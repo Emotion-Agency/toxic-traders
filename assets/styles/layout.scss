@@ -3,13 +3,16 @@
   position: relative;
   padding-left: $g-offset;
   padding-right: $g-offset;
+  max-width: 1440px;
+  margin: 0 auto;
 
   @media (max-width: $br1) {
+    max-width: 100%;
     padding-left: $g-sm;
     padding-right: $g-sm;
   }
 
-  @media (max-width: $br3) {
+  @media (max-width: $br4) {
     padding-left: $g-s;
     padding-right: $g-s;
   }
@@ -28,15 +31,8 @@
   display: grid;
   width: 100%;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: vw(30);
+  column-gap: 25px;
   grid-auto-flow: row;
-  @media (max-width: $br1) {
-    column-gap: 30px;
-  }
-  @media (max-width: $br4) {
-    column-gap: 20px;
-    grid-template-columns: repeat(4, 1fr);
-  }
 }
 
 @mixin col($start, $end) {

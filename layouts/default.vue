@@ -5,11 +5,7 @@ useFonts()
 
 onMounted(async () => {
   const { hello } = await import('~/utils/hello')
-  const { detectOrientationChanges } = await import(
-    '~/utils/detectLandscapeOrientation'
-  )
 
-  detectOrientationChanges()
   hello()
 })
 
@@ -24,7 +20,7 @@ useHead({
 <template>
   <div id="app">
     <Head>
-      <Title>Emotion</Title>
+      <Title>Toxic Traders</Title>
       <Meta
         name="viewport"
         content="width=device-width, initial-scale=1"
@@ -32,7 +28,7 @@ useHead({
       <Link rel="icon" type="image/x-icon" href="/favicon.ico"></Link>
     </Head>
     <AppGrid />
-    <Landscape />
+    <!-- <Landscape /> -->
     <SmoothScroll>
       <slot />
     </SmoothScroll>
