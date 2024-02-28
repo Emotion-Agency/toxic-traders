@@ -1,0 +1,90 @@
+.button {
+  @include button-default;
+  border-radius: 60px;
+  width: fit-content;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease,
+    color 0.3s ease;
+
+  &--fill {
+    color: var(--white);
+    background-color: var(--primary-default);
+
+    &:hover:not([disabled]) {
+      background-color: var(--primary-dark);
+    }
+
+    &:disabled {
+      opacity: 0.55;
+    }
+  }
+
+  &--fill-large {
+    padding: 16px 24px;
+  }
+
+  &--fill-medium {
+    padding: 10px 16px;
+  }
+
+  &--fill-small {
+    @include button-small;
+    padding: 8px 12px;
+  }
+
+  &--outlined {
+    color: var(--primary-default);
+    background-color: transparent;
+    border: 1px solid var(--primary-default);
+
+    &:hover:not([disabled]) {
+      color: var(--white);
+      background-color: var(--primary-dark);
+    }
+
+    &:disabled {
+      opacity: 0.55;
+    }
+  }
+
+  &--outlined-large {
+    padding: 16px 24px;
+  }
+
+  &--outlined-medium {
+    padding: 10px 16px;
+  }
+
+  &--outlined-small {
+    @include button-small;
+    padding: 8px 12px;
+  }
+
+  &--soft {
+    color: var(--secondary-default);
+    background-color: var(--primary-light2);
+
+    &:hover:not([disabled]) {
+      color: var(--white);
+      background-color: var(--primary-default);
+    }
+
+    &:disabled {
+      opacity: 0.55;
+    }
+  }
+
+  &--soft-large {
+    padding: 16px 24px;
+  }
+
+  &--soft-medium {
+    padding: 10px 16px;
+  }
+
+  &--soft-small {
+    @include button-small;
+    padding: 8px 12px;
+  }
+}
