@@ -33,5 +33,8 @@ const href = props.tag === 'a' ? props.href : undefined
     <span>
       <slot />
     </span>
+    <span>
+      <slot name="icon" />
+    </span>
   </component>
 </template>
