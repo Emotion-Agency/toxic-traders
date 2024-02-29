@@ -10,6 +10,9 @@
           <template #icon>afafa</template>
         </TheButton>
         <TheBadge :variant="'fill'" :is-button="true">Badge</TheBadge>
+        <TheAlert variant="danger">
+          A simple content alert—check it out!
+        </TheAlert>
       </div>
     </section>
   </main>
