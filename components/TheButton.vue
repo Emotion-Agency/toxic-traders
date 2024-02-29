@@ -2,18 +2,36 @@
 interface iProps {
   buttonSize: 'large' | 'medium' | 'small'
   variant: 'fill' | 'outlined' | 'soft'
+  tag: 'button' | 'a' | 'nuxt-link'
   disabled?: boolean
+  href?: string
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
+
+const tag = computed(() => {
+  if (props.tag === 'nuxt-link') {
+    return resolveComponent('NuxtLink')
+  } else return props.tag ?? 'button'
+})
+
+const to = props.tag === 'nuxt-link' ? props.href : undefined
+const href = props.tag === 'a' ? props.href : undefined
 </script>
 
 <template>
-  <button
+  <component
+    :is="tag"
     class="button"
     :class="[`button--${variant}`, `button--${variant}-${buttonSize}`]"
-    :disabled="disabled"
+    :to="to"
+    :href="href"
+    :target="props.tag === 'a' ? '_blank' : undefined"
+    :rel="props.tag === 'a' ? 'noreferer noopener' : undefined"
+    :disabled="props.tag === 'button' ? disabled : undefined"
   >
-    <slot />
-  </button>
+    <span>
+      <slot />
+    </span>
+  </component>
 </template>
