@@ -4,6 +4,12 @@ interface iProps {
 }
 
 defineProps<iProps>()
+
+const emit = defineEmits(['close'])
+
+const onClose = () => {
+  emit('close')
+}
 </script>
 
 <template>
@@ -15,7 +21,7 @@ defineProps<iProps>()
       <IconsDanger />
     </span>
     <slot />
-    <button class="alert__close-btn">
+    <button class="alert__close-btn" @click="onClose">
       <span class="alert__close-line" />
       <span class="alert__close-line" />
     </button>

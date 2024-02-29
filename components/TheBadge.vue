@@ -6,10 +6,10 @@ interface iProps {
 
 defineProps<iProps>()
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(['close'])
 
 const onClose = () => {
-  emit('click')
+  emit('close')
 }
 </script>
 
