@@ -2,22 +2,8 @@
 import { resize } from '@emotionagency/utils'
 
 let navbarPos
+const isDarkMode = ref(false)
 const $el = ref<HTMLElement | null>(null)
-
-onMounted(async () => {
-  const { default: NavbarPos } = await import('~/utils/navbarPos')
-  navbarPos = new NavbarPos()
-  navbarPos.init()
-})
-
-useOnBeforeUnmountDelay(() => {
-  navbarPos && navbarPos.destroy()
-})
-
-const calcHeight = () => {
-  const height = $el.value.offsetHeight
-  document.documentElement.style.setProperty('--h', `${height}px`)
-}
 
 const navigationList = [
   {
@@ -34,11 +20,34 @@ const navigationList = [
   },
 ]
 
-onMounted(() => {
+const calcHeight = () => {
+  const height = $el.value.offsetHeight
+  document.documentElement.style.setProperty('--h', `${height}px`)
+}
+
+const toggleTheme = () => {
+  isDarkMode.value = !isDarkMode.value
+
+  document.body.classList.toggle('dark-mode', isDarkMode.value)
+  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+}
+
+onMounted(async () => {
+  const { default: NavbarPos } = await import('~/utils/navbarPos')
+  const savedTheme = localStorage.getItem('theme')
+
+  navbarPos = new NavbarPos()
+  navbarPos.init()
   resize.on(calcHeight)
+
+  if (savedTheme) {
+    isDarkMode.value = savedTheme === 'dark'
+    document.body.classList.toggle('dark-mode', isDarkMode.value)
+  }
 })
 
 useOnBeforeUnmountDelay(() => {
+  navbarPos && navbarPos.destroy()
   resize.off(calcHeight)
 })
 </script>
@@ -61,7 +70,11 @@ useOnBeforeUnmountDelay(() => {
         </NuxtLink>
       </nav>
       <div class="header__right-menu">
-        <button class="header__theme-btn" aria-label="Theme changer">
+        <button
+          class="header__theme-btn"
+          aria-label="Theme changer"
+          @click="toggleTheme"
+        >
           <span>
             <IconsTheme />
           </span>
