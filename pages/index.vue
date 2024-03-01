@@ -69,6 +69,7 @@ const onChange = val => {
           :disabled="input.disabled"
           @input-value="onChange"
         />
+        <ThePagination />
       </div>
     </section>
   </main>

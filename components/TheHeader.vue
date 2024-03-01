@@ -65,6 +65,7 @@ useOnBeforeUnmountDelay(() => {
           v-for="(item, idx) in navigationList"
           :key="idx"
           :to="item.link"
+          class="header__link"
         >
           {{ item.text }}
         </NuxtLink>

@@ -39,6 +39,11 @@
   column-gap: 18px;
 }
 
+.header__link {
+  position: relative;
+  @include easing-line;
+}
+
 .header__right-menu {
   display: flex;
   align-items: center;

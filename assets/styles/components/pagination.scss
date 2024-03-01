@@ -1,0 +1,24 @@
+.pagination {
+  width: 100%;
+}
+
+.pagination__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination__btn {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  @include button-default;
+  color: var(--gray-500);
+  background-color: transparent;
+
+  &.next {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}
