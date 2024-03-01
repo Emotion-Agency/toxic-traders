@@ -30,6 +30,7 @@
   "dependencies": {
     "@emotionagency/emotion-scroll": "latest",
     "@emotionagency/utils": "latest",
+    "axios": "^1.6.7",
     "gsap": "^3.10.3"
   }
 }
