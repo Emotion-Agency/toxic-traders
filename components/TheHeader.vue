@@ -1,0 +1,80 @@
+<script setup lang="ts">
+import { resize } from '@emotionagency/utils'
+
+let navbarPos
+const $el = ref<HTMLElement | null>(null)
+
+onMounted(async () => {
+  const { default: NavbarPos } = await import('~/utils/navbarPos')
+  navbarPos = new NavbarPos()
+  navbarPos.init()
+})
+
+useOnBeforeUnmountDelay(() => {
+  navbarPos && navbarPos.destroy()
+})
+
+const calcHeight = () => {
+  const height = $el.value.offsetHeight
+  document.documentElement.style.setProperty('--h', `${height}px`)
+}
+
+const navigationList = [
+  {
+    text: 'Calendar',
+    link: '/',
+  },
+  {
+    text: 'Brokers',
+    link: '/',
+  },
+  {
+    text: 'Spreads',
+    link: '/',
+  },
+]
+
+onMounted(() => {
+  resize.on(calcHeight)
+})
+
+useOnBeforeUnmountDelay(() => {
+  resize.off(calcHeight)
+})
+</script>
+
+<template>
+  <header ref="$el" class="header">
+    <div class="header__wrapper container">
+      <NuxtLink to="/" class="header__logo-wrapper">
+        <span>
+          <IconsLogo />
+        </span>
+      </NuxtLink>
+      <nav class="header__list">
+        <NuxtLink
+          v-for="(item, idx) in navigationList"
+          :key="idx"
+          :to="item.link"
+        >
+          {{ item.text }}
+        </NuxtLink>
+      </nav>
+      <div class="header__right-menu">
+        <button class="header__theme-btn" aria-label="Theme changer">
+          <span>
+            <IconsTheme />
+          </span>
+        </button>
+        <button class="header__account">
+          <p class="header__account-name">lkosteckiy5@gmail.com</p>
+          <img
+            src="/images/avatars/1.jpg"
+            alt="Avatar"
+            class="header__account-img"
+          />
+        </button>
+      </div>
+    </div>
+  </header>
+</template>

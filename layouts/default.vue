@@ -30,6 +30,7 @@ useHead({
     <AppGrid />
     <!-- <Landscape /> -->
     <SmoothScroll>
+      <TheHeader />
       <slot />
     </SmoothScroll>
   </div>

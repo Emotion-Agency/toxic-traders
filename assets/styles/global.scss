@@ -19,12 +19,14 @@ html {
 
 body {
   color: var(--black);
+  background-color: var(--secondary-light2);
   font-size: 1rem;
   position: relative;
   font-family: sans-serif;
   overscroll-behavior-y: none;
   height: fit-content;
   @include smooth-font;
+  @include text-body;
 
   @media (max-width: $br1) {
     font-size: 16px;
@@ -73,4 +75,11 @@ body {
 .page-enter,
 .page-leave-to {
   opacity: 0;
+}
+
+.nav-hidden {
+  .header {
+    transform: translateY(-100%) !important;
+    opacity: 0;
+  }
 }
