@@ -9,7 +9,7 @@ interface iProps {
 
 defineProps<iProps>()
 
-const emit = defineEmits(['radioValue', 'checkboxValue'])
+const emit = defineEmits(['inputValue'])
 </script>
 
 <template>
@@ -25,24 +25,13 @@ const emit = defineEmits(['radioValue', 'checkboxValue'])
       {{ option }}
     </span>
     <input
-      v-if="type === 'radio'"
       :id="id"
-      type="radio"
+      :type="type"
       :name="name"
       :value="option"
       :disabled="disabled"
       class="input-selection__type"
-      @change="emit('radioValue', option)"
-    />
-    <input
-      v-else
-      :id="id"
-      type="checkbox"
-      :name="name"
-      :value="option"
-      :disabled="disabled"
-      class="input-selection__type"
-      @change="emit('checkboxValue', option)"
+      @change="emit('inputValue', option)"
     />
     <span v-if="type === 'radio'" class="input-selection__checkmark" />
     <span v-if="type === 'checkbox'" class="input-selection__checkmark">

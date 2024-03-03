@@ -56,14 +56,6 @@ const onChange = val => {
   console.log(val)
 }
 
-const onChangeRadio = val => {
-  console.log(val)
-}
-
-const onChangeCheckbox = val => {
-  console.log(val)
-}
-
 // onMounted(async () => {
 //   const data = await getSortedBrokers()
 
@@ -109,8 +101,7 @@ const onChangeCheckbox = val => {
           :name="radio.name"
           :type="radio.type"
           :disabled="radio.disabled"
-          @radio-value="onChangeRadio"
-          @checkbox-value="onChangeCheckbox"
+          @input-value="onChange"
         />
         <ThePagination />
       </div>
