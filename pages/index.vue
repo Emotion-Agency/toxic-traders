@@ -28,7 +28,39 @@ const inputsList = reactive([
   },
 ])
 
+const radioList = reactive([
+  {
+    option: 'vue',
+    id: 'vue',
+    name: 'framework',
+    type: 'checkbox',
+    disabled: false,
+  },
+  {
+    option: 'angular',
+    id: 'angular',
+    name: 'framework',
+    type: 'checkbox',
+    disabled: false,
+  },
+  {
+    option: 'react',
+    id: 'react',
+    name: 'framework',
+    type: 'checkbox',
+    disabled: true,
+  },
+])
+
 const onChange = val => {
+  console.log(val)
+}
+
+const onChangeRadio = val => {
+  console.log(val)
+}
+
+const onChangeCheckbox = val => {
   console.log(val)
 }
 
@@ -68,6 +100,17 @@ const onChange = val => {
           :placeholder="input.placeholder"
           :disabled="input.disabled"
           @input-value="onChange"
+        />
+        <InputSelection
+          v-for="(radio, idx) in radioList"
+          :id="radio.id"
+          :key="idx"
+          :option="radio.option"
+          :name="radio.name"
+          :type="radio.type"
+          :disabled="radio.disabled"
+          @radio-value="onChangeRadio"
+          @checkbox-value="onChangeCheckbox"
         />
         <ThePagination />
       </div>
