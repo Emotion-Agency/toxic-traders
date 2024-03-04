@@ -31,7 +31,7 @@ const emit = defineEmits(['inputValue'])
       @change="emit('inputValue', option)"
     />
     <span class="checkbox-input__checkmark">
-      <IconsTheCheck />
+      <IconsCheck />
     </span>
   </label>
 </template>

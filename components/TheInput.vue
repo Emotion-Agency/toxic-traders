@@ -10,6 +10,8 @@ interface iProps {
   error?: boolean
   placeholder?: string
   disabled?: boolean
+  isLeftButton?: boolean
+  isRightButton?: boolean
 }
 
 const props = defineProps<iProps>()
@@ -47,39 +49,56 @@ defineExpose({
     <span class="input__title"
       >{{ title }} <span v-if="required === true">*</span>
     </span>
+    <div class="input__wrapper">
+      <textarea
+        v-if="type === 'textarea'"
+        :id="id"
+        ref="$input"
+        v-model="inputValue"
+        class="input__type"
+        :class="error && 'input__type--error'"
+        :type="type"
+        :name="name"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+      />
 
-    <textarea
-      v-if="type === 'textarea'"
-      :id="id"
-      ref="$input"
-      v-model="inputValue"
-      class="input__type"
-      :class="error && 'input__type--error'"
-      :type="type"
-      :name="name"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      @focus="onFocus"
-      @blur="onBlur"
-      @input="onInput"
-    />
+      <input
+        v-else
+        :id="id"
+        ref="$input"
+        v-model="inputValue"
+        class="input__type"
+        :class="[
+          error && 'input__type--error',
+          isLeftButton && 'input__type--left-btn',
+          isRightButton && 'input__type--right-btn',
+        ]"
+        :type="type"
+        :name="name"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+      />
 
-    <input
-      v-else
-      :id="id"
-      ref="$input"
-      v-model="inputValue"
-      class="input__type"
-      :class="error && 'input__type--error'"
-      :type="type"
-      :name="name"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      @focus="onFocus"
-      @blur="onBlur"
-      @input="onInput"
-    />
-
+      <button
+        v-if="isLeftButton && type !== 'textarea'"
+        class="left-button input__btn"
+      >
+        <slot name="left-icon" />
+      </button>
+      <button
+        v-if="isRightButton && type !== 'textarea'"
+        class="right-button input__btn"
+      >
+        <slot name="right-icon" />
+      </button>
+    </div>
     <small v-if="error" class="input__error">
       {{ validationText }}
     </small>

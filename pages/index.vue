@@ -17,6 +17,8 @@ const inputsList = reactive([
     value: '',
     placeholder: 'Email',
     disabled: false,
+    isLeftButton: true,
+    isRightButton: true,
   },
   {
     title: 'First Name',
@@ -30,6 +32,8 @@ const inputsList = reactive([
     value: '',
     placeholder: 'First Name',
     disabled: false,
+    isLeftButton: false,
+    isRightButton: false,
   },
 ])
 
@@ -138,8 +142,17 @@ onMounted(async () => {
           :error="input.error"
           :placeholder="input.placeholder"
           :disabled="input.disabled"
+          :is-left-button="input.isLeftButton"
+          :is-right-button="input.isRightButton"
           @input-value="onChange"
-        />
+        >
+          <template #left-icon>
+            <IconsCalendar />
+          </template>
+          <template #right-icon>
+            <IconsCalendar />
+          </template>
+        </TheInput>
         <RadioInput
           v-for="(radio, idx) in radioList"
           :id="radio.id"
