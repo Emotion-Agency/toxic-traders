@@ -1,0 +1,20 @@
+.brokers {
+  padding-top: 142px;
+  padding-bottom: 116px;
+}
+
+.brokers__menu-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brokers__title {
+  @include heading-m-h1;
+}
+
+.brokers__menu {
+  display: flex;
+  align-items: center;
+  column-gap: 19px;
+}

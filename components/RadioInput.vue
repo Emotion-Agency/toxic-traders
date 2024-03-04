@@ -15,13 +15,10 @@ const emit = defineEmits(['inputValue'])
 <template>
   <label
     :for="option"
-    class="input-selection"
-    :class="[
-      `input-selection--${type}`,
-      disabled && 'input-selection--disabled',
-    ]"
+    class="radio-input"
+    :class="disabled && 'radio-input--disabled'"
   >
-    <span class="input-selection__text">
+    <span class="radio-input__text">
       {{ option }}
     </span>
     <input
@@ -30,12 +27,9 @@ const emit = defineEmits(['inputValue'])
       :name="name"
       :value="option"
       :disabled="disabled"
-      class="input-selection__type"
+      class="radio-input__type"
       @change="emit('inputValue', option)"
     />
-    <span v-if="type === 'radio'" class="input-selection__checkmark" />
-    <span v-if="type === 'checkbox'" class="input-selection__checkmark">
-      <IconsTheCheck />
-    </span>
+    <span class="radio-input__checkmark" />
   </label>
 </template>

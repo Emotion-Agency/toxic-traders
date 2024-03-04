@@ -31,10 +31,13 @@ const href = props.tag === 'a' ? props.href : undefined
     :disabled="props.tag === 'button' ? disabled : undefined"
   >
     <span>
+      <slot name="start-icon" />
+    </span>
+    <span>
       <slot />
     </span>
     <span>
-      <slot name="icon" />
+      <slot name="end-icon" />
     </span>
   </component>
 </template>

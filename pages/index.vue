@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
+
+const checkboxItemsList = ref([])
+const radioItem = ref('')
+
 const inputsList = reactive([
   {
     title: 'Email',
@@ -52,15 +57,57 @@ const radioList = reactive([
   },
 ])
 
+const checkboxList = reactive([
+  {
+    option: 'vue2',
+    id: 'vue2',
+    name: 'framework',
+    type: 'checkbox',
+    disabled: false,
+  },
+  {
+    option: 'angular2',
+    id: 'angular2',
+    name: 'framework',
+    type: 'checkbox',
+    disabled: false,
+  },
+  {
+    option: 'react2',
+    id: 'react2',
+    name: 'framework',
+    type: 'checkbox',
+    disabled: false,
+  },
+])
+
 const onChange = val => {
   console.log(val)
 }
 
-// onMounted(async () => {
-//   const data = await getSortedBrokers()
+const onChangeRadio = val => {
+  radioItem.value = val
 
-//   console.log(data)
-// })
+  console.log(radioItem.value)
+}
+
+const onChangeCheckbox = val => {
+  const index = checkboxItemsList.value.indexOf(val)
+
+  if (index === -1) {
+    checkboxItemsList.value.push(val)
+  } else {
+    checkboxItemsList.value.splice(index, 1)
+  }
+
+  console.log(checkboxItemsList.value)
+}
+
+onMounted(async () => {
+  const data = await getSortedBrokers()
+
+  console.log(data)
+})
 </script>
 
 <template>
@@ -70,7 +117,7 @@ const onChange = val => {
         <h1 class="22">Hello from Emotion!</h1>
         <TheButton tag="button" button-size="large" variant="soft">
           Button
-          <template #icon>afafa</template>
+          <template #end-icon>afafa</template>
         </TheButton>
         <TheBadge variant="outlined" :is-button="true">Badge</TheBadge>
         <TheAlert variant="danger">
@@ -93,7 +140,7 @@ const onChange = val => {
           :disabled="input.disabled"
           @input-value="onChange"
         />
-        <InputSelection
+        <RadioInput
           v-for="(radio, idx) in radioList"
           :id="radio.id"
           :key="idx"
@@ -101,7 +148,17 @@ const onChange = val => {
           :name="radio.name"
           :type="radio.type"
           :disabled="radio.disabled"
-          @input-value="onChange"
+          @input-value="onChangeRadio"
+        />
+        <CheckboxInput
+          v-for="(radio, idx) in checkboxList"
+          :id="radio.id"
+          :key="idx"
+          :option="radio.option"
+          :name="radio.name"
+          :type="radio.type"
+          :disabled="radio.disabled"
+          @input-value="onChangeCheckbox"
         />
         <ThePagination />
       </div>

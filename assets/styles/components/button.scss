@@ -1,5 +1,7 @@
 .button {
-  display: block;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
   @include button-default;
   border-radius: 60px;
   width: fit-content;
@@ -9,9 +11,25 @@
     opacity 0.3s ease,
     color 0.3s ease;
 
+  svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+
+    path {
+      transition: fill 0.3s ease;
+    }
+  }
+
   &--fill {
     color: var(--white);
     background-color: var(--primary-default);
+
+    svg {
+      path {
+        fill: var(--white);
+      }
+    }
 
     &:hover:not([disabled]) {
       background-color: var(--primary-dark);
@@ -40,9 +58,21 @@
     background-color: transparent;
     border: 1px solid var(--primary-default);
 
+    svg {
+      path {
+        fill: var(--primary-default);
+      }
+    }
+
     &:hover:not([disabled]) {
       color: var(--white);
       background-color: var(--primary-dark);
+
+      svg {
+        path {
+          fill: var(--white);
+        }
+      }
     }
 
     &:disabled {
@@ -67,9 +97,21 @@
     color: var(--secondary-default);
     background-color: var(--primary-light2);
 
+    svg {
+      path {
+        fill: var(--secondary-default);
+      }
+    }
+
     &:hover:not([disabled]) {
       color: var(--white);
       background-color: var(--primary-default);
+
+      svg {
+        path {
+          fill: var(--white);
+        }
+      }
     }
 
     &:disabled {
