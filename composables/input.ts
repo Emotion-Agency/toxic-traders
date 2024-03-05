@@ -25,7 +25,7 @@ export const useInput = (emit, props) => {
   }
 
   const onBlur = () => {
-    if (!inputValue.value.trim().length) {
+    if (!inputValue.value.length) {
       inputFocus.value = false
     }
   }

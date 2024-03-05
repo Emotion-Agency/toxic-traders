@@ -6,6 +6,7 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
+const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
 const selectedItem = ref('')
 
@@ -18,20 +19,35 @@ const closeList = option => {
   selectedItem.value = option
 }
 
+const outsideClick = event => {
+  if (!$el.value.contains(event.target)) {
+    isOpened.value = false
+  }
+}
+
 onMounted(() => {
   selectedItem.value = props.placeholder
+  document.body.addEventListener('click', outsideClick)
+})
+
+onUnmounted(() => {
+  document.body.removeEventListener('click', outsideClick)
 })
 </script>
 
 <template>
-  <div class="custom-select" :class="isOpened && 'custom-select--opened'">
+  <div
+    ref="$el"
+    class="custom-select"
+    :class="isOpened && 'custom-select--opened'"
+  >
     <div class="custom-select__selected" @click="toggleList">
       <p class="custom-select__text">
         {{ selectedItem }}
       </p>
       <IconsSelectionArrowDown />
     </div>
-    <div class="custom-select__content">
+    <div class="custom-select__content" @click.stop>
       <ul class="custom-select__list">
         <li
           v-for="(option, idx) of options"

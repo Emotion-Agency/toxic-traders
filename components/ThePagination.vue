@@ -27,8 +27,8 @@ const inputItem = {
   isRightButton: false,
 }
 
-const onChange = val => {
-  console.log(val)
+const onChange = input => {
+  console.log(input)
 }
 </script>
 

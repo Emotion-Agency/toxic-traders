@@ -77,6 +77,8 @@ defineExpose({
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
+        min="1"
+        max="100"
         @focus="onFocus"
         @blur="onBlur"
         @input="onInput"

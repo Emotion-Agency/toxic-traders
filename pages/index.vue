@@ -116,7 +116,7 @@ onMounted(async () => {
 
 <template>
   <main>
-    <section>
+    <section style="height: 100vh">
       <div class="container">
         <TheButton tag="button" button-size="large" variant="soft">
           Button
