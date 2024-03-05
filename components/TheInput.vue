@@ -2,7 +2,7 @@
 interface iProps {
   required?: boolean
   id: string
-  title: string
+  title?: string
   name: string
   type?: string
   validation?: string
@@ -46,7 +46,7 @@ defineExpose({
     ]"
     :for="id"
   >
-    <span class="input__title"
+    <span v-if="title" class="input__title"
       >{{ title }} <span v-if="required === true">*</span>
     </span>
     <div class="input__wrapper">
@@ -67,7 +67,23 @@ defineExpose({
       />
 
       <input
-        v-else
+        v-if="type === 'number'"
+        :id="id"
+        ref="$input"
+        v-model="inputValue"
+        class="input__type"
+        :class="error && 'input__type--error'"
+        :type="type"
+        :name="name"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+      />
+
+      <input
+        v-if="type === 'text'"
         :id="id"
         ref="$input"
         v-model="inputValue"

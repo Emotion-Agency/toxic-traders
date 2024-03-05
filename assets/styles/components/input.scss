@@ -71,6 +71,10 @@
   }
 }
 
+.input__type[type='number'] {
+  -moz-appearance: textfield;
+}
+
 .input__error {
   @include text-small;
   color: var(--status-danger);
@@ -117,4 +121,10 @@ select:-webkit-autofill:focus {
   border-radius: 10px;
   transition: background-color 5000s ease-in-out 0s;
   color: var(--gray-700);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

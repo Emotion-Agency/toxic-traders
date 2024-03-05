@@ -5,7 +5,7 @@
 .pagination__wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
 .pagination__btn {
@@ -21,4 +21,17 @@
       transform: rotate(180deg);
     }
   }
+}
+
+.pagination__content {
+  display: flex;
+  align-items: baseline;
+  column-gap: 10px;
+}
+.pagination__text {
+  @include button-default;
+  color: var(--secondary-dark);
+}
+.pagination__input {
+  max-width: 40px;
 }

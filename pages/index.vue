@@ -32,7 +32,7 @@ const inputsList = reactive([
     value: '',
     placeholder: 'First Name',
     disabled: false,
-    isLeftButton: false,
+    isLeftButton: true,
     isRightButton: false,
   },
 ])
@@ -118,7 +118,6 @@ onMounted(async () => {
   <main>
     <section>
       <div class="container">
-        <h1 class="22">Hello from Emotion!</h1>
         <TheButton tag="button" button-size="large" variant="soft">
           Button
           <template #end-icon>afafa</template>
@@ -130,9 +129,7 @@ onMounted(async () => {
         <TheInput
           v-for="(input, idx) in inputsList"
           :id="input.id"
-          ref="$inputs"
           :key="idx"
-          class="form__item"
           :required="input.required"
           :title="input.title"
           :name="input.name"
@@ -173,7 +170,7 @@ onMounted(async () => {
           :disabled="radio.disabled"
           @input-value="onChangeCheckbox"
         />
-        <ThePagination />
+        <ThePagination :max-pages="5" />
       </div>
     </section>
   </main>
