@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface iProps {
-  maxPages: number
+  totalPages: number
 }
 
 defineProps<iProps>()
@@ -54,7 +54,7 @@ const onChange = input => {
           class="pagination__input"
           @input-value="onChange"
         />
-        <p class="pagination__text">of {{ maxPages }}</p>
+        <p class="pagination__text">of {{ totalPages }}</p>
         <CustomSelect :options="optionList" placeholder="10 rows" />
       </div>
       <button class="next pagination__btn">

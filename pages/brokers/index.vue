@@ -1,4 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
+import type { iBroker } from '~/types/brokers'
+
+const brokersList = ref<iBroker[]>([])
+
+onMounted(async () => {
+  const data = await getSortedBrokers()
+  brokersList.value = data.brokers
+
+  console.log(data, brokersList.value)
+})
+</script>
 
 <template>
   <main>
@@ -24,7 +36,7 @@
             </TheButton>
           </div>
         </div>
-        <BrokersTable />
+        <TableBrokersTable :brokers="brokersList" />
       </div>
     </section>
   </main>

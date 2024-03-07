@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
-
 const checkboxItemsList = ref([])
 const radioItem = ref('')
 
@@ -106,12 +104,6 @@ const onChangeCheckbox = val => {
 
   console.log(checkboxItemsList.value)
 }
-
-onMounted(async () => {
-  const data = await getSortedBrokers()
-
-  console.log(data)
-})
 </script>
 
 <template>
@@ -170,7 +162,7 @@ onMounted(async () => {
           :disabled="radio.disabled"
           @input-value="onChangeCheckbox"
         />
-        <ThePagination :max-pages="5" />
+        <ThePagination :total-pages="5" />
       </div>
     </section>
   </main>
