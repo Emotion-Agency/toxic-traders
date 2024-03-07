@@ -36,7 +36,9 @@ onMounted(async () => {
             </TheButton>
           </div>
         </div>
-        <TableBrokersTable :brokers="brokersList" />
+        <div class="brokers__table-wrapper">
+          <TableBrokersTable :brokers="brokersList" />
+        </div>
       </div>
     </section>
   </main>

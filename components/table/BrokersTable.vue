@@ -18,8 +18,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <table class="table">
-    <TableRowHeader :header-fields="brokersTitle" />
-    <TableBody :brokers-list="brokers" />
-  </table>
+  <ClientOnly>
+    <table class="table">
+      <div class="table__wrapper">
+        <TableRowHeader :header-fields="brokersTitle" />
+        <TableBody :brokers-list="brokers" />
+      </div>
+    </table>
+  </ClientOnly>
 </template>
