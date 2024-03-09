@@ -1,7 +1,42 @@
 .table__wrapper {
+  border-radius: 10px;
   overflow-x: scroll;
 }
 
 .table {
   width: fit-content;
+
+  thead {
+    tr {
+      display: flex;
+      background-color: var(--primary-default);
+      color: var(--white);
+    }
+
+    th {
+      flex: 1;
+      padding: 20px 8px;
+      padding-right: 30px;
+      text-align: left;
+      vertical-align: middle;
+    }
+  }
+
+  tbody {
+    tr {
+      display: flex;
+      border-top: 20px solid transparent;
+    }
+
+    td {
+      flex: 1;
+      text-align: start;
+      vertical-align: middle;
+      padding: 20px 8px;
+      padding-right: 30px;
+      min-width: 180px;
+      max-width: 360px;
+      background-color: var(--white);
+    }
+  }
 }
