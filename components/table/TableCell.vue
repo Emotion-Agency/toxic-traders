@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface iProps {
-  broker: string | null
+  item: string | null
 }
 
 defineProps<iProps>()
@@ -8,6 +8,6 @@ defineProps<iProps>()
 
 <template>
   <td>
-    {{ broker }}
+    {{ item }}
   </td>
 </template>

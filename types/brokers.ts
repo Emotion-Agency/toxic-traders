@@ -21,3 +21,11 @@ export interface iBroker {
   restrictedCountries?: string | null
   website?: string | null
 }
+
+export interface iBrokersData {
+  data: {
+    brokers: iBroker[]
+    totalCount: number
+    message: string
+  }
+}

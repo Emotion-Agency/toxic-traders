@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface iProps {
   headerFields: string[]
+  isSort?: boolean
 }
 
 defineProps<iProps>()

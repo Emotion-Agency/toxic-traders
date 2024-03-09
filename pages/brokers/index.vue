@@ -3,9 +3,15 @@ import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 import type { iBroker } from '~/types/brokers'
 
 const brokersList = ref<iBroker[]>([])
+const isLoading = ref(true)
 
 onMounted(async () => {
+  isLoading.value = true
+
   const data = await getSortedBrokers()
+
+  isLoading.value = false
+
   brokersList.value = data.brokers
 
   console.log(data, brokersList.value)
@@ -36,9 +42,12 @@ onMounted(async () => {
             </TheButton>
           </div>
         </div>
-        <div class="brokers__table-wrapper">
+        <div v-if="brokersList.length" class="brokers__table-wrapper">
           <TableBrokersTable :brokers="brokersList" />
         </div>
+        <div v-else-if="isLoading && !brokersList.length"><UiLoader /></div>
+        <div v-else>No items found</div>
+        <ThePagination :total-pages="5" />
       </div>
     </section>
   </main>

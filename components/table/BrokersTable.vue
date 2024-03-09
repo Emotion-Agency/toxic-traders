@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { delayPromise } from '@emotionagency/utils'
-import { formatBrokerNames } from '~/assets/scripts/FormatBrokerNames'
 import type { iBroker } from '~/types/brokers'
 
 interface iProps {
@@ -11,19 +9,18 @@ const props = defineProps<iProps>()
 
 const brokersTitle = ref<string[] | []>([])
 
-onMounted(async () => {
-  await delayPromise(1000)
+onMounted(() => {
   brokersTitle.value = formatBrokerNames(props.brokers[0])
 })
 </script>
 
 <template>
   <ClientOnly>
-    <table class="table">
-      <div class="table__wrapper">
-        <TableRowHeader :header-fields="brokersTitle" />
+    <div class="table__wrapper">
+      <table class="table">
+        <TableHeader :header-fields="brokersTitle" />
         <TableBody :brokers-list="brokers" />
-      </div>
-    </table>
+      </table>
+    </div>
   </ClientOnly>
 </template>

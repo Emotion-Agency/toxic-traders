@@ -11,7 +11,7 @@ defineProps<iProps>()
 <template>
   <tbody>
     <TableRow v-for="(broker, idx) in brokersList" :key="idx">
-      <TableCell v-for="(item, id) in broker" :key="id" :broker="item" />
+      <TableCell v-for="(item, id) in broker" :key="id" :item="item" />
     </TableRow>
   </tbody>
 </template>

@@ -1,10 +1,7 @@
-.table {
-  overflow-x: auto;
-}
 .table__wrapper {
-  width: 100%;
-  min-width: 960px;
+  overflow-x: scroll;
 }
-.table__container {
-  width: 100%;
+
+.table {
+  width: fit-content;
 }

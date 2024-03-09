@@ -29,9 +29,9 @@ useHead({
     </Head>
     <AppGrid />
     <!-- <Landscape /> -->
-    <SmoothScroll>
+    <div class="scrollbar-container">
       <TheHeader />
       <slot />
-    </SmoothScroll>
+    </div>
   </div>
 </template>
