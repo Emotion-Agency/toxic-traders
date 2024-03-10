@@ -12,7 +12,7 @@ const navigationList = [
   },
   {
     text: 'Brokers',
-    link: '/',
+    link: '/brokers',
   },
   {
     text: 'Spreads',

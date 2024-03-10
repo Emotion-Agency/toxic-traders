@@ -6,12 +6,20 @@ interface iProps {
 }
 
 defineProps<iProps>()
+
+onMounted(() => {})
 </script>
 
 <template>
   <tbody>
     <TableRow v-for="(broker, idx) in brokersList" :key="idx">
-      <TableCell v-for="(item, id) in broker" :key="id" :item="item" />
+      <TableCell
+        v-for="(item, id, index) in broker"
+        :key="id"
+        :item="item"
+        :class="`table-cell--${index}`"
+        :style="{ width: `${item}px` }"
+      />
     </TableRow>
   </tbody>
 </template>
