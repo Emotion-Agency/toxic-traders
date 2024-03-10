@@ -48,6 +48,7 @@ onMounted(async () => {
         <div v-else-if="isLoading && !brokersList.length"><UiLoader /></div>
         <div v-else>No items found</div>
         <ThePagination :total-pages="5" />
+        <CustomTable />
       </div>
     </section>
   </main>

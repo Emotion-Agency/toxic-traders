@@ -8,8 +8,7 @@
 
   thead {
     tr {
-      // display: flex;
-      display: block;
+      display: flex;
       background-color: var(--primary-default);
       color: var(--white);
     }
@@ -25,14 +24,12 @@
 
   tbody {
     tr {
-      // display: flex;
-      // border-top: 20px solid transparent;
-      display: block;
-      margin-top: 20px;
+      display: flex;
+      border-top: 20px solid transparent;
     }
 
     td {
-      // flex: 1;
+      flex: 1;
       text-align: start;
       vertical-align: middle;
       padding: 20px 8px;
@@ -41,5 +38,48 @@
       max-width: 360px;
       background-color: var(--white);
     }
+  }
+}
+
+.grid-table-container {
+  overflow: hidden;
+}
+.grid-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+.grid-table {
+  width: fit-content;
+}
+.grid-head {
+  background-color: var(--primary-default);
+  color: var(--white);
+
+  .grid-tr {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: auto;
+  }
+  .grid-th {
+    min-width: 180px;
+    padding: 20px 8px;
+    padding-right: 30px;
+  }
+}
+
+.grid-body {
+  .grid-tr {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: auto;
+    margin-top: 20px;
+  }
+
+  .grid-td {
+    min-width: 180px;
+    max-width: 360px;
+    padding: 20px 8px;
+    padding-right: 30px;
+    background-color: var(--white);
   }
 }
