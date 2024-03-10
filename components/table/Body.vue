@@ -18,7 +18,6 @@ onMounted(() => {})
         :key="id"
         :item="item"
         :class="`table-cell--${index}`"
-        :style="{ width: `${item}px` }"
       />
     </TableRow>
   </div>

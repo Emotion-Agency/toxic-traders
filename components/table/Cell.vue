@@ -8,6 +8,8 @@ defineProps<iProps>()
 
 <template>
   <div class="table-cell">
-    {{ item }}
+    <p class="table-cell__text">
+      {{ item }}
+    </p>
   </div>
 </template>

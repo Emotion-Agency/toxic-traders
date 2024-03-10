@@ -1,9 +1,13 @@
-.table-wrapper {
+.table {
+  overflow: hidden;
+}
+
+.table__container {
   border-radius: 10px;
   overflow-x: scroll;
 }
 
-.table {
+.table__wrapper {
   width: fit-content;
 
   .table-head {
@@ -11,6 +15,7 @@
     color: var(--white);
 
     .table-row {
+      @include heading-b-h6;
       display: grid;
       grid-auto-flow: column;
       grid-template-columns: auto;
@@ -26,6 +31,7 @@
 
   .table-body {
     .table-row {
+      @include text-body;
       display: grid;
       grid-auto-flow: column;
       grid-template-columns: auto;

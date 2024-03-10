@@ -14,6 +14,7 @@ defineProps<iProps>()
         v-for="(headerItem, idx) in headerFields"
         :key="idx"
         :item="headerItem"
+        :class="`table-cell--${idx}`"
       />
     </TableRow>
   </div>
