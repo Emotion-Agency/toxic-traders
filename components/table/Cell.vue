@@ -7,7 +7,7 @@ defineProps<iProps>()
 </script>
 
 <template>
-  <td>
+  <div class="table-cell">
     {{ item }}
-  </td>
+  </div>
 </template>

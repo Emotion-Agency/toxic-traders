@@ -43,12 +43,11 @@ onMounted(async () => {
           </div>
         </div>
         <div v-if="brokersList.length" class="brokers__table-wrapper">
-          <TableBrokersTable :brokers="brokersList" />
+          <BrokersTable :brokers="brokersList" />
         </div>
         <div v-else-if="isLoading && !brokersList.length"><UiLoader /></div>
         <div v-else>No items found</div>
         <ThePagination :total-pages="5" />
-        <CustomTable />
       </div>
     </section>
   </main>

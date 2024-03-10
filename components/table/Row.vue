@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <tr>
+  <div class="table-row">
     <slot />
-  </tr>
+  </div>
 </template>

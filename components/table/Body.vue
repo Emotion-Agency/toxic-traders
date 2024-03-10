@@ -11,7 +11,7 @@ onMounted(() => {})
 </script>
 
 <template>
-  <tbody>
+  <div class="table-body">
     <TableRow v-for="(broker, idx) in brokersList" :key="idx">
       <TableCell
         v-for="(item, id, index) in broker"
@@ -21,5 +21,5 @@ onMounted(() => {})
         :style="{ width: `${item}px` }"
       />
     </TableRow>
-  </tbody>
+  </div>
 </template>

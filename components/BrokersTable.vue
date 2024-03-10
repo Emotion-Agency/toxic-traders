@@ -16,11 +16,11 @@ onMounted(() => {
 
 <template>
   <ClientOnly>
-    <div class="table__wrapper">
-      <table class="table">
-        <TableHeader :header-fields="brokersTitle" />
+    <div class="table-wrapper">
+      <div class="table">
+        <TableHead :header-fields="brokersTitle" />
         <TableBody :brokers-list="brokers" />
-      </table>
+      </div>
     </div>
   </ClientOnly>
 </template>
