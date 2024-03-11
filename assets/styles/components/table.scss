@@ -7,6 +7,13 @@
   overflow-x: scroll;
 }
 
+.table-cell {
+  text-align: start;
+  min-width: 180px;
+  padding: 20px 8px;
+  padding-right: 30px;
+}
+
 .table__wrapper {
   width: fit-content;
 
@@ -39,12 +46,30 @@
     }
 
     .table-cell {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
       text-align: start;
       min-width: 180px;
       max-width: 360px;
       padding: 20px 8px;
       padding-right: 30px;
       background-color: var(--white);
+    }
+
+    .table-cell__link {
+      @include text-link;
+      display: flex;
+      align-items: center;
+      column-gap: 6px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+
+      svg {
+        display: block;
+        width: 8px;
+        height: 8px;
+      }
     }
   }
 }

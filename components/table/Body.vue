@@ -7,7 +7,16 @@ interface iProps {
 
 defineProps<iProps>()
 
-onMounted(() => {})
+// onMounted(() => {
+//   const elements = document.querySelectorAll('.table-cell--0')
+//   const widthElements = []
+
+//   elements.forEach(el => {
+//     widthElements.push(el.offsetWidth)
+//   })
+
+//   elements.forEach(el => (el.style.width = `${Math.max(...widthElements)}px`))
+// })
 </script>
 
 <template>
@@ -18,6 +27,12 @@ onMounted(() => {})
         :key="id"
         :item="item"
         :class="`table-cell--${index}`"
+        :link="
+          broker.companyNames === item && {
+            url: broker.companyNames,
+            text: broker.companyNames,
+          }
+        "
       />
     </TableRow>
   </div>
