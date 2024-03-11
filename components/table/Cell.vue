@@ -7,13 +7,15 @@ interface iProps {
   }
 }
 
-defineProps<iProps>()
+withDefaults(defineProps<iProps>(), {
+  link: null,
+})
 </script>
 
 <template>
   <div class="table-cell">
-    <NuxtLink v-if="link" :to="link.url" class="table-cell__link">
-      <span> {{ link.text }} </span>
+    <NuxtLink v-if="link" :to="link!.url" class="table-cell__link">
+      <span> {{ link!.text }} </span>
       <IconsLinkArrow />
     </NuxtLink>
     <p v-else class="table-cell__text">
