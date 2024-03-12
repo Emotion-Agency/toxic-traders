@@ -5,6 +5,7 @@
 .table__container {
   border-radius: 10px;
   overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .table-cell {
@@ -16,60 +17,60 @@
 
 .table__wrapper {
   width: fit-content;
+}
 
-  .table-head {
-    background-color: var(--primary-default);
-    color: var(--white);
+.table-head {
+  background-color: var(--primary-default);
+  color: var(--white);
 
-    .table-row {
-      @include heading-b-h6;
-      display: grid;
-      grid-auto-flow: column;
-      grid-template-columns: auto;
-    }
+  .table-row {
+    @include heading-b-h6;
+  }
+}
 
-    .table-cell {
-      text-align: start;
-      min-width: 180px;
-      padding: 20px 8px;
-      padding-right: 30px;
-    }
+.table-body {
+  height: 507px;
+  overflow: auto;
+
+  .table-row {
+    @include text-body;
+    margin-top: 20px;
   }
 
-  .table-body {
-    .table-row {
-      @include text-body;
-      display: grid;
-      grid-auto-flow: column;
-      grid-template-columns: auto;
-      margin-top: 20px;
-    }
+  .table-cell {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 360px;
+    background-color: var(--white);
+  }
+}
 
-    .table-cell {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      text-align: start;
-      min-width: 180px;
-      max-width: 360px;
-      padding: 20px 8px;
-      padding-right: 30px;
-      background-color: var(--white);
-    }
+.table-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: auto;
+}
 
-    .table-cell__link {
-      @include text-link;
-      display: flex;
-      align-items: center;
-      column-gap: 6px;
-      text-decoration: underline;
-      text-underline-offset: 3px;
+.table-cell {
+  text-align: start;
+  min-width: 180px;
+  max-width: 360px;
+  padding: 20px 8px;
+  padding-right: 30px;
+}
 
-      svg {
-        display: block;
-        width: 8px;
-        height: 8px;
-      }
-    }
+.table-cell__link {
+  @include text-link;
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  svg {
+    display: block;
+    width: 8px;
+    height: 8px;
   }
 }
