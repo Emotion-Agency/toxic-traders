@@ -5,11 +5,14 @@ interface iProps {
     text: string
     url: string
   }
+  isSort?: boolean
 }
 
 withDefaults(defineProps<iProps>(), {
   link: null,
 })
+
+const emit = defineEmits(['sort'])
 </script>
 
 <template>
@@ -18,6 +21,10 @@ withDefaults(defineProps<iProps>(), {
       <span> {{ link!.text }} </span>
       <IconsLinkArrow />
     </NuxtLink>
+    <button v-else-if="isSort" class="table-cell__btn" @click="emit('sort')">
+      {{ item }}
+      <IconsDownUpArrow />
+    </button>
     <p v-else class="table-cell__text">
       {{ item }}
     </p>

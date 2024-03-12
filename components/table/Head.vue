@@ -15,6 +15,7 @@ defineProps<iProps>()
         :key="idx"
         :item="headerItem"
         :class="`table-cell--${idx}`"
+        :is-sort="true"
       />
     </TableRow>
   </div>

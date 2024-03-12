@@ -26,6 +26,10 @@
   .table-row {
     @include heading-b-h6;
   }
+
+  .table-cell {
+    align-items: flex-start;
+  }
 }
 
 .table-body {
@@ -38,10 +42,7 @@
   }
 
   .table-cell {
-    display: flex;
-    justify-content: flex-start;
     align-items: center;
-    max-width: 360px;
     background-color: var(--white);
   }
 }
@@ -53,6 +54,8 @@
 }
 
 .table-cell {
+  display: flex;
+  justify-content: flex-start;
   text-align: start;
   min-width: 180px;
   max-width: 360px;
@@ -67,6 +70,23 @@
   column-gap: 6px;
   text-decoration: underline;
   text-underline-offset: 3px;
+
+  svg {
+    display: block;
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.table-cell__btn {
+  @include heading-b-h6;
+  color: var(--white);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  width: fit-content;
+  text-align: left;
 
   svg {
     display: block;
