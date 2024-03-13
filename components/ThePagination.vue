@@ -34,7 +34,7 @@ const onChange = input => {
 
 <template>
   <div class="pagination">
-    <div class="container pagination__wrapper">
+    <div class="pagination__wrapper">
       <button class="prev pagination__btn">
         <span>
           <IconsNavigationArrow />

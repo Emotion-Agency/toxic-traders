@@ -19,8 +19,21 @@
   column-gap: 19px;
 }
 
-.brokers__table-wrapper {
+.brokers__content {
+  display: flex;
+  column-gap: 0;
+  overflow: hidden;
+  transition: column-gap 0.3s ease;
   margin-top: 32px;
+
+  &--search {
+    column-gap: 16px;
+  }
+}
+
+.brokers__table-wrapper {
+  height: fit-content;
+  overflow: hidden;
 }
 
 .brokers__pagination {

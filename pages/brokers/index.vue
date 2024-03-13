@@ -4,6 +4,11 @@ import type { iBroker } from '~/types/brokers'
 
 const brokersList = ref<iBroker[]>([])
 const isLoading = ref(true)
+const isSearchOpened = ref(false)
+
+const toggleSearch = () => {
+  isSearchOpened.value = !isSearchOpened.value
+}
 
 onMounted(async () => {
   isLoading.value = true
@@ -25,8 +30,13 @@ onMounted(async () => {
         <div class="brokers__menu-wrapper">
           <h1 class="brokers__title">All Brokers</h1>
           <div class="brokers__menu">
-            <TheButton tag="button" button-size="medium" variant="outlined">
-              Search
+            <TheButton
+              tag="button"
+              button-size="medium"
+              variant="outlined"
+              @click="toggleSearch"
+            >
+              {{ isSearchOpened ? 'Hide Search' : 'Search' }}
               <template #start-icon>
                 <IconsSearch />
               </template>
@@ -42,14 +52,23 @@ onMounted(async () => {
             </TheButton>
           </div>
         </div>
-        <div v-if="brokersList.length" class="brokers__table-wrapper">
-          <BrokersTable :brokers="brokersList" />
-          <ThePagination class="brokers__pagination" :total-pages="5" />
+        <div
+          class="brokers__content"
+          :class="isSearchOpened && 'brokers__content--search'"
+        >
+          <BrokersSearch :is-opened="isSearchOpened" />
+          <div v-if="brokersList.length" class="brokers__table-wrapper">
+            <BrokersTable
+              :is-search-opened="isSearchOpened"
+              :brokers="brokersList"
+            />
+            <ThePagination class="brokers__pagination" :total-pages="5" />
+          </div>
+          <div v-else-if="isLoading && !brokersList.length">
+            <UiLoader />
+          </div>
+          <div v-else>No items found</div>
         </div>
-        <div v-else-if="isLoading && !brokersList.length">
-          <UiLoader />
-        </div>
-        <div v-else>No items found</div>
       </div>
     </section>
   </main>

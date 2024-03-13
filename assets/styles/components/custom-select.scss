@@ -17,6 +17,12 @@
   }
 }
 
+.custom-select__title {
+  @include text-body;
+  line-height: 1.25em;
+  margin-bottom: 6px;
+}
+
 .custom-select__selected {
   display: flex;
   justify-content: space-between;
@@ -61,6 +67,11 @@
     border-color 0.3s ease;
   position: absolute;
   top: 42px;
+  z-index: 1;
+
+  &--with-title {
+    top: 69px;
+  }
 }
 
 .custom-select__item {

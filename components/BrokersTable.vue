@@ -3,6 +3,7 @@ import type { iBroker } from '~/types/brokers'
 
 interface iProps {
   brokers: iBroker[]
+  isSearchOpened: boolean
 }
 
 const props = defineProps<iProps>()
@@ -28,29 +29,27 @@ onMounted(() => {
 
 <template>
   <ClientOnly>
-    <div class="table">
-      <div class="table__container">
-        <div class="table__wrapper">
-          <TableHead :header-fields="brokersTitle" />
-          <TableBody>
-            <TableRow v-for="(broker, idx) in brokers" :key="idx">
-              <TableCell
-                v-for="(item, id, index) in broker"
-                :key="id"
-                :item="item"
-                :class="`table-cell--${index}`"
-                :link="
-                  broker.companyNames === item
-                    ? {
-                        url: `/brokers/${broker.companyNames}`,
-                        text: broker.companyNames,
-                      }
-                    : null
-                "
-              />
-            </TableRow>
-          </TableBody>
-        </div>
+    <div class="table" :class="isSearchOpened && 'table--search'">
+      <div class="table__wrapper">
+        <TableHead :header-fields="brokersTitle" />
+        <TableBody>
+          <TableRow v-for="(broker, idx) in brokers" :key="idx">
+            <TableCell
+              v-for="(item, id, index) in broker"
+              :key="id"
+              :item="item"
+              :class="`table-cell--${index}`"
+              :link="
+                broker.companyNames === item
+                  ? {
+                      url: `/brokers/${broker.companyNames}`,
+                      text: broker.companyNames,
+                    }
+                  : null
+              "
+            />
+          </TableRow>
+        </TableBody>
       </div>
     </div>
   </ClientOnly>

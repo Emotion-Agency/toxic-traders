@@ -1,11 +1,12 @@
 .table {
-  overflow: hidden;
-}
+  transition: width 0.3s ease;
+  width: 100%;
+  // width: calc(100vw - 48px); //padding container
 
-.table__container {
-  border-radius: 10px;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  &--search {
+    // width: calc(100vw - 324px); // column-gap + width search + padding container
+    width: 100%;
+  }
 }
 
 .table-cell {
@@ -16,25 +17,28 @@
 }
 
 .table__wrapper {
-  width: fit-content;
+  border-radius: 10px;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 
 .table-head {
-  background-color: var(--primary-default);
-  color: var(--white);
-
   .table-row {
     @include heading-b-h6;
   }
 
   .table-cell {
+    background-color: var(--primary-default);
+    color: var(--white);
     align-items: flex-start;
   }
 }
 
 .table-body {
-  height: 507px;
-  overflow: auto;
+  height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: fit-content;
 
   .table-row {
     @include text-body;
