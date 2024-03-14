@@ -2,6 +2,7 @@
 interface IProps {
   modalOpened: boolean
   title: string
+  className?: string
 }
 
 defineProps<IProps>()
@@ -16,7 +17,7 @@ const onClose = () => {
 
 <template>
   <Teleport to="body">
-    <div class="modal" :class="[modalOpened && 'modal--opened']">
+    <div class="modal" :class="[modalOpened && 'modal--opened', className]">
       <div class="modal__backdrop" @click="onClose" />
       <div class="modal__content">
         <div class="modal__header">

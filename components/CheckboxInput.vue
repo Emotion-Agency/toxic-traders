@@ -14,7 +14,7 @@ const emit = defineEmits(['inputValue'])
 
 <template>
   <label
-    :for="option"
+    :for="id"
     class="checkbox-input"
     :class="disabled && 'checkbox-input--disabled'"
   >

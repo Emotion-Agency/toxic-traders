@@ -71,8 +71,8 @@ onMounted(async () => {
           class="brokers__content"
           :class="isSearchOpened && 'brokers__content--search'"
         >
-          <BrokersSearch :is-opened="isSearchOpened" />
           <div v-if="brokersList.length" class="brokers__table-wrapper">
+            <BrokersSearch :is-opened="isSearchOpened" />
             <BrokersTable
               :is-search-opened="isSearchOpened"
               :brokers="brokersList"
@@ -89,9 +89,10 @@ onMounted(async () => {
     <TheModal
       :modal-opened="isSettingsOpened"
       title="Choose needed properties"
+      class-name="brokers__modal"
       @close="closeSettings"
     >
-      Content here
+      <TheSettings />
     </TheModal>
   </main>
 </template>
