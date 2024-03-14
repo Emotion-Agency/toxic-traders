@@ -5,9 +5,19 @@ import type { iBroker } from '~/types/brokers'
 const brokersList = ref<iBroker[]>([])
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
+const isSettingsOpened = ref(false)
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value
+}
+
+const openSettings = () => {
+  isSettingsOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const closeSettings = () => {
+  isSettingsOpened.value = false
 }
 
 onMounted(async () => {
@@ -41,7 +51,12 @@ onMounted(async () => {
                 <IconsSearch />
               </template>
             </TheButton>
-            <TheButton tag="button" button-size="medium" variant="fill">
+            <TheButton
+              tag="button"
+              button-size="medium"
+              variant="fill"
+              @click="openSettings"
+            >
               Settings
               <template #start-icon>
                 <IconsSettings />
@@ -71,5 +86,12 @@ onMounted(async () => {
         </div>
       </div>
     </section>
+    <TheModal
+      :modal-opened="isSettingsOpened"
+      title="Choose needed properties"
+      @close="closeSettings"
+    >
+      Content here
+    </TheModal>
   </main>
 </template>

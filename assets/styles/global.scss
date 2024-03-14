@@ -39,6 +39,10 @@ body {
   }
 }
 
+.modal-open {
+  overflow: hidden;
+}
+
 .e-landscape {
   @include coverdiv(fixed);
   z-index: 100000;
