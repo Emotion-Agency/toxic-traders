@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface IProps {
   modalOpened: boolean
-  title: string
+  title?: string
   className?: string
 }
 
@@ -21,7 +21,7 @@ const onClose = () => {
       <div class="modal__backdrop" @click="onClose" />
       <div class="modal__content">
         <div class="modal__header">
-          <p class="modal__title">
+          <p v-if="title" class="modal__title">
             {{ title }}
           </p>
           <button class="modal__close-btn" @click="onClose">

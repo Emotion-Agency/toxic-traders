@@ -6,6 +6,7 @@ const brokersList = ref<iBroker[]>([])
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
+const isHistoryOpened = ref(false)
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value
@@ -18,6 +19,15 @@ const openSettings = () => {
 
 const closeSettings = () => {
   isSettingsOpened.value = false
+}
+
+const openHistory = () => {
+  isHistoryOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const closeHistory = () => {
+  isHistoryOpened.value = false
 }
 
 onMounted(async () => {
@@ -62,7 +72,7 @@ onMounted(async () => {
                 <IconsSettings />
               </template>
             </TheButton>
-            <TheButton tag="button" button-size="medium" variant="outlined">
+            <TheButton tag="button" button-size="medium" variant="outlined" @click="openHistory">
               History
             </TheButton>
           </div>
@@ -94,5 +104,12 @@ onMounted(async () => {
     >
       <TheSettings />
     </TheModal>
+    <SlidingModal
+      :modal-opened="isHistoryOpened"
+      title="History"
+      @close="closeHistory"
+    >
+      Content here
+    </SlidingModal>
   </main>
 </template>
