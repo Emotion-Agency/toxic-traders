@@ -51,6 +51,7 @@ onMounted(async () => {
           <h1 class="brokers__title">All Brokers</h1>
           <div class="brokers__menu">
             <TheButton
+              v-if="brokersList.length"
               tag="button"
               button-size="medium"
               variant="outlined"
@@ -62,6 +63,7 @@ onMounted(async () => {
               </template>
             </TheButton>
             <TheButton
+              v-if="brokersList.length"
               tag="button"
               button-size="medium"
               variant="fill"
@@ -72,28 +74,34 @@ onMounted(async () => {
                 <IconsSettings />
               </template>
             </TheButton>
-            <TheButton tag="button" button-size="medium" variant="outlined" @click="openHistory">
+            <TheButton
+              tag="button"
+              button-size="medium"
+              variant="outlined"
+              @click="openHistory"
+            >
               History
             </TheButton>
           </div>
         </div>
         <div
+          v-if="brokersList.length"
           class="brokers__content"
           :class="isSearchOpened && 'brokers__content--search'"
         >
-          <div v-if="brokersList.length" class="brokers__table-wrapper">
-            <BrokersSearch :is-opened="isSearchOpened" />
+          <BrokersSearch :is-opened="isSearchOpened" />
+          <div class="brokers__table-wrapper">
             <BrokersTable
               :is-search-opened="isSearchOpened"
               :brokers="brokersList"
             />
             <ThePagination class="brokers__pagination" :total-pages="5" />
           </div>
-          <div v-else-if="isLoading && !brokersList.length">
-            <UiLoader />
-          </div>
-          <div v-else>No items found</div>
         </div>
+        <div v-else-if="isLoading && !brokersList.length">
+          <UiLoader />
+        </div>
+        <p v-else class="brokers__error-message">No items found</p>
       </div>
     </section>
     <TheModal
@@ -109,7 +117,7 @@ onMounted(async () => {
       title="History"
       @close="closeHistory"
     >
-      Content here
+      <TheHistory />
     </SlidingModal>
   </main>
 </template>

@@ -1,12 +1,8 @@
 .table {
   transition: width 0.3s ease;
   width: 100%;
-  // width: calc(100vw - 48px); //padding container
-
-  &--search {
-    // width: calc(100vw - 324px); // column-gap + width search + padding container
-    width: 100%;
-  }
+  overflow: hidden;
+  height: fit-content;
 }
 
 .table-cell {

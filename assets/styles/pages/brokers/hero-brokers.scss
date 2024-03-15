@@ -22,7 +22,6 @@
 .brokers__content {
   display: flex;
   column-gap: 0;
-  overflow: hidden;
   transition: column-gap 0.3s ease;
   margin-top: 32px;
 
@@ -32,8 +31,8 @@
 }
 
 .brokers__table-wrapper {
-  height: fit-content;
-  overflow: hidden;
+  width: calc(100% - 276px); // width search + column-gap
+  flex: 1 0 auto;
 }
 
 .brokers__pagination {
@@ -44,4 +43,9 @@
   .modal__content {
     max-width: 728px;
   }
+}
+
+.brokers__error-message {
+  @include text-big;
+  margin-top: 40px;
 }
