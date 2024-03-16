@@ -5,6 +5,7 @@ interface iProps {
   name: string
   type?: string
   disabled?: boolean
+  checked?: boolean
 }
 
 defineProps<iProps>()
@@ -28,6 +29,7 @@ const emit = defineEmits(['inputValue'])
       :value="option"
       :disabled="disabled"
       class="checkbox-input__type"
+      :checked="checked"
       @change="emit('inputValue', option)"
     />
     <span class="checkbox-input__checkmark">

@@ -7,6 +7,7 @@ const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
+const brokersHeadingFields = ref<string[] | []>([])
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value
@@ -30,6 +31,13 @@ const closeHistory = () => {
   isHistoryOpened.value = false
 }
 
+const changeTableColumns = (properties: string[]) => {
+  const newBrokers = brokersList.value.map(broker => {
+    return console.log(broker)
+  })
+  console.log(properties)
+}
+
 onMounted(async () => {
   isLoading.value = true
 
@@ -40,6 +48,8 @@ onMounted(async () => {
   brokersList.value = data.brokers
 
   console.log(data, brokersList.value)
+
+  brokersHeadingFields.value = formatBrokerNames(brokersList.value[0])
 })
 </script>
 
@@ -94,6 +104,7 @@ onMounted(async () => {
             <BrokersTable
               :is-search-opened="isSearchOpened"
               :brokers="brokersList"
+              :heading-fields="brokersHeadingFields"
             />
             <ThePagination class="brokers__pagination" :total-pages="5" />
           </div>
@@ -110,7 +121,10 @@ onMounted(async () => {
       class-name="brokers__modal"
       @close="closeSettings"
     >
-      <TheSettings />
+      <TheSettings
+        :properties="brokersHeadingFields"
+        @change="changeTableColumns"
+      />
     </TheModal>
     <SlidingModal
       :modal-opened="isHistoryOpened"

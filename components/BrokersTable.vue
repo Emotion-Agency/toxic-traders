@@ -4,15 +4,12 @@ import type { iBroker } from '~/types/brokers'
 interface iProps {
   brokers: iBroker[]
   isSearchOpened: boolean
+  headingFields: string[] | []
 }
 
 const props = defineProps<iProps>()
 
-const brokersTitle = ref<string[] | []>([])
-
 onMounted(() => {
-  brokersTitle.value = formatBrokerNames(props.brokers[0])
-
   console.log(
     props.brokers.map(broker => {
       return {
@@ -31,7 +28,7 @@ onMounted(() => {
   <ClientOnly>
     <div class="table">
       <div class="table__wrapper">
-        <TableHead :header-fields="brokersTitle" />
+        <TableHead :header-fields="headingFields" />
         <TableBody>
           <TableRow v-for="(broker, idx) in brokers" :key="idx">
             <TableCell
