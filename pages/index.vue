@@ -156,7 +156,7 @@ const onChangeCheckbox = val => {
           v-for="(radio, idx) in checkboxList"
           :id="radio.id"
           :key="idx"
-          :option="radio.option"
+          :value="radio.option"
           :name="radio.name"
           :type="radio.type"
           :disabled="radio.disabled"

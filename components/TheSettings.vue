@@ -7,8 +7,6 @@ const props = defineProps<iProps>()
 
 const emit = defineEmits(['change'])
 
-const checkboxItemsList = ref([])
-
 const searchInput = reactive({
   required: false,
   id: 'settings-search',
@@ -20,17 +18,19 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
-const checkboxList = computed(() => {
-  return props.properties.map(property => {
-    return {
-      option: property,
-      id: property,
-      name: 'settings-checkboxes',
-      type: 'checkbox',
-      disabled: false,
-      checked: false,
-    }
-  })
+const checkboxList = ref([])
+
+const selectedCheckboxItems = ref<string[]>([])
+
+watchEffect(() => {
+  checkboxList.value = props.properties.map(property => ({
+    value: formatNameToNormalCase(property),
+    id: property,
+    name: 'settings-checkboxes',
+    type: 'checkbox',
+    disabled: false,
+    checked: true,
+  }))
 })
 
 const onChange = val => {
@@ -42,15 +42,14 @@ const selectAllItems = () => {
 }
 
 const onChangeCheckbox = val => {
-  const index = checkboxItemsList.value.indexOf(val)
+  selectedCheckboxItems.value = checkboxList.value
+    .filter(item => {
+      console.log(item.value !== val)
+      return item.value !== val
+    })
+    .map(item => item.value)
 
-  if (index === -1) {
-    checkboxItemsList.value.push(val)
-  } else {
-    checkboxItemsList.value.splice(index, 1)
-  }
-
-  emit('change', checkboxItemsList.value)
+  emit('change', selectedCheckboxItems.value)
 }
 </script>
 
@@ -89,7 +88,7 @@ const onChangeCheckbox = val => {
         v-for="(item, idx) in checkboxList"
         :id="item.id"
         :key="idx"
-        :option="item.option"
+        :value="item.value"
         :name="item.name"
         :type="item.type"
         :disabled="item.disabled"
@@ -99,10 +98,11 @@ const onChangeCheckbox = val => {
     </div>
     <div class="settings__info">
       <p class="settings__info-text">
-        Showed properties: {{ checkboxItemsList.length }}
+        Showed properties: {{ selectedCheckboxItems.length }}
       </p>
       <p class="settings__info-text">
-        Hidden properties: {{ checkboxList.length - checkboxItemsList.length }}
+        Hidden properties:
+        {{ checkboxList.length - selectedCheckboxItems.length }}
       </p>
     </div>
   </div>

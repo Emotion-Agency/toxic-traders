@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 import type { iBroker } from '~/types/brokers'
+import {
+  formatToSnakeCase,
+  getBrokerHeadings,
+} from '~/utils/formatBrokerHeaders'
 
 const brokersList = ref<iBroker[]>([])
 const isLoading = ref(true)
@@ -32,10 +36,14 @@ const closeHistory = () => {
 }
 
 const changeTableColumns = (properties: string[]) => {
-  const newBrokers = brokersList.value.map(broker => {
-    return console.log(broker)
-  })
   console.log(properties)
+  // const formattedProperties = properties.map(property =>
+  //   formatToSnakeCase(property)
+  // )
+  // const newBrokers = brokersList.value.map(broker => {
+  //   console.log(Object.keys(broker), formattedProperties)
+  // })
+  // console.log(newBrokers)
 }
 
 onMounted(async () => {
@@ -49,7 +57,7 @@ onMounted(async () => {
 
   console.log(data, brokersList.value)
 
-  brokersHeadingFields.value = formatBrokerNames(brokersList.value[0])
+  brokersHeadingFields.value = getBrokerHeadings(brokersList.value[0])
 })
 </script>
 

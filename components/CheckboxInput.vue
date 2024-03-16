@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface iProps {
   id: string
-  option: string
+  value: string
   name: string
   type?: string
   disabled?: boolean
@@ -20,17 +20,17 @@ const emit = defineEmits(['inputValue'])
     :class="disabled && 'checkbox-input--disabled'"
   >
     <span class="checkbox-input__text">
-      {{ option }}
+      {{ value }}
     </span>
     <input
       :id="id"
       :type="type"
       :name="name"
-      :value="option"
+      :value="value"
       :disabled="disabled"
       class="checkbox-input__type"
       :checked="checked"
-      @change="emit('inputValue', option)"
+      @change="emit('inputValue', value)"
     />
     <span class="checkbox-input__checkmark">
       <IconsCheck />

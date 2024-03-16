@@ -22,13 +22,17 @@ onMounted(() => {
     })
   )
 })
+
+const formattedHeadingFields = computed(() => {
+  return props.headingFields.map(field => formatNameToNormalCase(field))
+})
 </script>
 
 <template>
   <ClientOnly>
     <div class="table">
       <div class="table__wrapper">
-        <TableHead :header-fields="headingFields" />
+        <TableHead :header-fields="formattedHeadingFields" />
         <TableBody>
           <TableRow v-for="(broker, idx) in brokers" :key="idx">
             <TableCell
