@@ -8,9 +8,18 @@ interface iProps {
   checked?: boolean
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const emit = defineEmits(['inputValue'])
+
+const isChecked = ref(props.checked ?? false)
+
+watch(
+  () => props.checked,
+  () => {
+    isChecked.value = props.checked
+  }
+)
 </script>
 
 <template>
@@ -24,13 +33,14 @@ const emit = defineEmits(['inputValue'])
     </span>
     <input
       :id="id"
+      v-model="isChecked"
       :type="type"
       :name="name"
       :value="value"
       :disabled="disabled"
       class="checkbox-input__type"
-      :checked="checked"
-      @change="emit('inputValue', value)"
+      :checked="isChecked"
+      @change="emit('inputValue', value, isChecked)"
     />
     <span class="checkbox-input__checkmark">
       <IconsCheck />

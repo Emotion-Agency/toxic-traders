@@ -9,19 +9,19 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-onMounted(() => {
-  console.log(
-    props.brokers.map(broker => {
-      return {
-        ...broker,
-        companyNames: {
-          text: broker.companyNames,
-          url: `/brokers/${broker.companyNames}`,
-        },
-      }
-    })
-  )
-})
+// onMounted(() => {
+//   console.log(
+//     props.brokers.map(broker => {
+//       return {
+//         ...broker,
+//         companyNames: {
+//           text: broker.companyNames,
+//           url: `/brokers/${broker.companyNames}`,
+//         },
+//       }
+//     })
+//   )
+// })
 
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))

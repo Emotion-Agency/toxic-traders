@@ -55,9 +55,9 @@ onMounted(async () => {
 
   brokersList.value = data.brokers
 
-  console.log(data, brokersList.value)
-
   brokersHeadingFields.value = getBrokerHeadings(brokersList.value[0])
+
+  console.log(data, brokersList.value, brokersHeadingFields.value)
 })
 </script>
 

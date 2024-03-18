@@ -31,6 +31,8 @@ watchEffect(() => {
     disabled: false,
     checked: true,
   }))
+
+  console.log(checkboxList.value)
 })
 
 const onChange = val => {
@@ -41,14 +43,23 @@ const selectAllItems = () => {
   console.log('selected all')
 }
 
-const onChangeCheckbox = val => {
-  selectedCheckboxItems.value = checkboxList.value
-    .filter(item => {
-      console.log(item.value !== val)
-      return item.value !== val
-    })
-    .map(item => item.value)
+const onChangeCheckbox = (val, checked) => {
+  // selectedCheckboxItems.value = checkboxList.value.filter(
+  //   item => item.value !== val
+  // )
 
+  checkboxList.value = checkboxList.value.map(item => {
+    if (item.value === val) {
+      return {
+        ...item,
+        checked,
+      }
+    }
+
+    return item
+  })
+
+  console.log(checkboxList.value)
   emit('change', selectedCheckboxItems.value)
 }
 </script>
