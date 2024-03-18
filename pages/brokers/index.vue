@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 import type { iBroker } from '~/types/brokers'
-import {
-  formatToSnakeCase,
-  getBrokerHeadings,
-} from '~/utils/formatBrokerHeaders'
+import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
 const brokersList = ref<iBroker[]>([])
+const filteredBrokers = ref<iBroker[]>([])
+
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
-const brokersHeadingFields = ref<string[] | []>([])
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value
@@ -36,15 +34,33 @@ const closeHistory = () => {
 }
 
 const changeTableColumns = (properties: string[]) => {
-  console.log(properties)
-  // const formattedProperties = properties.map(property =>
-  //   formatToSnakeCase(property)
-  // )
-  // const newBrokers = brokersList.value.map(broker => {
-  //   console.log(Object.keys(broker), formattedProperties)
-  // })
-  // console.log(newBrokers)
+  filteredBrokers.value = brokersList.value.map(broker => {
+    const formattedColumnsName = Object.keys(broker)
+
+    let newObj = {}
+
+    formattedColumnsName.forEach(column => {
+      if (properties.includes(column)) {
+        newObj = {
+          ...newObj,
+          [column]: broker[column],
+        }
+      }
+    })
+
+    return newObj
+  })
+
+  console.log(filteredBrokers.value)
 }
+
+const brokersHeadings = computed(() => {
+  return getBrokerHeadings(brokersList.value[0] ?? {})
+})
+
+const filteredBrokerHeading = computed(() => {
+  return getBrokerHeadings(filteredBrokers.value[0] ?? {})
+})
 
 onMounted(async () => {
   isLoading.value = true
@@ -54,10 +70,9 @@ onMounted(async () => {
   isLoading.value = false
 
   brokersList.value = data.brokers
+  filteredBrokers.value = brokersList.value
 
-  brokersHeadingFields.value = getBrokerHeadings(brokersList.value[0])
-
-  console.log(data, brokersList.value, brokersHeadingFields.value)
+  // console.log(data, brokersList.value, brokersHeadingFields.value)
 })
 </script>
 
@@ -111,8 +126,8 @@ onMounted(async () => {
           <div class="brokers__table-wrapper">
             <BrokersTable
               :is-search-opened="isSearchOpened"
-              :brokers="brokersList"
-              :heading-fields="brokersHeadingFields"
+              :brokers="filteredBrokers"
+              :heading-fields="filteredBrokerHeading"
             />
             <ThePagination class="brokers__pagination" :total-pages="5" />
           </div>
@@ -129,10 +144,7 @@ onMounted(async () => {
       class-name="brokers__modal"
       @close="closeSettings"
     >
-      <TheSettings
-        :properties="brokersHeadingFields"
-        @change="changeTableColumns"
-      />
+      <TheSettings :properties="brokersHeadings" @change="changeTableColumns" />
     </TheModal>
     <SlidingModal
       :modal-opened="isHistoryOpened"

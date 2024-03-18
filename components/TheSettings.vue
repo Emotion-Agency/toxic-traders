@@ -22,18 +22,19 @@ const checkboxList = ref([])
 
 const selectedCheckboxItems = ref<string[]>([])
 
-watchEffect(() => {
-  checkboxList.value = props.properties.map(property => ({
-    value: formatNameToNormalCase(property),
-    id: property,
-    name: 'settings-checkboxes',
-    type: 'checkbox',
-    disabled: false,
-    checked: true,
-  }))
-
-  console.log(checkboxList.value)
-})
+watch(
+  () => props.properties,
+  () => {
+    checkboxList.value = props.properties.map(property => ({
+      value: formatNameToNormalCase(property),
+      id: property,
+      name: 'settings-checkboxes',
+      type: 'checkbox',
+      disabled: false,
+      checked: true,
+    }))
+  }
+)
 
 const onChange = val => {
   console.log(val)
@@ -43,11 +44,7 @@ const selectAllItems = () => {
   console.log('selected all')
 }
 
-const onChangeCheckbox = (val, checked) => {
-  // selectedCheckboxItems.value = checkboxList.value.filter(
-  //   item => item.value !== val
-  // )
-
+const onChangeCheckbox = (val: string, checked: boolean) => {
   checkboxList.value = checkboxList.value.map(item => {
     if (item.value === val) {
       return {
@@ -58,10 +55,19 @@ const onChangeCheckbox = (val, checked) => {
 
     return item
   })
-
-  console.log(checkboxList.value)
-  emit('change', selectedCheckboxItems.value)
 }
+
+watch(
+  () => checkboxList.value,
+  () => {
+    selectedCheckboxItems.value = checkboxList.value
+      .filter(item => item.checked)
+      .map(item => item.id)
+
+    emit('change', selectedCheckboxItems.value)
+  },
+  { deep: true }
+)
 </script>
 
 <template>
