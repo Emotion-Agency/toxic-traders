@@ -29,9 +29,7 @@ useHead({
     </Head>
     <AppGrid />
     <!-- <Landscape /> -->
-    <div class="scrollbar-container">
-      <TheHeader />
-      <slot />
-    </div>
+    <TheHeader />
+    <slot />
   </div>
 </template>
