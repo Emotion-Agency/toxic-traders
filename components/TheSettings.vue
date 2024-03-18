@@ -41,7 +41,12 @@ const onChange = val => {
 }
 
 const selectAllItems = () => {
-  console.log('selected all')
+  checkboxList.value = checkboxList.value.map(item => {
+    return {
+      ...item,
+      checked: true,
+    }
+  })
 }
 
 const onChangeCheckbox = (val: string, checked: boolean) => {
