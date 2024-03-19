@@ -26,7 +26,7 @@
 .broker-aside__wrapper {
   position: sticky;
   position: -webkit-sticky;
-  top: 0;
+  top: calc(var(--h) + 20px);
   height: calc(100vh - 130px);
 }
 

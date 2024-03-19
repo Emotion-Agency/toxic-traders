@@ -1,41 +1,25 @@
 <script lang="ts" setup>
-import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 import type { iBroker } from '~/types/brokers'
 
 const route = useRoute()
-const name = route.params.name
+const id = route.params.id
 const brokersList = ref<iBroker[]>([])
 const categoryModalOpened = ref(false)
+const addressModalOpened = ref(false)
+const categoryOptions = ref<string[]>([])
+const brokersHeadings = ref<string[]>([])
+const addressCompany = ref<string[]>([])
+
+const { getAllBrokers } = useBrokers()
 
 onMounted(async () => {
-  const data = await getSortedBrokers()
+  const data = await getAllBrokers()
 
   brokersList.value = data.brokers
+
+  categoryOptions.value = brokersList.value.map(obj => obj.brokerCategory)
+  brokersHeadings.value = brokersList.value.map(obj => obj.companyNames)
 })
-
-const brokersHeadings = computed(() => {
-  return getBrokerHeadings(brokersList.value[0] ?? {})
-})
-
-const optionList = [
-  'Option 1',
-  'Option 2',
-  'Option 3',
-  'Option 4',
-  'Option 5',
-  'Option 6',
-  'Option 7',
-  'Option 8',
-]
-
-const categoryModalOpen = () => {
-  categoryModalOpened.value = true
-  document.body.classList.add('modal-open')
-}
-
-const categoryModalClose = () => {
-  categoryModalOpened.value = false
-}
 
 const categoryInputData = {
   required: false,
@@ -46,8 +30,48 @@ const categoryInputData = {
   placeholder: 'Category name',
 }
 
+const addressInputData = {
+  required: false,
+  id: 'address',
+  name: 'Adress',
+  type: 'textarea',
+  value: '',
+  placeholder: 'Company adress',
+}
+
+const locationInputData = {
+  required: false,
+  id: 'location',
+  name: 'Location',
+  type: 'text',
+  value: '',
+  placeholder: 'US NY',
+}
+
 const categoryOnChange = () => {
   console.log('new category')
+}
+
+const addressOnChange = () => {
+  console.log('new address')
+}
+
+const addressModalOpen = () => {
+  addressModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const addressModalClose = () => {
+  addressModalOpened.value = false
+}
+
+const categoryModalOpen = () => {
+  categoryModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const categoryModalClose = () => {
+  categoryModalOpened.value = false
 }
 </script>
 
@@ -68,7 +92,27 @@ const categoryOnChange = () => {
               :is-inputs="true"
               @open="categoryModalOpen"
             >
-              <CustomSelect :options="optionList" placeholder="Regulated" />
+              <CustomSelect
+                :options="categoryOptions"
+                placeholder="Regulated"
+              />
+            </TheAccordion>
+            <TheAccordion title="Location Servers" :is-inputs="true">
+              <TheInput
+                :id="categoryInputData.id"
+                :required="categoryInputData.required"
+                :name="categoryInputData.name"
+                :type="categoryInputData.type"
+                :placeholder="categoryInputData.placeholder"
+                @input-value="categoryOnChange"
+              />
+            </TheAccordion>
+            <TheAccordion
+              title="Adress Company"
+              additional-button="Add new"
+              @open="addressModalOpen"
+            >
+              accordion content
             </TheAccordion>
           </div>
         </div>
@@ -231,12 +275,12 @@ const categoryOnChange = () => {
           odit sequi iste sed voluptatibus consequatur corrupti laboriosam
           obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
           rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          {{ name }}
+          {{ id }}
         </div>
       </section>
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
-          <div class="broker-aside__content">right {{ name }}</div>
+          <div class="broker-aside__content">right {{ id }}</div>
         </div>
       </aside>
     </div>
@@ -246,11 +290,11 @@ const categoryOnChange = () => {
       @close="categoryModalClose"
     >
       <TheInput
-        :id="categoryInputData.id"
-        :required="categoryInputData.required"
-        :name="categoryInputData.name"
-        :type="categoryInputData.type"
-        :placeholder="categoryInputData.placeholder"
+        :id="locationInputData.id"
+        :required="locationInputData.required"
+        :name="locationInputData.name"
+        :type="locationInputData.type"
+        :placeholder="locationInputData.placeholder"
         class="broker-aside__category-input"
         @input-value="categoryOnChange"
       />
@@ -260,6 +304,34 @@ const categoryOnChange = () => {
           variant="fill"
           button-size="medium"
           @click="categoryModalClose"
+        >
+          Close
+        </TheButton>
+        <TheButton tag="button" variant="fill" button-size="medium">
+          Add
+        </TheButton>
+      </div>
+    </TheModal>
+    <TheModal
+      :modal-opened="addressModalOpened"
+      title="Add new category"
+      @close="addressModalClose"
+    >
+      <TheInput
+        :id="addressInputData.id"
+        :required="addressInputData.required"
+        :name="addressInputData.name"
+        :type="addressInputData.type"
+        :placeholder="addressInputData.placeholder"
+        class="broker-aside__category-input"
+        @input-value="addressOnChange"
+      />
+      <div class="broker-aside__category-buttons">
+        <TheButton
+          tag="button"
+          variant="fill"
+          button-size="medium"
+          @click="addressModalClose"
         >
           Close
         </TheButton>

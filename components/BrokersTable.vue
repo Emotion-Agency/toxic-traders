@@ -23,6 +23,10 @@ const props = defineProps<iProps>()
 //   )
 // })
 
+// const updatedBrokers = computed(() => {
+//   return props.brokers.map(broker => adapter(broker))
+// })
+
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
 })

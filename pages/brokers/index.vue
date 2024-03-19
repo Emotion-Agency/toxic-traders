@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 import type { iBroker } from '~/types/brokers'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
@@ -62,10 +61,12 @@ const filteredBrokerHeading = computed(() => {
   return getBrokerHeadings(filteredBrokers.value[0] ?? {})
 })
 
+const { getAllBrokers } = useBrokers()
+
 onMounted(async () => {
   isLoading.value = true
 
-  const data = await getSortedBrokers()
+  const data = await getAllBrokers()
 
   isLoading.value = false
 

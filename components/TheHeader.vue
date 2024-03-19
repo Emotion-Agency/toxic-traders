@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { resize } from '@emotionagency/utils'
 
-let navbarPos
+// let navbarPos
 const isDarkMode = ref(false)
 const $el = ref<HTMLElement | null>(null)
 
@@ -32,12 +32,12 @@ const toggleTheme = () => {
   localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
 }
 
-onMounted(async () => {
-  const { default: NavbarPos } = await import('~/utils/navbarPos')
+onMounted(() => {
+  // const { default: NavbarPos } = await import('~/utils/navbarPos')
   const savedTheme = localStorage.getItem('theme')
 
-  navbarPos = new NavbarPos()
-  navbarPos.init()
+  // navbarPos = new NavbarPos()
+  // navbarPos.init()
   resize.on(calcHeight)
 
   if (savedTheme) {
@@ -47,7 +47,7 @@ onMounted(async () => {
 })
 
 useOnBeforeUnmountDelay(() => {
-  navbarPos && navbarPos.destroy()
+  // navbarPos && navbarPos.destroy()
   resize.off(calcHeight)
 })
 </script>
