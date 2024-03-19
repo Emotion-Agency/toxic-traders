@@ -3,7 +3,8 @@ import { resize } from '@emotionagency/utils'
 
 interface iProps {
   title: string
-  additionalButton: string
+  additionalButton?: string
+  isInputs?: boolean
 }
 
 defineProps<iProps>()
@@ -42,13 +43,18 @@ useOnBeforeUnmountDelay(() => {
           <IconsSelectionArrowDown />
         </button>
         <button
+          v-if="additionalButton"
           class="accordion__btn accordion__additional-btn"
           @click="emit('open')"
         >
           {{ additionalButton }}
         </button>
       </div>
-      <div ref="$el" class="accordion__content-wrapper">
+      <div
+        ref="$el"
+        class="accordion__content-wrapper"
+        :class="isInputs && 'accordion__content-wrapper--inputs'"
+      >
         <div class="accordion__content">
           <slot />
         </div>

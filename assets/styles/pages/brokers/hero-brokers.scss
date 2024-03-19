@@ -43,6 +43,15 @@
   .modal__content {
     max-width: 728px;
   }
+
+  .modal__container {
+    padding: 32px;
+    padding-top: 0;
+  }
+
+  .modal__header {
+    border: none;
+  }
 }
 
 .brokers__error-message {

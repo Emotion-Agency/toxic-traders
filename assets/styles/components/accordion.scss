@@ -1,6 +1,4 @@
 .accordion {
-  overflow: hidden;
-
   &--opened {
     .accordion__content-wrapper {
       height: var(--h);
@@ -59,8 +57,21 @@
   height: 0;
   pointer-events: none;
   margin-top: 0;
+
+  &--inputs {
+    background-color: transparent;
+    border-radius: unset;
+
+    .accordion__content {
+      row-gap: 12px;
+      padding: 0;
+    }
+  }
 }
 
 .accordion__content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
   padding: 20px;
 }
