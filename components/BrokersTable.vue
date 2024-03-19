@@ -43,7 +43,7 @@ const formattedHeadingFields = computed(() => {
               :link="
                 broker.companyNames === item
                   ? {
-                      url: `/brokers/${broker.companyNames}`,
+                      url: `/brokers/${broker.id}`,
                       text: broker.companyNames,
                     }
                   : null

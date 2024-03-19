@@ -8,7 +8,20 @@ const name = route.params.name
     <div class="container grid main-broker__wrapper">
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
-          <div class="broker-aside__content">left {{ name }}</div>
+          <div class="broker-aside__content">
+            <TheAccordion title="Company Name" additional-button="Edit">
+              <p>
+                Hello, content dropdown is here!!! Hello, content dropdown is
+                here!!! Hello, content dropdown is here!!!
+              </p>
+            </TheAccordion>
+            <TheAccordion title="Company Name" additional-button="Edit">
+              <p>
+                Hello, content dropdown is here!!! Hello, content dropdown is
+                here!!! Hello, content dropdown is here!!!
+              </p>
+            </TheAccordion>
+          </div>
         </div>
       </aside>
       <section class="main-broker__content">

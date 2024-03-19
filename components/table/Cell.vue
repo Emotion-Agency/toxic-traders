@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface iProps {
-  item: string | null
+  item: string | number | null
   link?: {
     text: string
     url: string

@@ -20,6 +20,7 @@ export interface iBroker {
   regulatorName?: string | null
   restrictedCountries?: string | null
   website?: string | null
+  id?: number | null
 }
 
 export interface iBrokersData {
