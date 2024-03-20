@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { getSortedLogs } from '~/api/brokers/getSortedLogs'
 import type { iBroker } from '~/types/brokers'
+import type { iLogs } from '~/types/logs'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
 const brokersList = ref<iBroker[]>([])
+const logsList = ref<iLogs[]>([])
 const filteredBrokers = ref<iBroker[]>([])
 
 const isLoading = ref(true)
@@ -49,8 +52,6 @@ const changeTableColumns = (properties: string[]) => {
 
     return newObj
   })
-
-  console.log(filteredBrokers.value)
 }
 
 const brokersHeadings = computed(() => {
@@ -66,12 +67,15 @@ const { getAllBrokers } = useBrokers()
 onMounted(async () => {
   isLoading.value = true
 
-  const data = await getAllBrokers()
+  const brokersData = await getAllBrokers()
+  const logsData = await getSortedLogs()
 
   isLoading.value = false
 
-  brokersList.value = data.brokers
+  brokersList.value = brokersData.brokers
   filteredBrokers.value = brokersList.value
+
+  logsList.value = logsData.logs
 
   // console.log(data, brokersList.value, brokersHeadingFields.value)
 })
@@ -152,7 +156,7 @@ onMounted(async () => {
       title="History"
       @close="closeHistory"
     >
-      <TheHistory />
+      <TheHistory :logs="logsList" />
     </SlidingModal>
   </main>
 </template>

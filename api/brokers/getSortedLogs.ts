@@ -1,9 +1,9 @@
 import axiosInstance from '../axiosInstance'
-import type { iBrokersData } from '~/types/brokers'
+import type { iLogsData } from '~/types/logs'
 
-export const getSortedBrokers = async () => {
+export const getSortedLogs = async () => {
   try {
-    const { data }: iBrokersData = await axiosInstance.get(
+    const { data }: iLogsData = await axiosInstance.get(
       'GetSortedLogs?offset=1&count=25&sortBy=companyNames&sortOrder=1'
     )
 

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const headerFields = ['ID', 'Message', 'Timestamp', 'Level', 'BrokerId']
+import type { iLogs } from '~/types/logs'
+
+interface iProps {
+  logs: iLogs[]
+}
+
+defineProps<iProps>()
+
+const headerFields = ['ID', 'Message', 'Timestamp', 'Level']
 </script>
 
 <template>
@@ -8,22 +16,14 @@ const headerFields = ['ID', 'Message', 'Timestamp', 'Level', 'BrokerId']
       <div class="table__wrapper">
         <TableHead :header-fields="headerFields" />
         <TableBody>
-          <!-- <TableRow v-for="(broker, idx) in brokers" :key="idx">
+          <TableRow v-for="(log, idx) in logs" :key="idx">
             <TableCell
-              v-for="(item, id, index) in broker"
+              v-for="(item, id, index) in log"
               :key="id"
               :item="item"
               :class="`table-cell--${index}`"
-              :link="
-                broker.companyNames === item
-                  ? {
-                      url: `/brokers/${broker.companyNames}`,
-                      text: broker.companyNames,
-                    }
-                  : null
-              "
             />
-          </TableRow> -->
+          </TableRow>
         </TableBody>
       </div>
     </div>

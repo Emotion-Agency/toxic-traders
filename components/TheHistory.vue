@@ -1,7 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { iLogs } from '~/types/logs'
+
+interface iProps {
+  logs: iLogs[]
+}
+
+defineProps<iProps>()
+</script>
 
 <template>
   <div class="history">
-    <HistoryTable />
+    <HistoryTable :logs="logs" />
   </div>
 </template>
