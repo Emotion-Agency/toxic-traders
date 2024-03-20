@@ -51,10 +51,10 @@ const categoryModalClose = () => {
         :name="categoryInputData.name"
         :type="categoryInputData.type"
         :placeholder="categoryInputData.placeholder"
-        class="broker-aside__category-input"
+        class="category__modal-input"
         @input-value="categoryOnChange"
       />
-      <div class="broker-aside__category-buttons">
+      <div class="category__buttons">
         <TheButton
           tag="button"
           variant="fill"

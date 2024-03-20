@@ -1,0 +1,5 @@
+.optional-button {
+  @include button-small;
+  color: var(--secondary-light);
+  background-color: transparent;
+}

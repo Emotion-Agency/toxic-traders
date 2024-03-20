@@ -42,13 +42,9 @@ useOnBeforeUnmountDelay(() => {
           {{ title }}
           <IconsSelectionArrowDown />
         </button>
-        <button
-          v-if="additionalButton"
-          class="accordion__btn accordion__additional-btn"
-          @click="emit('open')"
-        >
+        <OptionalButton v-if="additionalButton" @click="emit('open')">
           {{ additionalButton }}
-        </button>
+        </OptionalButton>
       </div>
       <div
         ref="$el"

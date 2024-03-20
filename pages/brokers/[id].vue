@@ -6,6 +6,7 @@ const id = route.params.id
 const brokersList = ref<iBroker[]>([])
 const categoryOptions = ref<string[]>([])
 const brokersHeadings = ref<string[]>([])
+const websitesList = ref<string[]>([])
 
 const { getAllBrokers } = useBrokers()
 
@@ -16,6 +17,7 @@ onMounted(async () => {
 
   categoryOptions.value = brokersList.value.map(obj => obj.brokerCategory)
   brokersHeadings.value = brokersList.value.map(obj => obj.companyNames)
+  websitesList.value = brokersList.value.map(obj => obj.website)
 })
 </script>
 
@@ -29,6 +31,7 @@ onMounted(async () => {
             <BrokerCategory :category-options="categoryOptions" />
             <BrokerLocationServers />
             <BrokerAddressCompany />
+            <BrokerWebsites :websites="websitesList" />
           </div>
         </div>
       </aside>

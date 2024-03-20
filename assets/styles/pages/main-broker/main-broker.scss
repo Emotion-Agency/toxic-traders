@@ -37,21 +37,3 @@
   overflow-y: auto;
   height: 100%;
 }
-
-.broker-aside__category-input {
-  margin-top: 16px;
-}
-
-.broker-aside__category-buttons {
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  justify-content: flex-end;
-  margin-top: 32px;
-
-  .button {
-    &:first-child {
-      background-color: var(--secondary-default);
-    }
-  }
-}

@@ -53,11 +53,11 @@ const addressModalClose = () => {
         :placeholder="addressInput.placeholder"
         @input-value="addressOnChange"
       />
-      <button class="address-company__btn">Show more</button>
+      <OptionalButton> Show more </OptionalButton>
     </TheAccordion>
     <TheModal
       :modal-opened="addressModalOpened"
-      title="Add new category"
+      title="Add new address"
       @close="addressModalClose"
     >
       <TheInput
@@ -66,10 +66,10 @@ const addressModalClose = () => {
         :name="addressModalInput.name"
         :type="addressModalInput.type"
         :placeholder="addressModalInput.placeholder"
-        class="broker-aside__category-input"
+        class="address-company__modal-input"
         @input-value="addressModalOnChange"
       />
-      <div class="broker-aside__category-buttons">
+      <div class="address-company__buttons">
         <TheButton
           tag="button"
           variant="fill"
