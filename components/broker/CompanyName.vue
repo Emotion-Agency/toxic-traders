@@ -1,3 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface iProps {
+  brokersHeadings: string[]
+}
 
-<template>Company names</template>
+defineProps<iProps>()
+</script>
+
+<template>
+  <div class="company-name">
+    <TheAccordion title="Company Name">
+      <p v-for="(title, idx) in brokersHeadings" :key="idx">
+        {{ formatNameToNormalCase(title) }}
+      </p>
+    </TheAccordion>
+  </div>
+</template>

@@ -1,0 +1,5 @@
+.address-company__btn {
+  @include button-small;
+  background-color: transparent;
+  color: var(--secondary-light);
+}
