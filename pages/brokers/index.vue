@@ -122,26 +122,26 @@ onMounted(async () => {
             </TheButton>
           </div>
         </div>
-        <div
-          v-if="brokersList.length"
-          class="brokers__content"
-          :class="isSearchOpened && 'brokers__content--search'"
-        >
-          <BrokersSearch :is-opened="isSearchOpened" />
-          <div class="brokers__table-wrapper">
-            <BrokersTable
-              :is-search-opened="isSearchOpened"
-              :brokers="filteredBrokers"
-              :heading-fields="filteredBrokerHeading"
-            />
-            <ThePagination class="brokers__pagination" :total-pages="5" />
-          </div>
-        </div>
-        <div v-else-if="isLoading && !brokersList.length">
-          <UiLoader />
-        </div>
-        <p v-else class="brokers__error-message">No items found</p>
       </div>
+      <div
+        v-if="brokersList.length"
+        class="brokers__content"
+        :class="isSearchOpened && 'brokers__content--search'"
+      >
+        <BrokersSearch :is-opened="isSearchOpened" />
+        <div class="brokers__table-wrapper">
+          <BrokersTable
+            :is-search-opened="isSearchOpened"
+            :brokers="filteredBrokers"
+            :heading-fields="filteredBrokerHeading"
+          />
+          <ThePagination class="brokers__pagination" :total-pages="5" />
+        </div>
+      </div>
+      <div v-else-if="isLoading && !brokersList.length">
+        <UiLoader />
+      </div>
+      <p v-else class="brokers__error-message">No items found</p>
     </section>
     <TheModal
       :modal-opened="isSettingsOpened"

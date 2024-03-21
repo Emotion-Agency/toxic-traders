@@ -19,9 +19,7 @@ body {
   height: fit-content;
   @include smooth-font;
   @include text-body;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 
   @media (max-width: $br1) {
     font-size: 16px;
@@ -96,6 +94,7 @@ body {
 }
 
 ::-webkit-scrollbar {
+  display: none;
   height: 6px;
   width: 6px;
 }
