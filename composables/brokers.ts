@@ -1,3 +1,4 @@
+import { getBrokerById } from '~/api/brokers/getBrokerById'
 import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 // import { getSortedLogs } from '~/api/brokers/getSortedLogs'
 
@@ -8,15 +9,11 @@ export const useBrokers = () => {
     return data
   }
 
-  return { getAllBrokers }
+  const getBroker = async (id: number) => {
+    const data = await getBrokerById(id)
+
+    return data
+  }
+
+  return { getAllBrokers, getBroker }
 }
-
-// export const useLogs = () => {
-//   const getAllLogs = async () => {
-//     const data = await getSortedLogs()
-
-//     return data
-//   }
-
-//   return { getAllLogs }
-// }

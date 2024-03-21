@@ -9,7 +9,7 @@ interface iProps {
 
 defineProps<iProps>()
 
-const isOpened = ref(false)
+const isOpened = ref(true)
 const emit = defineEmits(['open'])
 
 const $el = ref<HTMLElement | null>(null)

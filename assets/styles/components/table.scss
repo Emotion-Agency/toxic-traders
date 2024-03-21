@@ -3,6 +3,16 @@
   width: 100%;
   overflow: hidden;
   height: fit-content;
+
+  &--full-width {
+    .table-body {
+      width: auto;
+    }
+
+    .table-cell {
+      max-width: none;
+    }
+  }
 }
 
 .table-cell {
@@ -50,7 +60,7 @@
 .table-row {
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: auto;
+  grid-template-columns: repeat(auto-fit, minmax(9%, 1fr));
 }
 
 .table-cell {

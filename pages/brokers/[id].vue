@@ -1,23 +1,20 @@
 <script lang="ts" setup>
-import type { iBroker } from '~/types/brokers'
-
 const route = useRoute()
 const id = route.params.id
-const brokersList = ref<iBroker[]>([])
 const categoryOptions = ref<string[]>([])
 const brokersHeadings = ref<string[]>([])
 const websitesList = ref<string[]>([])
 
-const { getAllBrokers } = useBrokers()
+const { getBroker } = useBrokers()
 
 onMounted(async () => {
-  const data = await getAllBrokers()
+  const data = await getBroker(Number(id))
 
-  brokersList.value = data.brokers
+  console.log(data)
 
   categoryOptions.value = brokersList.value.map(obj => obj.brokerCategory)
   brokersHeadings.value = brokersList.value.map(obj => obj.companyNames)
-  websitesList.value = brokersList.value.map(obj => obj.website)
+  websitesList.value = data?.website?.split(',')
 })
 </script>
 

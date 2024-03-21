@@ -30,3 +30,9 @@ export interface iBrokersData {
     message: string
   }
 }
+
+export interface iBrokerData {
+  data: iBroker
+}
+
+// export type iBrokerData = iBroker
