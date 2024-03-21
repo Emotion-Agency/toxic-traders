@@ -7,11 +7,14 @@ import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 const brokersList = ref<iBroker[]>([])
 const logsList = ref<iLogs[]>([])
 const filteredBrokers = ref<iBroker[]>([])
+const currentPage = ref(1)
+const totalCountPages = ref(0)
 
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
+const { getAllBrokers } = useBrokers()
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value
@@ -62,19 +65,32 @@ const filteredBrokerHeading = computed(() => {
   return getBrokerHeadings(filteredBrokers.value[0] ?? {})
 })
 
-const { getAllBrokers } = useBrokers()
+const prevPageClick = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+
+  console.log(currentPage.value)
+}
+
+const nextPageClick = () => {
+  if (currentPage.value < totalCountPages.value) {
+    currentPage.value++
+  }
+  console.log(currentPage.value)
+}
 
 onMounted(async () => {
   isLoading.value = true
 
-  const brokersData = await getAllBrokers()
-  const logsData = await getSortedLogs()
+  const brokersData = await getAllBrokers(currentPage.value)
+  const logsData = await getSortedLogs(currentPage.value)
 
   isLoading.value = false
 
   brokersList.value = brokersData.brokers
   filteredBrokers.value = brokersList.value
-
+  totalCountPages.value = brokersData.totalCount
   logsList.value = logsData.logs
 
   // console.log(data, brokersList.value, brokersHeadingFields.value)
@@ -135,7 +151,13 @@ onMounted(async () => {
             :brokers="filteredBrokers"
             :heading-fields="filteredBrokerHeading"
           />
-          <ThePagination class="brokers__pagination" :total-pages="5" />
+          <ThePagination
+            class="brokers__pagination"
+            :total-pages="totalCountPages"
+            :current-page="currentPage"
+            @next-click="nextPageClick"
+            @prev-click="prevPageClick"
+          />
         </div>
       </div>
       <div v-else-if="isLoading && !brokersList.length">

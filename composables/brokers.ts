@@ -1,10 +1,9 @@
 import { getBrokerById } from '~/api/brokers/getBrokerById'
 import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
-// import { getSortedLogs } from '~/api/brokers/getSortedLogs'
 
 export const useBrokers = () => {
-  const getAllBrokers = async () => {
-    const data = await getSortedBrokers()
+  const getAllBrokers = async (offset: number) => {
+    const data = await getSortedBrokers(offset)
 
     return data
   }

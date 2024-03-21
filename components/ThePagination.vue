@@ -1,9 +1,12 @@
 <script setup lang="ts">
 interface iProps {
   totalPages: number
+  currentPage: number
 }
 
 defineProps<iProps>()
+
+const emit = defineEmits(['prevClick', 'nextClick'])
 
 const optionList = [
   'Option 1',
@@ -35,7 +38,7 @@ const onChange = input => {
 <template>
   <div class="pagination">
     <div class="pagination__wrapper">
-      <button class="prev pagination__btn">
+      <button class="prev pagination__btn" @click="emit('prevClick')">
         <span>
           <IconsNavigationArrow />
         </span>
@@ -57,7 +60,7 @@ const onChange = input => {
         <p class="pagination__text">of {{ totalPages }}</p>
         <CustomSelect :options="optionList" placeholder="10 rows" />
       </div>
-      <button class="next pagination__btn">
+      <button class="next pagination__btn" @click="emit('nextClick')">
         Next
         <span>
           <IconsNavigationArrow />
