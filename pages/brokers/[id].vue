@@ -32,6 +32,7 @@ onMounted(async () => {
             <BrokerLocationServers />
             <BrokerAddressCompany />
             <BrokerWebsites :websites="websitesList" />
+            <BrokerReviews />
           </div>
         </div>
       </aside>
