@@ -2,33 +2,40 @@
   transition: width 0.3s ease;
   width: 100%;
   overflow: hidden;
+  border-radius: 10px;
   height: fit-content;
 
   &--full-width {
-    .table-body {
-      width: auto;
-    }
-
     .table-cell {
-      max-width: none;
+      width: 100% !important;
+    }
+    .table-row {
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
     }
   }
 }
 
 .table-cell {
   text-align: start;
-  min-width: 180px;
   padding: 20px 8px;
   padding-right: 30px;
+  display: flex;
+  justify-content: flex-start;
+  text-align: start;
+  width: 100%;
+  padding: 20px 8px;
+  padding-right: 30px;
+  min-width: 180px;
 }
 
 .table__wrapper {
-  border-radius: 10px;
-  overflow-y: hidden;
-  overflow-x: auto;
+  overflow: auto;
+  position: relative;
 }
 
 .table-head {
+  position: sticky;
+  top: 0;
   .table-row {
     @include heading-b-h6;
   }
@@ -42,9 +49,6 @@
 
 .table-body {
   height: 60vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: fit-content;
 
   .table-row {
     @include text-body;
@@ -60,17 +64,7 @@
 .table-row {
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: repeat(auto-fit, minmax(9%, 1fr));
-}
-
-.table-cell {
-  display: flex;
-  justify-content: flex-start;
-  text-align: start;
-  min-width: 180px;
-  max-width: 360px;
-  padding: 20px 8px;
-  padding-right: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
 }
 
 .table-cell__link {

@@ -31,8 +31,9 @@
 }
 
 .brokers__table-wrapper {
-  width: calc(100% - 276px); // width search + column-gap
-  flex: 1 0 auto;
+  width: calc(100% - 40px); // width search + column-gap
+
+  margin: 0 auto;
 }
 
 .brokers__pagination {
@@ -57,4 +58,11 @@
 .brokers__error-message {
   @include text-big;
   margin-top: 40px;
+}
+
+.brokers-table {
+  .table-cell--0 {
+    min-width: 80px;
+    width: 80px;
+  }
 }

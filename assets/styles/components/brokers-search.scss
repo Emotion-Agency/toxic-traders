@@ -1,8 +1,5 @@
 .brokers-search {
-  transition:
-    width 0.3s ease,
-    opacity 0.3s ease,
-    padding 0.3s ease;
+  transition: all 0.3s ease;
   width: 0;
   opacity: 0;
   pointer-events: none;
@@ -11,13 +8,14 @@
   padding: 0;
   overflow-y: auto;
   height: 76vh;
-  flex: 0 1 auto;
 
   &--opened {
     width: 260px;
     padding: 20px;
+    margin-left: 20px;
     opacity: 1;
     pointer-events: visible;
+    flex: 1 0 auto;
   }
 }
 
