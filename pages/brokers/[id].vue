@@ -4,6 +4,9 @@ const id = route.params.id
 const categoryOptions = ref<string[]>([])
 const brokersHeadings = ref<string[]>([])
 const websitesList = ref<string[]>([])
+const reviewsList = ref<
+  { rating: string | null; reviewsCount: string | null }[]
+>([])
 
 const { getBroker } = useBrokers()
 
@@ -12,9 +15,27 @@ onMounted(async () => {
 
   console.log(data)
 
-  categoryOptions.value = brokersList.value.map(obj => obj.brokerCategory)
-  brokersHeadings.value = brokersList.value.map(obj => obj.companyNames)
+  categoryOptions.value = data?.brokerCategory?.split(',')
+  brokersHeadings.value = data?.companyNames?.split(',')
   websitesList.value = data?.website?.split(',')
+  reviewsList.value = [
+    {
+      rating: data?.brokerReviewsForexPeaceArmyRating,
+      reviewsCount: data?.brokerReviewsForexPeaceArmyReviewsCount,
+    },
+    {
+      rating: data?.brokerReviewsFx123Rating,
+      reviewsCount: data?.brokerReviewsFx123ReviewsCount,
+    },
+    {
+      rating: data?.brokerReviewsTrustPilotRating,
+      reviewsCount: data?.brokerReviewsTrustPilotReviewsCount,
+    },
+    {
+      rating: data?.brokerReviewsWikifxRating,
+      reviewsCount: data?.brokerReviewsWikifxReviewsCount,
+    },
+  ]
 })
 </script>
 
@@ -29,7 +50,7 @@ onMounted(async () => {
             <BrokerLocationServers />
             <BrokerAddressCompany />
             <BrokerWebsites :websites="websitesList" />
-            <BrokerReviews />
+            <BrokerReviews :reviews-list="reviewsList" />
           </div>
         </div>
       </aside>

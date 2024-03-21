@@ -1,4 +1,13 @@
 <script setup lang="ts">
+interface iProps {
+  reviewsList: {
+    rating: string | null
+    reviewsCount: string | null
+  }[]
+}
+
+defineProps<iProps>()
+
 const reviewsModalOpened = ref(false)
 
 const reviewsModalOpen = () => {
@@ -18,7 +27,12 @@ const reviewsModalClose = () => {
       additional-button="Edit"
       @open="reviewsModalOpen"
     >
-      Reviews
+      <BrokerReviewsItem
+        v-for="(item, idx) in reviewsList"
+        :key="idx"
+        :rating="item.rating"
+        :reviews-count="item.reviewsCount"
+      />
     </TheAccordion>
     <TheModal
       :modal-opened="reviewsModalOpened"

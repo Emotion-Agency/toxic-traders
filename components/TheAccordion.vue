@@ -26,11 +26,15 @@ const toggleClick = () => {
 }
 
 onMounted(() => {
-  resize.on(calcHeight)
+  setTimeout(() => {
+    resize.on(calcHeight)
+  }, 200)
 })
 
 useOnBeforeUnmountDelay(() => {
-  resize.off(calcHeight)
+  setTimeout(() => {
+    resize.off(calcHeight)
+  }, 300)
 })
 </script>
 
