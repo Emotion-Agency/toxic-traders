@@ -6,25 +6,15 @@ interface iProps {
 
 defineProps<iProps>()
 
-const emit = defineEmits(['prevClick', 'nextClick'])
+const emit = defineEmits(['prevClick', 'nextClick', 'selectedItem'])
 
-const optionList = [
-  'Option 1',
-  'Option 2',
-  'Option 3',
-  'Option 4',
-  'Option 5',
-  'Option 6',
-  'Option 7',
-  'Option 8',
-]
+const optionList = ['25', '50', '100']
 
 const inputItem = {
   id: 'navigation-number',
   name: 'Navigation Number',
   type: 'number',
   value: '',
-  placeholder: '1',
   disabled: false,
   isLeftButton: false,
   isRightButton: false,
@@ -32,6 +22,10 @@ const inputItem = {
 
 const onChange = input => {
   console.log(input)
+}
+
+const selectItem = (val: string) => {
+  emit('selectedItem', val)
 }
 </script>
 
@@ -51,14 +45,18 @@ const onChange = input => {
           :name="inputItem.name"
           :type="inputItem.type"
           :disabled="inputItem.disabled"
-          :placeholder="inputItem.placeholder"
+          :placeholder="currentPage.toString()"
           :is-left-button="inputItem.isLeftButton"
           :is-right-button="inputItem.isRightButton"
           class="pagination__input"
           @input-value="onChange"
         />
         <p class="pagination__text">of {{ totalPages }}</p>
-        <CustomSelect :options="optionList" placeholder="10 rows" />
+        <CustomSelect
+          :options="optionList"
+          :placeholder="optionList[0] + ' rows'"
+          @select="selectItem"
+        />
       </div>
       <button class="next pagination__btn" @click="emit('nextClick')">
         Next

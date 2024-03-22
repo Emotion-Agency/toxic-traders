@@ -2,8 +2,8 @@ import { getBrokerById } from '~/api/brokers/getBrokerById'
 import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
 
 export const useBrokers = () => {
-  const getAllBrokers = async (offset: number) => {
-    const { brokers, totalCount } = await getSortedBrokers(offset)
+  const getAllBrokers = async (offset: number, count: number) => {
+    const { brokers, totalCount } = await getSortedBrokers(offset, count)
 
     return { brokers, totalCount }
   }

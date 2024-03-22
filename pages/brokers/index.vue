@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { delayPromise } from '@emotionagency/utils'
 import { getSortedLogs } from '~/api/brokers/getSortedLogs'
 import type { iBroker } from '~/types/brokers'
 import type { iLogs } from '~/types/logs'
@@ -10,6 +9,7 @@ const logsList = ref<iLogs[]>([])
 const filteredBrokers = ref<iBroker[]>([])
 const currentPage = ref(1)
 const totalCountPages = ref(0)
+const itemsCount = ref(25)
 
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
@@ -69,7 +69,7 @@ const filteredBrokerHeading = computed(() => {
 const prevPageClick = async () => {
   if (currentPage.value > 1) {
     currentPage.value--
-    const { brokers } = await getAllBrokers(currentPage.value)
+    const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
     brokersList.value = brokers
   }
 
@@ -79,16 +79,25 @@ const prevPageClick = async () => {
 const nextPageClick = async () => {
   if (currentPage.value < totalCountPages.value) {
     currentPage.value++
-    const { brokers } = await getAllBrokers(currentPage.value)
+    const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
     brokersList.value = brokers
   }
   console.log(currentPage.value)
 }
 
+const selectItem = async (val: string) => {
+  itemsCount.value = Number(val)
+  const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
+  brokersList.value = brokers
+}
+
 onMounted(async () => {
   isLoading.value = true
 
-  const { brokers, totalCount } = await getAllBrokers(currentPage.value)
+  const { brokers, totalCount } = await getAllBrokers(
+    currentPage.value,
+    itemsCount.value
+  )
   const logsData = await getSortedLogs(currentPage.value)
 
   isLoading.value = false
@@ -162,6 +171,7 @@ onMounted(async () => {
             :current-page="currentPage"
             @next-click="nextPageClick"
             @prev-click="prevPageClick"
+            @selected-item="selectItem"
           />
         </div>
       </div>
