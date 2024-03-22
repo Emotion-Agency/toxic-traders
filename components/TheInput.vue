@@ -12,6 +12,7 @@ interface iProps {
   disabled?: boolean
   isLeftButton?: boolean
   isRightButton?: boolean
+  value?: string
 }
 
 const props = defineProps<iProps>()

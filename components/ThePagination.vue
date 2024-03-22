@@ -2,13 +2,13 @@
 interface iProps {
   totalPages: number
   currentPage: number
+  options: string[]
+  itemsCount: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const emit = defineEmits(['prevClick', 'nextClick', 'selectedItem'])
-
-const optionList = ['25', '50', '100']
 
 const inputItem = {
   id: 'navigation-number',
@@ -27,6 +27,10 @@ const onChange = input => {
 const selectItem = (val: string) => {
   emit('selectedItem', val)
 }
+
+const computedTotalPages = computed(() => {
+  return Math.floor(props.totalPages / props.itemsCount)
+})
 </script>
 
 <template>
@@ -45,16 +49,16 @@ const selectItem = (val: string) => {
           :name="inputItem.name"
           :type="inputItem.type"
           :disabled="inputItem.disabled"
-          :placeholder="currentPage.toString()"
+          :placeholder="currentPage?.toString()"
           :is-left-button="inputItem.isLeftButton"
           :is-right-button="inputItem.isRightButton"
           class="pagination__input"
           @input-value="onChange"
         />
-        <p class="pagination__text">of {{ totalPages }}</p>
+        <p class="pagination__text">of {{ computedTotalPages }}</p>
         <CustomSelect
-          :options="optionList"
-          :placeholder="optionList[0] + ' rows'"
+          :options="options"
+          :placeholder="itemsCount + ' rows'"
           @select="selectItem"
         />
       </div>

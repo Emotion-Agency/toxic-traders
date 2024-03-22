@@ -41,8 +41,8 @@ onBeforeUnmount(() => {
   <div ref="$table" class="table" :class="isFullWidth && 'table--full-width'">
     <div class="table__wrapper">
       <slot />
-      <CustomScrollbar axis="y" />
-      <CustomScrollbar axis="x" />
     </div>
+    <CustomScrollbar axis="y" />
+    <CustomScrollbar axis="x" />
   </div>
 </template>

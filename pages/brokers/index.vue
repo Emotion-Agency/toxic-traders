@@ -4,12 +4,15 @@ import type { iBroker } from '~/types/brokers'
 import type { iLogs } from '~/types/logs'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
+const router = useRouter()
+const route = useRoute()
+
 const brokersList = ref<iBroker[]>([])
 const logsList = ref<iLogs[]>([])
 const filteredBrokers = ref<iBroker[]>([])
-const currentPage = ref(1)
+const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
-const itemsCount = ref(25)
+const itemsCount = ref(route.query.count ? Number(route.query.count) : 10)
 
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
@@ -66,30 +69,36 @@ const filteredBrokerHeading = computed(() => {
   return getBrokerHeadings(filteredBrokers.value[0] ?? {})
 })
 
-const prevPageClick = async () => {
+const prevPageClick = () => {
   if (currentPage.value > 1) {
     currentPage.value--
-    const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
-    brokersList.value = brokers
   }
 
   console.log(currentPage.value)
 }
 
-const nextPageClick = async () => {
+const nextPageClick = () => {
   if (currentPage.value < totalCountPages.value) {
     currentPage.value++
-    const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
-    brokersList.value = brokers
   }
   console.log(currentPage.value)
 }
 
-const selectItem = async (val: string) => {
+const selectItem = (val: string) => {
   itemsCount.value = Number(val)
+}
+
+watch([currentPage, itemsCount], async () => {
   const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
   brokersList.value = brokers
-}
+
+  router.push({
+    query: {
+      page: currentPage.value,
+      count: itemsCount.value,
+    },
+  })
+})
 
 onMounted(async () => {
   isLoading.value = true
@@ -169,6 +178,8 @@ onMounted(async () => {
             class="brokers__pagination"
             :total-pages="totalCountPages"
             :current-page="currentPage"
+            :options="['25', '50', '100']"
+            :items-count="itemsCount"
             @next-click="nextPageClick"
             @prev-click="prevPageClick"
             @selected-item="selectItem"
