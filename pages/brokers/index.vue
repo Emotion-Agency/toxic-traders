@@ -65,17 +65,21 @@ const filteredBrokerHeading = computed(() => {
   return getBrokerHeadings(filteredBrokers.value[0] ?? {})
 })
 
-const prevPageClick = () => {
+const prevPageClick = async () => {
   if (currentPage.value > 1) {
     currentPage.value--
+    const brokersData = await getAllBrokers(currentPage.value)
+    brokersList.value = brokersData.brokers
   }
 
   console.log(currentPage.value)
 }
 
-const nextPageClick = () => {
+const nextPageClick = async () => {
   if (currentPage.value < totalCountPages.value) {
     currentPage.value++
+    const brokersData = await getAllBrokers(currentPage.value)
+    brokersList.value = brokersData.brokers
   }
   console.log(currentPage.value)
 }
