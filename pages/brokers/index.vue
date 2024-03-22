@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { delayPromise } from '@emotionagency/utils'
 import { getSortedLogs } from '~/api/brokers/getSortedLogs'
 import type { iBroker } from '~/types/brokers'
 import type { iLogs } from '~/types/logs'
@@ -68,8 +69,8 @@ const filteredBrokerHeading = computed(() => {
 const prevPageClick = async () => {
   if (currentPage.value > 1) {
     currentPage.value--
-    const brokersData = await getAllBrokers(currentPage.value)
-    brokersList.value = brokersData.brokers
+    const { brokers } = await getAllBrokers(currentPage.value)
+    brokersList.value = brokers
   }
 
   console.log(currentPage.value)
@@ -78,8 +79,8 @@ const prevPageClick = async () => {
 const nextPageClick = async () => {
   if (currentPage.value < totalCountPages.value) {
     currentPage.value++
-    const brokersData = await getAllBrokers(currentPage.value)
-    brokersList.value = brokersData.brokers
+    const { brokers } = await getAllBrokers(currentPage.value)
+    brokersList.value = brokers
   }
   console.log(currentPage.value)
 }
@@ -87,14 +88,14 @@ const nextPageClick = async () => {
 onMounted(async () => {
   isLoading.value = true
 
-  const brokersData = await getAllBrokers(currentPage.value)
+  const { brokers, totalCount } = await getAllBrokers(currentPage.value)
   const logsData = await getSortedLogs(currentPage.value)
 
   isLoading.value = false
 
-  brokersList.value = brokersData.brokers
+  brokersList.value = brokers
   filteredBrokers.value = brokersList.value
-  totalCountPages.value = brokersData.totalCount
+  totalCountPages.value = totalCount
   logsList.value = logsData.logs
 
   // console.log(data, brokersList.value, brokersHeadingFields.value)
