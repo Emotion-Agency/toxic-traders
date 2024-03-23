@@ -17,7 +17,7 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const emit = defineEmits(['inputValue'])
+const emit = defineEmits(['inputValue', 'inputFocus'])
 
 const {
   inputValue,

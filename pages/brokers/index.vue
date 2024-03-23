@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getSortedLogs } from '~/api/brokers/getSortedLogs'
+import type { iInput } from '~/types'
 import type { iBroker } from '~/types/brokers'
 import type { iLogs } from '~/types/logs'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
@@ -69,24 +70,34 @@ const filteredBrokerHeading = computed(() => {
   return getBrokerHeadings(filteredBrokers.value[0] ?? {})
 })
 
+const computedTotalPages = computed(() => {
+  return Math.floor(totalCountPages.value / itemsCount.value)
+})
+
 const prevPageClick = () => {
   if (currentPage.value > 1) {
     currentPage.value--
   }
-
-  console.log(currentPage.value)
 }
 
 const nextPageClick = () => {
   if (currentPage.value < totalCountPages.value) {
     currentPage.value++
   }
-  console.log(currentPage.value)
 }
 
 const selectItem = (val: string) => {
-  console.log(val)
   itemsCount.value = Number(val)
+}
+
+const onBlur = (input: iInput) => {
+  currentPage.value = Number(input.value)
+  console.log(input.value, computedTotalPages.value)
+
+  if (input.value > computedTotalPages.value) {
+    input.value = computedTotalPages.value.toString()
+    console.log('max count')
+  }
 }
 
 watch([currentPage, itemsCount], async () => {
@@ -184,6 +195,7 @@ onMounted(async () => {
             @next-click="nextPageClick"
             @prev-click="prevPageClick"
             @selected-item="selectItem"
+            @on-blur-value="onBlur"
           />
         </div>
       </div>

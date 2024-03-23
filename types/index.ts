@@ -11,3 +11,9 @@ export interface iSearchItem {
   isRightButton?: boolean
   options?: string[]
 }
+
+export interface iInput {
+  id: string
+  value: string
+  error: boolean
+}

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { iInput } from '~/types'
+
 interface iProps {
   totalPages: number
   currentPage: number
@@ -8,7 +10,13 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const emit = defineEmits(['prevClick', 'nextClick', 'selectedItem'])
+const emit = defineEmits([
+  'prevClick',
+  'nextClick',
+  'selectedItem',
+  'onChangeValue',
+  'onBlurValue',
+])
 
 const inputItem = {
   id: 'navigation-number',
@@ -20,12 +28,16 @@ const inputItem = {
   isRightButton: false,
 }
 
-const onChange = input => {
-  console.log(input)
+const onChange = (input: iInput) => {
+  emit('onChangeValue', input)
 }
 
 const selectItem = (val: string) => {
   emit('selectedItem', val)
+}
+
+const onBlur = (input: iInput) => {
+  emit('onBlurValue', input)
 }
 
 const computedTotalPages = computed(() => {
@@ -54,6 +66,7 @@ const computedTotalPages = computed(() => {
           :is-right-button="inputItem.isRightButton"
           class="pagination__input"
           @input-value="onChange"
+          @input-focus="onBlur"
         />
         <p class="pagination__text">of {{ computedTotalPages }}</p>
         <CustomSelect

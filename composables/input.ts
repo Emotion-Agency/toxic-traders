@@ -27,6 +27,11 @@ export const useInput = (emit, props) => {
   const onBlur = () => {
     if (!inputValue.value.length) {
       inputFocus.value = false
+      emit('inputFocus', {
+        id: props.id,
+        value: inputValue.value,
+        error: error.value,
+      })
     }
   }
 
