@@ -85,6 +85,7 @@ const nextPageClick = () => {
 }
 
 const selectItem = (val: string) => {
+  console.log(val)
   itemsCount.value = Number(val)
 }
 

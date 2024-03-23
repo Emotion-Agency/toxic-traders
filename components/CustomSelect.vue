@@ -5,11 +5,10 @@ interface iProps {
   title?: string
 }
 
-const props = defineProps<iProps>()
+defineProps<iProps>()
 
 const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
-const selectedItem = ref('')
 
 const emit = defineEmits(['select'])
 
@@ -19,7 +18,6 @@ const toggleList = () => {
 
 const closeList = (option: string) => {
   isOpened.value = false
-  selectedItem.value = option
   emit('select', option)
 }
 
@@ -30,7 +28,6 @@ const outsideClick = event => {
 }
 
 onMounted(() => {
-  selectedItem.value = props.placeholder
   document.body.addEventListener('click', outsideClick)
 })
 
@@ -48,7 +45,7 @@ onUnmounted(() => {
     <p v-if="title" class="custom-select__title">{{ title }}</p>
     <div class="custom-select__selected" @click="toggleList">
       <p class="custom-select__text">
-        {{ selectedItem }}
+        {{ placeholder }}
       </p>
       <IconsSelectionArrowDown />
     </div>
