@@ -25,25 +25,52 @@ export const useInput = (emit, props) => {
   }
 
   const onBlur = () => {
-    if (!inputValue.value.length) {
-      inputFocus.value = false
-      emit('inputFocus', {
-        id: props.id,
-        value: inputValue.value,
-        error: error.value,
-      })
+    if (props.type === 'number') {
+      if (!inputValue.value.length) {
+        inputFocus.value = false
+        emit('inputFocus', {
+          id: props.id,
+          value: inputValue.value,
+          error: error.value,
+        })
+      }
+    }
+
+    if (props.type === 'text' || props.type === 'textarea') {
+      if (!inputValue.value.trim().length) {
+        inputFocus.value = false
+        emit('inputFocus', {
+          id: props.id,
+          value: inputValue.value,
+          error: error.value,
+        })
+      }
     }
   }
 
   const updateFields = () => {
-    if (inputValue.value.trim() !== '') {
-      onFocus()
-      $input.value.focus()
-      emit('inputValue', {
-        id: props.id,
-        value: inputValue.value,
-        error: error.value,
-      })
+    if (props.type === 'number') {
+      if (inputValue.value !== '') {
+        onFocus()
+        $input.value.focus()
+        emit('inputValue', {
+          id: props.id,
+          value: inputValue.value,
+          error: error.value,
+        })
+      }
+    }
+
+    if (props.type === 'text' || props.type === 'textarea') {
+      if (inputValue.value.trim() !== '') {
+        onFocus()
+        $input.value.focus()
+        emit('inputValue', {
+          id: props.id,
+          value: inputValue.value,
+          error: error.value,
+        })
+      }
     }
   }
 

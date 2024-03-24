@@ -12,8 +12,6 @@ const detectTableWidth = () => {
   const bodyWidth = $tableWrapper.scrollWidth
 
   isFullWidth.value = bodyWidth <= containerWidth
-
-  console.log(containerWidth, bodyWidth)
 }
 
 onMounted(() => {

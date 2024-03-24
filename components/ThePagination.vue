@@ -6,6 +6,7 @@ interface iProps {
   currentPage: number
   options: string[]
   itemsCount: number
+  inputValue: string | number
 }
 
 const props = defineProps<iProps>()
@@ -22,7 +23,7 @@ const inputItem = {
   id: 'navigation-number',
   name: 'Navigation Number',
   type: 'number',
-  value: '',
+  value: props.inputValue,
   disabled: false,
   isLeftButton: false,
   isRightButton: false,
@@ -64,6 +65,7 @@ const computedTotalPages = computed(() => {
           :placeholder="currentPage?.toString()"
           :is-left-button="inputItem.isLeftButton"
           :is-right-button="inputItem.isRightButton"
+          :value="inputItem.value"
           class="pagination__input"
           @input-value="onChange"
           @input-focus="onBlur"

@@ -14,6 +14,7 @@ const filteredBrokers = ref<iBroker[]>([])
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
 const itemsCount = ref(route.query.count ? Number(route.query.count) : 10)
+const searchValue = ref<string | number>(1)
 
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
@@ -90,14 +91,22 @@ const selectItem = (val: string) => {
   itemsCount.value = Number(val)
 }
 
+const onChange = (input: iInput) => {
+  const inputPage = input.value
+
+  if (Number(inputPage) > computedTotalPages.value) {
+    searchValue.value = computedTotalPages.value
+    console.log('maxPage')
+  }
+}
+
 const onBlur = (input: iInput) => {
   currentPage.value = Number(input.value)
-  console.log(input.value, computedTotalPages.value)
 
-  if (input.value > computedTotalPages.value) {
-    input.value = computedTotalPages.value.toString()
-    console.log('max count')
-  }
+  // if (input.value > computedTotalPages.value) {
+  //   input.value = computedTotalPages.value.toString()
+  //   console.log('max count')
+  // }
 }
 
 watch([currentPage, itemsCount], async () => {
@@ -192,10 +201,12 @@ onMounted(async () => {
             :current-page="currentPage"
             :options="['25', '50', '100']"
             :items-count="itemsCount"
+            :input-value="searchValue"
             @next-click="nextPageClick"
             @prev-click="prevPageClick"
             @selected-item="selectItem"
             @on-blur-value="onBlur"
+            @on-change-value="onChange"
           />
         </div>
       </div>
