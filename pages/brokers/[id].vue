@@ -4,9 +4,7 @@ const id = route.params.id
 const categoryOptions = ref<string[]>([])
 const brokersHeadings = ref<string[]>([])
 const websitesList = ref<string[]>([])
-const reviewsList = ref<
-  { rating: string | null; reviewsCount: string | null }[]
->([])
+const reviewsList = ref<{ rating: string; count: string }[]>([])
 
 const { getBroker } = useBrokers()
 
@@ -15,27 +13,28 @@ onMounted(async () => {
 
   console.log(data)
 
-  categoryOptions.value = data?.brokerCategory?.split(',')
+  categoryOptions.value = data?.brokerCategories?.split(',')
   brokersHeadings.value = data?.companyNames?.split(',')
   websitesList.value = data?.website?.split(',')
   reviewsList.value = [
     {
       rating: data?.brokerReviewsForexPeaceArmyRating,
-      reviewsCount: data?.brokerReviewsForexPeaceArmyReviewsCount,
+      count: data?.brokerReviewsForexPeaceArmyReviewsCount,
     },
     {
       rating: data?.brokerReviewsFx123Rating,
-      reviewsCount: data?.brokerReviewsFx123ReviewsCount,
+      count: data?.brokerReviewsFx123ReviewsCount,
     },
     {
       rating: data?.brokerReviewsTrustPilotRating,
-      reviewsCount: data?.brokerReviewsTrustPilotReviewsCount,
+      count: data?.brokerReviewsTrustPilotReviewsCount,
     },
     {
       rating: data?.brokerReviewsWikifxRating,
-      reviewsCount: data?.brokerReviewsWikifxReviewsCount,
+      count: data?.brokerReviewsWikifxReviewsCount,
     },
   ]
+  console.log(reviewsList.value)
 })
 </script>
 

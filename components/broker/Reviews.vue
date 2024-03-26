@@ -1,9 +1,6 @@
 <script setup lang="ts">
 interface iProps {
-  reviewsList: {
-    rating: string | null
-    reviewsCount: string | null
-  }[]
+  reviewsList: { rating: string; count: string }[]
 }
 
 defineProps<iProps>()
@@ -28,11 +25,29 @@ const reviewsModalClose = () => {
       @open="reviewsModalOpen"
     >
       <BrokerReviewsItem
-        v-for="(item, idx) in reviewsList"
-        :key="idx"
-        :rating="item.rating"
-        :reviews-count="item.reviewsCount"
-      />
+        :rating="reviewsList[0]?.rating ?? '0.0'"
+        :reviews-count="reviewsList[0]?.count ?? '0.0'"
+      >
+        <IconsReviewsForexPeaceArmy />
+      </BrokerReviewsItem>
+      <BrokerReviewsItem
+        :rating="reviewsList[1]?.rating ?? '0.0'"
+        :reviews-count="reviewsList[1]?.count ?? '0.0'"
+      >
+        <IconsReviewsTrustpilot />
+      </BrokerReviewsItem>
+      <BrokerReviewsItem
+        :rating="reviewsList[2]?.rating ?? '0.0'"
+        :reviews-count="reviewsList[2]?.count ?? '0.0'"
+      >
+        <IconsReviewsWikifx />
+      </BrokerReviewsItem>
+      <BrokerReviewsItem
+        :rating="reviewsList[3]?.rating ?? '0.0'"
+        :reviews-count="reviewsList[3]?.count ?? '0.0'"
+      >
+        <IconsReviewsFx123 />
+      </BrokerReviewsItem>
     </TheAccordion>
     <TheModal
       :modal-opened="reviewsModalOpened"

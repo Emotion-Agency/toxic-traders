@@ -17,3 +17,23 @@ export interface iInput {
   value: string | number
   error: boolean
 }
+
+export interface iReviewsForexPeaceArmy {
+  forexPeaceArmyRating: string
+  forexPeaceArmyCount: string
+}
+
+export interface iReviewsFx123 {
+  fx123Rating: string
+  fx123Count: string
+}
+
+export interface iReviewsTrustPilot {
+  trustPilotRating: string
+  trustPilotCount: string
+}
+
+export interface iReviewsWikifx {
+  wikifxRating: string
+  wikifxCount: string
+}

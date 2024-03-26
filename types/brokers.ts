@@ -1,6 +1,6 @@
 export interface iBroker {
   baseBrokerServerLocation?: string | null
-  brokerCategory?: string | null
+  brokerCategories?: string | null
   brokerDepositMethods?: string | null
   brokerLeverage?: string | null
   brokerPlatforms?: string | null

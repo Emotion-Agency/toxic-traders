@@ -50,7 +50,7 @@ export const useInput = (emit, props) => {
 
   const updateFields = () => {
     if (props.type === 'number') {
-      if (inputValue.value !== '') {
+      if (inputValue.value) {
         onFocus()
         $input.value.focus()
         emit('inputValue', {
