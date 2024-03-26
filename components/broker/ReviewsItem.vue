@@ -4,7 +4,12 @@ interface iProps {
   reviewsCount: string
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
+
+const filledStars = computed(() => {
+  const rating = parseInt(props.rating)
+  return rating > 0 ? rating : 0
+})
 </script>
 
 <template>
@@ -18,8 +23,8 @@ defineProps<iProps>()
       </div>
       <ul class="reviews-item__list">
         <li v-for="(_, idx) in 5" :key="idx" class="reviews-item__star">
-          <IconsStar />
-          <IconsFilledStar />
+          <IconsStar v-if="idx >= filledStars" />
+          <IconsFilledStar v-else />
         </li>
       </ul>
     </div>
