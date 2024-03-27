@@ -30,14 +30,8 @@ const href = props.tag === 'a' ? props.href : undefined
     :rel="props.tag === 'a' ? 'noreferer noopener' : undefined"
     :disabled="props.tag === 'button' ? disabled : undefined"
   >
-    <span>
-      <slot name="start-icon" />
-    </span>
-    <span>
-      <slot />
-    </span>
-    <span>
-      <slot name="end-icon" />
-    </span>
+    <slot name="start-icon" />
+    <slot />
+    <slot name="end-icon" />
   </component>
 </template>

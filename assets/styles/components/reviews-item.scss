@@ -1,5 +1,13 @@
 $step: 24px;
 
+.reviews-item {
+  margin-top: 8px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
 .reviews-item__rating-wrapper {
   display: grid;
   grid-template-columns: minmax(60px, auto) 1fr;

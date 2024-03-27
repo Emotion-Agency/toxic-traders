@@ -1,0 +1,16 @@
+.reviews__item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  margin-top: 20px;
+
+  &:first-child {
+    margin-top: 12px;
+  }
+}
+
+.reviews__item-btn {
+  align-self: flex-end;
+  margin-top: 32px;
+  margin-left: auto;
+}

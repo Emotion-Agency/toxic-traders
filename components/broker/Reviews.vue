@@ -5,6 +5,124 @@ interface iProps {
 
 defineProps<iProps>()
 
+const reviewsInputData = [
+  {
+    title: 'Trustpilot',
+    input: [
+      {
+        required: false,
+        id: 'trustpilot-link',
+        name: 'Link',
+        type: 'text',
+        value: '',
+        placeholder: 'Link',
+      },
+      {
+        required: false,
+        id: 'trustpilot-count',
+        name: 'Reviews count',
+        type: 'text',
+        value: '',
+        placeholder: 'Reviews count',
+      },
+      {
+        required: false,
+        id: 'trustpilot-rating',
+        name: 'Rating',
+        type: 'text',
+        value: '',
+        placeholder: 'Rating from 0 to 5',
+      },
+    ],
+  },
+  {
+    title: 'ForexPeaceArmy',
+    input: [
+      {
+        required: false,
+        id: 'forexpeacearmy-link',
+        name: 'Link',
+        type: 'text',
+        value: '',
+        placeholder: 'Link',
+      },
+      {
+        required: false,
+        id: 'forexpeacearmy-count',
+        name: 'Reviews count',
+        type: 'text',
+        value: '',
+        placeholder: 'Reviews count',
+      },
+      {
+        required: false,
+        id: 'forexpeacearmy-rating',
+        name: 'Rating',
+        type: 'text',
+        value: '',
+        placeholder: 'Rating from 0 to 5',
+      },
+    ],
+  },
+  {
+    title: 'WikiFx',
+    input: [
+      {
+        required: false,
+        id: 'wikifx-link',
+        name: 'Link',
+        type: 'text',
+        value: '',
+        placeholder: 'Link',
+      },
+      {
+        required: false,
+        id: 'wikifx-count',
+        name: 'Reviews count',
+        type: 'text',
+        value: '',
+        placeholder: 'Reviews count',
+      },
+      {
+        required: false,
+        id: 'wikifx-rating',
+        name: 'Rating',
+        type: 'text',
+        value: '',
+        placeholder: 'Rating from 0 to 5',
+      },
+    ],
+  },
+  {
+    title: 'fx123',
+    input: [
+      {
+        required: false,
+        id: 'fx123-link',
+        name: 'Link',
+        type: 'text',
+        value: '',
+        placeholder: 'Link',
+      },
+      {
+        required: false,
+        id: 'fx123-count',
+        name: 'Reviews count',
+        type: 'text',
+        value: '',
+        placeholder: 'Reviews count',
+      },
+      {
+        required: false,
+        id: 'fx123-rating',
+        name: 'Rating',
+        type: 'text',
+        value: '',
+        placeholder: 'Rating from 0 to 5',
+      },
+    ],
+  },
+]
 const reviewsModalOpened = ref(false)
 
 const reviewsModalOpen = () => {
@@ -54,7 +172,30 @@ const reviewsModalClose = () => {
       title="Edit reviews"
       @close="reviewsModalClose"
     >
-      <TheButton tag="button" variant="fill" button-size="medium">
+      <div
+        v-for="(item, idx) in reviewsInputData"
+        :key="idx"
+        class="reviews__item"
+      >
+        <p class="reviews__item-title">
+          {{ item.title }}
+        </p>
+        <TheInput
+          v-for="(input, index) in item.input"
+          :id="input.id"
+          :key="index"
+          :required="input.required"
+          :name="input.name"
+          :type="input.type"
+          :placeholder="input.placeholder"
+        />
+      </div>
+      <TheButton
+        class="reviews__item-btn"
+        tag="button"
+        variant="fill"
+        button-size="medium"
+      >
         Save
       </TheButton>
     </TheModal>

@@ -41,6 +41,16 @@
   height: fit-content;
   background-color: var(--gray-100);
   border-radius: 10px;
+
+  &--full-height {
+    height: 90vh;
+    overflow: hidden;
+
+    .modal__container {
+      overflow-y: auto;
+      height: calc(100% - 77px);
+    }
+  }
 }
 
 .modal__header {
