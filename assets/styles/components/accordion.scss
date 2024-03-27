@@ -2,7 +2,7 @@
   &--opened {
     .accordion__content-wrapper {
       height: var(--h);
-      pointer-events: visible;
+      pointer-events: auto;
       margin-top: 12px;
       opacity: 1;
     }
@@ -47,10 +47,7 @@
 }
 
 .accordion__content-wrapper {
-  transition:
-    height 0.3s ease,
-    opacity 0.3s ease,
-    margin-top 0.3s ease;
+  transition: height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
   background-color: var(--white);
   border-radius: 10px;
   opacity: 0;

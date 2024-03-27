@@ -9,32 +9,33 @@ interface iProps {
 
 defineProps<iProps>()
 
-const isOpened = ref(true)
+const isOpened = ref(false)
 const emit = defineEmits(['open'])
 
 const $el = ref<HTMLElement | null>(null)
 
 const calcHeight = () => {
-  const height = $el.value.scrollHeight
+  const height = $el.value?.scrollHeight
 
-  $el.value.style.setProperty('--h', `${height}px`)
+  $el.value?.style.setProperty('--h', `${height}px`)
 }
 
 const toggleClick = () => {
   isOpened.value = !isOpened.value
-  resize.on(calcHeight)
+
+  calcHeight()
 }
 
 onMounted(() => {
+  resize.on(calcHeight)
   setTimeout(() => {
-    resize.on(calcHeight)
-  }, 200)
+    calcHeight()
+    isOpened.value = true
+  }, 400)
 })
 
-useOnBeforeUnmountDelay(() => {
-  setTimeout(() => {
-    resize.off(calcHeight)
-  }, 300)
+onBeforeUnmount(() => {
+  resize.off(calcHeight)
 })
 </script>
 
