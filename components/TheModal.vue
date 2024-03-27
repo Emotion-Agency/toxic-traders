@@ -10,6 +10,7 @@ interface IProps {
 const props = defineProps<IProps>()
 
 const $modal = ref<HTMLElement | null>(null)
+const $modalContainer = ref<HTMLElement | null>(null)
 const isFullHeight = ref(false)
 
 const emit = defineEmits(['close'])
@@ -20,26 +21,20 @@ const onClose = () => {
 }
 
 const detectModalContentHeight = () => {
-  const $modalContent = $modal.value.querySelector(
-    '.modal__content'
-  ) as HTMLElement
-
   const wh = window.innerHeight
-  const modalContentHeight = $modalContent.scrollHeight
+  const modalContentHeight = $modalContainer.value.scrollHeight
 
-  isFullHeight.value = modalContentHeight <= wh
+  isFullHeight.value = modalContentHeight >= wh
 }
 
 watch(
   () => props.modalOpened,
   () => {
-    detectModalContentHeight()
+    if (props.modalOpened) {
+      resize.on(detectModalContentHeight)
+    }
   }
 )
-
-onMounted(() => {
-  resize.on(detectModalContentHeight)
-})
 
 onBeforeUnmount(() => {
   resize.off(detectModalContentHeight)
@@ -56,7 +51,7 @@ onBeforeUnmount(() => {
       <div class="modal__backdrop" @click="onClose" />
       <div
         class="modal__content"
-        :class="!isFullHeight && 'modal__content--full-height'"
+        :class="isFullHeight && 'modal__content--full-height'"
       >
         <div class="modal__header">
           <p v-if="title" class="modal__title">
@@ -67,7 +62,7 @@ onBeforeUnmount(() => {
             <span class="modal__close-line" />
           </button>
         </div>
-        <div class="modal__container">
+        <div ref="$modalContainer" class="modal__container">
           <slot />
         </div>
       </div>
