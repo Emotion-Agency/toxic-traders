@@ -51,8 +51,8 @@ export const useInput = (emit, props) => {
   const updateFields = () => {
     if (props.type === 'number') {
       if (inputValue.value) {
-        onFocus()
-        $input.value.focus()
+        // onFocus()
+        // $input.value.focus()
         emit('inputValue', {
           id: props.id,
           value: inputValue.value,
@@ -63,8 +63,8 @@ export const useInput = (emit, props) => {
 
     if (props.type === 'text' || props.type === 'textarea') {
       if (inputValue.value.trim() !== '') {
-        onFocus()
-        $input.value.focus()
+        // onFocus()
+        // $input.value.focus()
         emit('inputValue', {
           id: props.id,
           value: inputValue.value,

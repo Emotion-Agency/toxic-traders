@@ -4,8 +4,8 @@ const locationInputData = {
   id: 'location',
   name: 'Location',
   type: 'text',
-  value: '',
-  placeholder: 'US NY',
+  value: 'US NY',
+  placeholder: 'Enter Location Server',
 }
 
 const locationOnChange = () => {
@@ -22,6 +22,7 @@ const locationOnChange = () => {
         :name="locationInputData.name"
         :type="locationInputData.type"
         :placeholder="locationInputData.placeholder"
+        :value="locationInputData.value"
         @input-value="locationOnChange"
       />
     </TheAccordion>
