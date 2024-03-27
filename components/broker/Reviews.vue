@@ -5,7 +5,7 @@ interface iProps {
 
 defineProps<iProps>()
 
-const reviewsInputData = [
+const reviewsInputData = ref([
   {
     title: 'Trustpilot',
     input: [
@@ -122,7 +122,8 @@ const reviewsInputData = [
       },
     ],
   },
-]
+])
+
 const reviewsModalOpened = ref(false)
 
 const reviewsModalOpen = () => {
@@ -132,6 +133,18 @@ const reviewsModalOpen = () => {
 
 const reviewsModalClose = () => {
   reviewsModalOpened.value = false
+}
+
+const onInputChange = (e: iInputData) => {
+  reviewsInputData.value = reviewsInputData.value.map(item => {
+    item.input.map(input => {
+      if (input.id === e.id) {
+        input.value = e.value
+      }
+      return input
+    })
+    return item
+  })
 }
 </script>
 
@@ -188,6 +201,7 @@ const reviewsModalClose = () => {
           :name="input.name"
           :type="input.type"
           :placeholder="input.placeholder"
+          @input-value="onInputChange"
         />
       </div>
       <TheButton

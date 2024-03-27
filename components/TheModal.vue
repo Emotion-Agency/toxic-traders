@@ -28,7 +28,6 @@ const detectModalContentHeight = () => {
   const modalContentHeight = $modalContent.scrollHeight
 
   isFullHeight.value = modalContentHeight <= wh
-  console.log(wh, modalContentHeight)
 }
 
 watch(
