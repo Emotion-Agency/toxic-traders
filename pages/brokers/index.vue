@@ -82,7 +82,7 @@ const prevPageClick = () => {
 }
 
 const nextPageClick = () => {
-  if (currentPage.value < totalCountPages.value) {
+  if (currentPage.value < computedTotalPages.value) {
     currentPage.value++
   }
 }
