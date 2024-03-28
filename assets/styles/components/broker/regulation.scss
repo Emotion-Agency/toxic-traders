@@ -38,3 +38,32 @@
     text-decoration: none;
   }
 }
+
+.regulation__accordion-wrapper {
+  margin-top: 16px;
+}
+
+.regulation__accordion {
+  margin-top: 20px;
+
+  .accordion__content-wrapper {
+    background-color: transparent;
+  }
+  .accordion__content {
+    padding: 0;
+  }
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.regulation__add-btn {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.regulation__btn {
+  margin-left: auto;
+  margin-top: 32px;
+}

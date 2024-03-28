@@ -10,7 +10,7 @@ interface iProps {
 defineProps<iProps>()
 
 const isOpened = ref(false)
-const emit = defineEmits(['open'])
+const emit = defineEmits(['open', 'remove'])
 
 const $el = ref<HTMLElement | null>(null)
 
@@ -24,6 +24,11 @@ const toggleClick = () => {
   isOpened.value = !isOpened.value
 
   calcHeight()
+}
+
+const optionalClick = () => {
+  emit('open')
+  emit('remove')
 }
 
 onMounted(() => {
@@ -47,7 +52,7 @@ onBeforeUnmount(() => {
           {{ title }}
           <IconsSelectionArrowDown />
         </button>
-        <OptionalButton v-if="additionalButton" @click="emit('open')">
+        <OptionalButton v-if="additionalButton" @click="optionalClick">
           {{ additionalButton }}
         </OptionalButton>
       </div>
