@@ -10,6 +10,12 @@
   @include col(4, 9);
 }
 
+.main-broker__title {
+  @include heading-m-h3;
+  color: var(--black);
+  margin-bottom: 20px;
+}
+
 .broker-aside {
   position: relative;
   height: 100%;

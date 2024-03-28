@@ -17,7 +17,11 @@ const emit = defineEmits(['sort'])
 
 <template>
   <div class="table-cell">
-    <NuxtLink v-if="link" :to="link!.url" class="table-cell__link">
+    <NuxtLink
+      v-if="link && link?.text?.length"
+      :to="link!.url"
+      class="table-cell__link"
+    >
       <span> {{ link!.text }} </span>
       <IconsLinkArrow />
     </NuxtLink>

@@ -1,9 +1,12 @@
 <script lang="ts" setup>
+import type { iBroker } from '~/types/brokers'
+
 const route = useRoute()
 const id = route.params.id
 const categoryOptions = ref<string[]>([])
 const brokersHeadings = ref<string[]>([])
 const websitesList = ref<string[]>([])
+const serversList = ref<iBroker[]>([])
 const reviewsList = ref<{ rating: string; count: string }[]>([])
 
 const { getBroker } = useBrokers()
@@ -13,6 +16,12 @@ onMounted(async () => {
 
   console.log(data)
 
+  serversList.value = [
+    {
+      brokerServersMT4ServerNames: data?.brokerServersMT4ServerNames,
+      brokerServersMT5ServerNames: data?.brokerServersMT5ServerNames,
+    },
+  ]
   categoryOptions.value = data?.brokerCategories?.split(',')
   brokersHeadings.value = data?.companyNames?.split(',')
   websitesList.value = data?.website?.split(',')
@@ -34,7 +43,6 @@ onMounted(async () => {
       count: data?.brokerReviewsWikifxReviewsCount,
     },
   ]
-  console.log(reviewsList.value)
 })
 </script>
 
@@ -54,165 +62,8 @@ onMounted(async () => {
         </div>
       </aside>
       <section class="main-broker__content">
-        <div>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-          facilis ipsum asperiores minus aperiam magni iure omnis nobis. Sunt
-          cum, fugit reprehenderit quaerat id ipsa labore at provident dicta
-          ipsam voluptas ipsum fugiat odit sequi iste sed voluptatibus
-          consequatur corrupti laboriosam obcaecati aut eaque! Reprehenderit
-          explicabo autem ut inventore animi, rem nam fuga, maiores quisquam
-          corrupti quibusdam, in sequi adipisci. Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, facilis ipsum asperiores
-          minus aperiam magni iure omnis nobis. Sunt cum, fugit reprehenderit
-          quaerat id ipsa labore at provident dicta ipsam voluptas ipsum fugiat
-          odit sequi iste sed voluptatibus consequatur corrupti laboriosam
-          obcaecati aut eaque! Reprehenderit explicabo autem ut inventore animi,
-          rem nam fuga, maiores quisquam corrupti quibusdam, in sequi adipisci.
-          {{ id }}
-        </div>
+        <h2 class="main-broker__title">Servers</h2>
+        <BrokerServersTable :servers="serversList" />
       </section>
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
