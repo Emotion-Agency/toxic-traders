@@ -216,7 +216,9 @@ onMounted(async () => {
       </section>
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
-          <div class="broker-aside__content">right {{ id }}</div>
+          <div class="broker-aside__content">
+            <BrokerNotes />
+          </div>
         </div>
       </aside>
     </div>

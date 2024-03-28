@@ -14,7 +14,7 @@ const addressInput = {
   required: false,
   id: 'address',
   name: 'Address',
-  type: 'text',
+  type: 'textarea',
   value: '',
   placeholder: 'Address company',
 }
@@ -51,6 +51,7 @@ const addressModalClose = () => {
         :name="addressInput.name"
         :type="addressInput.type"
         :placeholder="addressInput.placeholder"
+        class="address-company__input"
         @input-value="addressOnChange"
       />
       <OptionalButton> Show more </OptionalButton>
