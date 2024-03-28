@@ -7,10 +7,6 @@ const locationInputData = {
   value: 'US NY',
   placeholder: 'Enter Location Server',
 }
-
-const locationOnChange = () => {
-  console.log('location')
-}
 </script>
 
 <template>
@@ -23,7 +19,6 @@ const locationOnChange = () => {
         :type="locationInputData.type"
         :placeholder="locationInputData.placeholder"
         :value="locationInputData.value"
-        @input-value="locationOnChange"
       />
     </TheAccordion>
   </div>

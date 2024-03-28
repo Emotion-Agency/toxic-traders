@@ -1,0 +1,40 @@
+.regulation__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.regulation__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  padding: 4px 8px;
+  background-color: var(--primary-light);
+}
+
+.regulation__item-name {
+  @include text-body;
+  color: var(--secondary-dark);
+}
+
+.regulation__link {
+  @include text-link;
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--secondary-dark);
+
+  svg {
+    display: block;
+    width: 8px;
+    height: 8px;
+    flex: 1 0 auto;
+  }
+
+  &--text {
+    text-decoration: none;
+  }
+}

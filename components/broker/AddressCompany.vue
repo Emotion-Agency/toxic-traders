@@ -15,12 +15,9 @@ const addressInput = {
   id: 'address',
   name: 'Address',
   type: 'textarea',
-  value: '',
+  value:
+    'Rua Duque de Palmela, no. 37, 10 A, District: Lisbon Municipality: Lisbon Parish: Sanot Antonio, 1250 097, Portugal',
   placeholder: 'Address company',
-}
-
-const addressOnChange = () => {
-  console.log('new address')
 }
 
 const addressModalOnChange = () => {
@@ -51,8 +48,8 @@ const addressModalClose = () => {
         :name="addressInput.name"
         :type="addressInput.type"
         :placeholder="addressInput.placeholder"
+        :value="addressInput.value"
         class="address-company__input"
-        @input-value="addressOnChange"
       />
       <OptionalButton> Show more </OptionalButton>
     </TheAccordion>

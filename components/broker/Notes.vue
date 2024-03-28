@@ -22,7 +22,7 @@ const notesOnChange = () => {
         :name="notesInput.name"
         :type="notesInput.type"
         :placeholder="notesInput.placeholder"
-        class="address-company__input"
+        class="notes__input"
         @input-value="notesOnChange"
       />
     </TheAccordion>

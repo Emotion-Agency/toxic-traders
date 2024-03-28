@@ -21,6 +21,8 @@
 
   &:nth-of-type(2) {
     @include col(10, 12);
+    margin-left: auto;
+    width: 100%;
   }
 }
 
