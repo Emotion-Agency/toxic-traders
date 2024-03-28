@@ -70,6 +70,7 @@ onMounted(async () => {
           <div class="broker-aside__content">
             <BrokerNotes />
             <BrokerRegulation />
+            <BrokerPlatforms />
           </div>
         </div>
       </aside>
