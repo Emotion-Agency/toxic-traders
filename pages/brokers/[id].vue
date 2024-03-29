@@ -71,6 +71,7 @@ onMounted(async () => {
             <BrokerNotes />
             <BrokerRegulation />
             <BrokerPlatforms />
+            <BrokerRestrictionCountries />
             <BrokerDepositMethods />
             <div class="broker-aside__btn-wrapper">
               <TheButton tag="button" button-size="medium" variant="outlined">
