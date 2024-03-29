@@ -71,6 +71,18 @@ onMounted(async () => {
             <BrokerNotes />
             <BrokerRegulation />
             <BrokerPlatforms />
+            <BrokerDepositMethods />
+            <div class="broker-aside__btn-wrapper">
+              <TheButton tag="button" button-size="medium" variant="outlined">
+                History
+              </TheButton>
+              <TheButton tag="button" button-size="medium" variant="fill">
+                Settings
+                <template #start-icon>
+                  <IconsSettings />
+                </template>
+              </TheButton>
+            </div>
           </div>
         </div>
       </aside>
