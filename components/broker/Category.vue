@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getBrokerCompanyNames } from '~/api/brokers/getBrokerCompanyNames'
+
 interface iProps {
   categoryOptions: string[]
 }
@@ -28,6 +30,12 @@ const categoryModalOpen = () => {
 const categoryModalClose = () => {
   categoryModalOpened.value = false
 }
+
+onMounted(async () => {
+  const logsData = await getBrokerCompanyNames()
+
+  console.log(logsData)
+})
 </script>
 
 <template>

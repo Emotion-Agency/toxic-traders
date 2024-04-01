@@ -102,3 +102,20 @@
     flex: 1 0 auto;
   }
 }
+
+.table-cell__modal-btn {
+  @include text-link;
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background-color: transparent;
+
+  svg {
+    display: block;
+    width: 8px;
+    height: 8px;
+    flex: 1 0 auto;
+  }
+}

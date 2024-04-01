@@ -1,10 +1,10 @@
 import { getBrokerById } from '~/api/brokers/getBrokerById'
-import { getSortedBrokers } from '~/api/brokers/getSortedBrokers'
+import { getBroker } from '~/api/brokers/getBroker'
 
 export const useBrokers = () => {
   const getAllBrokers = async (offset: number, count: number) => {
     try {
-      const { brokers, totalCount } = await getSortedBrokers(offset, count)
+      const { brokers, totalCount } = await getBroker(offset, count)
 
       return { brokers, totalCount }
     } catch (error) {
@@ -12,11 +12,11 @@ export const useBrokers = () => {
     }
   }
 
-  const getBroker = async (id: number) => {
-    const data = await getBrokerById(id)
+  const getCurrentBroker = async (brokerId: number) => {
+    const data = await getBrokerById(brokerId)
 
     return data
   }
 
-  return { getAllBrokers, getBroker }
+  return { getAllBrokers, getCurrentBroker }
 }

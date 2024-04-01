@@ -1,4 +1,4 @@
-import type { iBroker } from '~/types/brokers'
+import type { iBroker } from '~/types/broker/broker'
 
 export const formatNameToNormalCase = (name: string) => {
   const format = name

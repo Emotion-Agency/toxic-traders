@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getSortedLogs } from '~/api/brokers/getSortedLogs'
 import type { iInput } from '~/types'
-import type { iBroker } from '~/types/brokers'
+import type { iBroker } from '~/types/broker/broker'
 import type { iLogs } from '~/types/logs'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
@@ -232,3 +232,4 @@ onMounted(async () => {
     </SlidingModal>
   </main>
 </template>
+~/types/broker/brokers

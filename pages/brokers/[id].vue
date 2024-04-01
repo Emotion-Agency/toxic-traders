@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { iBroker } from '~/types/brokers'
+import type { iBroker } from '~/types/broker/broker'
 
 const route = useRoute()
 const id = route.params.id
@@ -9,10 +9,10 @@ const websitesList = ref<string[]>([])
 const serversList = ref<iBroker[]>([])
 const reviewsList = ref<{ rating: string; count: string }[]>([])
 
-const { getBroker } = useBrokers()
+const { getCurrentBroker } = useBrokers()
 
 onMounted(async () => {
-  const data = await getBroker(Number(id))
+  const data = await getCurrentBroker(Number(id))
 
   console.log(data)
 

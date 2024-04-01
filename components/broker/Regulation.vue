@@ -1,5 +1,5 @@
 <script setup lang="ts">
-interface iRegulationItem {
+interface iRegulatorItem {
   name: string
   licenseNumber: number
   licenseLink?: string
@@ -7,7 +7,7 @@ interface iRegulationItem {
 
 const regulationModalOpened = ref(false)
 
-const regulationItems = ref<iRegulationItem[]>([
+const regulationItems = ref<iRegulatorItem[]>([
   {
     name: 'FCA UK',
     licenseNumber: 316876,
@@ -79,7 +79,6 @@ const regulationOnChange = () => {}
     <TheModal
       :modal-opened="regulationModalOpened"
       title="Edit regulations"
-      class="regulation__modal"
       @close="regulationModalClose"
     >
       <div class="regulation__accordion-wrapper">

@@ -1,4 +1,4 @@
-export interface iRegulationData {
+export interface iRegulatorData {
   data: {
     name: string
     licenseNumber: number

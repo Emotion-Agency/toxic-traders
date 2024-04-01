@@ -1,13 +1,9 @@
 import axiosInstance from '../axiosInstance'
-import type { iBrokerData } from '~/types/brokers'
+import type { iBrokerData } from '~/types/broker/broker'
 
-export const getBrokerById = async (id: number) => {
+export const getBrokerById = async (brokerId: number) => {
   try {
-    const { data }: iBrokerData = await axiosInstance.get(`GetBrokerById`, {
-      params: {
-        id,
-      },
-    })
+    const { data }: iBrokerData = await axiosInstance.get(`Broker/${brokerId}`)
 
     return data
   } catch (e) {

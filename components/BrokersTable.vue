@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iBroker } from '~/types/brokers'
+import type { iBroker } from '~/types/broker/broker'
 
 interface iProps {
   brokers: iBroker[]
@@ -55,3 +55,4 @@ const formattedHeadingFields = computed(() => {
     </TableBody>
   </Table>
 </template>
+~/types/broker/brokers

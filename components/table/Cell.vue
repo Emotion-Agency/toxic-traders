@@ -6,13 +6,14 @@ interface iProps {
     url: string
   }
   isSort?: boolean
+  isModal?: boolean
 }
 
 withDefaults(defineProps<iProps>(), {
   link: null,
 })
 
-const emit = defineEmits(['sort'])
+const emit = defineEmits(['sort', 'open'])
 </script>
 
 <template>
@@ -28,6 +29,14 @@ const emit = defineEmits(['sort'])
     <button v-else-if="isSort" class="table-cell__btn" @click="emit('sort')">
       {{ item }}
       <IconsDownUpArrow />
+    </button>
+    <button
+      v-else-if="isModal && item"
+      class="table-cell__modal-btn"
+      @click="emit('open')"
+    >
+      {{ item }}
+      <IconsLinkArrow />
     </button>
     <p v-else class="table-cell__text">
       {{ item }}
