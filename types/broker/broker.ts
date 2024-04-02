@@ -27,7 +27,6 @@ export interface iBrokersData {
   data: {
     brokers: iBroker[]
     totalCount: number
-    message: string
   }
 }
 

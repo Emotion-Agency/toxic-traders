@@ -13,9 +13,13 @@ export const useBrokers = () => {
   }
 
   const getCurrentBroker = async (brokerId: number) => {
-    const data = await getBrokerById(brokerId)
+    try {
+      const data = await getBrokerById(brokerId)
 
-    return data
+      return data
+    } catch (error) {
+      // alert with error
+    }
   }
 
   return { getAllBrokers, getCurrentBroker }

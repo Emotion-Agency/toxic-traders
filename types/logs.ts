@@ -1,4 +1,4 @@
-export interface iLogs {
+export interface iLogItem {
   id?: number | null
   level?: string | null
   message?: string | null
@@ -7,8 +7,7 @@ export interface iLogs {
 
 export interface iLogsData {
   data: {
-    logs: iLogs[]
+    logs: iLogItem[]
     totalCount: number
-    message: string
   }
 }

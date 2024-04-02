@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { getSortedLogs } from '~/api/brokers/getSortedLogs'
+import { getLogs } from '~/api/brokers/getLogs'
 import type { iInput } from '~/types'
 import type { iBroker } from '~/types/broker/broker'
-import type { iLogs } from '~/types/logs'
+import type { iLogItem } from '~/types/logs'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
 const router = useRouter()
 const route = useRoute()
 
 const brokersList = ref<iBroker[]>([])
-const logsList = ref<iLogs[]>([])
+const logsList = ref<iLogItem[]>([])
 const filteredBrokers = ref<iBroker[]>([])
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
@@ -128,7 +128,7 @@ onMounted(async () => {
     currentPage.value,
     itemsCount.value
   )
-  const logsData = await getSortedLogs(currentPage.value)
+  const logsData = await getLogs(currentPage.value)
 
   isLoading.value = false
 
@@ -232,4 +232,4 @@ onMounted(async () => {
     </SlidingModal>
   </main>
 </template>
-~/types/broker/brokers
+~/types/broker/brokers ~/api/brokers/getLogs

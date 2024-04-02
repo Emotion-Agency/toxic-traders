@@ -7,3 +7,9 @@ export interface iPlatformsData {
     platforms: iPlatformsItem[]
   }
 }
+
+export interface iPlatformsListData {
+  data: {
+    platforms: string[]
+  }
+}

@@ -7,3 +7,9 @@ export interface iDepositMethodsData {
     depositMethods: iDepositMethodItem[]
   }
 }
+
+export interface iDepositMethodsListData {
+  data: {
+    depositMethods: string[]
+  }
+}

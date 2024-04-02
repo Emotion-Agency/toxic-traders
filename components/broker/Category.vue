@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getBrokerCompanyNames } from '~/api/brokers/getBrokerCompanyNames'
+import { getBrokerCompanyNames } from '~/api/brokers/brokerCompanyNames'
 
 interface iProps {
   categoryOptions: string[]
@@ -78,3 +78,4 @@ onMounted(async () => {
     </TheModal>
   </div>
 </template>
+~/api/brokers/brokerCompanyNames

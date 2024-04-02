@@ -1,9 +1,11 @@
 import axiosInstance from '../axiosInstance'
 import type { iRegulatorData } from '~/types/broker/brokerRegulator'
 
-export const getBrokerRegulator = async () => {
+export const getBrokerRegulatorById = async (regulatorId: number) => {
   try {
-    const { data }: iRegulatorData = await axiosInstance.get('Broker/Regulator')
+    const { data }: iRegulatorData = await axiosInstance.get(
+      `Broker/Regulator/${regulatorId}`
+    )
 
     return data
   } catch (e) {
