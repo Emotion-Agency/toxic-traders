@@ -1,5 +1,5 @@
 import axiosInstance from '../axiosInstance'
-import type { iCategoriesListData } from '~/types/broker/brokerCategoriesList'
+import type { iCategoriesListData } from '~/types/broker/brokerCategories'
 
 export const getBrokerCategoriesList = async () => {
   try {

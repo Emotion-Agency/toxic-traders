@@ -51,6 +51,7 @@ const addressModalClose = () => {
         :value="addressInput.value"
         class="address-company__input"
       />
+      <button class="address-company__remove"></button>
       <OptionalButton> Show more </OptionalButton>
     </TheAccordion>
     <TheModal

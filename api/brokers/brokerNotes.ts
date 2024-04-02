@@ -15,11 +15,12 @@ export const getBrokerNotes = async (brokerId: number) => {
   }
 }
 
-export const updateBrokerNotes = async (brokerId: number) => {
+export const updateBrokerNotes = async (brokerId: number, notes: string) => {
   try {
-    const { data }: iNotesData = await axiosInstance.get('Broker/Notes', {
+    const { data }: iNotesData = await axiosInstance.put('Broker/Notes', {
       params: {
         brokerId,
+        notes,
       },
     })
 
@@ -29,11 +30,12 @@ export const updateBrokerNotes = async (brokerId: number) => {
   }
 }
 
-export const createBrokerNotes = async (brokerId: number) => {
+export const createBrokerNotes = async (brokerId: number, notes: string) => {
   try {
-    const { data }: iNotesData = await axiosInstance.get('Broker/Notes', {
+    const { data }: iNotesData = await axiosInstance.post('Broker/Notes', {
       params: {
         brokerId,
+        notes,
       },
     })
 
@@ -45,7 +47,7 @@ export const createBrokerNotes = async (brokerId: number) => {
 
 export const deleteBrokerNotes = async (brokerId: number) => {
   try {
-    const { data }: iNotesData = await axiosInstance.get('Broker/Notes', {
+    const { data }: iNotesData = await axiosInstance.delete('Broker/Notes', {
       params: {
         brokerId,
       },
