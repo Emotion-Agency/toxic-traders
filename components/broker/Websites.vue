@@ -7,8 +7,10 @@ const props = defineProps<iProps>()
 
 const websitesModalOpened = ref(false)
 const websitesInputs = ref([])
+const showAllWebsites = ref(false)
+const visibleWebsites = ref([websitesInputs.value[0]])
 
-const websiteInputData = {
+const modalInputData = {
   required: false,
   id: 'websites',
   name: 'Websites',
@@ -28,6 +30,11 @@ const websitesModalClose = () => {
 
 const websitesOnChange = () => {
   console.log('new websites')
+}
+
+const showMoreWebsites = () => {
+  showAllWebsites.value = true
+  visibleWebsites.value = [...websitesInputs.value]
 }
 
 watch(
@@ -58,7 +65,12 @@ watch(
         :key="website.id"
         class="websites__item"
       >
-        <IconsInfoCircle />
+        <div class="websites__info-item">
+          <IconsInfoCircle />
+          <div class="websites__info-modal">
+            <p class="websites__info-text">Website created date</p>
+          </div>
+        </div>
         <TheInput
           :id="website.id"
           :required="website.required"
@@ -68,7 +80,11 @@ watch(
           @input-value="websitesOnChange"
         />
       </div>
-      <OptionalButton>Show more</OptionalButton>
+      <OptionalButton
+        v-if="!showAllWebsites && websitesInputs.length > 3"
+        @on-click="showMoreWebsites"
+        >Show more</OptionalButton
+      >
     </TheAccordion>
     <TheModal
       :modal-opened="websitesModalOpened"
@@ -76,11 +92,11 @@ watch(
       @close="websitesModalClose"
     >
       <TheInput
-        :id="websiteInputData.id"
-        :required="websiteInputData.required"
-        :name="websiteInputData.name"
-        :type="websiteInputData.type"
-        :placeholder="websiteInputData.placeholder"
+        :id="modalInputData.id"
+        :required="modalInputData.required"
+        :name="modalInputData.name"
+        :type="modalInputData.type"
+        :placeholder="modalInputData.placeholder"
         class="websites__modal-input"
         @input-value="websitesOnChange"
       />
