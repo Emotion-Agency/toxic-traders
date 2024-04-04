@@ -1,23 +1,42 @@
 <script setup lang="ts">
 const addressModalOpened = ref(false)
 
-const addressModalInput = {
+const addressModalInput = ref({
   required: false,
   id: 'address-popup',
   name: 'Address',
   type: 'textarea',
   value: '',
   placeholder: 'Company address',
-}
+})
 
-const addressInput = {
-  required: false,
-  id: 'address',
-  name: 'Address',
-  type: 'textarea',
-  value:
-    'Rua Duque de Palmela, no. 37, 10 A, District: Lisbon Municipality: Lisbon Parish: Sanot Antonio, 1250 097, Portugal',
-  placeholder: 'Address company',
+const addressInputs = ref([
+  {
+    required: false,
+    id: 'address',
+    name: 'Address',
+    type: 'textarea',
+    value:
+      'Rua Duque de Palmela, no. 37, 10 A, District: Lisbon Municipality: Lisbon Parish: Sanot Antonio, 1250 097, Portugal',
+    placeholder: 'Address company',
+  },
+  {
+    required: false,
+    id: 'address-2',
+    name: 'Address',
+    type: 'textarea',
+    value:
+      'Rua Duque de Palmela, no. 37, 10 A, District: Lisbon Municipality: Lisbon Parish: Sanot Antonio, 1250 097, Portugal',
+    placeholder: 'Address company',
+  },
+])
+
+const showAllAddresses = ref(false)
+const visibleAddresses = ref([addressInputs.value[0]])
+
+const showMoreAddresses = () => {
+  showAllAddresses.value = true
+  visibleAddresses.value = [...addressInputs.value]
 }
 
 const addressModalOnChange = () => {
@@ -42,17 +61,33 @@ const addressModalClose = () => {
       :is-inputs="true"
       @open="addressModalOpen"
     >
-      <TheInput
-        :id="addressInput.id"
-        :required="addressInput.required"
-        :name="addressInput.name"
-        :type="addressInput.type"
-        :placeholder="addressInput.placeholder"
-        :value="addressInput.value"
-        class="address-company__input"
-      />
-      <button class="address-company__remove"></button>
-      <OptionalButton> Show more </OptionalButton>
+      <div class="address-company__inputs-list">
+        <div
+          v-for="(item, idx) in visibleAddresses"
+          :key="idx"
+          class="address-company__input-wrapper"
+        >
+          <TheInput
+            :id="item.id"
+            :required="item.required"
+            :name="item.name"
+            :type="item.type"
+            :placeholder="item.placeholder"
+            :value="item.value"
+            :is-right-button="true"
+            class="address-company__input"
+          />
+          <button class="address-company__remove">
+            <IconsTrash />
+          </button>
+        </div>
+      </div>
+      <OptionalButton
+        v-if="!showAllAddresses && addressInputs.length > 1"
+        @on-click="showMoreAddresses"
+      >
+        Show more
+      </OptionalButton>
     </TheAccordion>
     <TheModal
       :modal-opened="addressModalOpened"

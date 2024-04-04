@@ -57,7 +57,11 @@ defineExpose({
         ref="$input"
         v-model="inputValue"
         class="input__type"
-        :class="error && 'input__type--error'"
+        :class="[
+          error && 'input__type--error',
+          isLeftButton && 'input__type--left-btn',
+          isRightButton && 'input__type--right-btn',
+        ]"
         :type="type"
         :name="name"
         :placeholder="placeholder"
