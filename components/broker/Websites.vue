@@ -8,7 +8,7 @@ const props = defineProps<iProps>()
 const websitesModalOpened = ref(false)
 const websitesInputs = ref([])
 
-const categoryInputData = {
+const websiteInputData = {
   required: false,
   id: 'websites',
   name: 'Websites',
@@ -76,11 +76,11 @@ watch(
       @close="websitesModalClose"
     >
       <TheInput
-        :id="categoryInputData.id"
-        :required="categoryInputData.required"
-        :name="categoryInputData.name"
-        :type="categoryInputData.type"
-        :placeholder="categoryInputData.placeholder"
+        :id="websiteInputData.id"
+        :required="websiteInputData.required"
+        :name="websiteInputData.name"
+        :type="websiteInputData.type"
+        :placeholder="websiteInputData.placeholder"
         class="websites__modal-input"
         @input-value="websitesOnChange"
       />

@@ -2,8 +2,8 @@
 import type { iBroker } from '~/types/broker/broker'
 
 const route = useRoute()
-const id = route.params.id
-const categoryOptions = ref<string[]>([])
+const brokerId = route.params.id
+
 const brokersHeadings = ref<string[]>([])
 const websitesList = ref<string[]>([])
 const serversList = ref<iBroker[]>([])
@@ -12,9 +12,7 @@ const reviewsList = ref<{ rating: string; count: string }[]>([])
 const { getCurrentBroker } = useBrokers()
 
 onMounted(async () => {
-  const data = await getCurrentBroker(Number(id))
-
-  console.log(data)
+  const data = await getCurrentBroker(Number(brokerId))
 
   serversList.value = [
     {
@@ -22,7 +20,7 @@ onMounted(async () => {
       brokerServersMT5ServerNames: data?.brokerServersMT5ServerNames,
     },
   ]
-  categoryOptions.value = data?.brokerCategories?.split(',')
+
   brokersHeadings.value = data?.companyNames?.split(',')
   websitesList.value = data?.website?.split(',')
   reviewsList.value = [
@@ -53,7 +51,7 @@ onMounted(async () => {
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
             <BrokerCompanyName :brokers-headings="brokersHeadings" />
-            <BrokerCategory :category-options="categoryOptions" />
+            <BrokerCategory :broker-id="Number(brokerId)" />
             <BrokerLocationServers />
             <BrokerAddressCompany />
             <BrokerWebsites :websites="websitesList" />

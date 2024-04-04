@@ -14,6 +14,6 @@ export interface iSearchItem {
 
 export interface iInput {
   id: string
-  value: string | number
+  value: string
   error: boolean
 }

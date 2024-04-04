@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { getBrokerCompanyNames } from '~/api/brokers/brokerCompanyNames'
+import { getBrokerCategoriesList } from '~/api/brokers/brokerCategoriesList'
+import type { iInput } from '~/types'
 
 interface iProps {
-  categoryOptions: string[]
+  brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const categoryModalOpened = ref(false)
+const categoryOptions = ref<string[]>([])
+const categoriesData = ref<string[]>([])
+const categoryValue = ref<string>('')
 
 const categoryInputData = {
   required: false,
@@ -18,9 +22,23 @@ const categoryInputData = {
   placeholder: 'Category name',
 }
 
-const categoryOnChange = () => {
-  console.log('new category')
+const { createCategories } = useBrokerCategories()
+
+const categoryOnChange = (input: iInput) => {
+  categoryValue.value = input.value
+
+  console.log(categoryValue.value, input.value)
 }
+
+const onAddCategory = async () => {
+  await createCategories(props.brokerId, categoryValue.value)
+  categoryValue.value = ''
+  categoryModalClose()
+}
+
+watch(categoriesData, () => {
+  categoryOptions.value = categoriesData.value
+})
 
 const categoryModalOpen = () => {
   categoryModalOpened.value = true
@@ -32,9 +50,7 @@ const categoryModalClose = () => {
 }
 
 onMounted(async () => {
-  const logsData = await getBrokerCompanyNames()
-
-  console.log(logsData)
+  categoriesData.value = await getBrokerCategoriesList()
 })
 </script>
 
@@ -46,7 +62,7 @@ onMounted(async () => {
       :is-inputs="true"
       @open="categoryModalOpen"
     >
-      <CustomSelect :options="categoryOptions" placeholder="Regulated" />
+      <CustomSelect :options="categoryOptions" placeholder="Choose category" />
     </TheAccordion>
     <TheModal
       :modal-opened="categoryModalOpened"
@@ -59,6 +75,7 @@ onMounted(async () => {
         :name="categoryInputData.name"
         :type="categoryInputData.type"
         :placeholder="categoryInputData.placeholder"
+        :value="categoryValue"
         class="category__modal-input"
         @input-value="categoryOnChange"
       />
@@ -71,7 +88,12 @@ onMounted(async () => {
         >
           Close
         </TheButton>
-        <TheButton tag="button" variant="fill" button-size="medium">
+        <TheButton
+          tag="button"
+          variant="fill"
+          button-size="medium"
+          @click="onAddCategory()"
+        >
           Add
         </TheButton>
       </div>

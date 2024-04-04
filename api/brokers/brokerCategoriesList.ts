@@ -1,13 +1,13 @@
 import axiosInstance from '../axiosInstance'
-import type { iCategoriesListData } from '~/types/broker/brokerCategories'
+import type { iCategoriesList } from '~/types/broker/brokerCategories'
 
 export const getBrokerCategoriesList = async () => {
   try {
-    const { data }: iCategoriesListData = await axiosInstance.get(
-      'Broker/CategoriesList'
+    const { data }: iCategoriesList = await axiosInstance.get(
+      'Broker/BrokerCategoriesList'
     )
 
-    return data
+    return data.uniqueBrokerCategories
   } catch (e) {
     console.error(e.message)
   }

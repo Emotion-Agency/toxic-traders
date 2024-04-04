@@ -30,7 +30,7 @@ export const useInput = (emit, props) => {
         inputFocus.value = false
         emit('inputFocus', {
           id: props.id,
-          value: inputValue.value,
+          value: inputValue.value.toString(),
           error: error.value,
         })
       }
@@ -55,7 +55,7 @@ export const useInput = (emit, props) => {
         // $input.value.focus()
         emit('inputValue', {
           id: props.id,
-          value: inputValue.value,
+          value: inputValue.value.toString(),
           error: error.value,
         })
       }

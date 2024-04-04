@@ -6,7 +6,7 @@ interface iProps {
   currentPage: number
   options: string[]
   itemsCount: number
-  inputValue: string | number
+  inputValue: string
 }
 
 const props = defineProps<iProps>()

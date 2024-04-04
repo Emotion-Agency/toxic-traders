@@ -14,7 +14,7 @@ const filteredBrokers = ref<iBroker[]>([])
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
 const itemsCount = ref(route.query.count ? Number(route.query.count) : 10)
-const searchValue = ref<string | number>(1)
+const searchValue = ref<string>('1')
 
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
@@ -95,7 +95,7 @@ const onChange = (input: iInput) => {
   const inputPage = input.value
 
   if (Number(inputPage) > computedTotalPages.value) {
-    searchValue.value = computedTotalPages.value
+    searchValue.value = computedTotalPages.value.toString()
     console.log('maxPage')
   }
 }
@@ -149,7 +149,7 @@ onMounted(async () => {
           <h1 class="brokers__title">All Brokers</h1>
           <div class="brokers__menu">
             <TheButton
-              v-if="brokersList.length"
+              v-if="brokersList?.length"
               tag="button"
               button-size="medium"
               variant="outlined"
@@ -161,7 +161,7 @@ onMounted(async () => {
               </template>
             </TheButton>
             <TheButton
-              v-if="brokersList.length"
+              v-if="brokersList?.length"
               tag="button"
               button-size="medium"
               variant="fill"

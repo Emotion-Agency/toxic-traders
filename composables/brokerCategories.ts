@@ -7,19 +7,22 @@ import {
 export const useBrokerCategories = () => {
   const getCategories = async (brokerId: number) => {
     try {
-      const data = await getBrokerCategories(brokerId)
+      const { brokerCategories } = await getBrokerCategories(brokerId)
 
-      return data
+      return brokerCategories
     } catch (error) {
       // alert with error
     }
   }
 
-  const createCategories = async (brokerId: number) => {
+  const createCategories = async (brokerId: number, category: string) => {
     try {
-      const data = await createBrokerCategories(brokerId)
+      const { brokerCategories } = await createBrokerCategories(
+        brokerId,
+        category
+      )
 
-      return data
+      return brokerCategories
     } catch (error) {
       // alert with error
     }

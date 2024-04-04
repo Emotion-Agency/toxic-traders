@@ -8,8 +8,8 @@ export interface iCategoriesData {
   }
 }
 
-export interface iCategoriesListData {
+export interface iCategoriesList {
   data: {
-    uniqueBrokerCategories: string
+    uniqueBrokerCategories: string[]
   }
 }
