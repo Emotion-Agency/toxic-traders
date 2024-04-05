@@ -77,8 +77,12 @@ watch(
           :name="website.name"
           :type="website.type"
           :placeholder="website.placeholder"
+          :is-right-button="true"
           @input-value="websitesOnChange"
         />
+        <button class="websites__remove-btn">
+          <IconsTrash />
+        </button>
       </div>
       <OptionalButton
         v-if="!showAllWebsites && websitesInputs.length > 3"
