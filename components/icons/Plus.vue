@@ -8,7 +8,11 @@
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_1306_5910)">
+    <g
+      :clip-path="`url(#clip0_${Math.floor(Math.random() * 1000)}_${Math.floor(
+        Math.random() * 1000
+      )})`"
+    >
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -23,7 +27,11 @@
       />
     </g>
     <defs>
-      <clipPath id="clip0_1306_5910">
+      <clipPath
+        :id="`clip0_${Math.floor(Math.random() * 1000)}_${Math.floor(
+          Math.random() * 1000
+        )}`"
+      >
         <rect width="16" height="16" fill="white" />
       </clipPath>
     </defs>

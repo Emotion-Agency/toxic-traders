@@ -16,6 +16,14 @@
   margin-bottom: 20px;
 }
 
+.main-broker__item {
+  margin-top: 40px;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
 .broker-aside {
   position: relative;
   height: 100%;

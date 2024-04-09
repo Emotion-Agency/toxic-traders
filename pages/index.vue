@@ -109,7 +109,7 @@ const onChangeCheckbox = val => {
 <template>
   <main>
     <section style="height: 100vh">
-      <div class="container">
+      <!-- <div class="container">
         <TheButton tag="button" button-size="large" variant="soft">
           Button
           <template #end-icon>afafa</template>
@@ -163,7 +163,7 @@ const onChangeCheckbox = val => {
           @input-value="onChangeCheckbox"
         />
         <ThePagination :total-pages="5" />
-      </div>
+      </div> -->
     </section>
   </main>
 </template>

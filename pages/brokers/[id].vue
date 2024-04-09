@@ -60,13 +60,19 @@ onMounted(async () => {
         </div>
       </aside>
       <section class="main-broker__content">
-        <h2 class="main-broker__title">Servers</h2>
-        <BrokerServersTable :servers="serversList" />
+        <div class="main-broker__item">
+          <h2 class="main-broker__title">Servers</h2>
+          <BrokerServersTable :servers="serversList" />
+        </div>
+        <div class="main-broker__item">
+          <h2 class="main-broker__title">Type of Accounts</h2>
+          <BrokerTypeOfAccounts />
+        </div>
       </section>
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
-            <BrokerNotes />
+            <BrokerNotes :broker-id="Number(brokerId)" />
             <BrokerRegulation />
             <BrokerPlatforms />
             <BrokerRestrictionCountries />

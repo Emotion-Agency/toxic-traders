@@ -17,7 +17,7 @@ const toggleList = () => {
   isOpened.value = !isOpened.value
 }
 
-const closeList = (option: string) => {
+const closeList = (option = '') => {
   isOpened.value = false
   selectedItem.value = option
   emit('select', option)
@@ -58,7 +58,15 @@ onUnmounted(() => {
     >
       <ul class="custom-select__list">
         <li
+          v-if="!options.length"
+          class="custom-select__item"
+          @click="closeList()"
+        >
+          <p class="custom-select__item-text">Options not found</p>
+        </li>
+        <li
           v-for="(option, idx) of options"
+          v-else
           :key="idx"
           class="custom-select__item"
           @click="closeList(option)"

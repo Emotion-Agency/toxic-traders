@@ -1,0 +1,10 @@
+.type-accounts {
+}
+.type-accounts__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: row;
+  gap: 25px;
+}
+.type-accounts__item {
+}
