@@ -8,3 +8,24 @@
 }
 .type-accounts__item {
 }
+
+.type-accounts__modal-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  margin-top: 16px;
+}
+
+.type-accounts__buttons {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  justify-content: flex-end;
+  margin-top: 32px;
+
+  .button {
+    &:first-child {
+      background-color: var(--secondary-default);
+    }
+  }
+}
