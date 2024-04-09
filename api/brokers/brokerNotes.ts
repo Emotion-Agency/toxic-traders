@@ -15,17 +15,14 @@ export const getBrokerNotes = async (brokerId: number) => {
   }
 }
 
-export const updateBrokerNotes = async (brokerId: number, notes: string) => {
+export const updateBrokerNotes = async (BrokerId: number, Notes: string) => {
   try {
-    const { data }: iNotesData = await axiosInstance.put(
-      `Broker/Notes?BrokerId=${brokerId}&Notes=${notes}`,
-      {
-        params: {
-          brokerId,
-          notes,
-        },
-      }
-    )
+    const { data }: iNotesData = await axiosInstance.put(`Broker/Notes`, null, {
+      params: {
+        BrokerId,
+        Notes: Notes || '',
+      },
+    })
 
     return data
   } catch (e) {

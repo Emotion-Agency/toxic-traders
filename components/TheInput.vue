@@ -27,7 +27,6 @@ const {
   onFocus,
   onBlur,
   onInput,
-  onClickEnter,
   reset,
   throwError,
 } = useInput(emit, props)
@@ -67,7 +66,6 @@ defineExpose({
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
-        @keyup.enter="onClickEnter"
         @focus="onFocus"
         @blur="onBlur"
         @input="onInput"

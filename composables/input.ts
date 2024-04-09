@@ -101,18 +101,6 @@ export const useInput = (emit, props) => {
     })
   }
 
-  const onClickEnter = () => {
-    if (props.type === 'text' || props.type === 'textarea') {
-      if (inputValue.value.trim() !== '') {
-        emit('inputValue', {
-          id: props.id,
-          value: inputValue.value,
-          error: error.value,
-        })
-      }
-    }
-  }
-
   const throwError = () => {
     if (validationResult().includes(true)) {
       inputFocus.value = true
@@ -149,7 +137,6 @@ export const useInput = (emit, props) => {
     onFocus,
     onBlur,
     onInput,
-    onClickEnter,
     reset,
     resetSearch,
     throwError,

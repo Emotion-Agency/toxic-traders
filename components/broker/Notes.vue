@@ -9,7 +9,6 @@ const props = defineProps<iProps>()
 
 const { getNotes, updateNotes } = useBrokerNotes()
 const brokerNotesValue = ref('')
-const inputValue = ref('')
 
 const notesInput = ref({
   required: false,
@@ -21,12 +20,12 @@ const notesInput = ref({
 })
 
 const notesOnChange = (val: iInput) => {
-  val.value = inputValue.value
-  console.log(val.value, inputValue.value)
+  brokerNotesValue.value = val.value
+  console.log(val.value, brokerNotesValue.value)
 }
 
 const onClickEnter = async () => {
-  await updateNotes(props.brokerId, inputValue.value)
+  await updateNotes(props.brokerId, brokerNotesValue.value)
   console.log('Notes updated')
 }
 
@@ -35,10 +34,22 @@ onMounted(async () => {
   brokerNotesValue.value = data.brokerNotes
   console.log(brokerNotesValue.value)
 })
+
+// const onClickEnter = () => {
+//     if (props.type === 'text' || props.type === 'textarea') {
+//       if (inputValue.value.trim() !== '') {
+//         emit('inputValue', {
+//           id: props.id,
+//           value: inputValue.value,
+//           error: error.value,
+//         })
+//       }
+//     }
+//   }
 </script>
 
 <template>
-  <div class="notes">
+  <form class="notes" novalidate @keyup.enter.prevent="onClickEnter">
     <TheAccordion title="Notes" :is-inputs="true">
       <TheInput
         :id="notesInput.id"
@@ -49,8 +60,7 @@ onMounted(async () => {
         :value="notesInput.value"
         class="notes__input"
         @input-value="notesOnChange"
-        @click-enter="onClickEnter"
       />
     </TheAccordion>
-  </div>
+  </form>
 </template>
