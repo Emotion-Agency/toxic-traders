@@ -1,10 +1,16 @@
 <script setup lang="ts">
+interface iProps {
+  serverLocation: string
+}
+
+const props = defineProps<iProps>()
+
 const locationInputData = {
   required: false,
   id: 'location',
   name: 'Location',
   type: 'text',
-  value: 'US NY',
+  value: props.serverLocation || '',
   placeholder: 'Enter Location Server',
 }
 </script>
