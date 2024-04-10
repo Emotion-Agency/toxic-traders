@@ -39,8 +39,19 @@ const showMoreAddresses = () => {
   visibleAddresses.value = [...addressInputs.value]
 }
 
+const showLessAddresses = () => {
+  showAllAddresses.value = false
+  visibleAddresses.value = [addressInputs.value[0]]
+}
+
 const addressModalOnChange = () => {
   console.log('new address')
+}
+
+const removeAddress = (idx: number) => {
+  visibleAddresses.value = visibleAddresses.value.filter(
+    (_, index) => idx !== index
+  )
 }
 
 const addressModalOpen = () => {
@@ -77,7 +88,7 @@ const addressModalClose = () => {
             :is-right-button="true"
             class="address-company__input"
           />
-          <button class="address-company__remove">
+          <button class="address-company__remove" @click="removeAddress(idx)">
             <IconsTrash />
           </button>
         </div>
@@ -87,6 +98,9 @@ const addressModalClose = () => {
         @on-click="showMoreAddresses"
       >
         Show more
+      </OptionalButton>
+      <OptionalButton v-else @on-click="showLessAddresses">
+        Show less
       </OptionalButton>
     </TheAccordion>
     <TheModal
