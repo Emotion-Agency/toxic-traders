@@ -7,7 +7,7 @@ export const getBrokerServer = async (brokerId: number) => {
       'Broker/BrokerServer',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -18,10 +18,15 @@ export const getBrokerServer = async (brokerId: number) => {
   }
 }
 
-export const getBrokerServerById = async (brokerServerId: number) => {
+export const getBrokerServerById = async (serverId: number) => {
   try {
     const { data }: iBrokerServerData = await axiosInstance.get(
-      `Broker/BrokerServer/${brokerServerId}`
+      `Broker/BrokerServer`,
+      {
+        params: {
+          BrokerServerId: serverId,
+        },
+      }
     )
 
     return data
@@ -37,14 +42,14 @@ export const createBrokerServerAccount = async (
   brokerServerId: number
 ) => {
   try {
-    const { data }: iBrokerServerData = await axiosInstance.get(
+    const { data }: iBrokerServerData = await axiosInstance.post(
       `BrokerServerAccount`,
       {
         params: {
-          accountType,
-          login,
-          password,
-          brokerServerId,
+          AccountType: accountType,
+          Login: login,
+          Password: password,
+          BrokerServerId: brokerServerId,
         },
       }
     )

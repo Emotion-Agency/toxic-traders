@@ -7,7 +7,7 @@ export const getBrokerCategories = async (brokerId: number) => {
       'Broker/BrokerCategories',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -40,7 +40,7 @@ export const deleteBrokerCategories = async (brokerId: number) => {
       'Broker/BrokerCategories',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )

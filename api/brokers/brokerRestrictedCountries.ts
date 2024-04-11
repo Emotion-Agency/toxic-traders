@@ -7,7 +7,7 @@ export const getBrokerRestrictedCountries = async (brokerId: number) => {
       'Broker/RestrictedCountries',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -24,7 +24,7 @@ export const createBrokerRestrictedCountries = async (brokerId: number) => {
       'Broker/RestrictedCountries',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -39,9 +39,10 @@ export const updateBrokerRestrictedCountries = async (brokerId: number) => {
   try {
     const { data }: iRestrictedCountriesData = await axiosInstance.put(
       'Broker/RestrictedCountries',
+      null,
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -58,7 +59,7 @@ export const deleteBrokerRestrictedCountries = async (brokerId: number) => {
       'Broker/RestrictedCountries',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )

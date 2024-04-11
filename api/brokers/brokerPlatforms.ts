@@ -7,7 +7,7 @@ export const getBrokerPlatforms = async (brokerId: number) => {
       'Broker/Platforms',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -24,7 +24,7 @@ export const createBrokerPlatforms = async (brokerId: number) => {
       'Broker/Platforms',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -39,9 +39,10 @@ export const updateBrokerPlatforms = async (brokerId: number) => {
   try {
     const { data }: iPlatformsData = await axiosInstance.put(
       'Broker/Platforms',
+      null,
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -58,7 +59,7 @@ export const deleteBrokerPlatforms = async (brokerId: number) => {
       'Broker/Platforms',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )

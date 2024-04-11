@@ -7,7 +7,7 @@ export const getBrokerRegulator = async (brokerId: number) => {
       'Broker/Regulator',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -24,7 +24,7 @@ export const createBrokerRegulator = async (brokerId: number) => {
       'Broker/Regulator',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -39,9 +39,10 @@ export const updateBrokerRegulator = async (brokerId: number) => {
   try {
     const { data }: iRegulatorData = await axiosInstance.put(
       'Broker/Regulator',
+      null,
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
@@ -58,7 +59,7 @@ export const deleteBrokerRegulator = async (brokerId: number) => {
       'Broker/Regulator',
       {
         params: {
-          brokerId,
+          BrokerId: brokerId,
         },
       }
     )
