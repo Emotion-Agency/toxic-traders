@@ -12,3 +12,15 @@ export const getBrokerCompanyNames = async () => {
     console.error(e.message)
   }
 }
+
+export const getBrokerCompanyNamesById = async (brokerId: number) => {
+  try {
+    const { data }: iCompanyNamesData = await axiosInstance.get(
+      `Broker/CompanyNames/${brokerId}`
+    )
+
+    return data
+  } catch (e) {
+    console.error(e.message)
+  }
+}

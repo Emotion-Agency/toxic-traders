@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { iBroker } from '~/types/broker/broker'
-
 interface iProps {
-  servers: iBroker[]
+  brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const isOpenedServersModal = ref(false)
 const headerFields = ['Servers MT4', 'Servers MT5']
+const serversList = ref([])
+const { getAllBrokerServers } = useBrokerServer()
 
 // const getBrokerServersLink = (broker: iBroker, item: string | number) => {
 //   const isMT4Server = broker.brokerServersMT4ServerNames === item
@@ -33,6 +33,40 @@ const serversModalOpen = () => {
 const serversModalClose = () => {
   isOpenedServersModal.value = false
 }
+
+onMounted(async () => {
+  const data = await getAllBrokerServers(props.brokerId)
+
+  serversList.value = data?.brokerServers
+
+  console.log(serversList.value)
+
+  const servers = serversList.value.map(item => item.serverType)
+
+  const groupedData = serversList.value.reduce((acc, currentItem) => {
+    const serverType = currentItem.serverType
+    if (!acc[serverType]) {
+      acc[serverType] = []
+    }
+    acc[serverType].push(currentItem)
+    return acc
+  }, {})
+
+  // Convert object to array of arrays
+  const result = Object.values(groupedData)
+
+  console.log(result)
+
+  // serversMT4List.value = data.brokerServers.filter(
+  //   item => item.serverType === 0
+  // )
+
+  // serversMT5List.value = data.brokerServers.filter(
+  //   item => item.serverType === 1
+  // )
+
+  // console.log(serversMT4List.value, serversMT5List.value)
+})
 </script>
 
 <template>
@@ -40,12 +74,19 @@ const serversModalClose = () => {
     <Table>
       <TableHead :header-fields="headerFields" />
       <TableBody>
-        <TableRow v-for="(broker, idx) in servers" :key="idx">
+        <TableRow v-for="(item, idx) in serversList" :key="idx">
           <TableCell
-            v-for="(item, id, index) in broker"
-            :key="id"
-            :item="item"
-            :class="`table-cell--${index}`"
+            v-if="item.serverType === 0"
+            :item="item.serverName"
+            :class="`table-cell--${idx}`"
+            :is-modal="true"
+            @open="serversModalOpen"
+          />
+
+          <TableCell
+            v-if="item.serverType === 1"
+            :item="item.serverName"
+            :class="`table-cell--${idx}`"
             :is-modal="true"
             @open="serversModalOpen"
           />

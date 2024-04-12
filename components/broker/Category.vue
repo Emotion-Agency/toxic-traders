@@ -100,4 +100,3 @@ onMounted(async () => {
     </TheModal>
   </div>
 </template>
-~/api/brokers/brokerCompanyNames

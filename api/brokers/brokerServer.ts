@@ -4,7 +4,7 @@ import type { iBrokerServerData } from '~/types/broker/brokerServer'
 export const getBrokerServer = async (brokerId: number) => {
   try {
     const { data }: iBrokerServerData = await axiosInstance.get(
-      'Broker/BrokerServer',
+      'BrokerServer/BrokerServer',
       {
         params: {
           BrokerId: brokerId,
@@ -21,7 +21,7 @@ export const getBrokerServer = async (brokerId: number) => {
 export const getBrokerServerById = async (serverId: number) => {
   try {
     const { data }: iBrokerServerData = await axiosInstance.get(
-      `Broker/BrokerServer`,
+      `BrokerServer/BrokerServer`,
       {
         params: {
           BrokerServerId: serverId,

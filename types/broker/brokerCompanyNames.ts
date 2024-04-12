@@ -1,10 +1,16 @@
 export interface iCompanyNamesItem {
+  id: number
+  companyName: string
+  website: string
+}
+
+export interface iCompanyNames {
   brokerId: number
-  companyNames: string[]
+  companyNames: iCompanyNamesItem[]
 }
 
 export interface iCompanyNamesData {
   data: {
-    companyNames: iCompanyNamesItem[]
+    companyNames: iCompanyNames[]
   }
 }

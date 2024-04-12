@@ -1,16 +1,30 @@
 <script setup lang="ts">
+import type { iCompanyNamesItem } from '~/types/broker/brokerCompanyNames'
+
 interface iProps {
-  brokersHeadings: string[]
+  brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
+
+const companyNames = ref<iCompanyNamesItem[]>([])
+
+const { getCompanyNamesById } = useBrokerCompanyNames()
+
+onMounted(async () => {
+  const data = await getCompanyNamesById(props.brokerId)
+
+  if (data?.length) {
+    companyNames.value = data[0]?.companyNames
+  }
+})
 </script>
 
 <template>
   <div class="company-name">
     <TheAccordion title="Company Name">
-      <p v-for="(title, idx) in brokersHeadings" :key="idx">
-        {{ formatNameToNormalCase(title) }}
+      <p v-for="(item, idx) in companyNames" :key="idx">
+        {{ item?.companyName }}
       </p>
     </TheAccordion>
   </div>

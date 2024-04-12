@@ -3,8 +3,6 @@ import type { iBroker } from '~/types/broker/broker'
 
 const route = useRoute()
 const brokerId = route.params.id
-
-const brokersHeadings = ref<string[]>([])
 const websitesList = ref<string[]>([])
 const serversList = ref<iBroker[]>([])
 const serverLocation = ref<string>('')
@@ -22,7 +20,6 @@ onMounted(async () => {
     },
   ]
 
-  brokersHeadings.value = data?.companyNames?.split(',')
   websitesList.value = data?.website?.split(',')
   reviewsList.value = [
     {
@@ -52,7 +49,7 @@ onMounted(async () => {
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
-            <BrokerCompanyName :brokers-headings="brokersHeadings" />
+            <BrokerCompanyName :broker-id="Number(brokerId)" />
             <BrokerCategory :broker-id="Number(brokerId)" />
             <BrokerLocationServers :server-location="serverLocation" />
             <BrokerAddressCompany />
@@ -64,7 +61,7 @@ onMounted(async () => {
       <section class="main-broker__content">
         <div class="main-broker__item">
           <h2 class="main-broker__title">Servers</h2>
-          <BrokerServersTable :servers="serversList" />
+          <BrokerServersTable :broker-id="Number(brokerId)" />
         </div>
         <div class="main-broker__item">
           <h2 class="main-broker__title">Type of Accounts</h2>
