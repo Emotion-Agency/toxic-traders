@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resize } from '@emotionagency/utils'
+import { raf } from '@emotionagency/utils'
 
 interface iProps {
   title: string
@@ -23,7 +23,7 @@ const calcHeight = () => {
 const toggleClick = () => {
   isOpened.value = !isOpened.value
 
-  calcHeight()
+  // calcHeight()
 }
 
 const optionalClick = () => {
@@ -32,15 +32,13 @@ const optionalClick = () => {
 }
 
 onMounted(() => {
-  resize.on(calcHeight)
-  setTimeout(() => {
-    calcHeight()
-    isOpened.value = true
-  }, 400)
+  raf.on(calcHeight)
+
+  isOpened.value = true
 })
 
 onBeforeUnmount(() => {
-  resize.off(calcHeight)
+  raf.off(calcHeight)
 })
 </script>
 
