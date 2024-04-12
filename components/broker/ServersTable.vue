@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { iBrokerServer } from '~/types/broker/brokerServer'
 interface iProps {
   brokerId: number
 }
@@ -7,24 +8,8 @@ const props = defineProps<iProps>()
 
 const isOpenedServersModal = ref(false)
 const headerFields = ['Servers MT4', 'Servers MT5']
-const serversList = ref([])
+const serversList = ref<iBrokerServer[]>([])
 const { getAllBrokerServers } = useBrokerServer()
-
-// const getBrokerServersLink = (broker: iBroker, item: string | number) => {
-//   const isMT4Server = broker.brokerServersMT4ServerNames === item
-//   const isMT5Server = broker.brokerServersMT5ServerNames === item
-
-//   if (isMT4Server || isMT5Server) {
-//     return {
-//       url: `/brokers/${broker.id}`,
-//       text: isMT4Server
-//         ? broker.brokerServersMT4ServerNames
-//         : broker.brokerServersMT5ServerNames,
-//     }
-//   } else {
-//     return null
-//   }
-// }
 
 const serversModalOpen = () => {
   isOpenedServersModal.value = true
@@ -38,34 +23,14 @@ onMounted(async () => {
   const data = await getAllBrokerServers(props.brokerId)
 
   serversList.value = data?.brokerServers
+})
 
-  console.log(serversList.value)
-
-  const servers = serversList.value.map(item => item.serverType)
-
-  const groupedData = serversList.value.reduce((acc, currentItem) => {
-    const serverType = currentItem.serverType
-    if (!acc[serverType]) {
-      acc[serverType] = []
-    }
-    acc[serverType].push(currentItem)
-    return acc
-  }, {})
-
-  // Convert object to array of arrays
-  const result = Object.values(groupedData)
-
-  console.log(result)
-
-  // serversMT4List.value = data.brokerServers.filter(
-  //   item => item.serverType === 0
-  // )
-
-  // serversMT5List.value = data.brokerServers.filter(
-  //   item => item.serverType === 1
-  // )
-
-  // console.log(serversMT4List.value, serversMT5List.value)
+const serversConvertedList = computed(() => {
+  return serversList.value.map(item => {
+    const type0 = item.serverType === 0 ? item : null
+    const type1 = item.serverType === 1 ? item : null
+    return [type0, type1]
+  })
 })
 </script>
 
@@ -74,20 +39,13 @@ onMounted(async () => {
     <Table>
       <TableHead :header-fields="headerFields" />
       <TableBody>
-        <TableRow v-for="(item, idx) in serversList" :key="idx">
+        <TableRow v-for="(item, idx) in serversConvertedList" :key="idx">
           <TableCell
-            v-if="item.serverType === 0"
-            :item="item.serverName"
-            :class="`table-cell--${idx}`"
-            :is-modal="true"
-            @open="serversModalOpen"
-          />
-
-          <TableCell
-            v-if="item.serverType === 1"
-            :item="item.serverName"
-            :class="`table-cell--${idx}`"
-            :is-modal="true"
+            v-for="(cell, i) in item"
+            :key="i"
+            :item="cell?.serverName || 'N/A'"
+            :class="`table-cell--${i}`"
+            :is-modal="!!cell?.serverName"
             @open="serversModalOpen"
           />
         </TableRow>
