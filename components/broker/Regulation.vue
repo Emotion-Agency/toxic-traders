@@ -88,7 +88,7 @@ const regulationOnChange = () => {}
           :title="'#' + (idx + 1)"
           additional-button="Remove"
           class="regulation__accordion"
-          @remove="regulationRemoveItem(idx)"
+          @action-click="regulationRemoveItem(idx)"
         >
           <TheInput
             id="regulation-name"

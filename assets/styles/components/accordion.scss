@@ -1,7 +1,7 @@
 .accordion {
   &--opened {
     .accordion__content-wrapper {
-      height: var(--h);
+      max-height: var(--h);
       pointer-events: auto;
       margin-top: 12px;
       opacity: 1;
@@ -47,11 +47,11 @@
 }
 
 .accordion__content-wrapper {
-  transition: height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
   background-color: var(--white);
   border-radius: 10px;
   opacity: 0;
-  height: 0;
+  max-height: 0;
   pointer-events: none;
   margin-top: 0;
 
