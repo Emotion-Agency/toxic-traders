@@ -26,8 +26,8 @@ const methodsList = [
         :key="idx"
         variant="fill"
         :is-button="true"
-        >{{ item.depositMethod }}</TheBadge
-      >
+        :text="item.depositMethod"
+      />
     </TheAccordion>
   </div>
 </template>

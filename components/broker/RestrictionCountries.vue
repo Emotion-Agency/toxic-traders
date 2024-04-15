@@ -32,8 +32,8 @@ const countriesList = [
         :key="idx"
         variant="outlined"
         :is-button="true"
-        >{{ item.countryCode }}</TheBadge
-      >
+        :text="item.countryCode"
+      />
     </TheAccordion>
   </div>
 </template>

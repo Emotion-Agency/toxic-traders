@@ -1,0 +1,44 @@
+.tags-input {
+}
+.tags-input__wrapper {
+  position: relative;
+}
+.tags-input__content {
+  position: relative;
+}
+.tags-input__input-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 12px;
+}
+.tags-input__badge {
+  flex: 0 1 auto;
+}
+.tags-input__input {
+  flex: 1 0 auto;
+  max-width: 100%;
+  width: 46px;
+}
+.tags-input__dropdown {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+
+  &--opened {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+.tags-input__dropdown-item {
+}
+.tags-input__invalid {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+
+  &--error {
+    opacity: 1;
+  }
+}

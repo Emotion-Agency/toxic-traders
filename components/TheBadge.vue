@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface iProps {
   variant: 'fill' | 'outlined'
+  text: string
   isButton?: boolean
 }
 
@@ -20,7 +21,7 @@ const onClose = () => {
     :disabled="!isButton"
     @click="onClose"
   >
-    <slot />
+    {{ text }}
     <span v-if="isButton">
       <IconsClose />
     </span>
