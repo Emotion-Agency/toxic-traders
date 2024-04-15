@@ -100,6 +100,38 @@ const accountModalOpen = () => {
 const accountModalClose = () => {
   accountModalOpened.value = false
 }
+
+const arr1 = [
+  {
+    serverType: 0,
+  },
+  {
+    serverType: 0,
+  },
+  {
+    serverType: 0,
+  },
+  {
+    serverType: 0,
+  },
+]
+
+const arr2 = [
+  [
+    {
+      serverType: 0,
+    },
+    {
+      serverType: 0,
+    },
+    {
+      serverType: 0,
+    },
+    {
+      serverType: 0,
+    },
+  ],
+]
 </script>
 
 <template>

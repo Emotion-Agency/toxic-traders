@@ -31,8 +31,7 @@ const onClickEnter = async () => {
 
 onMounted(async () => {
   const data = await getNotes(props.brokerId)
-  brokerNotesValue.value = data.brokerNotes
-  console.log(brokerNotesValue.value)
+  brokerNotesValue.value = data?.brokerNotes || ''
 })
 
 // const onClickEnter = () => {
@@ -52,12 +51,12 @@ onMounted(async () => {
   <form class="notes" novalidate @keyup.enter.prevent="onClickEnter">
     <TheAccordion title="Notes" :is-inputs="true">
       <TheInput
-        :id="notesInput.id"
-        :required="notesInput.required"
-        :name="notesInput.name"
-        :type="notesInput.type"
-        :placeholder="notesInput.placeholder"
-        :value="notesInput.value"
+        :id="notesInput?.id"
+        :required="notesInput?.required"
+        :name="notesInput?.name"
+        :type="notesInput?.type"
+        :placeholder="notesInput?.placeholder"
+        :value="notesInput?.value"
         class="notes__input"
         @input-value="notesOnChange"
       />

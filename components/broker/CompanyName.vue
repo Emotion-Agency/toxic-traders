@@ -13,7 +13,6 @@ const { getCompanyNamesById } = useBrokerCompanyNames()
 
 onMounted(async () => {
   const data = await getCompanyNamesById(props.brokerId)
-
   if (data?.length) {
     companyNames.value = data[0]?.companyNames
   }
@@ -26,6 +25,7 @@ onMounted(async () => {
       <p v-for="(item, idx) in companyNames" :key="idx">
         {{ item?.companyName }}
       </p>
+      <p v-if="!companyNames.length">Company names is not found</p>
     </TheAccordion>
   </div>
 </template>
