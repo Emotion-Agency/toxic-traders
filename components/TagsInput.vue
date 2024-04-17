@@ -44,6 +44,12 @@ watch(inputValue, () => {
   }
 })
 
+// const filteredPlatformsList = computed(() => {
+
+// })
+
+// виводити в tags-input__dropdown-item
+
 onMounted(async () => {
   const platformsData = await getBrokerPlatformsList()
 
