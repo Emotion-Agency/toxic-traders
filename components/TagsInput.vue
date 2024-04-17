@@ -26,6 +26,16 @@ const selectPlatform = (platform: string) => {
   console.log(badgesList.value)
 }
 
+const removeBadge = (idx: number) => {
+  badgesList.value = badgesList.value.filter((_, index) => idx !== index)
+}
+
+const outsideClick = event => {
+  if (!$el.value.contains(event.target)) {
+    dropdownOpened.value = false
+  }
+}
+
 watch(inputValue, () => {
   dropdownOpened.value = true
 
@@ -33,12 +43,6 @@ watch(inputValue, () => {
     dropdownOpened.value = false
   }
 })
-
-const outsideClick = event => {
-  if (!$el.value.contains(event.target)) {
-    dropdownOpened.value = false
-  }
-}
 
 onMounted(async () => {
   const platformsData = await getBrokerPlatformsList()
@@ -63,7 +67,9 @@ onUnmounted(() => {
             :key="idx"
             class="tags-input__badge"
             variant="fill"
+            :is-button="true"
             :text="badge"
+            @click="removeBadge(idx)"
           />
           <input
             id="tags-input"

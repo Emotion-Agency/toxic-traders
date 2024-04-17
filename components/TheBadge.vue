@@ -9,7 +9,7 @@ defineProps<iProps>()
 
 const emit = defineEmits(['close'])
 
-const onClose = () => {
+const onClick = () => {
   emit('close')
 }
 </script>
@@ -19,7 +19,7 @@ const onClose = () => {
     class="badge"
     :class="[`badge--${variant}`]"
     :disabled="!isButton"
-    @click="onClose"
+    @click="onClick"
   >
     {{ text }}
     <span v-if="isButton">
