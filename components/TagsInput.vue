@@ -1,6 +1,28 @@
 <script setup lang="ts">
 import { getBrokerPlatformsList } from '~/api/brokers/brokerPlatformsList'
+
+const inputValue = ref('')
 const platformsList = ref<string[]>([])
+const dropdownOpened = ref(false)
+
+const onChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  inputValue.value = target.value
+}
+
+const onBlur = () => {}
+
+const onFocus = () => {
+  console.log('hello')
+}
+
+watch(inputValue, () => {
+  dropdownOpened.value = true
+
+  if (inputValue.value === '') {
+    dropdownOpened.value = false
+  }
+})
 
 onMounted(async () => {
   const platformsData = await getBrokerPlatformsList()
@@ -26,9 +48,15 @@ onMounted(async () => {
             name="Tags input"
             placeholder="Type a value"
             autocomplete="off"
+            @focus="onFocus"
+            @blur="onBlur"
+            @input="onChange"
           />
         </div>
-        <ul class="tags-input__dropdown">
+        <ul
+          class="tags-input__dropdown"
+          :class="dropdownOpened && 'tags-input__dropdown--opened'"
+        >
           <li
             v-for="(platform, idx) in platformsList"
             :key="idx"
