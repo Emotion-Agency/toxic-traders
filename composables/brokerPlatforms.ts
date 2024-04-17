@@ -6,7 +6,7 @@ import {
 } from '~/api/brokers/brokerPlatforms'
 
 export const useBrokerPlatforms = () => {
-  const getPlatforms = async (brokerId: number) => {
+  const getPlatform = async (brokerId: number) => {
     try {
       const data = await getBrokerPlatforms(brokerId)
 
@@ -16,7 +16,7 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const updatePlatforms = async (brokerId: number) => {
+  const updatePlatform = async (brokerId: number) => {
     try {
       const data = await updateBrokerPlatforms(brokerId)
 
@@ -26,7 +26,7 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const createPlatforms = async (brokerId: number) => {
+  const createPlatform = async (brokerId: number) => {
     try {
       const data = await createBrokerPlatforms(brokerId)
 
@@ -36,7 +36,7 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const deletePlatforms = async (brokerId: number) => {
+  const deletePlatform = async (brokerId: number) => {
     try {
       const data = await deleteBrokerPlatforms(brokerId)
 
@@ -46,5 +46,5 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  return { getPlatforms, updatePlatforms, createPlatforms, deletePlatforms }
+  return { getPlatform, updatePlatform, createPlatform, deletePlatform }
 }

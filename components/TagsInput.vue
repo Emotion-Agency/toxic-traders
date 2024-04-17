@@ -4,6 +4,11 @@ import { getBrokerPlatformsList } from '~/api/brokers/brokerPlatformsList'
 const inputValue = ref('')
 const platformsList = ref<string[]>([])
 const dropdownOpened = ref(false)
+const badgesList = ref<string[]>([])
+const selectedBadge = ref('')
+const $el = ref<HTMLElement | null>(null)
+
+const { getPlatform } = useBrokerPlatforms()
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -12,8 +17,13 @@ const onChange = (event: Event) => {
 
 const onBlur = () => {}
 
-const onFocus = () => {
-  console.log('hello')
+const onFocus = () => {}
+
+const selectPlatform = (platform: string) => {
+  selectedBadge.value = platform
+  badgesList.value.push(selectedBadge.value)
+
+  console.log(badgesList.value)
 }
 
 watch(inputValue, () => {
@@ -24,10 +34,22 @@ watch(inputValue, () => {
   }
 })
 
+const outsideClick = event => {
+  if (!$el.value.contains(event.target)) {
+    dropdownOpened.value = false
+  }
+}
+
 onMounted(async () => {
   const platformsData = await getBrokerPlatformsList()
 
   platformsList.value = platformsData.platforms
+
+  document.body.addEventListener('click', outsideClick)
+})
+
+onUnmounted(() => {
+  document.body.removeEventListener('click', outsideClick)
 })
 </script>
 
@@ -37,16 +59,18 @@ onMounted(async () => {
       <div class="tags-input__content">
         <div class="tags-input__input-field">
           <TheBadge
+            v-for="(badge, idx) in badgesList"
+            :key="idx"
             class="tags-input__badge"
             variant="fill"
-            text="hello world"
+            :text="badge"
           />
           <input
             id="tags-input"
             class="tags-input__input"
             type="text"
             name="Tags input"
-            placeholder="Type a value"
+            :placeholder="!badgesList.length ? 'Type a value' : null"
             autocomplete="off"
             @focus="onFocus"
             @blur="onBlur"
@@ -54,6 +78,7 @@ onMounted(async () => {
           />
         </div>
         <ul
+          ref="$el"
           class="tags-input__dropdown"
           :class="dropdownOpened && 'tags-input__dropdown--opened'"
         >
@@ -61,6 +86,7 @@ onMounted(async () => {
             v-for="(platform, idx) in platformsList"
             :key="idx"
             class="tags-input__dropdown-item"
+            @click="selectPlatform(platform)"
           >
             {{ platform }}
           </li>
