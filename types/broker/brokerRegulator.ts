@@ -1,7 +1,7 @@
 export interface iRegulatorItem {
   name: string
   licenseNumber: number
-  licenseLink: string
+  licenseLink?: string
 }
 
 export interface iRegulatorData {

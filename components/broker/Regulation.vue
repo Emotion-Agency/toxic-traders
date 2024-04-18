@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getBrokerRegulatorNames } from '~/api/brokers/brokerRegulatorNames'
+import type { iInput } from '~/types'
 
 interface iProps {
   brokerId: number
@@ -23,9 +24,8 @@ const regulationAddItem = () => {}
 
 const regulationRemoveItem = async (idx: number) => {
   regulationItems.value.splice(idx, 1)
-  await updateRegulator(props.brokerId, [...regulationItems.value])
 
-  console.log([...regulationItems.value])
+  await updateRegulator(props.brokerId, regulationItems.value)
 }
 
 const regulationModalOpen = () => {
@@ -37,13 +37,24 @@ const regulationModalClose = () => {
   regulationModalOpened.value = false
 }
 
-const regulationOnChange = () => {}
+const regulationOnChange = (val: iInput) => {
+  console.log(val)
+}
 
 const getSelectedRegulation = () => {}
 
 onMounted(async () => {
   regulationsNames.value = await getBrokerRegulatorNames()
   regulationItems.value = await getRegulator(props.brokerId)
+
+  // [
+  //   {
+  //     id: ,
+  //     name: ,
+  //     value: ,
+
+  //   }
+  // ]
 })
 </script>
 
@@ -102,19 +113,19 @@ onMounted(async () => {
             @select="getSelectedRegulation"
           />
           <TheInput
-            id="license-number"
+            :id="'license-number' + idx"
             name="License number"
             type="text"
             placeholder="License number"
-            value=""
+            :value="item.licenseNumber?.toString()"
             @input-value="regulationOnChange"
           />
           <TheInput
-            id="regulation-link"
+            :id="'regulation-link' + idx"
             name="Regulation link"
             type="text"
-            placeholder="Link"
-            value=""
+            placeholder="Regulation link"
+            :value="item.licenseLink"
             @input-value="regulationOnChange"
           />
         </TheAccordion>
