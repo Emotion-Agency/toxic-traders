@@ -85,15 +85,6 @@ const onSave = async () => {
 onMounted(async () => {
   regulationsNames.value = await getBrokerRegulatorNames()
   regulationItems.value = await getRegulator(props.brokerId)
-
-  // [
-  //   {
-  //     id: ,
-  //     name: ,
-  //     value: ,
-
-  //   }
-  // ]
 })
 </script>
 
