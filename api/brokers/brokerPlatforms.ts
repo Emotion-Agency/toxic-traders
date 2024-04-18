@@ -20,7 +20,7 @@ export const getBrokerPlatforms = async (brokerId: number) => {
 
 export const createBrokerPlatforms = async (
   brokerId: number,
-  platform: string
+  platform: number
 ) => {
   try {
     const { data }: iPlatformsData = await axiosInstance.post(

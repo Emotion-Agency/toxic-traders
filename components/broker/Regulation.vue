@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getBrokerRegulatorNames } from '~/api/brokers/brokerRegulatorNames'
+
 interface iRegulatorItem {
   name: string
   licenseNumber: number
@@ -6,6 +8,7 @@ interface iRegulatorItem {
 }
 
 const regulationModalOpened = ref(false)
+const regulationsList = ref<string[]>([])
 
 const regulationItems = ref<iRegulatorItem[]>([
   {
@@ -40,6 +43,12 @@ const regulationModalClose = () => {
 }
 
 const regulationOnChange = () => {}
+
+const getSelectedRegulation = () => {}
+
+onMounted(async () => {
+  regulationsList.value = await getBrokerRegulatorNames()
+})
 </script>
 
 <template>
@@ -90,13 +99,10 @@ const regulationOnChange = () => {}
           class="regulation__accordion"
           @action-click="regulationRemoveItem(idx)"
         >
-          <TheInput
-            id="regulation-name"
-            name="Regulation name"
-            type="text"
-            placeholder="Name"
-            :value="item.name"
-            @input-value="regulationOnChange"
+          <CustomSelect
+            :options="regulationsList"
+            placeholder="Regulation name"
+            @select="getSelectedRegulation"
           />
           <TheInput
             id="license-number"

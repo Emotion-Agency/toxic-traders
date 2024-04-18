@@ -9,19 +9,20 @@ const props = defineProps<iProps>()
 
 const platformsList = ref<string[]>([])
 
-const { createPlatform, deletePlatform, getPlatform } = useBrokerPlatforms()
+const { createPlatform } = useBrokerPlatforms()
 
 const selectPlatform = async (platform: string) => {
-  await createPlatform(props.brokerId, platform)
+  const platformIndex = platformsList.value.findIndex(el => el === platform)
+  console.log(platformIndex)
+  await createPlatform(props.brokerId, platformIndex)
 }
 
-const removePlatform = async (index: number) => {
-  // await deletePlatform(props.brokerId)
-}
+const removePlatform = async (index: number) => {}
+
+// removeUnderlines(platformsList)
 
 onMounted(async () => {
   const platformsData = await getBrokerPlatformsList()
-  const platform = await getPlatform(props.brokerId)
 
   platformsList.value = platformsData.platforms
 })
@@ -31,8 +32,7 @@ onMounted(async () => {
   <div class="platforms">
     <TheAccordion class="platforms__accordion" title="Platforms">
       <TagsInput
-        :broker-id="brokerId"
-        :dropdown-list="removeUnderlines(platformsList)"
+        :dropdown-list="platformsList"
         @select="selectPlatform"
         @remove="removePlatform"
       />

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 interface iProps {
-  brokerId: number
   dropdownList: string[]
 }
 
@@ -20,7 +19,6 @@ const onChange = (event: Event) => {
 }
 
 const onBlur = () => {
-  // dropdownOpened.value = false
   console.log('blur', dropdownOpened.value)
 }
 
@@ -31,7 +29,7 @@ const onFocus = () => {
 
 const selectDropdownItem = (item: string) => {
   selectedBadge.value = item
-  badgesList.value.push(selectedBadge.value)
+  badgesList.value = [...badgesList.value, selectedBadge.value]
 
   emit('select', selectedBadge.value)
 }

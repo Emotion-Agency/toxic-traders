@@ -7,7 +7,7 @@ export const getBrokerRegulatorNames = async () => {
       'Broker/BrokerRegulatorNamesEnum'
     )
 
-    return data
+    return data.regulatorNames
   } catch (e) {
     console.error(e.message)
   }

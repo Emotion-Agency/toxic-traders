@@ -26,7 +26,7 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const createPlatform = async (brokerId: number, platform: string) => {
+  const createPlatform = async (brokerId: number, platform: number) => {
     try {
       const { platforms } = await createBrokerPlatforms(brokerId, platform)
 
