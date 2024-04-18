@@ -9,15 +9,15 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const regulationModalOpened = ref(false)
-const regulationsNames = ref<string[]>([])
-const regulationItems = ref<iRegulatorItem[]>([])
+const regulatorModalOpened = ref(false)
+const regulatorNames = ref<string[]>([])
+const regulatorItems = ref<iRegulatorItem[]>([])
 
 const { getRegulator, updateRegulator } = useBrokerRegulator()
 
-const regulationAddItem = () => {
-  regulationItems.value = [
-    ...regulationItems.value,
+const regulatorAddItem = () => {
+  regulatorItems.value = [
+    ...regulatorItems.value,
     {
       name: 0,
       licenseNumber: '',
@@ -26,21 +26,21 @@ const regulationAddItem = () => {
   ]
 }
 
-const regulationRemoveItem = (idx: number) => {
-  regulationItems.value.splice(idx, 1)
+const regulatorRemoveItem = (idx: number) => {
+  regulatorItems.value.splice(idx, 1)
 }
 
-const regulationModalOpen = () => {
-  regulationModalOpened.value = true
+const regulatorModalOpen = () => {
+  regulatorModalOpened.value = true
   document.body.classList.add('modal-open')
 }
 
-const regulationModalClose = () => {
-  regulationModalOpened.value = false
+const regulatorModalClose = () => {
+  regulatorModalOpened.value = false
 }
 
 const onLicenseChange = (input: iInput, idx: number) => {
-  regulationItems.value = regulationItems.value.map((item, index) => {
+  regulatorItems.value = regulatorItems.value.map((item, index) => {
     if (index === idx) {
       return {
         ...item,
@@ -52,7 +52,7 @@ const onLicenseChange = (input: iInput, idx: number) => {
 }
 
 const onLinkChange = (input: iInput, idx: number) => {
-  regulationItems.value = regulationItems.value.map((item, index) => {
+  regulatorItems.value = regulatorItems.value.map((item, index) => {
     if (index === idx) {
       return {
         ...item,
@@ -63,10 +63,10 @@ const onLinkChange = (input: iInput, idx: number) => {
   })
 }
 
-const getSelectedRegulation = (value: string, idx: number) => {
-  const regulatorIdx = regulationsNames.value.findIndex(name => name === value)
+const getSelectedRegulator = (value: string, idx: number) => {
+  const regulatorIdx = regulatorNames.value.findIndex(name => name === value)
 
-  regulationItems.value = regulationItems.value.map((item, index) => {
+  regulatorItems.value = regulatorItems.value.map((item, index) => {
     if (index === idx) {
       return {
         ...item,
@@ -78,69 +78,69 @@ const getSelectedRegulation = (value: string, idx: number) => {
 }
 
 const onSave = async () => {
-  await updateRegulator(props.brokerId, regulationItems.value)
-  regulationModalClose()
+  await updateRegulator(props.brokerId, regulatorItems.value)
+  regulatorModalClose()
 }
 
 onMounted(async () => {
-  regulationsNames.value = await getBrokerRegulatorNames()
-  regulationItems.value = await getRegulator(props.brokerId)
+  regulatorNames.value = await getBrokerRegulatorNames()
+  regulatorItems.value = await getRegulator(props.brokerId)
 })
 </script>
 
 <template>
-  <div class="regulation">
+  <div class="regulator">
     <TheAccordion
-      title="Regulation"
+      title="Regulator"
       additional-button="Edit"
-      @open="regulationModalOpen"
+      @open="regulatorModalOpen"
     >
-      <ul v-if="regulationItems.length" class="regulation__list">
+      <ul v-if="regulatorItems.length" class="regulator__list">
         <li
-          v-for="(item, idx) in regulationItems"
+          v-for="(item, idx) in regulatorItems"
           :key="idx"
-          class="regulation__item"
+          class="regulator__item"
         >
-          <p class="regulation__item-name">
-            {{ regulationsNames[item.name] }}
+          <p class="regulator__item-name">
+            {{ regulatorNames[item.name] }}
           </p>
-          <div class="regulation__content">
+          <div class="regulator__content">
             <a
               v-if="item.licenseLink"
               :href="item.licenseLink"
               rel="noreferer noopener"
               target="_blank"
-              class="regulation__link"
+              class="regulator__link"
             >
               {{ item.licenseNumber }}
               <IconsLinkArrow />
             </a>
-            <p v-else class="regulation__link regulation__link--text">
+            <p v-else class="regulator__link regulator__link--text">
               {{ item.licenseNumber }}
             </p>
           </div>
         </li>
       </ul>
-      <p v-else>Regulations not found</p>
+      <p v-else>Regulators not found</p>
     </TheAccordion>
     <TheModal
-      :modal-opened="regulationModalOpened"
-      title="Edit regulations"
-      @close="regulationModalClose"
+      :modal-opened="regulatorModalOpened"
+      title="Edit regulators"
+      @close="regulatorModalClose"
     >
-      <div class="regulation__accordion-wrapper">
+      <div class="regulator__accordion-wrapper">
         <TheAccordion
-          v-for="(item, idx) in regulationItems"
+          v-for="(item, idx) in regulatorItems"
           :key="idx"
           :title="'#' + (idx + 1)"
           additional-button="Remove"
-          class="regulation__accordion"
-          @action-click="regulationRemoveItem(idx)"
+          class="regulator__accordion"
+          @action-click="regulatorRemoveItem(idx)"
         >
           <CustomSelect
-            :options="regulationsNames"
-            :placeholder="regulationsNames[item.name]"
-            @select="val => getSelectedRegulation(val, idx)"
+            :options="regulatorNames"
+            :placeholder="regulatorNames[item.name]"
+            @select="val => getSelectedRegulator(val, idx)"
           />
           <TheInput
             :id="'license-number-' + idx"
@@ -151,10 +151,10 @@ onMounted(async () => {
             @input-value="val => onLicenseChange(val, idx)"
           />
           <TheInput
-            :id="'regulation-link-' + idx"
-            name="Regulation link"
+            :id="'regulator-link-' + idx"
+            name="Regulator link"
             type="text"
-            placeholder="Regulation link"
+            placeholder="Regulator link"
             :value="item.licenseLink"
             @input-value="val => onLinkChange(val, idx)"
           />
@@ -164,8 +164,8 @@ onMounted(async () => {
         tag="button"
         variant="outlined"
         button-size="medium"
-        class="regulation__add-btn"
-        @click="regulationAddItem"
+        class="regulator__add-btn"
+        @click="regulatorAddItem"
       >
         <template #start-icon>
           <IconsPlus />
@@ -176,7 +176,7 @@ onMounted(async () => {
         tag="button"
         variant="fill"
         button-size="medium"
-        class="regulation__btn"
+        class="regulator__btn"
         @click="onSave"
       >
         Save

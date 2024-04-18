@@ -1,10 +1,10 @@
-.regulation__list {
+.regulator__list {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
 }
 
-.regulation__item {
+.regulator__item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,12 +13,12 @@
   background-color: var(--primary-light);
 }
 
-.regulation__item-name {
+.regulator__item-name {
   @include text-body;
   color: var(--secondary-dark);
 }
 
-.regulation__link {
+.regulator__link {
   @include text-link;
   display: flex;
   align-items: center;
@@ -39,11 +39,11 @@
   }
 }
 
-.regulation__accordion-wrapper {
+.regulator__accordion-wrapper {
   margin-top: 16px;
 }
 
-.regulation__accordion {
+.regulator__accordion {
   margin-top: 20px;
 
   .accordion__content-wrapper {
@@ -58,12 +58,12 @@
   }
 }
 
-.regulation__add-btn {
+.regulator__add-btn {
   margin: 0 auto;
   margin-top: 20px;
 }
 
-.regulation__btn {
+.regulator__btn {
   margin-left: auto;
   margin-top: 32px;
 }

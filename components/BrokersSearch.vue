@@ -97,10 +97,10 @@ const searchItems = reactive<iSearchItem[]>([
     isRightButton: false,
   },
   {
-    title: 'Regulation',
+    title: 'Regulator',
     required: false,
-    id: 'regulation',
-    name: 'Regulation',
+    id: 'regulator',
+    name: 'Regulator',
     type: 'text',
     value: '',
     placeholder: 'Placeholder',
