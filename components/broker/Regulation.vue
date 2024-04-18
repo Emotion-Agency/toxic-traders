@@ -15,12 +15,19 @@ const regulationItems = ref<iRegulatorItem[]>([])
 
 const { getRegulator, updateRegulator } = useBrokerRegulator()
 
-const regulationAddItem = () => {}
+const regulationAddItem = () => {
+  regulationItems.value = [
+    ...regulationItems.value,
+    {
+      name: 0,
+      licenseNumber: '',
+      licenseLink: '',
+    },
+  ]
+}
 
-const regulationRemoveItem = async (idx: number) => {
+const regulationRemoveItem = (idx: number) => {
   regulationItems.value.splice(idx, 1)
-
-  await updateRegulator(props.brokerId, regulationItems.value)
 }
 
 const regulationModalOpen = () => {
@@ -68,6 +75,11 @@ const getSelectedRegulation = (value: string, idx: number) => {
     }
     return item
   })
+}
+
+const onSave = async () => {
+  await updateRegulator(props.brokerId, regulationItems.value)
+  regulationModalClose()
 }
 
 onMounted(async () => {
@@ -174,7 +186,7 @@ onMounted(async () => {
         variant="fill"
         button-size="medium"
         class="regulation__btn"
-        @click="regulationModalClose"
+        @click="onSave"
       >
         Save
       </TheButton>
