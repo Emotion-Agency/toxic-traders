@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { getBrokerPlatformsList } from '~/api/brokers/brokerPlatformsList'
+interface iProps {
+  brokerId: number
+  dropdownList: string[]
+}
+
+const props = defineProps<iProps>()
+
+const emit = defineEmits(['select', 'remove'])
 
 const inputValue = ref('')
-const platformsList = ref<string[]>([])
 const dropdownOpened = ref(false)
 const badgesList = ref<string[]>([])
 const selectedBadge = ref('')
 const $el = ref<HTMLElement | null>(null)
-
-const { getPlatform } = useBrokerPlatforms()
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -19,15 +23,16 @@ const onBlur = () => {}
 
 const onFocus = () => {}
 
-const selectPlatform = (platform: string) => {
-  selectedBadge.value = platform
+const selectDropdownItem = (item: string) => {
+  selectedBadge.value = item
   badgesList.value.push(selectedBadge.value)
 
-  console.log(badgesList.value)
+  emit('select', selectedBadge.value)
 }
 
 const removeBadge = (idx: number) => {
   badgesList.value = badgesList.value.filter((_, index) => idx !== index)
+  emit('remove', idx)
 }
 
 const outsideClick = event => {
@@ -44,17 +49,15 @@ watch(inputValue, () => {
   }
 })
 
-// const filteredPlatformsList = computed(() => {
+const filteredDropdownList = computed(() => {
+  const filteredList = props.dropdownList.filter(item =>
+    item.toLowerCase().includes(inputValue.value.toLowerCase())
+  )
 
-// })
+  return filteredList
+})
 
-// виводити в tags-input__dropdown-item
-
-onMounted(async () => {
-  const platformsData = await getBrokerPlatformsList()
-
-  platformsList.value = platformsData.platforms
-
+onMounted(() => {
   document.body.addEventListener('click', outsideClick)
 })
 
@@ -95,12 +98,12 @@ onUnmounted(() => {
           :class="dropdownOpened && 'tags-input__dropdown--opened'"
         >
           <li
-            v-for="(platform, idx) in platformsList"
+            v-for="(item, idx) in filteredDropdownList"
             :key="idx"
             class="tags-input__dropdown-item"
-            @click="selectPlatform(platform)"
+            @click="selectDropdownItem(item)"
           >
-            {{ platform }}
+            {{ item }}
           </li>
         </ul>
       </div>

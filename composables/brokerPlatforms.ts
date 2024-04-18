@@ -26,11 +26,11 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const createPlatform = async (brokerId: number) => {
+  const createPlatform = async (brokerId: number, platform: string) => {
     try {
-      const data = await createBrokerPlatforms(brokerId)
+      const { platforms } = await createBrokerPlatforms(brokerId, platform)
 
-      return data
+      return platforms
     } catch (error) {
       // alert with error
     }

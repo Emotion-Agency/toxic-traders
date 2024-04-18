@@ -1,11 +1,11 @@
 .tags-input {
   width: 100%;
 }
+
 .tags-input__wrapper {
   position: relative;
 }
-.tags-input__content {
-}
+
 .tags-input__input-field {
   display: flex;
   align-items: center;
@@ -13,23 +13,27 @@
   column-gap: 8px;
   row-gap: 12px;
 }
+
 .tags-input__badge {
   flex: 0 1 auto;
 }
+
 .tags-input__input {
   flex: 1 0 auto;
   max-width: 100%;
   width: 46px;
 }
+
 .tags-input__dropdown {
   position: absolute;
-  top: 38px;
   left: -20px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
   width: 280px;
   height: fit-content;
+  max-height: 350px;
+  overflow: auto;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   z-index: 10;
@@ -39,6 +43,7 @@
     pointer-events: auto;
   }
 }
+
 .tags-input__dropdown-item {
   cursor: pointer;
   padding: 10px;
@@ -51,6 +56,7 @@
     background-color: var(--primary-light);
   }
 }
+
 .tags-input__invalid {
   position: absolute;
   opacity: 0;
