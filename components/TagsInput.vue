@@ -19,9 +19,15 @@ const onChange = (event: Event) => {
   inputValue.value = target.value
 }
 
-const onBlur = () => {}
+const onBlur = () => {
+  // dropdownOpened.value = false
+  console.log('blur', dropdownOpened.value)
+}
 
-const onFocus = () => {}
+const onFocus = () => {
+  dropdownOpened.value = true
+  console.log('focus', dropdownOpened.value)
+}
 
 const selectDropdownItem = (item: string) => {
   selectedBadge.value = item
@@ -67,7 +73,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="tags-input">
+  <div ref="$el" class="tags-input">
     <div class="tags-input__wrapper">
       <div class="tags-input__content">
         <div class="tags-input__input-field">
@@ -93,7 +99,6 @@ onUnmounted(() => {
           />
         </div>
         <ul
-          ref="$el"
           class="tags-input__dropdown"
           :class="dropdownOpened && 'tags-input__dropdown--opened'"
         >
