@@ -29,16 +29,19 @@
   left: -20px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    max-height 0.3s ease;
   width: 280px;
   height: fit-content;
-  max-height: 350px;
+  max-height: 0;
   overflow: auto;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   z-index: 10;
 
   &--opened {
+    max-height: 350px;
     opacity: 1;
     pointer-events: auto;
   }
