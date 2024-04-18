@@ -1,36 +1,31 @@
 <script setup lang="ts">
 import { getBrokerRegulatorNames } from '~/api/brokers/brokerRegulatorNames'
 
+interface iProps {
+  brokerId: number
+}
+
 interface iRegulatorItem {
   name: string
   licenseNumber: number
   licenseLink?: string
 }
 
-const regulationModalOpened = ref(false)
-const regulationsList = ref<string[]>([])
+const props = defineProps<iProps>()
 
-const regulationItems = ref<iRegulatorItem[]>([
-  {
-    name: 'FCA UK',
-    licenseNumber: 316876,
-    licenseLink: '/',
-  },
-  {
-    name: 'ASIC',
-    licenseNumber: 286365,
-    licenseLink: '/',
-  },
-  {
-    name: 'NFA',
-    licenseNumber: 523426347,
-  },
-])
+const regulationModalOpened = ref(false)
+const regulationsNames = ref<string[]>([])
+const regulationItems = ref<iRegulatorItem[]>([])
+
+const { getRegulator, updateRegulator } = useBrokerRegulator()
 
 const regulationAddItem = () => {}
 
-const regulationRemoveItem = (idx: number) => {
+const regulationRemoveItem = async (idx: number) => {
   regulationItems.value.splice(idx, 1)
+  await updateRegulator(props.brokerId, [...regulationItems.value])
+
+  console.log([...regulationItems.value])
 }
 
 const regulationModalOpen = () => {
@@ -47,7 +42,8 @@ const regulationOnChange = () => {}
 const getSelectedRegulation = () => {}
 
 onMounted(async () => {
-  regulationsList.value = await getBrokerRegulatorNames()
+  regulationsNames.value = await getBrokerRegulatorNames()
+  regulationItems.value = await getRegulator(props.brokerId)
 })
 </script>
 
@@ -58,14 +54,14 @@ onMounted(async () => {
       additional-button="Edit"
       @open="regulationModalOpen"
     >
-      <ul class="regulation__list">
+      <ul v-if="regulationItems.length" class="regulation__list">
         <li
           v-for="(item, idx) in regulationItems"
           :key="idx"
           class="regulation__item"
         >
           <p class="regulation__item-name">
-            {{ item.name }}
+            {{ regulationsNames[item.name] }}
           </p>
           <div class="regulation__content">
             <a
@@ -84,6 +80,7 @@ onMounted(async () => {
           </div>
         </li>
       </ul>
+      <p v-else>Regulations not found</p>
     </TheAccordion>
     <TheModal
       :modal-opened="regulationModalOpened"
@@ -100,8 +97,8 @@ onMounted(async () => {
           @action-click="regulationRemoveItem(idx)"
         >
           <CustomSelect
-            :options="regulationsList"
-            placeholder="Regulation name"
+            :options="regulationsNames"
+            :placeholder="regulationsNames[item.name]"
             @select="getSelectedRegulation"
           />
           <TheInput

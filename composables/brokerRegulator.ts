@@ -4,23 +4,27 @@ import {
   getBrokerRegulator,
   updateBrokerRegulator,
 } from '~/api/brokers/brokerRegulator'
+import type { iRegulatorItem } from '~/types/broker/brokerRegulator'
 
 export const useBrokerRegulator = () => {
   const getRegulator = async (brokerId: number) => {
     try {
-      const data = await getBrokerRegulator(brokerId)
+      const { regulators } = await getBrokerRegulator(brokerId)
 
-      return data
+      return regulators
     } catch (error) {
       // alert with error
     }
   }
 
-  const updateRegulator = async (brokerId: number) => {
+  const updateRegulator = async (
+    brokerId: number,
+    regulator: iRegulatorItem[]
+  ) => {
     try {
-      const data = await updateBrokerRegulator(brokerId)
+      const { regulators } = await updateBrokerRegulator(brokerId, regulator)
 
-      return data
+      return regulators
     } catch (error) {
       // alert with error
     }

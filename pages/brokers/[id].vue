@@ -72,7 +72,7 @@ onMounted(async () => {
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
             <BrokerNotes :broker-id="Number(brokerId)" />
-            <BrokerRegulation />
+            <BrokerRegulation :broker-id="Number(brokerId)" />
             <BrokerPlatforms :broker-id="Number(brokerId)" />
             <BrokerRestrictionCountries />
             <BrokerDepositMethods />

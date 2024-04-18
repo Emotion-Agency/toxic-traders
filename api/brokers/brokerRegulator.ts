@@ -1,5 +1,8 @@
 import axiosInstance from '../axiosInstance'
-import type { iRegulatorData } from '~/types/broker/brokerRegulator'
+import type {
+  iRegulatorData,
+  iRegulatorItem,
+} from '~/types/broker/brokerRegulator'
 
 export const getBrokerRegulator = async (brokerId: number) => {
   try {
@@ -35,11 +38,14 @@ export const createBrokerRegulator = async (brokerId: number) => {
   }
 }
 
-export const updateBrokerRegulator = async (brokerId: number) => {
+export const updateBrokerRegulator = async (
+  brokerId: number,
+  regulators: iRegulatorItem[]
+) => {
   try {
     const { data }: iRegulatorData = await axiosInstance.put(
-      'Broker/Regulator',
-      null,
+      `Broker/Regulator`,
+      regulators,
       {
         params: {
           BrokerId: brokerId,
