@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { getBrokerRegulatorNames } from '~/api/brokers/brokerRegulatorNames'
 import type { iInput } from '~/types'
+import type { iRegulatorItem } from '~/types/broker/brokerRegulator'
 
 interface iProps {
   brokerId: number
-}
-
-interface iRegulatorItem {
-  name: string
-  licenseNumber: number
-  licenseLink?: string
 }
 
 const props = defineProps<iProps>()
@@ -37,11 +32,43 @@ const regulationModalClose = () => {
   regulationModalOpened.value = false
 }
 
-const regulationOnChange = (val: iInput) => {
-  console.log(val)
+const onLicenseChange = (input: iInput, idx: number) => {
+  regulationItems.value = regulationItems.value.map((item, index) => {
+    if (index === idx) {
+      return {
+        ...item,
+        licenseNumber: input.value,
+      }
+    }
+    return item
+  })
 }
 
-const getSelectedRegulation = () => {}
+const onLinkChange = (input: iInput, idx: number) => {
+  regulationItems.value = regulationItems.value.map((item, index) => {
+    if (index === idx) {
+      return {
+        ...item,
+        licenseLink: input.value,
+      }
+    }
+    return item
+  })
+}
+
+const getSelectedRegulation = (value: string, idx: number) => {
+  const regulatorIdx = regulationsNames.value.findIndex(name => name === value)
+
+  regulationItems.value = regulationItems.value.map((item, index) => {
+    if (index === idx) {
+      return {
+        ...item,
+        name: regulatorIdx,
+      }
+    }
+    return item
+  })
+}
 
 onMounted(async () => {
   regulationsNames.value = await getBrokerRegulatorNames()
@@ -110,23 +137,23 @@ onMounted(async () => {
           <CustomSelect
             :options="regulationsNames"
             :placeholder="regulationsNames[item.name]"
-            @select="getSelectedRegulation"
+            @select="val => getSelectedRegulation(val, idx)"
           />
           <TheInput
-            :id="'license-number' + idx"
+            :id="'license-number-' + idx"
             name="License number"
             type="text"
             placeholder="License number"
             :value="item.licenseNumber?.toString()"
-            @input-value="regulationOnChange"
+            @input-value="val => onLicenseChange(val, idx)"
           />
           <TheInput
-            :id="'regulation-link' + idx"
+            :id="'regulation-link-' + idx"
             name="Regulation link"
             type="text"
             placeholder="Regulation link"
             :value="item.licenseLink"
-            @input-value="regulationOnChange"
+            @input-value="val => onLinkChange(val, idx)"
           />
         </TheAccordion>
       </div>

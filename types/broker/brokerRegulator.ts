@@ -1,6 +1,6 @@
 export interface iRegulatorItem {
-  name: string
-  licenseNumber: number
+  name: number
+  licenseNumber: string
   licenseLink?: string
 }
 
