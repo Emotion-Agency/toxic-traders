@@ -18,11 +18,14 @@ export const getBrokerDepositMethods = async (brokerId: number) => {
   }
 }
 
-export const updateBrokerDepositMethods = async (brokerId: number) => {
+export const updateBrokerDepositMethods = async (
+  brokerId: number,
+  depositItems: number[]
+) => {
   try {
     const { data }: iDepositMethodsData = await axiosInstance.put(
       'Broker/DepositMethods',
-      null,
+      depositItems,
       {
         params: {
           BrokerId: brokerId,
@@ -36,10 +39,14 @@ export const updateBrokerDepositMethods = async (brokerId: number) => {
   }
 }
 
-export const createBrokerDepositMethods = async (brokerId: number) => {
+export const createBrokerDepositMethods = async (
+  brokerId: number,
+  depositItems: number[]
+) => {
   try {
     const { data }: iDepositMethodsData = await axiosInstance.post(
       'Broker/DepositMethods',
+      depositItems,
       {
         params: {
           BrokerId: brokerId,

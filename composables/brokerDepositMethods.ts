@@ -16,9 +16,12 @@ export const useBrokerDepositMethods = () => {
     }
   }
 
-  const updateDepositMethods = async (brokerId: number) => {
+  const updateDepositMethods = async (
+    brokerId: number,
+    depositItems: number[]
+  ) => {
     try {
-      const data = await updateBrokerDepositMethods(brokerId)
+      const data = await updateBrokerDepositMethods(brokerId, depositItems)
 
       return data
     } catch (error) {
@@ -26,11 +29,17 @@ export const useBrokerDepositMethods = () => {
     }
   }
 
-  const createDepositMethods = async (brokerId: number) => {
+  const createDepositMethods = async (
+    brokerId: number,
+    depositItems: number[]
+  ) => {
     try {
-      const data = await createBrokerDepositMethods(brokerId)
+      const { depositMethods } = await createBrokerDepositMethods(
+        brokerId,
+        depositItems
+      )
 
-      return data
+      return depositMethods
     } catch (error) {
       // alert with error
     }
