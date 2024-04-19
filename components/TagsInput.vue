@@ -1,7 +1,14 @@
 <script setup lang="ts">
 interface iProps {
   dropdownList: string[]
-  badgesList: string[]
+  badgesList?: string[]
+  flagList?: {
+    name: string
+    flagImg: {
+      url: string
+      alt: string
+    }
+  }[]
   badgeVariant: 'fill' | 'outlined'
 }
 
@@ -68,25 +75,52 @@ onUnmounted(() => {
     <div class="tags-input__wrapper">
       <div class="tags-input__content">
         <div class="tags-input__input-field">
-          <TheBadge
-            v-for="(badge, idx) in props.badgesList"
-            :key="idx"
-            class="tags-input__badge"
-            :variant="badgeVariant"
-            :is-button="true"
-            :text="badge"
-            @click="removeBadge(idx)"
-          />
-          <input
-            id="tags-input"
-            class="tags-input__input"
-            type="text"
-            name="Tags input"
-            :placeholder="!props.badgesList?.length ? 'Type a value' : null"
-            autocomplete="off"
-            @focus="onFocus"
-            @input="onChange"
-          />
+          <div v-if="flagList?.length" class="tags-input__badge-wrapper">
+            <TheBadge
+              v-for="(badge, idx) in props.flagList"
+              :key="idx"
+              class="tags-input__badge"
+              :variant="badgeVariant"
+              :is-button="true"
+              :text="badge.name"
+              @click="removeBadge(idx)"
+            >
+              <template #icon>
+                <img :src="badge.flagImg.url" :alt="badge.flagImg.alt" />
+              </template>
+            </TheBadge>
+            <input
+              id="tags-input"
+              class="tags-input__input"
+              type="text"
+              name="Tags input"
+              :placeholder="!props.flagList?.length ? 'Type a value' : null"
+              autocomplete="off"
+              @focus="onFocus"
+              @input="onChange"
+            />
+          </div>
+          <div v-else class="tags-input__badge-wrapper">
+            <TheBadge
+              v-for="(badge, idx) in props.badgesList"
+              :key="idx"
+              class="tags-input__badge"
+              :variant="badgeVariant"
+              :is-button="true"
+              :text="badge"
+              @click="removeBadge(idx)"
+            />
+            <input
+              id="tags-input"
+              class="tags-input__input"
+              type="text"
+              name="Tags input"
+              :placeholder="!props.badgesList?.length ? 'Type a value' : null"
+              autocomplete="off"
+              @focus="onFocus"
+              @input="onChange"
+            />
+          </div>
         </div>
         <ul
           class="tags-input__dropdown"
@@ -102,7 +136,6 @@ onUnmounted(() => {
           </li>
         </ul>
       </div>
-      <small class="tags-input__invalid">Please select a valid tag.</small>
     </div>
   </div>
 </template>

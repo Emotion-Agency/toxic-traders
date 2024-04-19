@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { getBrokerRestrictedCountriesList } from '~/api/brokers/brokerRestrictedCountriesList'
+import { getCountriesList } from '~/api/countries/getCountriesList'
+import type { iCountriesFlagItem } from '~/types'
+import getFullCountriesNames from '~/utils/getFullCountriesNames'
 
 interface iProps {
   brokerId: number
@@ -9,6 +12,7 @@ const props = defineProps<iProps>()
 
 const countriesFullList = ref<string[]>([])
 const countriesList = ref<number[]>([])
+const flagsList = ref<iCountriesFlagItem[]>([])
 const filteredCountriesList = computed(() => {
   return removeUnderlines(
     countriesList.value?.map(index => countriesFullList.value[index]) || []
@@ -30,6 +34,7 @@ const selectCountries = async (country: string) => {
 
 const removeCountries = async (index: number) => {
   countriesList.value.splice(index, 1)
+
   await updateRestrictedCountries(props.brokerId, countriesList.value)
 }
 
@@ -40,6 +45,9 @@ onMounted(async () => {
   countriesFullList.value = removeUnderlines(restrictedCountries)
   countriesList.value =
     countriesData?.restrictedCountries?.map(item => item.countryCode) || []
+
+  const countries = await getCountriesList()
+  flagsList.value = countries
 })
 </script>
 

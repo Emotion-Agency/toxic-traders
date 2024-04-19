@@ -21,6 +21,7 @@ const onClick = () => {
     :disabled="!isButton"
     @click="onClick"
   >
+    <slot name="icon" />
     {{ text }}
     <span v-if="isButton">
       <IconsClose />

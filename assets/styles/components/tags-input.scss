@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.tags-input__input-field {
+.tags-input__badge-wrapper {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -57,15 +57,5 @@
 
   &:hover {
     background-color: var(--primary-light);
-  }
-}
-
-.tags-input__invalid {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-
-  &--error {
-    opacity: 1;
   }
 }

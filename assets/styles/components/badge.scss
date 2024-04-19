@@ -1,5 +1,4 @@
 .badge {
-  display: block;
   @include button-small;
   padding: 4px 8px;
   width: fit-content;
@@ -42,5 +41,13 @@
 
   &--close {
     display: none;
+  }
+
+  img {
+    display: block;
+    height: 13px;
+    width: 20px;
+    max-width: 100%;
+    margin-right: 4px;
   }
 }
