@@ -102,9 +102,14 @@ onMounted(async () => {
           :key="idx"
           class="regulator__item"
         >
-          <p class="regulator__item-name">
+          <div class="regulator__item-name">
             {{ truncateString(regulatorNames[item.name], 11) }}
-          </p>
+            <div class="regulator__info">
+              <p class="regulator__info-text">
+                {{ regulatorNames[item.name] }}
+              </p>
+            </div>
+          </div>
           <div class="regulator__content">
             <a
               v-if="item.licenseLink"
