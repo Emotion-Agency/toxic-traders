@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface iProps {
   dropdownList: string[]
+  badgesList: string[]
 }
 
 const props = defineProps<iProps>()
@@ -9,7 +10,6 @@ const emit = defineEmits(['select', 'remove'])
 
 const inputValue = ref('')
 const dropdownOpened = ref(false)
-const badgesList = ref<string[]>([])
 const selectedBadge = ref('')
 const $el = ref<HTMLElement | null>(null)
 
@@ -18,24 +18,16 @@ const onChange = (event: Event) => {
   inputValue.value = target.value
 }
 
-const onBlur = () => {
-  console.log('blur', dropdownOpened.value)
-}
-
 const onFocus = () => {
   dropdownOpened.value = true
-  console.log('focus', dropdownOpened.value)
 }
 
 const selectDropdownItem = (item: string) => {
   selectedBadge.value = item
-  badgesList.value = [...badgesList.value, selectedBadge.value]
-
   emit('select', selectedBadge.value)
 }
 
 const removeBadge = (idx: number) => {
-  badgesList.value = badgesList.value.filter((_, index) => idx !== index)
   emit('remove', idx)
 }
 
@@ -76,7 +68,7 @@ onUnmounted(() => {
       <div class="tags-input__content">
         <div class="tags-input__input-field">
           <TheBadge
-            v-for="(badge, idx) in badgesList"
+            v-for="(badge, idx) in props.badgesList"
             :key="idx"
             class="tags-input__badge"
             variant="fill"
@@ -89,10 +81,9 @@ onUnmounted(() => {
             class="tags-input__input"
             type="text"
             name="Tags input"
-            :placeholder="!badgesList.length ? 'Type a value' : null"
+            :placeholder="!props.badgesList?.length ? 'Type a value' : null"
             autocomplete="off"
             @focus="onFocus"
-            @blur="onBlur"
             @input="onChange"
           />
         </div>

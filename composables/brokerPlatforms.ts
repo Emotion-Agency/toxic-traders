@@ -16,9 +16,9 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const updatePlatform = async (brokerId: number) => {
+  const updatePlatform = async (brokerId: number, platformItems: number[]) => {
     try {
-      const data = await updateBrokerPlatforms(brokerId)
+      const data = await updateBrokerPlatforms(brokerId, platformItems)
 
       return data
     } catch (error) {
@@ -26,9 +26,9 @@ export const useBrokerPlatforms = () => {
     }
   }
 
-  const createPlatform = async (brokerId: number, platform: number) => {
+  const createPlatform = async (brokerId: number, platformItems: number[]) => {
     try {
-      const { platforms } = await createBrokerPlatforms(brokerId, platform)
+      const { platforms } = await createBrokerPlatforms(brokerId, platformItems)
 
       return platforms
     } catch (error) {

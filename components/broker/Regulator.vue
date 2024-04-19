@@ -83,8 +83,8 @@ const onSave = async () => {
 }
 
 onMounted(async () => {
-  regulatorNames.value = await getBrokerRegulatorNames()
-  regulatorNames.value = removeUnderlines(regulatorNames.value)
+  const brokerRegulatorData = await getBrokerRegulatorNames()
+  regulatorNames.value = removeUnderlines(brokerRegulatorData)
   regulatorItems.value = await getRegulator(props.brokerId)
 })
 </script>
@@ -144,7 +144,7 @@ onMounted(async () => {
           @action-click="regulatorRemoveItem(idx)"
         >
           <CustomSelect
-            :options="removeUnderlines(regulatorNames)"
+            :options="regulatorNames"
             :placeholder="regulatorNames[item.name]"
             @select="val => getSelectedRegulator(val, idx)"
           />
