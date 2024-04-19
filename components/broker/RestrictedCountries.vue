@@ -47,11 +47,12 @@ onMounted(async () => {
   <div class="restricted-countries">
     <TheAccordion
       class="restricted-countries__accordion"
-      title="restricted Countries"
+      title="Restricted countries"
     >
       <TagsInput
         :dropdown-list="countriesFullList"
         :badges-list="filteredCountriesList"
+        badge-variant="outlined"
         @select="selectCountries"
         @remove="removeCountries"
       />

@@ -2,6 +2,7 @@
 interface iProps {
   dropdownList: string[]
   badgesList: string[]
+  badgeVariant: 'fill' | 'outlined'
 }
 
 const props = defineProps<iProps>()
@@ -71,7 +72,7 @@ onUnmounted(() => {
             v-for="(badge, idx) in props.badgesList"
             :key="idx"
             class="tags-input__badge"
-            variant="fill"
+            :variant="badgeVariant"
             :is-button="true"
             :text="badge"
             @click="removeBadge(idx)"

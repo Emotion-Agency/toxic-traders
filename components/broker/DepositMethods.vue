@@ -46,6 +46,7 @@ onMounted(async () => {
       <TagsInput
         :dropdown-list="depositFullList"
         :badges-list="filteredDepositList"
+        badge-variant="fill"
         @select="selectDeposit"
         @remove="removeDeposit"
       />

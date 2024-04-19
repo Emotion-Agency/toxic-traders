@@ -45,6 +45,7 @@ onMounted(async () => {
       <TagsInput
         :dropdown-list="platformsFullList"
         :badges-list="filteredPlatformsList"
+        badge-variant="fill"
         @select="selectPlatform"
         @remove="removePlatform"
       />
