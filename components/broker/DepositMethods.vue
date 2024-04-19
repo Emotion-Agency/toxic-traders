@@ -19,9 +19,9 @@ const { createDepositMethods, getDepositMethods, updateDepositMethods } =
   useBrokerDepositMethods()
 
 const selectDeposit = async (deposit: string) => {
-  const platformIndex = depositFullList.value.findIndex(el => el === deposit)
+  const depositIndex = depositFullList.value.findIndex(el => el === deposit)
 
-  depositList.value.push(platformIndex)
+  depositList.value.push(depositIndex)
   await createDepositMethods(props.brokerId, depositList.value)
 }
 

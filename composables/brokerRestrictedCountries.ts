@@ -16,9 +16,15 @@ export const useBrokerRestrictedCountries = () => {
     }
   }
 
-  const updateRestrictedCountries = async (brokerId: number) => {
+  const updateRestrictedCountries = async (
+    brokerId: number,
+    countriesItems: number[]
+  ) => {
     try {
-      const data = await updateBrokerRestrictedCountries(brokerId)
+      const data = await updateBrokerRestrictedCountries(
+        brokerId,
+        countriesItems
+      )
 
       return data
     } catch (error) {
@@ -26,11 +32,17 @@ export const useBrokerRestrictedCountries = () => {
     }
   }
 
-  const createRestrictedCountries = async (brokerId: number) => {
+  const createRestrictedCountries = async (
+    brokerId: number,
+    countriesItems: number[]
+  ) => {
     try {
-      const data = await createBrokerRestrictedCountries(brokerId)
+      const { restrictedCountries } = await createBrokerRestrictedCountries(
+        brokerId,
+        countriesItems
+      )
 
-      return data
+      return restrictedCountries
     } catch (error) {
       // alert with error
     }

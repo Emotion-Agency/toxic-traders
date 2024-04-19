@@ -18,10 +18,14 @@ export const getBrokerRestrictedCountries = async (brokerId: number) => {
   }
 }
 
-export const createBrokerRestrictedCountries = async (brokerId: number) => {
+export const createBrokerRestrictedCountries = async (
+  brokerId: number,
+  countriesItems: number[]
+) => {
   try {
     const { data }: iRestrictedCountriesData = await axiosInstance.post(
       'Broker/RestrictedCountries',
+      countriesItems,
       {
         params: {
           BrokerId: brokerId,
@@ -35,11 +39,14 @@ export const createBrokerRestrictedCountries = async (brokerId: number) => {
   }
 }
 
-export const updateBrokerRestrictedCountries = async (brokerId: number) => {
+export const updateBrokerRestrictedCountries = async (
+  brokerId: number,
+  countriesItems: number[]
+) => {
   try {
     const { data }: iRestrictedCountriesData = await axiosInstance.put(
       'Broker/RestrictedCountries',
-      null,
+      countriesItems,
       {
         params: {
           BrokerId: brokerId,

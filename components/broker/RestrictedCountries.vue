@@ -1,0 +1,60 @@
+<script setup lang="ts">
+import { getBrokerRestrictedCountriesList } from '~/api/brokers/brokerRestrictedCountriesList'
+
+interface iProps {
+  brokerId: number
+}
+
+const props = defineProps<iProps>()
+
+const countriesFullList = ref<string[]>([])
+const countriesList = ref<number[]>([])
+const filteredCountriesList = computed(() => {
+  return removeUnderlines(
+    countriesList.value?.map(index => countriesFullList.value[index]) || []
+  )
+})
+
+const {
+  createRestrictedCountries,
+  getRestrictedCountries,
+  updateRestrictedCountries,
+} = useBrokerRestrictedCountries()
+
+const selectCountries = async (country: string) => {
+  const countriesIndex = countriesFullList.value.findIndex(el => el === country)
+
+  countriesList.value.push(countriesIndex)
+  await createRestrictedCountries(props.brokerId, countriesList.value)
+}
+
+const removeCountries = async (index: number) => {
+  countriesList.value.splice(index, 1)
+  await updateRestrictedCountries(props.brokerId, countriesList.value)
+}
+
+onMounted(async () => {
+  const { restrictedCountries } = await getBrokerRestrictedCountriesList()
+  const countriesData = await getRestrictedCountries(props.brokerId)
+
+  countriesFullList.value = removeUnderlines(restrictedCountries)
+  countriesList.value =
+    countriesData?.restrictedCountries?.map(item => item.countryCode) || []
+})
+</script>
+
+<template>
+  <div class="restricted-countries">
+    <TheAccordion
+      class="restricted-countries__accordion"
+      title="restricted Countries"
+    >
+      <TagsInput
+        :dropdown-list="countriesFullList"
+        :badges-list="filteredCountriesList"
+        @select="selectCountries"
+        @remove="removeCountries"
+      />
+    </TheAccordion>
+  </div>
+</template>

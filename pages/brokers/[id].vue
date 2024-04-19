@@ -74,7 +74,7 @@ onMounted(async () => {
             <BrokerNotes :broker-id="Number(brokerId)" />
             <BrokerRegulator :broker-id="Number(brokerId)" />
             <BrokerPlatforms :broker-id="Number(brokerId)" />
-            <BrokerRestrictionCountries />
+            <BrokerRestrictedCountries :broker-id="Number(brokerId)" />
             <BrokerDepositMethods :broker-id="Number(brokerId)" />
             <div class="broker-aside__btn-wrapper">
               <TheButton tag="button" button-size="medium" variant="outlined">
