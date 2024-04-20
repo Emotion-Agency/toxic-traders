@@ -17,12 +17,3 @@ export interface iInput {
   value: string
   error: boolean
 }
-
-export interface iCountriesFlagItem {
-  flagFullName: string
-  flagShortName: string
-  flagImg: {
-    url: string
-    alt: string
-  }
-}

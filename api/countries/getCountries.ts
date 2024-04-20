@@ -1,15 +1,15 @@
 import axios from 'axios'
-import type { iCountriesFlagItem } from '~/types'
+import type { iCountries } from '~/types/countries/countries'
 
 export const getCountriesFlag = async () => {
   try {
     const { data } = await axios.get('https://restcountries.com/v3.1/all')
 
-    const countries: iCountriesFlagItem[] = data.map(item => {
+    const countries: iCountries[] = data.map(item => {
       return {
-        flagFullName: item.name.common,
-        flagShortName: item.cca2,
-        flagImg: {
+        countryFullName: item.name.common,
+        countryShortName: item.cca2,
+        countryFlag: {
           url: item.flags.png,
           alt: item.flags.alt,
         },

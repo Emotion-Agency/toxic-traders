@@ -1,14 +1,10 @@
 <script setup lang="ts">
+import type { iCountries } from '~/types/countries/countries'
+
 interface iProps {
   dropdownList: string[]
   badgesList?: string[]
-  flagList?: {
-    name: string
-    flagImg: {
-      url: string
-      alt: string
-    }
-  }[]
+  countryList?: iCountries[]
   badgeVariant: 'fill' | 'outlined'
 }
 
@@ -75,18 +71,21 @@ onUnmounted(() => {
     <div class="tags-input__wrapper">
       <div class="tags-input__content">
         <div class="tags-input__input-field">
-          <div v-if="flagList?.length" class="tags-input__badge-wrapper">
+          <div v-if="countryList?.length" class="tags-input__badge-wrapper">
             <TheBadge
-              v-for="(badge, idx) in props.flagList"
+              v-for="(badge, idx) in props.countryList"
               :key="idx"
               class="tags-input__badge"
               :variant="badgeVariant"
               :is-button="true"
-              :text="badge?.name"
+              :text="badge?.countryFullName"
               @click="removeBadge(idx)"
             >
               <template #icon>
-                <img :src="badge?.flagImg?.url" :alt="badge?.flagImg?.alt" />
+                <img
+                  :src="badge?.countryFlag?.url"
+                  :alt="badge?.countryFlag?.alt"
+                />
               </template>
             </TheBadge>
             <input
@@ -94,7 +93,7 @@ onUnmounted(() => {
               class="tags-input__input"
               type="text"
               name="Tags input"
-              :placeholder="!props.flagList?.length ? 'Type a value' : null"
+              :placeholder="!props.countryList?.length ? 'Type a value' : null"
               autocomplete="off"
               @focus="onFocus"
               @input="onChange"

@@ -1,19 +1,20 @@
-import type { iCountriesFlagItem } from '~/types'
+import type { iCountries } from '~/types/countries/countries'
 
 const getFullCountriesNames = (
   shortCountriesNames: string[],
-  countries: iCountriesFlagItem[]
+  countries: iCountries[]
 ) => {
   const matchingCountries = countries.filter(country =>
-    shortCountriesNames.includes(country.flagShortName)
+    shortCountriesNames.includes(country.countryShortName)
   )
 
   return matchingCountries.map(country => {
     return {
-      name: country.flagFullName,
-      flagImg: {
-        url: country.flagImg.url,
-        alt: country.flagImg.alt,
+      countryFullName: country.countryFullName,
+      countryShortName: country.countryShortName,
+      countryFlag: {
+        url: country.countryFlag.url,
+        alt: country.countryFlag.alt,
       },
     }
   })

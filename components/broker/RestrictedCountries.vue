@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getBrokerRestrictedCountriesList } from '~/api/brokers/brokerRestrictedCountriesList'
-import { getCountriesFlag } from '~/api/countries/getCountriesFlag'
-import type { iCountriesFlagItem } from '~/types'
+import { getCountriesFlag } from '~/api/countries/getCountries'
+import type { iCountries } from '~/types/countries/countries'
 import getFullCountriesNames from '~/utils/getFullCountriesNames'
 
 interface iProps {
@@ -10,10 +10,10 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const fullCountriesNames = ref([])
+const fullCountriesNames = ref<iCountries[]>([])
 const countriesFullList = ref<string[]>([])
 const countriesList = ref<number[]>([])
-const flagsList = ref<iCountriesFlagItem[]>([])
+const flagsList = ref<iCountries[]>([])
 const filteredCountriesList = computed(() => {
   return (
     countriesList.value?.map(index => fullCountriesNames.value[index]) || []
@@ -56,7 +56,9 @@ onMounted(async () => {
   countriesList.value =
     countriesData?.restrictedCountries?.map(item => item.countryCode) || []
 
-  countriesFullList.value = fullCountriesNames.value.map(item => item.name)
+  countriesFullList.value = fullCountriesNames.value.map(
+    item => item.countryFullName
+  )
 })
 </script>
 
@@ -68,7 +70,7 @@ onMounted(async () => {
     >
       <TagsInput
         :dropdown-list="countriesFullList"
-        :flag-list="filteredCountriesList"
+        :country-list="filteredCountriesList"
         badge-variant="outlined"
         @select="selectCountries"
         @remove="removeCountries"
