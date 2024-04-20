@@ -1,6 +1,6 @@
 import type { iCountries } from '~/types/countries/countries'
 
-const getFullCountriesNames = (
+const getCountriesFullNames = (
   shortCountriesNames: string[],
   countries: iCountries[]
 ) => {
@@ -20,4 +20,4 @@ const getFullCountriesNames = (
   })
 }
 
-export default getFullCountriesNames
+export default getCountriesFullNames
