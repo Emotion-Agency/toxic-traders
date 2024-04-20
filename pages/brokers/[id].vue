@@ -5,7 +5,6 @@ const route = useRoute()
 const brokerId = route.params.id
 const websitesList = ref<string[]>([])
 const serversList = ref<iBroker[]>([])
-const serverLocation = ref<string>('')
 const reviewsList = ref<{ rating: string; count: string }[]>([])
 
 const { getCurrentBroker } = useBrokers()
@@ -39,7 +38,6 @@ onMounted(async () => {
       count: data?.brokerReviewsWikifxReviewsCount,
     },
   ]
-  serverLocation.value = data?.baseBrokerServerLocation
 })
 </script>
 
@@ -51,7 +49,7 @@ onMounted(async () => {
           <div class="broker-aside__content">
             <BrokerCompanyName :broker-id="Number(brokerId)" />
             <BrokerCategory :broker-id="Number(brokerId)" />
-            <BrokerLocationServers :server-location="serverLocation" />
+            <BrokerServerLocation :broker-id="Number(brokerId)" />
             <BrokerAddressCompany />
             <BrokerWebsites :websites="websitesList" />
             <BrokerReviews :reviews-list="reviewsList" />
