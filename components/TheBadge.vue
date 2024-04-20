@@ -22,8 +22,8 @@ const onClick = () => {
     @click="onClick"
   >
     <slot name="icon" />
-    {{ text }}
-    <span v-if="isButton">
+    <span class="badge__text"> {{ text }}</span>
+    <span v-if="isButton" class="badge__close">
       <IconsClose />
     </span>
   </button>

@@ -7,11 +7,16 @@ const getFullCountriesNames = (
   const matchingCountries = countries.filter(country =>
     shortCountriesNames.includes(country.flagShortName)
   )
-  const fullCountriesNames = matchingCountries.map(
-    country => country.flagFullName
-  )
 
-  return fullCountriesNames
+  return matchingCountries.map(country => {
+    return {
+      name: country.flagFullName,
+      flagImg: {
+        url: country.flagImg.url,
+        alt: country.flagImg.alt,
+      },
+    }
+  })
 }
 
 export default getFullCountriesNames

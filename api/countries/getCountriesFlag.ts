@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { iCountriesFlagItem } from '~/types'
 
-export const getCountriesList = async () => {
+export const getCountriesFlag = async () => {
   try {
     const { data } = await axios.get('https://restcountries.com/v3.1/all')
 

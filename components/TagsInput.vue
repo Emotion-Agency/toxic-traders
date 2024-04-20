@@ -82,11 +82,11 @@ onUnmounted(() => {
               class="tags-input__badge"
               :variant="badgeVariant"
               :is-button="true"
-              :text="badge.name"
+              :text="badge?.name"
               @click="removeBadge(idx)"
             >
               <template #icon>
-                <img :src="badge.flagImg.url" :alt="badge.flagImg.alt" />
+                <img :src="badge?.flagImg?.url" :alt="badge?.flagImg?.alt" />
               </template>
             </TheBadge>
             <input

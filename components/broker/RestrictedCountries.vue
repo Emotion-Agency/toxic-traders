@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getBrokerRestrictedCountriesList } from '~/api/brokers/brokerRestrictedCountriesList'
-import { getCountriesList } from '~/api/countries/getCountriesList'
+import { getCountriesFlag } from '~/api/countries/getCountriesFlag'
 import type { iCountriesFlagItem } from '~/types'
 import getFullCountriesNames from '~/utils/getFullCountriesNames'
 
@@ -10,12 +10,13 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
+const fullCountriesNames = ref([])
 const countriesFullList = ref<string[]>([])
 const countriesList = ref<number[]>([])
 const flagsList = ref<iCountriesFlagItem[]>([])
 const filteredCountriesList = computed(() => {
-  return removeUnderlines(
-    countriesList.value?.map(index => countriesFullList.value[index]) || []
+  return (
+    countriesList.value?.map(index => fullCountriesNames.value[index]) || []
   )
 })
 
@@ -28,7 +29,7 @@ const {
 const selectCountries = async (country: string) => {
   const countriesIndex = countriesFullList.value.findIndex(el => el === country)
 
-  countriesList.value.push(countriesIndex)
+  countriesList.value = [...countriesList.value, countriesIndex]
   await createRestrictedCountries(props.brokerId, countriesList.value)
 }
 
@@ -41,13 +42,21 @@ const removeCountries = async (index: number) => {
 onMounted(async () => {
   const { restrictedCountries } = await getBrokerRestrictedCountriesList()
   const countriesData = await getRestrictedCountries(props.brokerId)
+  const countriesFlags = await getCountriesFlag()
 
-  countriesFullList.value = removeUnderlines(restrictedCountries)
+  countriesFullList.value = restrictedCountries
+
+  flagsList.value = countriesFlags
+
+  fullCountriesNames.value = getFullCountriesNames(
+    countriesFullList.value,
+    flagsList.value
+  )
+
   countriesList.value =
     countriesData?.restrictedCountries?.map(item => item.countryCode) || []
 
-  const countries = await getCountriesList()
-  flagsList.value = countries
+  countriesFullList.value = fullCountriesNames.value.map(item => item.name)
 })
 </script>
 
@@ -59,7 +68,7 @@ onMounted(async () => {
     >
       <TagsInput
         :dropdown-list="countriesFullList"
-        :badges-list="filteredCountriesList"
+        :flag-list="filteredCountriesList"
         badge-variant="outlined"
         @select="selectCountries"
         @remove="removeCountries"
