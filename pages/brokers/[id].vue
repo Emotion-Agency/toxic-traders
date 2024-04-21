@@ -50,7 +50,7 @@ onMounted(async () => {
             <BrokerCompanyName :broker-id="Number(brokerId)" />
             <BrokerCategory :broker-id="Number(brokerId)" />
             <BrokerServerLocation :broker-id="Number(brokerId)" />
-            <BrokerAddressCompany />
+            <BrokerServerAddresses :broker-id="Number(brokerId)" />
             <BrokerWebsites :websites="websitesList" />
             <BrokerReviews :reviews-list="reviewsList" />
           </div>

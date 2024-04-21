@@ -41,6 +41,8 @@
 }
 
 .badge__close {
+  position: relative;
+  top: 2px;
   display: block;
   margin-left: 4px;
   width: 12px;
