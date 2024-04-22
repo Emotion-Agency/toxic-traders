@@ -3,7 +3,7 @@ import type { iBroker } from '~/types/broker/broker'
 
 const route = useRoute()
 const brokerId = route.params.id
-const websitesList = ref<string[]>([])
+// const websitesList = ref<string[]>([])
 const serversList = ref<iBroker[]>([])
 const reviewsList = ref<{ rating: string; count: string }[]>([])
 
@@ -19,7 +19,7 @@ onMounted(async () => {
     },
   ]
 
-  websitesList.value = data?.website?.split(',')
+  // websitesList.value = data?.website?.split(',')
   reviewsList.value = [
     {
       rating: data?.brokerReviewsForexPeaceArmyRating,
@@ -51,7 +51,7 @@ onMounted(async () => {
             <BrokerCategory :broker-id="Number(brokerId)" />
             <BrokerServerLocation :broker-id="Number(brokerId)" />
             <BrokerServerAddresses :broker-id="Number(brokerId)" />
-            <BrokerWebsites :websites="websitesList" />
+            <BrokerWebsites :broker-id="Number(brokerId)" />
             <BrokerReviews :reviews-list="reviewsList" />
           </div>
         </div>

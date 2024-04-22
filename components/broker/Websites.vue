@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { iCompanyNamesItem } from '~/types/broker/brokerCompanyNames'
+
 interface iProps {
-  websites: string[]
+  brokerId: number
 }
 
 const props = defineProps<iProps>()
@@ -9,15 +11,18 @@ const websitesModalOpened = ref(false)
 const websitesInputs = ref([])
 const showAllWebsites = ref(false)
 const visibleWebsites = ref([websitesInputs.value[0]])
+const websiteList = ref<iCompanyNamesItem[]>([])
 
-const modalInputData = {
+const { getCompanyNamesById } = useBrokerCompanyNames()
+
+const modalInputData = ref({
   required: false,
   id: 'websites',
   name: 'Websites',
   type: 'text',
   value: '',
   placeholder: 'Website',
-}
+})
 
 const websitesModalOpen = () => {
   websitesModalOpened.value = true
@@ -38,11 +43,11 @@ const showMoreWebsites = () => {
 }
 
 watch(
-  () => props.websites,
+  () => websiteList.value,
   () => {
-    websitesInputs.value = props.websites.map(item => ({
-      value: item,
-      id: item,
+    websitesInputs.value = websiteList.value.map(item => ({
+      value: item.website || '',
+      id: item.id.toString(),
       name: 'websites',
       type: 'text',
       required: false,
@@ -50,6 +55,12 @@ watch(
     }))
   }
 )
+
+onMounted(async () => {
+  const data = await getCompanyNamesById(props.brokerId)
+
+  websiteList.value = data[0].companyNames
+})
 </script>
 
 <template>
