@@ -33,6 +33,14 @@ const onChange = (input: iInput) => {
   locationServerValue.value = input.value
 }
 
+const onBlur = async () => {
+  if (!locationServerValue.value) {
+    await deleteServerLocation(props.brokerId)
+  } else {
+    await createServerLocation(props.brokerId, locationServerValue.value)
+  }
+}
+
 onMounted(async () => {
   const locationServerData = await getServerLocation(props.brokerId)
 
@@ -56,6 +64,7 @@ onMounted(async () => {
           :placeholder="locationInputData?.placeholder"
           :value="locationInputData?.value"
           @input-value="onChange"
+          @input-focus="onBlur"
         />
       </TheAccordion>
     </div>
