@@ -44,7 +44,11 @@ onBeforeUnmount(() => {
   <div class="accordion" :class="isOpened && 'accordion--opened'">
     <div class="accordion__wrapper">
       <div class="accordion__header">
-        <button class="accordion__btn accordion__main-btn" @click="toggleClick">
+        <button
+          type="button"
+          class="accordion__btn accordion__main-btn"
+          @click="toggleClick"
+        >
           {{ title }}
           <IconsSelectionArrowDown />
         </button>
