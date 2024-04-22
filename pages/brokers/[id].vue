@@ -20,24 +20,24 @@ onMounted(async () => {
   ]
 
   // websitesList.value = data?.website?.split(',')
-  reviewsList.value = [
-    {
-      rating: data?.brokerReviewsForexPeaceArmyRating,
-      count: data?.brokerReviewsForexPeaceArmyReviewsCount,
-    },
-    {
-      rating: data?.brokerReviewsFx123Rating,
-      count: data?.brokerReviewsFx123ReviewsCount,
-    },
-    {
-      rating: data?.brokerReviewsTrustPilotRating,
-      count: data?.brokerReviewsTrustPilotReviewsCount,
-    },
-    {
-      rating: data?.brokerReviewsWikifxRating,
-      count: data?.brokerReviewsWikifxReviewsCount,
-    },
-  ]
+  // reviewsList.value = [
+  //   {
+  //     rating: data?.brokerReviewsForexPeaceArmyRating,
+  //     count: data?.brokerReviewsForexPeaceArmyReviewsCount,
+  //   },
+  //   {
+  //     rating: data?.brokerReviewsFx123Rating,
+  //     count: data?.brokerReviewsFx123ReviewsCount,
+  //   },
+  //   {
+  //     rating: data?.brokerReviewsTrustPilotRating,
+  //     count: data?.brokerReviewsTrustPilotReviewsCount,
+  //   },
+  //   {
+  //     rating: data?.brokerReviewsWikifxRating,
+  //     count: data?.brokerReviewsWikifxReviewsCount,
+  //   },
+  // ]
 })
 </script>
 
@@ -52,7 +52,7 @@ onMounted(async () => {
             <BrokerServerLocation :broker-id="Number(brokerId)" />
             <BrokerServerAddresses :broker-id="Number(brokerId)" />
             <BrokerWebsites :broker-id="Number(brokerId)" />
-            <BrokerReviews :reviews-list="reviewsList" />
+            <BrokerReviews :broker-id="Number(brokerId)" />
           </div>
         </div>
       </aside>

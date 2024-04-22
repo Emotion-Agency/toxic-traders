@@ -26,7 +26,16 @@ export const createBrokerReview = async (
 ) => {
   try {
     const { data }: iBrokerReviewsData = await axiosInstance.post(
-      `Broker/Reviews?BrokerId=${brokerId}&Url=${url}&Rating=${rating}&NumberOfReviews=${numberReviews}`
+      `Broker/Reviews`,
+      null,
+      {
+        params: {
+          BrokerId: brokerId,
+          Url: url,
+          Rating: rating,
+          NumberOfReviews: numberReviews,
+        },
+      }
     )
 
     return data

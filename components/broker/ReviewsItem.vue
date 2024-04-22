@@ -1,19 +1,24 @@
 <script setup lang="ts">
 interface iProps {
-  rating: string
-  reviewsCount: string
+  rating: number
+  reviewsCount: number
+  reviewLink: string
 }
 
 const props = defineProps<iProps>()
 
 const filledStars = computed(() => {
-  const rating = parseInt(props.rating)
-  return rating > 0 ? rating : 0
+  return props.rating > 0 ? props.rating : 0
 })
 </script>
 
 <template>
-  <a href="/" target="_blank" rel="noreferer noopener" class="reviews-item">
+  <a
+    :href="reviewLink"
+    target="_blank"
+    rel="noreferer noopener"
+    class="reviews-item"
+  >
     <div class="reviews-item__rating-wrapper">
       <div class="reviews-item__rating">
         <slot />

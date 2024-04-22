@@ -6,9 +6,9 @@ import {
 export const useBrokerReviews = () => {
   const getReviews = async (brokerId: number) => {
     try {
-      const data = await getBrokerReviews(brokerId)
+      const { brokerReviews } = await getBrokerReviews(brokerId)
 
-      return data
+      return brokerReviews
     } catch (error) {
       // alert with error
     }

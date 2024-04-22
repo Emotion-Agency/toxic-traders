@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { iBrokerReviewsItem } from '~/types/broker/brokerReviews'
+
 interface iProps {
-  reviewsList: { rating: string; count: string }[]
+  brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const reviewsInputData = ref([
   {
@@ -124,6 +126,8 @@ const reviewsInputData = ref([
   },
 ])
 
+const { getReviews } = useBrokerReviews()
+const reviewList = ref<iBrokerReviewsItem[]>([])
 const reviewsModalOpened = ref(false)
 
 const reviewsModalOpen = () => {
@@ -146,6 +150,11 @@ const onInputChange = (e: iInputData) => {
     return item
   })
 }
+
+onMounted(async () => {
+  const reviewsData = await getReviews(props.brokerId)
+  reviewList.value = reviewsData
+})
 </script>
 
 <template>
@@ -156,6 +165,15 @@ const onInputChange = (e: iInputData) => {
       @open="reviewsModalOpen"
     >
       <BrokerReviewsItem
+        v-for="(item, idx) in reviewList"
+        :key="idx"
+        :rating="item.rating"
+        :reviews-count="item.numberOfReviews ?? 0.0"
+        :review-link="item.url"
+      >
+        <IconsReviewsForexPeaceArmy />
+      </BrokerReviewsItem>
+      <!-- <BrokerReviewsItem
         :rating="reviewsList[0]?.rating ?? '0.0'"
         :reviews-count="reviewsList[0]?.count ?? '0.0'"
       >
@@ -178,7 +196,7 @@ const onInputChange = (e: iInputData) => {
         :reviews-count="reviewsList[3]?.count ?? '0.0'"
       >
         <IconsReviewsFx123 />
-      </BrokerReviewsItem>
+      </BrokerReviewsItem> -->
     </TheAccordion>
     <TheModal
       :modal-opened="reviewsModalOpened"
