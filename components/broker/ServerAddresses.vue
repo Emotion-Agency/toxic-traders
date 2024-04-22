@@ -8,25 +8,17 @@ interface iProps {
 const props = defineProps<iProps>()
 
 const serverAddresses = ref<iServerAddress[]>([])
-const showAllAddresses = ref(false)
-const filteredServerAddresses = computed(() => {
-  return serverAddresses.value.filter(item => {
-    if (showAllAddresses.value === false) {
-      return serverAddresses.value[0] === item
-    } else {
-      return serverAddresses.value
-    }
-  })
-})
+
+const filteredServerAddresses = ref<iServerAddress[]>([])
 
 const { getServerAddresses } = useBrokerServerAddresses()
 
 const showMoreServerAddresses = () => {
-  showAllAddresses.value = true
+  filteredServerAddresses.value = serverAddresses.value
 }
 
 const showLessServerAddresses = () => {
-  showAllAddresses.value = false
+  filteredServerAddresses.value = serverAddresses.value.slice(0, 1)
 }
 
 onMounted(async () => {
@@ -35,6 +27,7 @@ onMounted(async () => {
   if (serverAddressesRequest?.length) {
     serverAddresses.value = serverAddressesRequest
   }
+  showLessServerAddresses()
 })
 </script>
 
@@ -55,7 +48,10 @@ onMounted(async () => {
       </div>
 
       <OptionalButton
-        v-if="serverAddresses.length > 1 && !showAllAddresses"
+        v-if="
+          serverAddresses.length > 1 &&
+          filteredServerAddresses.length !== serverAddresses.length
+        "
         @on-click="showMoreServerAddresses"
         >Show more</OptionalButton
       >

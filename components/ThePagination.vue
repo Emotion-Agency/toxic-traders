@@ -68,7 +68,7 @@ const computedTotalPages = computed(() => {
           :value="inputItem.value"
           class="pagination__input"
           @input-value="onChange"
-          @input-focus="onBlur"
+          @input-blur="onBlur"
         />
         <p class="pagination__text">of {{ computedTotalPages }}</p>
         <CustomSelect

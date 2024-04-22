@@ -64,7 +64,7 @@ onMounted(async () => {
           :placeholder="locationInputData?.placeholder"
           :value="locationInputData?.value"
           @input-value="onChange"
-          @input-focus="onBlur"
+          @input-blur="onBlur"
         />
       </TheAccordion>
     </div>

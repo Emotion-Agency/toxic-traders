@@ -8,7 +8,7 @@ export interface iInputData {
 
 export const useInput = (emit, props) => {
   const inputValue = ref(props.value ?? '')
-  const inputFocus = ref(false)
+  const inputBlur = ref(false)
   const error = ref(false)
   const $input = ref(null)
 
@@ -21,13 +21,18 @@ export const useInput = (emit, props) => {
   )
 
   const onFocus = () => {
-    inputFocus.value = true
+    inputBlur.value = true
+    emit('inputFocus', {
+      id: props.id,
+      value: inputValue.value.toString(),
+      error: error.value,
+    })
   }
 
   const onBlur = () => {
     if (props.type === 'number') {
-      inputFocus.value = false
-      emit('inputFocus', {
+      inputBlur.value = false
+      emit('inputBlur', {
         id: props.id,
         value: inputValue.value.toString(),
         error: error.value,
@@ -35,8 +40,8 @@ export const useInput = (emit, props) => {
     }
 
     if (props.type === 'text' || props.type === 'textarea') {
-      inputFocus.value = false
-      emit('inputFocus', {
+      inputBlur.value = false
+      emit('inputBlur', {
         id: props.id,
         value: inputValue.value,
         error: error.value,
@@ -99,7 +104,7 @@ export const useInput = (emit, props) => {
 
   const throwError = () => {
     if (validationResult().includes(true)) {
-      inputFocus.value = true
+      inputBlur.value = true
       error.value = true
       $input.value.focus()
     }
@@ -127,7 +132,7 @@ export const useInput = (emit, props) => {
 
   return {
     inputValue,
-    inputFocus,
+    inputBlur,
     error,
     $input,
     onFocus,

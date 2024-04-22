@@ -17,11 +17,11 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const emit = defineEmits(['inputValue', 'inputFocus'])
+const emit = defineEmits(['inputValue', 'inputFocus', 'inputBlur'])
 
 const {
   inputValue,
-  inputFocus,
+  inputBlur,
   error,
   $input,
   onFocus,
@@ -43,7 +43,7 @@ defineExpose({
     :class="[
       type === 'textarea' && 'input--textarea',
       type === 'select' && 'input--select',
-      inputFocus && 'js-focus',
+      inputBlur && 'js-focus',
     ]"
     :for="id"
   >
