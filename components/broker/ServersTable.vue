@@ -63,7 +63,12 @@ const serversConvertedList = computed(() => {
       title="Server info"
       @close="serversModalClose"
     >
-      servers modal
+      <ul class="servers-table__modal-list">
+        <li class="servers-table__modal-item">
+          <p class="servers-table__modal-numbers">127.0.0.1:443</p>
+          <p class="servers-table__modal-text">Data Center LD4</p>
+        </li>
+      </ul>
     </TheModal>
   </div>
 </template>

@@ -126,7 +126,7 @@ const reviewsInputData = ref([
   },
 ])
 
-const { getReviews } = useBrokerReviews()
+const { getReviews, createReview } = useBrokerReviews()
 const reviewList = ref<iBrokerReviewsItem[]>([])
 const reviewsModalOpened = ref(false)
 
