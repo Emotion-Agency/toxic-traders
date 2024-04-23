@@ -39,8 +39,6 @@ onMounted(async () => {
   isOpenedServersModal.value = new Array(
     serversConvertedList.value.length
   ).fill(false)
-
-  console.log(serversConvertedList.value)
 })
 </script>
 
@@ -63,23 +61,22 @@ onMounted(async () => {
             title="Server info"
             @close="serversModalClose(idx)"
           >
-            <ul class="servers-table__modal-list">
+            <ul
+              v-for="(address, index) in item"
+              :key="index"
+              class="servers-table__modal-list"
+            >
               <li
-                v-for="(address, index) in item"
-                :key="index"
+                v-for="ip in address?.brokerServerIPAddresses"
+                :key="ip.ipAddress"
                 class="servers-table__modal-item"
               >
-                <div
-                  v-for="ip in address?.brokerServerIPAddresses"
-                  :key="ip.ipAddress"
-                >
-                  <p class="servers-table__modal-numbers">
-                    {{ ip.ipAddress }}
-                  </p>
-                  <p class="servers-table__modal-text">
-                    {{ address?.clusterName || 'N/A' }}
-                  </p>
-                </div>
+                <p class="servers-table__modal-numbers">
+                  {{ ip.ipAddress }}
+                </p>
+                <p class="servers-table__modal-text">
+                  {{ address?.clusterName || 'N/A' }}
+                </p>
               </li>
             </ul>
           </TheModal>
