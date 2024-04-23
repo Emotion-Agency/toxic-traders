@@ -6,24 +6,22 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const isOpenedServersModal = ref(false)
+const isOpenedServersModal = ref<Array<boolean>>([])
 const headerFields = ['Servers MT4', 'Servers MT5']
 const serversList = ref<iBrokerServer[]>([])
 const { getAllBrokerServers } = useBrokerServer()
 
-const serversModalOpen = () => {
-  isOpenedServersModal.value = true
+const serversModalOpen = (index: number) => {
+  if (!serversConvertedList.value[index]) {
+    isOpenedServersModal.value[index] = false
+  } else {
+    isOpenedServersModal.value[index] = true
+  }
 }
 
-const serversModalClose = () => {
-  isOpenedServersModal.value = false
+const serversModalClose = (index: number) => {
+  isOpenedServersModal.value[index] = false
 }
-
-onMounted(async () => {
-  const data = await getAllBrokerServers(props.brokerId)
-
-  serversList.value = data?.brokerServers
-})
 
 const serversConvertedList = computed(() => {
   return serversList.value.map(item => {
@@ -31,6 +29,18 @@ const serversConvertedList = computed(() => {
     const type1 = item.serverType === 1 ? item : null
     return [type0, type1]
   })
+})
+
+onMounted(async () => {
+  const data = await getAllBrokerServers(props.brokerId)
+
+  serversList.value = data?.brokerServers
+
+  isOpenedServersModal.value = new Array(
+    serversConvertedList.value.length
+  ).fill(false)
+
+  console.log(serversConvertedList.value)
 })
 </script>
 
@@ -46,8 +56,26 @@ const serversConvertedList = computed(() => {
             :item="cell?.serverName || 'N/A'"
             :class="`table-cell--${i}`"
             :is-modal="!!cell?.serverName"
-            @open="serversModalOpen"
+            @open="serversModalOpen(idx)"
           />
+          <TheModal
+            :modal-opened="isOpenedServersModal[idx]"
+            title="Server info"
+            @close="serversModalClose(idx)"
+          >
+            <ul class="servers-table__modal-list">
+              <li
+                v-for="(address, index) in item"
+                :key="index"
+                class="servers-table__modal-item"
+              >
+                <p class="servers-table__modal-numbers">
+                  {{ address }}
+                </p>
+                <p class="servers-table__modal-text">Data Center LD4</p>
+              </li>
+            </ul>
+          </TheModal>
         </TableRow>
       </TableBody>
     </Table>
@@ -58,17 +86,5 @@ const serversConvertedList = computed(() => {
       class="servers-table__btn"
       >Show more</TheButton
     >
-    <TheModal
-      :modal-opened="isOpenedServersModal"
-      title="Server info"
-      @close="serversModalClose"
-    >
-      <ul class="servers-table__modal-list">
-        <li class="servers-table__modal-item">
-          <p class="servers-table__modal-numbers">127.0.0.1:443</p>
-          <p class="servers-table__modal-text">Data Center LD4</p>
-        </li>
-      </ul>
-    </TheModal>
   </div>
 </template>
