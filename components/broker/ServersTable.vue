@@ -69,10 +69,17 @@ onMounted(async () => {
                 :key="index"
                 class="servers-table__modal-item"
               >
-                <p class="servers-table__modal-numbers">
-                  {{ address }}
-                </p>
-                <p class="servers-table__modal-text">Data Center LD4</p>
+                <div
+                  v-for="ip in address?.brokerServerIPAddresses"
+                  :key="ip.ipAddress"
+                >
+                  <p class="servers-table__modal-numbers">
+                    {{ ip.ipAddress }}
+                  </p>
+                  <p class="servers-table__modal-text">
+                    {{ address?.clusterName || 'N/A' }}
+                  </p>
+                </div>
               </li>
             </ul>
           </TheModal>
