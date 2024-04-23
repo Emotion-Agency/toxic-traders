@@ -6,10 +6,18 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
+const { getAllBrokerServers } = useBrokerServer()
 const isOpenedServersModal = ref<Array<boolean>>([])
 const headerFields = ['Servers MT4', 'Servers MT5']
 const serversList = ref<iBrokerServer[]>([])
-const { getAllBrokerServers } = useBrokerServer()
+const filteredServersList = ref([])
+const serversConvertedList = computed(() => {
+  return serversList.value.map(item => {
+    const type0 = item.serverType === 0 ? item : null
+    const type1 = item.serverType === 1 ? item : null
+    return [type0, type1]
+  })
+})
 
 const serversModalOpen = (index: number) => {
   if (!serversConvertedList.value[index]) {
@@ -23,13 +31,13 @@ const serversModalClose = (index: number) => {
   isOpenedServersModal.value[index] = false
 }
 
-const serversConvertedList = computed(() => {
-  return serversList.value.map(item => {
-    const type0 = item.serverType === 0 ? item : null
-    const type1 = item.serverType === 1 ? item : null
-    return [type0, type1]
-  })
-})
+const showMoreServers = () => {
+  filteredServersList.value = serversConvertedList.value
+}
+
+const showLessServers = () => {
+  filteredServersList.value = serversConvertedList.value.slice(0, 5)
+}
 
 onMounted(async () => {
   const data = await getAllBrokerServers(props.brokerId)
@@ -39,6 +47,8 @@ onMounted(async () => {
   isOpenedServersModal.value = new Array(
     serversConvertedList.value.length
   ).fill(false)
+
+  showLessServers()
 })
 </script>
 
@@ -47,7 +57,7 @@ onMounted(async () => {
     <Table>
       <TableHead :header-fields="headerFields" />
       <TableBody>
-        <TableRow v-for="(item, idx) in serversConvertedList" :key="idx">
+        <TableRow v-for="(item, idx) in filteredServersList" :key="idx">
           <TableCell
             v-for="(cell, i) in item"
             :key="i"
@@ -68,11 +78,11 @@ onMounted(async () => {
             >
               <li
                 v-for="ip in address?.brokerServerIPAddresses"
-                :key="ip.ipAddress"
+                :key="ip?.ipAddress"
                 class="servers-table__modal-item"
               >
                 <p class="servers-table__modal-numbers">
-                  {{ ip.ipAddress }}
+                  {{ ip?.ipAddress }}
                 </p>
                 <p class="servers-table__modal-text">
                   {{ address?.clusterName || 'N/A' }}
@@ -84,11 +94,25 @@ onMounted(async () => {
       </TableBody>
     </Table>
     <TheButton
+      v-if="
+        serversConvertedList.length > 5 &&
+        filteredServersList.length !== serversConvertedList.length
+      "
       tag="button"
       button-size="small"
       variant="fill"
       class="servers-table__btn"
+      @click="showMoreServers"
       >Show more</TheButton
+    >
+    <TheButton
+      v-if="filteredServersList.length > 5"
+      tag="button"
+      button-size="small"
+      variant="fill"
+      class="servers-table__btn"
+      @click="showLessServers"
+      >Show less</TheButton
     >
   </div>
 </template>

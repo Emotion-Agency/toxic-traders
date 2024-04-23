@@ -8,7 +8,6 @@ interface iProps {
 const props = defineProps<iProps>()
 
 const serverAddresses = ref<iServerAddress[]>([])
-
 const filteredServerAddresses = ref<iServerAddress[]>([])
 
 const { getServerAddresses } = useBrokerServerAddresses()
