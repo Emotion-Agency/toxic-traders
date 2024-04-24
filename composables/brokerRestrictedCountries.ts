@@ -6,13 +6,20 @@ import {
 } from '~/api/brokers/brokerRestrictedCountries'
 
 export const useBrokerRestrictedCountries = () => {
+  const { addToast } = useToasts()
+
   const getRestrictedCountries = async (brokerId: number) => {
     try {
       const data = await getBrokerRestrictedCountries(brokerId)
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error fetching restricted countries:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching restricted countries. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -28,7 +35,12 @@ export const useBrokerRestrictedCountries = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error updating restricted countries:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while updating restricted countries. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -44,7 +56,12 @@ export const useBrokerRestrictedCountries = () => {
 
       return restrictedCountries
     } catch (error) {
-      // alert with error
+      console.error('Error creating restricted countries:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while creating restricted countries. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -54,7 +71,12 @@ export const useBrokerRestrictedCountries = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error deleting restricted countries:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while deleting restricted countries. Please try again.',
+      })
+      throw error
     }
   }
 

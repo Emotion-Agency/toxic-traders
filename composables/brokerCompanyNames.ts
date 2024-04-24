@@ -4,13 +4,20 @@ import {
 } from '~/api/brokers/brokerCompanyNames'
 
 export const useBrokerCompanyNames = () => {
+  const { addToast } = useToasts()
+
   const getCompanyNamesById = async (brokerId: number) => {
     try {
       const { companyNames } = await getBrokerCompanyNamesById(brokerId)
 
       return companyNames
     } catch (error) {
-      // alert with error
+      console.error('Error fetching company names by ID:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching company names. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -20,7 +27,12 @@ export const useBrokerCompanyNames = () => {
 
       return companyNames
     } catch (error) {
-      // alert with error
+      console.error('Error fetching company names:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching company names. Please try again.',
+      })
+      throw error
     }
   }
 

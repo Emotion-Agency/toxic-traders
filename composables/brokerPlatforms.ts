@@ -6,13 +6,20 @@ import {
 } from '~/api/brokers/brokerPlatforms'
 
 export const useBrokerPlatforms = () => {
+  const { addToast } = useToasts()
+
   const getPlatform = async (brokerId: number) => {
     try {
       const data = await getBrokerPlatforms(brokerId)
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error fetching platform:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching platform. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -22,7 +29,12 @@ export const useBrokerPlatforms = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error updating platform:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while updating platform. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -32,7 +44,12 @@ export const useBrokerPlatforms = () => {
 
       return platforms
     } catch (error) {
-      // alert with error
+      console.error('Error creating platform:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while creating platform. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -42,7 +59,12 @@ export const useBrokerPlatforms = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error deleting platform:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while deleting platform. Please try again.',
+      })
+      throw error
     }
   }
 

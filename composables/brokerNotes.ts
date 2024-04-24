@@ -6,13 +6,20 @@ import {
 } from '~/api/brokers/brokerNotes'
 
 export const useBrokerNotes = () => {
+  const { addToast } = useToasts()
+
   const getNotes = async (brokerId: number) => {
     try {
       const data = await getBrokerNotes(brokerId)
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error fetching notes:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching notes. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -22,7 +29,12 @@ export const useBrokerNotes = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error updating notes:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while updating notes. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -32,7 +44,12 @@ export const useBrokerNotes = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error creating notes:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while creating notes. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -42,7 +59,12 @@ export const useBrokerNotes = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error deleting notes:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while deleting notes. Please try again.',
+      })
+      throw error
     }
   }
 

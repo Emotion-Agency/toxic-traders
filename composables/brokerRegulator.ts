@@ -7,13 +7,20 @@ import {
 import type { iRegulatorItem } from '~/types/broker/brokerRegulator'
 
 export const useBrokerRegulator = () => {
+  const { addToast } = useToasts()
+
   const getRegulator = async (brokerId: number) => {
     try {
       const { regulators } = await getBrokerRegulator(brokerId)
 
       return regulators
     } catch (error) {
-      // alert with error
+      console.error('Error fetching regulator:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching regulator. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -26,7 +33,12 @@ export const useBrokerRegulator = () => {
 
       return regulators
     } catch (error) {
-      // alert with error
+      console.error('Error updating regulator:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while updating regulator. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -36,7 +48,12 @@ export const useBrokerRegulator = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error creating regulator:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while creating regulator. Please try again.',
+      })
+      throw error
     }
   }
 
@@ -46,7 +63,12 @@ export const useBrokerRegulator = () => {
 
       return data
     } catch (error) {
-      // alert with error
+      console.error('Error deleting regulator:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while deleting regulator. Please try again.',
+      })
+      throw error
     }
   }
 
