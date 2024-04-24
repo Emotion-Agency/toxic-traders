@@ -31,5 +31,6 @@ useHead({
     <!-- <Landscape /> -->
     <TheHeader />
     <slot />
+    <AppToast />
   </div>
 </template>

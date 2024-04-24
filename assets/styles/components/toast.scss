@@ -1,4 +1,12 @@
-.alert {
+.toast-container {
+  position: fixed;
+  z-index: 10000;
+  top: 10%;
+}
+
+.toast {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: flex-start;
   column-gap: 12px;
@@ -23,9 +31,22 @@
   &--warning {
     background-color: var(--status-warning);
   }
+
+  + .toast {
+    margin-top: 10px;
+  }
 }
 
-.alert__icon {
+.toast__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--white);
+}
+
+.toast__icon {
   display: block;
   width: 16px;
   height: 16px;
@@ -37,7 +58,7 @@
   }
 }
 
-.alert__close-btn {
+.toast__close-btn {
   position: relative;
   width: 16px;
   height: 16px;
@@ -45,7 +66,7 @@
   background-color: transparent;
 }
 
-.alert__close-line {
+.toast__close-line {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

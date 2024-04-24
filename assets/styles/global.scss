@@ -19,7 +19,9 @@ body {
   height: fit-content;
   @include smooth-font;
   @include text-body;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 
   @media (max-width: $br1) {
     font-size: 16px;
@@ -76,6 +78,15 @@ body {
 }
 .page-enter,
 .page-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s;
+}
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
