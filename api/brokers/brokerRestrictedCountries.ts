@@ -15,6 +15,7 @@ export const getBrokerRestrictedCountries = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -36,6 +37,7 @@ export const createBrokerRestrictedCountries = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -57,6 +59,7 @@ export const updateBrokerRestrictedCountries = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -74,5 +77,6 @@ export const deleteBrokerRestrictedCountries = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

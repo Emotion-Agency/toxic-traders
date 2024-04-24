@@ -17,7 +17,6 @@ export const useBrokerServer = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching broker servers. Please try again.',
       })
-      throw error
     }
   }
 
@@ -32,7 +31,6 @@ export const useBrokerServer = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching current broker server. Please try again.',
       })
-      throw error
     }
   }
 

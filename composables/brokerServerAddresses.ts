@@ -14,7 +14,6 @@ export const useBrokerServerAddresses = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching server addresses. Please try again.',
       })
-      throw error
     }
   }
 

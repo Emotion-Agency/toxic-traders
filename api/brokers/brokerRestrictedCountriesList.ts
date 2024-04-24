@@ -10,5 +10,6 @@ export const getBrokerRestrictedCountriesList = async () => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

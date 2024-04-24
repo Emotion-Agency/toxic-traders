@@ -10,5 +10,6 @@ export const getBrokerPlatformsList = async () => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

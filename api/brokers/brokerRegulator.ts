@@ -18,6 +18,7 @@ export const getBrokerRegulator = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -35,6 +36,7 @@ export const createBrokerRegulator = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -56,6 +58,7 @@ export const updateBrokerRegulator = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -73,5 +76,6 @@ export const deleteBrokerRegulator = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

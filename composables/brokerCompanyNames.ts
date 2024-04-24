@@ -17,7 +17,6 @@ export const useBrokerCompanyNames = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching company names. Please try again.',
       })
-      throw error
     }
   }
 
@@ -32,7 +31,6 @@ export const useBrokerCompanyNames = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching company names. Please try again.',
       })
-      throw error
     }
   }
 

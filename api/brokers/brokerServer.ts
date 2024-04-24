@@ -15,6 +15,7 @@ export const getBrokerServer = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -32,6 +33,7 @@ export const getBrokerServerById = async (serverId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -57,5 +59,6 @@ export const createBrokerServerAccount = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

@@ -17,7 +17,6 @@ export const useBrokerReviews = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching reviews. Please try again.',
       })
-      throw error
     }
   }
 
@@ -42,7 +41,6 @@ export const useBrokerReviews = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating review. Please try again.',
       })
-      throw error
     }
   }
 

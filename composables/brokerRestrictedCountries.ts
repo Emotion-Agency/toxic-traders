@@ -19,7 +19,6 @@ export const useBrokerRestrictedCountries = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching restricted countries. Please try again.',
       })
-      throw error
     }
   }
 
@@ -40,7 +39,6 @@ export const useBrokerRestrictedCountries = () => {
         color: ToastColor.danger,
         text: 'An error occurred while updating restricted countries. Please try again.',
       })
-      throw error
     }
   }
 
@@ -61,7 +59,6 @@ export const useBrokerRestrictedCountries = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating restricted countries. Please try again.',
       })
-      throw error
     }
   }
 
@@ -76,7 +73,6 @@ export const useBrokerRestrictedCountries = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting restricted countries. Please try again.',
       })
-      throw error
     }
   }
 

@@ -15,7 +15,6 @@ export const useBrokers = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching brokers. Please try again.',
       })
-      throw error
     }
   }
 
@@ -30,7 +29,6 @@ export const useBrokers = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching current broker. Please try again.',
       })
-      throw error
     }
   }
 

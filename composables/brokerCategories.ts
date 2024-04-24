@@ -18,7 +18,6 @@ export const useBrokerCategories = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching categories. Please try again.',
       })
-      throw error
     }
   }
 
@@ -36,7 +35,6 @@ export const useBrokerCategories = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating categories. Please try again.',
       })
-      throw error
     }
   }
 
@@ -51,7 +49,6 @@ export const useBrokerCategories = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting categories. Please try again.',
       })
-      throw error
     }
   }
 

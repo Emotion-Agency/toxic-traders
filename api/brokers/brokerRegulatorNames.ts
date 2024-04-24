@@ -10,5 +10,6 @@ export const getBrokerRegulatorNames = async () => {
     return data.regulatorNames
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

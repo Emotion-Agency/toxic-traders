@@ -19,7 +19,6 @@ export const useBrokerPlatforms = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching platform. Please try again.',
       })
-      throw error
     }
   }
 
@@ -34,7 +33,6 @@ export const useBrokerPlatforms = () => {
         color: ToastColor.danger,
         text: 'An error occurred while updating platform. Please try again.',
       })
-      throw error
     }
   }
 
@@ -49,7 +47,6 @@ export const useBrokerPlatforms = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating platform. Please try again.',
       })
-      throw error
     }
   }
 
@@ -64,7 +61,6 @@ export const useBrokerPlatforms = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting platform. Please try again.',
       })
-      throw error
     }
   }
 

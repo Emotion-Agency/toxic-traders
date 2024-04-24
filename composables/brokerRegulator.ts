@@ -20,7 +20,6 @@ export const useBrokerRegulator = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching regulator. Please try again.',
       })
-      throw error
     }
   }
 
@@ -38,7 +37,6 @@ export const useBrokerRegulator = () => {
         color: ToastColor.danger,
         text: 'An error occurred while updating regulator. Please try again.',
       })
-      throw error
     }
   }
 
@@ -53,7 +51,6 @@ export const useBrokerRegulator = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating regulator. Please try again.',
       })
-      throw error
     }
   }
 
@@ -68,7 +65,6 @@ export const useBrokerRegulator = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting regulator. Please try again.',
       })
-      throw error
     }
   }
 

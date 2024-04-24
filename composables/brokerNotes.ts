@@ -19,7 +19,6 @@ export const useBrokerNotes = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching notes. Please try again.',
       })
-      throw error
     }
   }
 
@@ -34,7 +33,6 @@ export const useBrokerNotes = () => {
         color: ToastColor.danger,
         text: 'An error occurred while updating notes. Please try again.',
       })
-      throw error
     }
   }
 
@@ -49,7 +47,6 @@ export const useBrokerNotes = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating notes. Please try again.',
       })
-      throw error
     }
   }
 
@@ -64,7 +61,6 @@ export const useBrokerNotes = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting notes. Please try again.',
       })
-      throw error
     }
   }
 

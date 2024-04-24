@@ -12,6 +12,7 @@ export const getBrokerNotes = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -27,6 +28,7 @@ export const updateBrokerNotes = async (brokerId: number, Notes: string) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -42,6 +44,7 @@ export const createBrokerNotes = async (brokerId: number, notes: string) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -56,5 +59,6 @@ export const deleteBrokerNotes = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

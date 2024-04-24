@@ -18,7 +18,6 @@ export const useBrokerServerLocation = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching server location. Please try again.',
       })
-      throw error
     }
   }
 
@@ -36,7 +35,6 @@ export const useBrokerServerLocation = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating server location. Please try again.',
       })
-      throw error
     }
   }
 
@@ -51,7 +49,6 @@ export const useBrokerServerLocation = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting server location. Please try again.',
       })
-      throw error
     }
   }
 

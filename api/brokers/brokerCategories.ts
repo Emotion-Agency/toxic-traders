@@ -15,6 +15,7 @@ export const getBrokerCategories = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -31,6 +32,7 @@ export const createBrokerCategories = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -48,5 +50,6 @@ export const deleteBrokerCategories = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

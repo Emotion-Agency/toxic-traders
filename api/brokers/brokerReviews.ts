@@ -15,6 +15,7 @@ export const getBrokerReviews = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -41,5 +42,6 @@ export const createBrokerReview = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

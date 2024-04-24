@@ -15,6 +15,7 @@ export const getBrokerPlatforms = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -36,6 +37,7 @@ export const createBrokerPlatforms = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -57,6 +59,7 @@ export const updateBrokerPlatforms = async (
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
 
@@ -74,5 +77,6 @@ export const deleteBrokerPlatforms = async (brokerId: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

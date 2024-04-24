@@ -15,5 +15,6 @@ export const getBroker = async (offset: number, count: number) => {
     return data
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

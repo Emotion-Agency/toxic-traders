@@ -19,5 +19,6 @@ export const getCountriesFlag = async () => {
     return countries
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }

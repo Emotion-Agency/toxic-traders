@@ -19,7 +19,6 @@ export const useBrokerDepositMethods = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching deposit methods. Please try again.',
       })
-      throw error
     }
   }
 
@@ -37,7 +36,6 @@ export const useBrokerDepositMethods = () => {
         color: ToastColor.danger,
         text: 'An error occurred while updating deposit methods. Please try again.',
       })
-      throw error
     }
   }
 
@@ -58,7 +56,6 @@ export const useBrokerDepositMethods = () => {
         color: ToastColor.danger,
         text: 'An error occurred while creating deposit methods. Please try again.',
       })
-      throw error
     }
   }
 
@@ -73,7 +70,6 @@ export const useBrokerDepositMethods = () => {
         color: ToastColor.danger,
         text: 'An error occurred while deleting deposit methods. Please try again.',
       })
-      throw error
     }
   }
 

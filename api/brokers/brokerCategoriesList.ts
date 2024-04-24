@@ -10,5 +10,6 @@ export const getBrokerCategoriesList = async () => {
     return data.uniqueBrokerCategories
   } catch (e) {
     console.error(e.message)
+    throw e
   }
 }
