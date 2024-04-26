@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iSearchItem } from '~/types'
+import type { iSearchInput } from '~/types'
 
 interface iProps {
   isOpened: boolean
@@ -7,7 +7,7 @@ interface iProps {
 
 defineProps<iProps>()
 
-const searchItems = reactive<iSearchItem[]>([
+const searchItems = reactive<iSearchInput[]>([
   {
     title: 'Name',
     required: false,

@@ -68,3 +68,35 @@
     width: 100%;
   }
 }
+
+.main-broker__settings {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+
+.main-broker__settings-item {
+  margin-top: 20px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.main-broker__settings-title {
+  @include heading-m-h6;
+  color: var(--secondary-dark);
+}
+
+.main-broker__settings-select {
+  margin-top: 12px;
+}
+
+.main-broker__settings-delete {
+  margin-top: 12px;
+}
+
+.main-broker__settings-close {
+  margin-top: 32px;
+  align-self: flex-end;
+}

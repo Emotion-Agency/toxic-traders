@@ -8,10 +8,4 @@
   column-gap: 8px;
   justify-content: flex-end;
   margin-top: 32px;
-
-  .button {
-    &:first-child {
-      background-color: var(--secondary-default);
-    }
-  }
 }

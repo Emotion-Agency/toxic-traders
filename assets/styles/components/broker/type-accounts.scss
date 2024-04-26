@@ -1,12 +1,8 @@
-.type-accounts {
-}
 .type-accounts__list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-flow: row;
   gap: 25px;
-}
-.type-accounts__item {
 }
 
 .type-accounts__modal-list {
@@ -22,10 +18,4 @@
   column-gap: 8px;
   justify-content: flex-end;
   margin-top: 32px;
-
-  .button {
-    &:first-child {
-      background-color: var(--secondary-default);
-    }
-  }
 }

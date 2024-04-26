@@ -1,9 +1,9 @@
-export interface iSearchItem {
-  title: string
+export interface iSearchInput {
+  title?: string
   required?: boolean
-  id?: string
-  name?: string
-  type?: string
+  id: string
+  name: string
+  type: string
   value?: string
   placeholder?: string
   disabled?: boolean

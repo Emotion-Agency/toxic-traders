@@ -4,10 +4,32 @@ import type { iBroker } from '~/types/broker/broker'
 const route = useRoute()
 const brokerId = route.params.id
 // const websitesList = ref<string[]>([])
+const settingsModalOpened = ref(false)
 const serversList = ref<iBroker[]>([])
 const reviewsList = ref<{ rating: string; count: string }[]>([])
+const settingsSearch = ref({
+  id: 'select-search',
+  required: false,
+  name: 'Search broker',
+  type: 'text',
+  placeholder: 'Search broker',
+  isRightButton: true,
+})
 
 const { getCurrentBroker } = useBrokers()
+
+const settingsModalOpen = () => {
+  settingsModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const settingsModalClose = () => {
+  settingsModalOpened.value = false
+}
+
+const settingsOnChange = (val: string) => {
+  console.log(val)
+}
 
 onMounted(async () => {
   const data = await getCurrentBroker(Number(brokerId))
@@ -78,7 +100,13 @@ onMounted(async () => {
               <TheButton tag="button" button-size="medium" variant="outlined">
                 History
               </TheButton>
-              <TheButton tag="button" button-size="medium" variant="fill">
+              <TheButton
+                tag="button"
+                button-size="medium"
+                variant="fill"
+                disabled
+                @click="settingsModalOpen"
+              >
                 Settings
                 <template #start-icon>
                   <IconsSettings />
@@ -89,5 +117,44 @@ onMounted(async () => {
         </div>
       </aside>
     </div>
+    <TheModal
+      :modal-opened="settingsModalOpened"
+      title="Settings"
+      @close="settingsModalClose"
+    >
+      <div class="main-broker__settings">
+        <div class="main-broker__settings-item">
+          <p class="main-broker__settings-title">Transfer</p>
+          <CustomSelect
+            :options="['Broker 1', 'Broker 2', 'Broker 3']"
+            :search-input="settingsSearch"
+            placeholder="Select existing broker"
+            class="main-broker__settings-select"
+            @search="settingsOnChange"
+          />
+        </div>
+        <div class="main-broker__settings-item">
+          <p class="main-broker__settings-title">Delete this broker</p>
+          <TheButton
+            tag="button"
+            variant="danger"
+            button-size="medium"
+            class="main-broker__settings-delete"
+            @click="settingsModalClose"
+          >
+            Delete
+          </TheButton>
+        </div>
+        <TheButton
+          tag="button"
+          variant="close"
+          button-size="medium"
+          class="main-broker__settings-close"
+          @click="settingsModalClose"
+        >
+          Close
+        </TheButton>
+      </div>
+    </TheModal>
   </main>
 </template>

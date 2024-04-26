@@ -82,7 +82,7 @@ onMounted(async () => {
       <div class="category__buttons">
         <TheButton
           tag="button"
-          variant="fill"
+          variant="close"
           button-size="medium"
           @click="categoryModalClose"
         >

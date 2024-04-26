@@ -41,19 +41,6 @@ const accountModalItems = reactive<iAccountModalItem[]>([
     placeholder: 'Account Name',
   },
   {
-    placeholder: 'Type',
-    options: [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5',
-      'Option 6',
-      'Option 7',
-      'Option 8',
-    ],
-  },
-  {
     required: false,
     id: 'account-login',
     name: 'Account login',
@@ -184,7 +171,7 @@ const arr2 = [
       <div class="type-accounts__buttons">
         <TheButton
           tag="button"
-          variant="fill"
+          variant="close"
           button-size="medium"
           @click="accountModalClose"
         >

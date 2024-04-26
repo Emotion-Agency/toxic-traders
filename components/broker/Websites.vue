@@ -118,7 +118,7 @@ onMounted(async () => {
       <div class="websites__buttons">
         <TheButton
           tag="button"
-          variant="fill"
+          variant="close"
           button-size="medium"
           @click="websitesModalClose"
         >

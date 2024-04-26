@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import type { iInput, iSearchInput } from '~/types'
+
 interface iProps {
   options: string[]
   placeholder: string
   title?: string
+  searchInput?: iSearchInput
 }
 
 defineProps<iProps>()
@@ -11,7 +14,7 @@ const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
 const selectedItem = ref('')
 
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select', 'search'])
 
 const toggleList = () => {
   isOpened.value = !isOpened.value
@@ -27,6 +30,10 @@ const outsideClick = event => {
   if (!$el.value.contains(event.target)) {
     isOpened.value = false
   }
+}
+
+const onSearch = (input: iInput) => {
+  emit('search', input.value)
 }
 
 onMounted(() => {
@@ -56,6 +63,23 @@ onUnmounted(() => {
       :class="title && 'custom-select__content--with-title'"
       @click.stop
     >
+      <div v-if="searchInput" class="custom-select__input-wrapper">
+        <TheInput
+          :id="searchInput.id"
+          :required="searchInput.required"
+          :name="searchInput.name"
+          :type="searchInput.type"
+          :placeholder="searchInput.placeholder"
+          :is-right-button="searchInput.isRightButton"
+          class="custom-select__input"
+          @input-value="onSearch"
+        >
+          <template #right-icon>
+            <IconsSearch />
+          </template>
+        </TheInput>
+      </div>
+
       <ul class="custom-select__list">
         <li
           v-if="!options.length"
