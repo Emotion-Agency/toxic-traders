@@ -127,7 +127,7 @@ const reviewsInputData = ref([
 ])
 
 const { getReviews, createReview } = useBrokerReviews()
-const reviewList = ref<iBrokerReviewsItem[]>([])
+const reviewsList = ref<iBrokerReviewsItem[]>([])
 const reviewsModalOpened = ref(false)
 
 const reviewsModalOpen = () => {
@@ -149,11 +149,17 @@ const onInputChange = (e: iInputData) => {
     })
     return item
   })
+
+  console.log(reviewsInputData.value)
 }
 
 onMounted(async () => {
-  const reviewsData = await getReviews(props.brokerId)
-  reviewList.value = reviewsData
+  const { forexpeacearmy, forexratings, trustpilot, wikifx } = await getReviews(
+    props.brokerId
+  )
+  reviewsList.value = [forexpeacearmy, forexratings, trustpilot, wikifx]
+
+  console.log(reviewsList.value)
 })
 </script>
 
@@ -165,38 +171,25 @@ onMounted(async () => {
       @open="reviewsModalOpen"
     >
       <BrokerReviewsItem
-        v-for="(item, idx) in reviewList"
+        v-for="(item, idx) in reviewsList"
         :key="idx"
         :rating="item.rating"
         :reviews-count="item.numberOfReviews ?? 0.0"
         :review-link="item.url"
       >
-        <IconsReviewsForexPeaceArmy />
+        <IconsReviewsForexPeaceArmy
+          v-if="item.serviceName.toLowerCase() === 'forexpeacearmy'"
+        />
+        <IconsReviewsTrustpilot
+          v-if="item.serviceName.toLowerCase() === 'trustpilot'"
+        />
+        <IconsReviewsWikifx
+          v-if="item.serviceName.toLowerCase() === 'wikifx'"
+        />
+        <IconsReviewsFx123
+          v-if="item.serviceName.toLowerCase() === 'forexratings'"
+        />
       </BrokerReviewsItem>
-      <!-- <BrokerReviewsItem
-        :rating="reviewsList[0]?.rating ?? '0.0'"
-        :reviews-count="reviewsList[0]?.count ?? '0.0'"
-      >
-        <IconsReviewsForexPeaceArmy />
-      </BrokerReviewsItem>
-      <BrokerReviewsItem
-        :rating="reviewsList[1]?.rating ?? '0.0'"
-        :reviews-count="reviewsList[1]?.count ?? '0.0'"
-      >
-        <IconsReviewsTrustpilot />
-      </BrokerReviewsItem>
-      <BrokerReviewsItem
-        :rating="reviewsList[2]?.rating ?? '0.0'"
-        :reviews-count="reviewsList[2]?.count ?? '0.0'"
-      >
-        <IconsReviewsWikifx />
-      </BrokerReviewsItem>
-      <BrokerReviewsItem
-        :rating="reviewsList[3]?.rating ?? '0.0'"
-        :reviews-count="reviewsList[3]?.count ?? '0.0'"
-      >
-        <IconsReviewsFx123 />
-      </BrokerReviewsItem> -->
     </TheAccordion>
     <TheModal
       :modal-opened="reviewsModalOpened"

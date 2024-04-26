@@ -3,10 +3,21 @@ export interface iBrokerReviewsItem {
   url: string
   rating: number
   numberOfReviews: number
+  serviceName: string
+}
+
+export interface iBrokerReviews {
+  forexpeacearmy: iBrokerReviewsItem
+  forexratings: iBrokerReviewsItem
+  trustpilot: iBrokerReviewsItem
+  wikifx: iBrokerReviewsItem
 }
 
 export interface iBrokerReviewsData {
   data: {
-    brokerReviews: iBrokerReviewsItem[]
+    forexpeacearmy: iBrokerReviewsItem
+    forexratings: iBrokerReviewsItem
+    trustpilot: iBrokerReviewsItem
+    wikifx: iBrokerReviewsItem
   }
 }

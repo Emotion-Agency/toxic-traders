@@ -8,9 +8,9 @@ export const useBrokerReviews = () => {
 
   const getReviews = async (brokerId: number) => {
     try {
-      const { brokerReviews } = await getBrokerReviews(brokerId)
+      const data = await getBrokerReviews(brokerId)
 
-      return brokerReviews
+      return data
     } catch (error) {
       console.error('Error fetching reviews:', error)
       addToast({
