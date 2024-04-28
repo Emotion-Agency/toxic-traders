@@ -1,16 +1,16 @@
 export interface iBrokerReviewsItem {
-  id: number
-  url: string
-  rating: number
-  numberOfReviews: number
-  serviceName: string
+  id?: number
+  url?: string
+  rating?: number
+  numberOfReviews?: number
+  serviceName?: string
 }
 
 export interface iBrokerReviews {
-  forexpeacearmy: iBrokerReviewsItem
-  forexratings: iBrokerReviewsItem
-  trustpilot: iBrokerReviewsItem
-  wikifx: iBrokerReviewsItem
+  forexpeacearmy?: iBrokerReviewsItem
+  forexratings?: iBrokerReviewsItem
+  trustpilot?: iBrokerReviewsItem
+  wikifx?: iBrokerReviewsItem
 }
 
 export interface iBrokerReviewsData {

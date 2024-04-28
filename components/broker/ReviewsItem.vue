@@ -1,8 +1,8 @@
 <script setup lang="ts">
 interface iProps {
-  rating: number
-  reviewsCount: number
-  reviewLink: string
+  rating?: number
+  reviewsCount?: number
+  reviewLink?: string
 }
 
 const props = defineProps<iProps>()
