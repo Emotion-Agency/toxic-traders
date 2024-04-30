@@ -4,7 +4,7 @@ import type { iDepositMethodsListData } from '~/types/broker/brokerDepositMethod
 export const getBrokerDepositMethodsList = async () => {
   try {
     const { data }: iDepositMethodsListData = await axiosInstance.get(
-      'Broker/BrokerDepositMethodsEnum'
+      'Enum/BrokerDepositMethodsEnum'
     )
 
     return data

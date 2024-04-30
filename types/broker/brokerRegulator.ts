@@ -12,6 +12,6 @@ export interface iRegulatorData {
 
 export interface iRegulatorNamesData {
   data: {
-    regulatorNames: string[]
+    [key: number]: string
   }
 }

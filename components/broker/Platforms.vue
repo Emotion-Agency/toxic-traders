@@ -30,10 +30,10 @@ const removePlatform = async (index: number) => {
 }
 
 onMounted(async () => {
-  const { platforms } = await getBrokerPlatformsList()
+  const data = await getBrokerPlatformsList()
   const platformsData = await getPlatform(props.brokerId)
 
-  platformsFullList.value = removeUnderlines(platforms)
+  platformsFullList.value = removeUnderlines(Object.values(data))
   platformsList.value =
     platformsData?.platforms?.map(item => item.platform) || []
 })

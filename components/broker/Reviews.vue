@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type {
-  iBrokerReviews,
-  iBrokerReviewsItem,
-} from '~/types/broker/brokerReviews'
+import type { iBrokerReviewsItem } from '~/types/broker/brokerReviews'
 
 interface iProps {
   brokerId: number
@@ -12,11 +9,7 @@ const props = defineProps<iProps>()
 
 const { getReviews, createReview } = useBrokerReviews()
 const reviewsModalOpened = ref(false)
-const reviewsList = ref<iBrokerReviews>({})
-const forexPeaceArmy = ref<iBrokerReviewsItem>({})
-const forexRatings = ref<iBrokerReviewsItem>({})
-const trustPilot = ref<iBrokerReviewsItem>({})
-const wikiFx = ref<iBrokerReviewsItem>({})
+const reviewsList = ref<iBrokerReviewsItem[]>([])
 const reviewsInputs = ref([])
 
 const reviewsModalOpen = () => {
@@ -43,140 +36,44 @@ const onInputChange = (e: iInputData) => {
 watch(
   () => reviewsList.value,
   () => {
-    reviewsInputs.value = [
-      {
-        title: trustPilot?.value.serviceName,
-        input: [
-          {
-            required: false,
-            id: 'trustpilot-link',
-            name: 'Link',
-            type: 'text',
-            value: trustPilot?.value.url,
-            placeholder: 'Link',
-          },
-          {
-            required: false,
-            id: 'trustpilot-count',
-            name: 'Reviews count',
-            type: 'number',
-            value: trustPilot?.value.numberOfReviews,
-            placeholder: 'Reviews count',
-          },
-          {
-            required: false,
-            id: 'trustpilot-rating',
-            name: 'Rating',
-            type: 'number',
-            value: trustPilot?.value.rating,
-            placeholder: 'Rating from 0 to 5',
-          },
-        ],
-      },
-      {
-        title: forexPeaceArmy?.value.serviceName,
-        input: [
-          {
-            required: false,
-            id: 'forexpeacearmy-link',
-            name: 'Link',
-            type: 'text',
-            value: forexPeaceArmy?.value.url,
-            placeholder: 'Link',
-          },
-          {
-            required: false,
-            id: 'forexpeacearmy-count',
-            name: 'Reviews count',
-            type: 'number',
-            value: forexPeaceArmy?.value.numberOfReviews,
-            placeholder: 'Reviews count',
-          },
-          {
-            required: false,
-            id: 'forexpeacearmy-rating',
-            name: 'Rating',
-            type: 'number',
-            value: forexPeaceArmy?.value.rating,
-            placeholder: 'Rating from 0 to 5',
-          },
-        ],
-      },
-      {
-        title: wikiFx?.value.serviceName,
-        input: [
-          {
-            required: false,
-            id: 'wikifx-link',
-            name: 'Link',
-            type: 'text',
-            value: wikiFx?.value.url,
-            placeholder: 'Link',
-          },
-          {
-            required: false,
-            id: 'wikifx-count',
-            name: 'Reviews count',
-            type: 'number',
-            value: wikiFx?.value.numberOfReviews,
-            placeholder: 'Reviews count',
-          },
-          {
-            required: false,
-            id: 'wikifx-rating',
-            name: 'Rating',
-            type: 'number',
-            value: wikiFx?.value.rating,
-            placeholder: 'Rating from 0 to 5',
-          },
-        ],
-      },
-      {
-        title: forexRatings?.value.serviceName,
-        input: [
-          {
-            required: false,
-            id: 'fx123-link',
-            name: 'Link',
-            type: 'text',
-            value: forexRatings?.value.url,
-            placeholder: 'Link',
-          },
-          {
-            required: false,
-            id: 'fx123-count',
-            name: 'Reviews count',
-            type: 'number',
-            value: forexRatings?.value.numberOfReviews,
-            placeholder: 'Reviews count',
-          },
-          {
-            required: false,
-            id: 'fx123-rating',
-            name: 'Rating',
-            type: 'number',
-            value: forexRatings?.value.rating,
-            placeholder: 'Rating from 0 to 5',
-          },
-        ],
-      },
-    ]
+    reviewsInputs.value = reviewsList.value.map(item => ({
+      title: item.serviceName,
+      input: [
+        {
+          required: false,
+          id: `${item.serviceName}-link`,
+          name: 'Link',
+          type: 'text',
+          value: item.url,
+          placeholder: 'Link',
+        },
+        {
+          required: false,
+          id: `${item.serviceName}-count`,
+          name: 'Reviews count',
+          type: 'number',
+          value: item.numberOfReviews,
+          placeholder: 'Reviews count',
+        },
+        {
+          required: false,
+          id: `${item.serviceName}-rating`,
+          name: 'Rating',
+          type: 'number',
+          value: item.rating,
+          placeholder: 'Rating from 0 to 5',
+        },
+      ],
+    }))
   }
 )
 
 onMounted(async () => {
-  reviewsList.value = await getReviews(props.brokerId)
-  forexPeaceArmy.value = reviewsList?.value?.forexpeacearmy
-  trustPilot.value = reviewsList?.value?.trustpilot
-  wikiFx.value = reviewsList?.value?.wikifx
-  forexRatings.value = reviewsList?.value?.forexratings
+  const data = await getReviews(props.brokerId)
 
-  console.log(
-    forexPeaceArmy.value,
-    trustPilot.value,
-    wikiFx.value,
-    forexRatings.value
-  )
+  reviewsList.value = Object.values(data).filter(el => typeof el !== 'string')
+
+  console.log(reviewsList.value, reviewsInputs.value)
 })
 </script>
 
@@ -188,32 +85,24 @@ onMounted(async () => {
       @open="reviewsModalOpen"
     >
       <BrokerReviewsItem
-        :rating="forexPeaceArmy?.rating"
-        :reviews-count="forexPeaceArmy?.numberOfReviews"
-        :review-link="forexPeaceArmy?.url"
+        v-for="(item, idx) in reviewsList"
+        :key="idx"
+        :rating="item.rating"
+        :reviews-count="item.numberOfReviews"
+        :review-link="item.url"
       >
-        <IconsReviewsForexPeaceArmy />
-      </BrokerReviewsItem>
-      <BrokerReviewsItem
-        :rating="trustPilot?.rating"
-        :reviews-count="trustPilot?.numberOfReviews"
-        :review-link="trustPilot?.url"
-      >
-        <IconsReviewsTrustpilot />
-      </BrokerReviewsItem>
-      <BrokerReviewsItem
-        :rating="wikiFx?.rating"
-        :reviews-count="wikiFx?.numberOfReviews"
-        :review-link="wikiFx?.url"
-      >
-        <IconsReviewsWikifx />
-      </BrokerReviewsItem>
-      <BrokerReviewsItem
-        :rating="forexRatings?.rating"
-        :reviews-count="forexRatings?.numberOfReviews"
-        :review-link="forexRatings?.url"
-      >
-        <IconsReviewsFx123 />
+        <IconsReviewsForexPeaceArmy
+          v-if="item.serviceName.toLowerCase() === 'forexpeacearmy'"
+        />
+        <IconsReviewsTrustpilot
+          v-if="item.serviceName.toLowerCase() === 'trustpilot'"
+        />
+        <IconsReviewsWikifx
+          v-if="item.serviceName.toLowerCase() === 'wikifx'"
+        />
+        <IconsReviewsFx123
+          v-if="item.serviceName.toLowerCase() === 'forexratings'"
+        />
       </BrokerReviewsItem>
     </TheAccordion>
     <TheModal

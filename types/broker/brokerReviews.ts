@@ -6,13 +6,6 @@ export interface iBrokerReviewsItem {
   serviceName?: string
 }
 
-export interface iBrokerReviews {
-  forexpeacearmy?: iBrokerReviewsItem
-  forexratings?: iBrokerReviewsItem
-  trustpilot?: iBrokerReviewsItem
-  wikifx?: iBrokerReviewsItem
-}
-
 export interface iBrokerReviewsData {
   data: {
     forexpeacearmy: iBrokerReviewsItem

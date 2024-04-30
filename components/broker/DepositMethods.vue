@@ -31,10 +31,12 @@ const removeDeposit = async (index: number) => {
 }
 
 onMounted(async () => {
-  const { depositMethods } = await getBrokerDepositMethodsList()
+  const depositMethodsListRequest = await getBrokerDepositMethodsList()
   const depositData = await getDepositMethods(props.brokerId)
 
-  depositFullList.value = removeUnderlines(depositMethods)
+  depositFullList.value = removeUnderlines(
+    Object.values(depositMethodsListRequest)
+  )
   depositList.value =
     depositData?.depositMethods?.map(item => item.depositMethod) || []
 })

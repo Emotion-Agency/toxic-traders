@@ -10,6 +10,6 @@ export interface iPlatformsData {
 
 export interface iPlatformsListData {
   data: {
-    platforms: string[]
+    [key: number]: string
   }
 }

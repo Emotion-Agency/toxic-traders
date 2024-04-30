@@ -10,6 +10,6 @@ export interface iDepositMethodsData {
 
 export interface iDepositMethodsListData {
   data: {
-    depositMethods: string[]
+    [key: number]: string
   }
 }
