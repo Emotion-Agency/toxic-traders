@@ -8,9 +8,9 @@ export const useBrokerCompanyNames = () => {
 
   const getCompanyNamesById = async (brokerId: number) => {
     try {
-      const { companyNames } = await getBrokerCompanyNamesById(brokerId)
+      const data = await getBrokerCompanyNamesById(brokerId)
 
-      return companyNames
+      return data.companyNames[0]
     } catch (error) {
       console.error('Error fetching company names by ID:', error)
       addToast({

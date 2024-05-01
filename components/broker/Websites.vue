@@ -7,73 +7,38 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const websitesModalOpened = ref(false)
-const websitesInputs = ref([])
-const showAllWebsites = ref(false)
-const visibleWebsites = ref([websitesInputs.value[0]])
-const websiteList = ref<iCompanyNamesItem[]>([])
+const companyNamesList = ref<iCompanyNamesItem[]>([])
+const filteredCompanyNamesList = ref([])
 
 const { getCompanyNamesById } = useBrokerCompanyNames()
 
-const modalInputData = ref({
-  required: false,
-  id: 'websites',
-  name: 'Websites',
-  type: 'text',
-  value: '',
-  placeholder: 'Website',
-})
-
-const websitesModalOpen = () => {
-  websitesModalOpened.value = true
-  document.body.classList.add('modal-open')
+const showMoreServerAddresses = () => {
+  filteredCompanyNamesList.value = companyNamesList.value
 }
 
-const websitesModalClose = () => {
-  websitesModalOpened.value = false
+const showLessServerAddresses = () => {
+  filteredCompanyNamesList.value = companyNamesList.value.slice(0, 1)
 }
-
-const websitesOnChange = () => {
-  console.log('new websites')
-}
-
-const showMoreWebsites = () => {
-  showAllWebsites.value = true
-  visibleWebsites.value = [...websitesInputs.value]
-}
-
-watch(
-  () => websiteList.value,
-  () => {
-    websitesInputs.value = websiteList.value.map(item => ({
-      value: item.website || '',
-      id: item.id.toString(),
-      name: 'websites',
-      type: 'text',
-      required: false,
-      placeholder: 'Enter website',
-    }))
-  }
-)
 
 onMounted(async () => {
-  const data = await getCompanyNamesById(props.brokerId)
+  const companyNamesRequest = await getCompanyNamesById(props.brokerId)
 
-  websiteList.value = data[0].companyNames
+  companyNamesList.value = companyNamesRequest?.companyNames?.filter(
+    item => item.website
+  )
+
+  filteredCompanyNamesList.value = companyNamesList.value
+
+  showLessServerAddresses()
 })
 </script>
 
 <template>
   <div class="websites">
-    <TheAccordion
-      title="Websites"
-      additional-button="Add new"
-      :is-inputs="true"
-      @open="websitesModalOpen"
-    >
+    <TheAccordion title="Websites" :is-inputs="true">
       <div
-        v-for="website in websitesInputs"
-        :key="website.id"
+        v-for="(item, idx) in filteredCompanyNamesList"
+        :key="idx"
         class="websites__item"
       >
         <div class="websites__info-item">
@@ -82,52 +47,29 @@ onMounted(async () => {
             <p class="websites__info-text">Website created date</p>
           </div>
         </div>
-        <TheInput
-          :id="website.id"
-          :required="website.required"
-          :name="website.name"
-          :type="website.type"
-          :placeholder="website.placeholder"
-          :is-right-button="true"
-          @input-value="websitesOnChange"
-        />
-        <button class="websites__remove-btn">
-          <IconsTrash />
-        </button>
+        <div class="websites__text-wrapper">
+          <p class="websites__text">{{ item.website }}</p>
+        </div>
+      </div>
+      <div
+        v-if="!filteredCompanyNamesList.length"
+        class="websites__text-wrapper"
+      >
+        <p class="websites__text">Websites not found</p>
       </div>
       <OptionalButton
-        v-if="!showAllWebsites && websitesInputs.length > 3"
-        @on-click="showMoreWebsites"
+        v-if="
+          companyNamesList.length > 1 &&
+          filteredCompanyNamesList.length !== companyNamesList.length
+        "
+        @on-click="showMoreServerAddresses"
         >Show more</OptionalButton
       >
+      <OptionalButton
+        v-if="filteredCompanyNamesList.length > 1"
+        @on-click="showLessServerAddresses"
+        >Show less</OptionalButton
+      >
     </TheAccordion>
-    <TheModal
-      :modal-opened="websitesModalOpened"
-      title="Add new website"
-      @close="websitesModalClose"
-    >
-      <TheInput
-        :id="modalInputData.id"
-        :required="modalInputData.required"
-        :name="modalInputData.name"
-        :type="modalInputData.type"
-        :placeholder="modalInputData.placeholder"
-        class="websites__modal-input"
-        @input-value="websitesOnChange"
-      />
-      <div class="websites__buttons">
-        <TheButton
-          tag="button"
-          variant="close"
-          button-size="medium"
-          @click="websitesModalClose"
-        >
-          Close
-        </TheButton>
-        <TheButton tag="button" variant="fill" button-size="medium">
-          Add
-        </TheButton>
-      </div>
-    </TheModal>
   </div>
 </template>
