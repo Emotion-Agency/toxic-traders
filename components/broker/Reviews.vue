@@ -33,44 +33,27 @@ const onInputChange = (e: iInputData) => {
   })
 }
 
-const onSave = async () => {
-  for (const item of reviewsInputs.value) {
-    let link, rating, count
-
-    console.log('Service name:', item.serviceName)
-
-    switch (item.serviceName) {
-      case 'trustpilot':
-        link = item['trustpilot-link']
-        rating = item['trustpilot-rating']
-        count = item['trustpilot-count']
-        break
-      case 'forexpeacearmy':
-        link = item['forexpeacearmy-link']
-        rating = item['forexpeacearmy-rating']
-        count = item['forexpeacearmy-count']
-        break
-      case 'wikifx':
-        link = item['wikifx-link']
-        rating = item['wikifx-rating']
-        count = item['wikifx-count']
-        break
-      case 'forexratings':
-        link = item['forexratings-link']
-        rating = item['forexratings-rating']
-        count = item['forexratings-count']
-        break
-      default:
-        console.log('Unknown service name:', item.serviceName)
-        continue
+const onSave = () => {
+  const dataToSave = reviewsInputs.value.map(item => {
+    return {
+      serviceName: item.title,
+      url: item.input.find(el => el.name === 'Link').value,
+      numberOfReviews: item.input.find(el => el.name === 'Reviews count').value,
+      rating: item.input.find(el => el.name === 'Rating').value,
     }
+  })
 
-    console.log('Link:', link)
-    console.log('Rating:', rating)
-    console.log('Count:', count)
+  console.log(reviewsList.value, dataToSave)
 
-    await createReview(props.brokerId, link, rating, count, item.serviceName)
-  }
+  dataToSave.forEach(async item => {
+    await createReview(
+      props.brokerId,
+      item.url,
+      item.rating,
+      item.numberOfReviews,
+      item.serviceName
+    )
+  })
 
   reviewsModalClose()
 }
