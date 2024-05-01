@@ -24,14 +24,16 @@ export const useBrokerReviews = () => {
     brokerId: number,
     url: string,
     rating: number,
-    numberReviews: number
+    numberReviews: number,
+    serviceName: string
   ) => {
     try {
       const data = await createBrokerReview(
         brokerId,
         url,
         rating,
-        numberReviews
+        numberReviews,
+        serviceName
       )
 
       return data

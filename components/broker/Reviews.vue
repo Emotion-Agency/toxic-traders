@@ -33,6 +33,48 @@ const onInputChange = (e: iInputData) => {
   })
 }
 
+const onSave = async () => {
+  for (const item of reviewsInputs.value) {
+    let link, rating, count
+
+    console.log('Service name:', item.serviceName)
+
+    switch (item.serviceName) {
+      case 'trustpilot':
+        link = item['trustpilot-link']
+        rating = item['trustpilot-rating']
+        count = item['trustpilot-count']
+        break
+      case 'forexpeacearmy':
+        link = item['forexpeacearmy-link']
+        rating = item['forexpeacearmy-rating']
+        count = item['forexpeacearmy-count']
+        break
+      case 'wikifx':
+        link = item['wikifx-link']
+        rating = item['wikifx-rating']
+        count = item['wikifx-count']
+        break
+      case 'forexratings':
+        link = item['forexratings-link']
+        rating = item['forexratings-rating']
+        count = item['forexratings-count']
+        break
+      default:
+        console.log('Unknown service name:', item.serviceName)
+        continue
+    }
+
+    console.log('Link:', link)
+    console.log('Rating:', rating)
+    console.log('Count:', count)
+
+    await createReview(props.brokerId, link, rating, count, item.serviceName)
+  }
+
+  reviewsModalClose()
+}
+
 watch(
   () => reviewsList.value,
   () => {
@@ -72,8 +114,6 @@ onMounted(async () => {
   const data = await getReviews(props.brokerId)
 
   reviewsList.value = Object.values(data).filter(el => typeof el !== 'string')
-
-  console.log(reviewsList.value, reviewsInputs.value)
 })
 </script>
 
@@ -135,6 +175,7 @@ onMounted(async () => {
         tag="button"
         variant="fill"
         button-size="medium"
+        @click="onSave"
       >
         Save
       </TheButton>

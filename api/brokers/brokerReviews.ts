@@ -23,7 +23,8 @@ export const createBrokerReview = async (
   brokerId: number,
   url: string,
   rating: number,
-  numberReviews: number
+  numberReviews: number,
+  serviceName: string
 ) => {
   try {
     const { data }: iBrokerReviewsData = await axiosInstance.post(
@@ -35,6 +36,7 @@ export const createBrokerReview = async (
           Url: url,
           Rating: rating,
           NumberOfReviews: numberReviews,
+          ServiceName: serviceName,
         },
       }
     )
