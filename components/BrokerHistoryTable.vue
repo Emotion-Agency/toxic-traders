@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import type { iLogItem } from '~/types/logs'
+import { getBrokerLogs } from '~/api/brokers/getBrokerLogs'
+import type { iBrokerLogItem } from '~/types/broker/brokerLogs'
 
 interface iProps {
-  logs: iLogItem[]
+  brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const headerFields = ['ID', 'Message', 'Timestamp', 'Level']
+const logsList = ref<iBrokerLogItem[]>([])
+
+onMounted(async () => {
+  const { brokerLogs } = await getBrokerLogs(props.brokerId)
+  logsList.value = brokerLogs
+})
 </script>
 
 <template>
@@ -15,7 +22,7 @@ const headerFields = ['ID', 'Message', 'Timestamp', 'Level']
     <div class="table__wrapper">
       <TableHead :header-fields="headerFields" />
       <TableBody>
-        <TableRow v-for="(log, idx) in logs" :key="idx">
+        <TableRow v-for="(log, idx) in logsList" :key="idx">
           <TableCell
             v-for="(item, id, index) in log"
             :key="id"

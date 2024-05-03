@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { getLogs } from '~/api/brokers/getLogs'
 import type { iInput } from '~/types'
 import type { iBroker } from '~/types/broker/broker'
-import type { iLogItem } from '~/types/logs'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
 const router = useRouter()
 const route = useRoute()
 
 const brokersList = ref<iBroker[]>([])
-const logsList = ref<iLogItem[]>([])
 const filteredBrokers = ref<iBroker[]>([])
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
@@ -128,16 +125,11 @@ onMounted(async () => {
     currentPage.value,
     itemsCount.value
   )
-  const logsData = await getLogs(currentPage.value)
 
   isLoading.value = false
-
   brokersList.value = brokers
   filteredBrokers.value = brokersList.value
   totalCountPages.value = totalCount
-  logsList.value = logsData.logs
-
-  // console.log(data, brokersList.value, brokersHeadingFields.value)
 })
 </script>
 
@@ -228,8 +220,7 @@ onMounted(async () => {
       title="History"
       @close="closeHistory"
     >
-      <TheHistory :logs="logsList" />
+      <TheHistory />
     </SlidingModal>
   </main>
 </template>
-~/types/broker/brokers ~/api/brokers/getLogs

@@ -1,12 +1,8 @@
 <script lang="ts" setup>
-import type { iBroker } from '~/types/broker/broker'
-
 const route = useRoute()
 const brokerId = route.params.id
-// const websitesList = ref<string[]>([])
 const settingsModalOpened = ref(false)
-const serversList = ref<iBroker[]>([])
-const reviewsList = ref<{ rating: string; count: string }[]>([])
+const historyModalOpened = ref(false)
 const settingsSearch = ref({
   id: 'select-search',
   required: false,
@@ -15,8 +11,6 @@ const settingsSearch = ref({
   placeholder: 'Search broker',
   isRightButton: true,
 })
-
-const { getCurrentBroker } = useBrokers()
 
 const settingsModalOpen = () => {
   settingsModalOpened.value = true
@@ -31,36 +25,14 @@ const settingsOnChange = (val: string) => {
   console.log(val)
 }
 
-onMounted(async () => {
-  const data = await getCurrentBroker(Number(brokerId))
+const historyModalOpen = () => {
+  historyModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
 
-  serversList.value = [
-    {
-      brokerServersMT4ServerNames: data?.brokerServersMT4ServerNames,
-      brokerServersMT5ServerNames: data?.brokerServersMT5ServerNames,
-    },
-  ]
-
-  // websitesList.value = data?.website?.split(',')
-  // reviewsList.value = [
-  //   {
-  //     rating: data?.brokerReviewsForexPeaceArmyRating,
-  //     count: data?.brokerReviewsForexPeaceArmyReviewsCount,
-  //   },
-  //   {
-  //     rating: data?.brokerReviewsFx123Rating,
-  //     count: data?.brokerReviewsFx123ReviewsCount,
-  //   },
-  //   {
-  //     rating: data?.brokerReviewsTrustPilotRating,
-  //     count: data?.brokerReviewsTrustPilotReviewsCount,
-  //   },
-  //   {
-  //     rating: data?.brokerReviewsWikifxRating,
-  //     count: data?.brokerReviewsWikifxReviewsCount,
-  //   },
-  // ]
-})
+const historyModalClose = () => {
+  historyModalOpened.value = false
+}
 </script>
 
 <template>
@@ -97,7 +69,12 @@ onMounted(async () => {
             <BrokerRestrictedCountries :broker-id="Number(brokerId)" />
             <BrokerDepositMethods :broker-id="Number(brokerId)" />
             <div class="broker-aside__btn-wrapper">
-              <TheButton tag="button" button-size="medium" variant="outlined">
+              <TheButton
+                tag="button"
+                button-size="medium"
+                variant="outlined"
+                @click="historyModalOpen"
+              >
                 History
               </TheButton>
               <TheButton
@@ -117,6 +94,14 @@ onMounted(async () => {
         </div>
       </aside>
     </div>
+    <SlidingModal
+      :modal-opened="historyModalOpened"
+      title="History"
+      @close="historyModalClose"
+    >
+      <BrokerHistoryTable :broker-id="Number(brokerId)" />
+    </SlidingModal>
+
     <TheModal
       :modal-opened="settingsModalOpened"
       title="Settings"

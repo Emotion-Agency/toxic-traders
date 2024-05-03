@@ -5,12 +5,24 @@ interface iProps {
   brokerId: number
 }
 
+interface iReviewsInput {
+  title?: string
+  input?: {
+    required?: boolean
+    id?: string
+    name?: string
+    type?: string
+    value?: string
+    placeholder?: string
+  }[]
+}
+
 const props = defineProps<iProps>()
 
-const { getReviews, createReview } = useBrokerReviews()
+const { getReviews, updateReview } = useBrokerReviews()
 const reviewsModalOpened = ref(false)
 const reviewsList = ref<iBrokerReviewsItem[]>([])
-const reviewsInputs = ref([])
+const reviewsInputs = ref<iReviewsInput[]>([])
 
 const reviewsModalOpen = () => {
   reviewsModalOpened.value = true
@@ -46,12 +58,12 @@ const onSave = () => {
   console.log(reviewsList.value, dataToSave)
 
   dataToSave.forEach(async item => {
-    await createReview(
+    await updateReview(
       props.brokerId,
+      item.serviceName,
       item.url,
       item.rating,
-      item.numberOfReviews,
-      item.serviceName
+      item.numberOfReviews
     )
   })
 
@@ -77,7 +89,7 @@ watch(
           id: `${item.serviceName}-count`,
           name: 'Reviews count',
           type: 'number',
-          value: item.numberOfReviews,
+          value: item.numberOfReviews.toString(),
           placeholder: 'Reviews count',
         },
         {
@@ -85,7 +97,7 @@ watch(
           id: `${item.serviceName}-rating`,
           name: 'Rating',
           type: 'number',
-          value: item.rating,
+          value: item.rating.toString(),
           placeholder: 'Rating from 0 to 5',
         },
       ],
@@ -97,6 +109,8 @@ onMounted(async () => {
   const data = await getReviews(props.brokerId)
 
   reviewsList.value = Object.values(data).filter(el => typeof el !== 'string')
+
+  console.log(reviewsList.value)
 })
 </script>
 

@@ -1,14 +1,19 @@
 import axiosInstance from '../axiosInstance'
 import type { iLogsData } from '~/types/logs'
 
-export const getLogs = async (offset: number) => {
+export const getLogs = async (
+  offset: number,
+  count: number,
+  sortBy: string,
+  sortOrder: number
+) => {
   try {
     const { data }: iLogsData = await axiosInstance.get('Log', {
       params: {
         offset,
-        count: 25,
-        sortOrder: 1,
-        sortBy: 'companyNames',
+        count,
+        sortBy,
+        sortOrder,
       },
     })
 

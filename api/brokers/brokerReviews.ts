@@ -19,6 +19,35 @@ export const getBrokerReviews = async (brokerId: number) => {
   }
 }
 
+export const updateBrokerReview = async (
+  brokerReviewId: number,
+  serviceName: string,
+  url: string,
+  rating: number,
+  numberReviews: number
+) => {
+  try {
+    const { data }: iBrokerReviewsData = await axiosInstance.put(
+      `Broker/Reviews`,
+      null,
+      {
+        params: {
+          BrokerReviewId: brokerReviewId,
+          ServiceName: serviceName,
+          Url: url,
+          Rating: rating,
+          NumberOfReviews: numberReviews,
+        },
+      }
+    )
+
+    return data
+  } catch (e) {
+    console.error(e.message)
+    throw e
+  }
+}
+
 export const createBrokerReview = async (
   brokerId: number,
   url: string,

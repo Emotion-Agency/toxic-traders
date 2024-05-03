@@ -1,14 +1,13 @@
-export interface iLogItem {
+export interface iBrokerLogItem {
   id?: number
   level?: string
   message?: string
   timestamp?: string
 }
 
-export interface iLogsData {
+export interface iBrokerLogsData {
   data: {
-    logs: iLogItem[]
-    totalCount: number
+    brokerLogs: iBrokerLogItem[]
     message: string
   }
 }
