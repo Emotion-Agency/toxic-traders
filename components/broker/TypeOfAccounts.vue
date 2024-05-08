@@ -5,12 +5,20 @@ export interface iAccountModalItem {
   name?: string
   type?: string
   value?: string
-  placeholder?: string
+  placeholder: string
   disabled?: boolean
   isLeftButton?: boolean
   isRightButton?: boolean
   options?: string[]
 }
+
+interface iProps {
+  brokerId: number
+}
+
+const props = defineProps<iProps>()
+
+const { getAllBrokerServers } = useBrokerServer()
 
 const accountModalOpened = ref(false)
 const accountList = ref([
@@ -88,37 +96,11 @@ const accountModalClose = () => {
   accountModalOpened.value = false
 }
 
-const arr1 = [
-  {
-    serverType: 0,
-  },
-  {
-    serverType: 0,
-  },
-  {
-    serverType: 0,
-  },
-  {
-    serverType: 0,
-  },
-]
+onMounted(async () => {
+  const { brokerServers } = await getAllBrokerServers(props.brokerId)
 
-const arr2 = [
-  [
-    {
-      serverType: 0,
-    },
-    {
-      serverType: 0,
-    },
-    {
-      serverType: 0,
-    },
-    {
-      serverType: 0,
-    },
-  ],
-]
+  console.log(brokerServers)
+})
 </script>
 
 <template>

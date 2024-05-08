@@ -9,11 +9,28 @@ interface iProps {
   isModal?: boolean
 }
 
-withDefaults(defineProps<iProps>(), {
+const props = withDefaults(defineProps<iProps>(), {
   link: null,
 })
 
+const sortOrder = ref<1 | 2 | null>(null)
 const emit = defineEmits(['sort', 'open'])
+
+const onSort = () => {
+  if (sortOrder.value === null) {
+    sortOrder.value = 1
+  }
+
+  if (sortOrder.value === 1) {
+    sortOrder.value = 2
+  }
+
+  if (sortOrder.value === 2) {
+    sortOrder.value = null
+  }
+
+  emit('sort', props.item, sortOrder.value)
+}
 </script>
 
 <template>
@@ -26,7 +43,7 @@ const emit = defineEmits(['sort', 'open'])
       <span> {{ link!.text }} </span>
       <IconsLinkArrow />
     </NuxtLink>
-    <button v-else-if="isSort" class="table-cell__btn" @click="emit('sort')">
+    <button v-else-if="isSort" class="table-cell__btn" @click="onSort">
       {{ item }}
       <IconsDownUpArrow />
     </button>

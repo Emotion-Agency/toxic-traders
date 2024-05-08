@@ -36,29 +36,3 @@ export const getBrokerServerById = async (serverId: number) => {
     throw e
   }
 }
-
-export const createBrokerServerAccount = async (
-  accountType: string,
-  login: string,
-  password: string,
-  brokerServerId: number
-) => {
-  try {
-    const { data }: iBrokerServerData = await axiosInstance.post(
-      `BrokerServerAccount`,
-      {
-        params: {
-          AccountType: accountType,
-          Login: login,
-          Password: password,
-          BrokerServerId: brokerServerId,
-        },
-      }
-    )
-
-    return data
-  } catch (e) {
-    console.error(e.message)
-    throw e
-  }
-}

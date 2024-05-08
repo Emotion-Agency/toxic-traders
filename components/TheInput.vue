@@ -13,6 +13,8 @@ interface iProps {
   isLeftButton?: boolean
   isRightButton?: boolean
   value?: string
+  min?: number
+  max?: number
 }
 
 const props = defineProps<iProps>()
@@ -82,8 +84,8 @@ defineExpose({
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
-        min="1"
-        max="100"
+        :min="min"
+        :max="max"
         @focus="onFocus"
         @blur="onBlur"
         @input="onInput"

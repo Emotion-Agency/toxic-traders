@@ -17,5 +17,6 @@ onMounted(async () => {
 <template>
   <div class="history">
     <HistoryTable v-if="logs?.length" :logs="logs" />
+    <!-- <ThePagination/> -->
   </div>
 </template>

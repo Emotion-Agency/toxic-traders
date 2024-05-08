@@ -1,9 +1,9 @@
 export interface iBrokerReviewsItem {
-  id?: number
-  url?: string
-  rating?: number
-  numberOfReviews?: number
-  serviceName?: string
+  id: number
+  url: string
+  rating: number
+  numberOfReviews: number
+  serviceName: string
 }
 
 export interface iBrokerReviewsData {

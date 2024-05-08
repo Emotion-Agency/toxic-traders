@@ -8,12 +8,14 @@ interface iProps {
 interface iReviewsInput {
   title?: string
   input?: {
-    required?: boolean
-    id?: string
-    name?: string
-    type?: string
-    value?: string
-    placeholder?: string
+    required: boolean
+    id: string
+    name: string
+    type: string
+    value: string
+    placeholder: string
+    min?: number
+    max?: number
   }[]
 }
 
@@ -50,22 +52,24 @@ const onSave = () => {
     return {
       serviceName: item.title,
       url: item.input.find(el => el.name === 'Link').value,
-      numberOfReviews: item.input.find(el => el.name === 'Reviews count').value,
-      rating: item.input.find(el => el.name === 'Rating').value,
+      numberOfReviews: +item.input.find(el => el.name === 'Reviews count')
+        .value,
+      rating: +item.input.find(el => el.name === 'Rating').value,
+      id: reviewsList.value.find(el => el.serviceName === item.title)?.id,
     }
   })
 
-  console.log(reviewsList.value, dataToSave)
-
   dataToSave.forEach(async item => {
     await updateReview(
-      props.brokerId,
+      item.id,
       item.serviceName,
       item.url,
       item.rating,
       item.numberOfReviews
     )
   })
+
+  reviewsList.value = dataToSave
 
   reviewsModalClose()
 }
@@ -99,6 +103,8 @@ watch(
           type: 'number',
           value: item.rating.toString(),
           placeholder: 'Rating from 0 to 5',
+          min: 0,
+          max: 5,
         },
       ],
     }))
@@ -109,8 +115,6 @@ onMounted(async () => {
   const data = await getReviews(props.brokerId)
 
   reviewsList.value = Object.values(data).filter(el => typeof el !== 'string')
-
-  console.log(reviewsList.value)
 })
 </script>
 
@@ -164,6 +168,8 @@ onMounted(async () => {
           :type="input.type"
           :placeholder="input.placeholder"
           :value="input.value.toString()"
+          :min="input.min"
+          :max="input.max"
           @input-value="onInputChange"
         />
       </div>

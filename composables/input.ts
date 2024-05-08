@@ -1,3 +1,4 @@
+import { clamp } from '@emotionagency/utils'
 import validator from '~/utils/Validation'
 
 export interface iInputData {
@@ -94,6 +95,14 @@ export const useInput = (emit, props) => {
 
   const onInput = () => {
     error.value = validationResult().includes(true)
+
+    if (
+      props.type === 'number' &&
+      typeof props.min === 'number' &&
+      typeof props.max === 'number'
+    ) {
+      inputValue.value = clamp(+inputValue.value, props.min, props.max)
+    }
 
     emit('inputValue', {
       id: props.id,
