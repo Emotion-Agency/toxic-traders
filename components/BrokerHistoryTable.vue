@@ -18,19 +18,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="table">
-    <div class="table__wrapper">
-      <TableHead :header-fields="headerFields" />
-      <TableBody>
-        <TableRow v-for="(log, idx) in logsList" :key="idx">
-          <TableCell
-            v-for="(item, id, index) in log"
-            :key="id"
-            :item="item"
-            :class="`table-cell--${index}`"
-          />
-        </TableRow>
-      </TableBody>
-    </div>
-  </div>
+  <Table>
+    <TableHead :header-fields="headerFields" />
+    <TableBody>
+      <TableRow v-for="(log, idx) in logsList" :key="idx">
+        <TableCell
+          v-for="(item, id, index) in log"
+          :key="id"
+          :item="item"
+          :class="`table-cell--${index}`"
+        />
+      </TableRow>
+    </TableBody>
+  </Table>
 </template>
