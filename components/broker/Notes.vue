@@ -7,7 +7,7 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const { getNotes, updateNotes } = useBrokerNotes()
+const { getNotes, updateNotes, deleteNotes } = useBrokerNotes()
 const brokerNotesValue = ref('')
 
 const notesInput = ref({
@@ -20,46 +20,36 @@ const notesInput = ref({
 })
 
 const notesOnChange = (val: iInput) => {
-  brokerNotesValue.value = val.value
-  console.log(val.value, brokerNotesValue.value)
+  brokerNotesValue.value = val?.value
 }
 
-const onClickEnter = async () => {
+const onBlur = async () => {
   await updateNotes(props.brokerId, brokerNotesValue.value)
-  console.log('Notes updated')
+
+  if (brokerNotesValue?.value?.length === 0) {
+    await deleteNotes(props.brokerId)
+  }
 }
 
 onMounted(async () => {
-  const data = await getNotes(props.brokerId)
-  brokerNotesValue.value = data?.brokerNotes || ''
-})
+  const { brokerNotes } = await getNotes(props.brokerId)
 
-// const onClickEnter = () => {
-//     if (props.type === 'text' || props.type === 'textarea') {
-//       if (inputValue.value.trim() !== '') {
-//         emit('inputValue', {
-//           id: props.id,
-//           value: inputValue.value,
-//           error: error.value,
-//         })
-//       }
-//     }
-//   }
+  brokerNotesValue.value = brokerNotes || ''
+})
 </script>
 
 <template>
-  <form class="notes" novalidate @keyup.enter.prevent="onClickEnter">
-    <TheAccordion title="Notes" :is-inputs="true">
-      <TheInput
-        :id="notesInput?.id"
-        :required="notesInput?.required"
-        :name="notesInput?.name"
-        :type="notesInput?.type"
-        :placeholder="notesInput?.placeholder"
-        :value="notesInput?.value"
-        class="notes__input"
-        @input-value="notesOnChange"
-      />
-    </TheAccordion>
-  </form>
+  <TheAccordion title="Notes" :is-inputs="true">
+    <TheInput
+      :id="notesInput?.id"
+      :required="notesInput?.required"
+      :name="notesInput?.name"
+      :type="notesInput?.type"
+      :placeholder="notesInput?.placeholder"
+      :value="notesInput?.value"
+      class="notes__input"
+      @input-value="notesOnChange"
+      @input-blur="onBlur"
+    />
+  </TheAccordion>
 </template>
