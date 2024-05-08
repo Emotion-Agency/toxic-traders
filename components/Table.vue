@@ -1,4 +1,12 @@
 <script lang="ts" setup>
+import { resize } from '@emotionagency/utils'
+
+interface iProps {
+  withLog?: boolean
+}
+
+const props = defineProps<iProps>()
+
 const $table = ref<HTMLElement | null>(null)
 const isFullWidth = ref(false)
 const observer = ref<MutationObserver>(null)
@@ -12,6 +20,10 @@ const detectTableWidth = () => {
   const bodyWidth = $tableWrapper.scrollWidth
 
   isFullWidth.value = bodyWidth <= containerWidth
+
+  if (props.withLog) {
+    console.log('containerWidth:', containerWidth, 'bodyWidth:', bodyWidth)
+  }
 }
 
 onMounted(() => {
@@ -21,17 +33,17 @@ onMounted(() => {
     subtree: true,
   }
 
-  const callback = () => {
-    detectTableWidth()
-  }
+  resize.on(detectTableWidth)
 
-  observer.value = new MutationObserver(callback)
+  observer.value = new MutationObserver(detectTableWidth)
 
   observer.value.observe($table.value, config)
 })
 
 onBeforeUnmount(() => {
   observer.value?.disconnect()
+
+  resize.off(detectTableWidth)
 })
 </script>
 

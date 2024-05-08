@@ -18,7 +18,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="$scrollbar" class="scrollbar" :class="`scrollbar--${axis}`">
+  <div
+    ref="$scrollbar"
+    class="scrollbar"
+    :class="`scrollbar--${axis}`"
+    :style="{ display: 'none' }"
+  >
     <div ref="$thumb" class="scrollbar__thumb"></div>
   </div>
 </template>
