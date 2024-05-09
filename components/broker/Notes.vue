@@ -24,17 +24,18 @@ const notesOnChange = (val: iInput) => {
 }
 
 const onBlur = async () => {
-  await updateNotes(props.brokerId, brokerNotesValue.value)
-
   if (brokerNotesValue?.value?.length === 0) {
     await deleteNotes(props.brokerId)
+    return
   }
+
+  await updateNotes(props.brokerId, brokerNotesValue.value)
 }
 
 onMounted(async () => {
-  const { brokerNotes } = await getNotes(props.brokerId)
+  const data = await getNotes(props.brokerId)
 
-  brokerNotesValue.value = brokerNotes || ''
+  brokerNotesValue.value = data?.brokerNotes || ''
 })
 </script>
 

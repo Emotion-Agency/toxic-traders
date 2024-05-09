@@ -11,8 +11,10 @@ export const getBrokerNotes = async (brokerId: number) => {
 
     return data
   } catch (e) {
-    console.error(e.message)
-    throw e
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
   }
 }
 
