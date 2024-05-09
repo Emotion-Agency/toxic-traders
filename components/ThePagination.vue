@@ -19,16 +19,6 @@ const emit = defineEmits([
   'onBlurValue',
 ])
 
-const inputItem = {
-  id: 'navigation-number',
-  name: 'Navigation Number',
-  type: 'number',
-  value: props.inputValue,
-  disabled: false,
-  isLeftButton: false,
-  isRightButton: false,
-}
-
 const onChange = (input: iInput) => {
   emit('onChangeValue', input)
 }
@@ -42,7 +32,19 @@ const onBlur = (input: iInput) => {
 }
 
 const computedTotalPages = computed(() => {
-  return Math.floor(props.totalPages / props.itemsCount)
+  return Math.ceil(props.totalPages / props.itemsCount)
+})
+
+const inputItem = ref({
+  id: 'navigation-number',
+  name: 'Navigation Number',
+  type: 'number',
+  value: '',
+  disabled: false,
+  isLeftButton: false,
+  isRightButton: false,
+  min: 1,
+  max: computedTotalPages.value,
 })
 </script>
 
@@ -65,8 +67,10 @@ const computedTotalPages = computed(() => {
           :placeholder="currentPage?.toString()"
           :is-left-button="inputItem.isLeftButton"
           :is-right-button="inputItem.isRightButton"
-          :value="inputItem.value"
+          :value="currentPage?.toString()"
           class="pagination__input"
+          :min="inputItem.min"
+          :max="inputItem.max"
           @input-value="onChange"
           @input-blur="onBlur"
         />

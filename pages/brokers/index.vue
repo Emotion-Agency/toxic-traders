@@ -107,7 +107,20 @@ const onBlur = (input: iInput) => {
 }
 
 watch([currentPage, itemsCount], async () => {
-  const { brokers } = await getAllBrokers(currentPage.value, itemsCount.value)
+  let offset = 1
+
+  if (currentPage.value > 1) {
+    offset = currentPage.value * itemsCount.value
+  }
+
+  if (offset > totalCountPages.value) {
+    offset = totalCountPages.value - 1
+  }
+
+  console.log(offset, totalCountPages.value)
+
+  const { brokers } = await getAllBrokers(offset, itemsCount.value)
+
   brokersList.value = brokers
 
   router.push({
