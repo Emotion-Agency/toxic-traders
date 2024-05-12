@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { iBrokerServer } from '~/types/broker/brokerServer'
+
 export interface iAccountModalItem {
   required?: boolean
   id?: string
@@ -21,23 +23,7 @@ const props = defineProps<iProps>()
 const { getAllBrokerServers } = useBrokerServer()
 
 const accountModalOpened = ref(false)
-const accountList = ref([
-  {
-    title: 'MT4 Standrart',
-  },
-  {
-    title: 'MT4 ECN',
-  },
-  {
-    title: 'MT4 ECN',
-  },
-  {
-    title: 'MT4 ECN',
-  },
-  {
-    title: 'MT4 ECN',
-  },
-])
+const accountList = ref<iBrokerServer[]>([])
 
 const accountModalItems = reactive<iAccountModalItem[]>([
   {
@@ -99,13 +85,14 @@ const accountModalClose = () => {
 onMounted(async () => {
   const { brokerServers } = await getAllBrokerServers(props.brokerId)
 
+  accountList.value = brokerServers
   console.log(brokerServers)
 })
 </script>
 
 <template>
   <div class="type-accounts">
-    <ul class="type-accounts__list">
+    <div class="type-accounts__list">
       <BrokerTypeOfAccountsItem
         title="Add new"
         :is-new-account="true"
@@ -115,10 +102,10 @@ onMounted(async () => {
         v-for="(account, idx) in accountList"
         :id="idx"
         :key="idx"
-        :title="account.title"
+        :title="account.serverName"
         class="type-accounts__item"
       />
-    </ul>
+    </div>
     <TheModal
       :modal-opened="accountModalOpened"
       title="Add new Account"

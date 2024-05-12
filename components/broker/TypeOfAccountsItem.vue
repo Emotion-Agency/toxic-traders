@@ -33,27 +33,36 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <li
+  <div
     class="type-accounts-item"
     :class="isNewAccount && 'type-accounts-item--new'"
   >
-    <button
-      v-if="isNewAccount"
-      class="type-accounts-item__content"
-      @click="emit('addNewAccount')"
-    >
-      <p class="type-accounts-item__title">{{ title }}</p>
+    <div v-if="isNewAccount" class="type-accounts-item__wrapper">
+      <button
+        class="type-accounts-item__content"
+        @click="emit('addNewAccount')"
+      >
+        <p class="type-accounts-item__title">{{ title }}</p>
 
-      <IconsPlus />
-    </button>
-    <div v-else class="type-accounts-item__content">
-      <button class="type-accounts-item__btn" @click="toggleMenu" @click.stop>
-        <span />
-        <span />
-        <span />
+        <IconsPlus />
       </button>
-      <p class="type-accounts-item__title">{{ title }}</p>
     </div>
+
+    <NuxtLink v-else to="/" class="type-accounts-item__wrapper">
+      <div class="type-accounts-item__content">
+        <button
+          class="type-accounts-item__btn"
+          @click.prevent="toggleMenu"
+          @click.stop
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <p class="type-accounts-item__title">{{ title }}</p>
+      </div>
+    </NuxtLink>
+
     <div
       ref="$el"
       class="type-accounts-item__menu"
@@ -71,5 +80,5 @@ onUnmounted(() => {
         </button>
       </div>
     </div>
-  </li>
+  </div>
 </template>

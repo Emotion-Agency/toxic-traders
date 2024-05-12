@@ -1,14 +1,11 @@
 .type-accounts-item {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 104px;
   width: 100%;
   max-width: 100%;
   border-radius: 12px;
-  background-color: var(--primary-default);
   padding: 0 10px;
+  background-color: var(--primary-default);
 
   &--new {
     padding: 0;
@@ -39,6 +36,15 @@
       }
     }
   }
+}
+
+.type-accounts-item__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
 }
 .type-accounts-item__btn {
   position: absolute;
