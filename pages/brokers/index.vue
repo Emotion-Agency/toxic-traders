@@ -93,17 +93,11 @@ const onChange = (input: iInput) => {
 
   if (Number(inputPage) > computedTotalPages.value) {
     searchValue.value = computedTotalPages.value.toString()
-    console.log('maxPage')
   }
 }
 
 const onBlur = (input: iInput) => {
   currentPage.value = Number(input.value)
-
-  // if (input.value > computedTotalPages.value) {
-  //   input.value = computedTotalPages.value.toString()
-  //   console.log('max count')
-  // }
 }
 
 watch([currentPage, itemsCount], async () => {
@@ -207,6 +201,8 @@ onMounted(async () => {
             :options="['25', '50', '100']"
             :items-count="itemsCount"
             :input-value="searchValue"
+            input-id="brokers-navigation"
+            input-name="Brokers navigation"
             @next-click="nextPageClick"
             @prev-click="prevPageClick"
             @selected-item="selectItem"

@@ -2,6 +2,8 @@
 import type { iInput } from '~/types'
 
 interface iProps {
+  inputId: string
+  inputName: string
   totalPages: number
   currentPage: number
   options: string[]
@@ -36,8 +38,8 @@ const computedTotalPages = computed(() => {
 })
 
 const inputItem = ref({
-  id: 'navigation-number',
-  name: 'Navigation Number',
+  id: props.inputId,
+  name: props.inputName,
   type: 'number',
   value: '',
   disabled: false,
