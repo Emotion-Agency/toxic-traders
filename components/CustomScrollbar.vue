@@ -10,11 +10,9 @@ withDefaults(defineProps<iProps>(), {
 const $scrollbar = ref<HTMLElement | null>(null)
 const $thumb = ref<HTMLElement | null>(null)
 
-onMounted(() => {
-  const $parent = $scrollbar.value.parentElement as HTMLElement
-
-  console.log($parent)
-})
+// onMounted(() => {
+//   const $parent = $scrollbar.value.parentElement as HTMLElement
+// })
 </script>
 
 <template>

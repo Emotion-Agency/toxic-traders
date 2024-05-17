@@ -5,6 +5,7 @@ export interface iBrokerServerDataItem {
 }
 
 export interface iBrokerServer {
+  id: number
   serverName: string
   clusterName: string
   serverType: number

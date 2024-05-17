@@ -22,10 +22,11 @@ const props = defineProps<iProps>()
 
 const { getAllBrokerServers } = useBrokerServer()
 
-const accountModalOpened = ref(false)
+const newAccountModalOpened = ref(false)
+
 const accountList = ref<iBrokerServer[]>([])
 
-const accountModalItems = reactive<iAccountModalItem[]>([
+const newAccountModalItems = reactive<iAccountModalItem[]>([
   {
     required: false,
     id: 'account-name',
@@ -73,13 +74,13 @@ const getSelectedItem = (item: string) => {
   console.log(item)
 }
 
-const accountModalOpen = () => {
-  accountModalOpened.value = true
+const newAccountModalOpen = () => {
+  newAccountModalOpened.value = true
   document.body.classList.add('modal-open')
 }
 
-const accountModalClose = () => {
-  accountModalOpened.value = false
+const newAccountModalClose = () => {
+  newAccountModalOpened.value = false
 }
 
 onMounted(async () => {
@@ -96,24 +97,24 @@ onMounted(async () => {
       <BrokerTypeOfAccountsItem
         title="Add new"
         :is-new-account="true"
-        @add-new-account="accountModalOpen"
+        @add-new-account="newAccountModalOpen"
       />
       <BrokerTypeOfAccountsItem
         v-for="(account, idx) in accountList"
-        :id="idx"
         :key="idx"
+        :account-id="account.id"
         :title="account.serverName"
         class="type-accounts__item"
       />
     </div>
     <TheModal
-      :modal-opened="accountModalOpened"
+      :modal-opened="newAccountModalOpened"
       title="Add new Account"
-      @close="accountModalClose"
+      @close="newAccountModalClose"
     >
       <div class="type-accounts__modal-list">
         <div
-          v-for="(input, idx) in accountModalItems"
+          v-for="(input, idx) in newAccountModalItems"
           :key="idx"
           class="type-accounts__modal-item"
         >
@@ -142,7 +143,7 @@ onMounted(async () => {
           tag="button"
           variant="close"
           button-size="medium"
-          @click="accountModalClose"
+          @click="newAccountModalClose"
         >
           Close
         </TheButton>

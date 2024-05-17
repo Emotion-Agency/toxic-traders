@@ -3,13 +3,10 @@ import { getLogs } from '~/api/logs/getLogs'
 import type { iInput } from '~/types'
 import type { iLogItem } from '~/types/logs'
 
-const router = useRouter()
-const route = useRoute()
-
 const logsList = ref<iLogItem[]>([])
 const currentPage = ref(1)
 const totalCountPages = ref(0)
-const itemsCount = ref(route.query.count ? Number(route.query.count) : 10)
+const itemsCount = ref(25)
 const searchValue = ref<string>('1')
 
 const computedTotalPages = computed(() => {
@@ -60,13 +57,6 @@ watch([currentPage, itemsCount], async () => {
   const { logs } = await getLogs(offset, itemsCount.value, 'message', 1)
 
   logsList.value = logs
-
-  router.push({
-    query: {
-      page: currentPage.value,
-      count: itemsCount.value,
-    },
-  })
 })
 
 onMounted(async () => {

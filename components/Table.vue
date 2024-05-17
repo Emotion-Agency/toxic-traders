@@ -21,9 +21,9 @@ const detectTableWidth = () => {
 
   isFullWidth.value = bodyWidth <= containerWidth
 
-  if (props.withLog) {
-    console.log('containerWidth:', containerWidth, 'bodyWidth:', bodyWidth)
-  }
+  // if (props.withLog) {
+  //   console.log('containerWidth:', containerWidth, 'bodyWidth:', bodyWidth)
+  // }
 }
 
 onMounted(() => {

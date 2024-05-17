@@ -112,6 +112,7 @@
   width: 100%;
   height: 100%;
 }
+
 .type-accounts-item__menu-btn {
   display: flex;
   align-items: center;
@@ -126,4 +127,28 @@
   &:last-child {
     color: var(--status-danger);
   }
+}
+
+.type-accounts-item__modal-wrapper {
+  padding-top: 16px;
+}
+
+.type-accounts-item__modal-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.type-accounts-item__delete-text {
+  @include text-body;
+  color: var(--secondary-default);
+}
+
+.type-accounts-item__modal-btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 8px;
+  margin-top: 32px;
+  width: 100%;
 }
