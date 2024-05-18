@@ -42,7 +42,7 @@ const editAccountModalItems = reactive<iAccountModalItem[]>([
     required: false,
     id: 'account-password',
     name: 'Account password',
-    type: 'text',
+    type: 'password',
     value: '',
     placeholder: 'Password',
   },

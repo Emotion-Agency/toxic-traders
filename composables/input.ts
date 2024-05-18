@@ -40,7 +40,7 @@ export const useInput = (emit, props) => {
       })
     }
 
-    if (props.type === 'text' || props.type === 'textarea') {
+    if (props.type !== 'number') {
       inputBlur.value = false
       emit('inputBlur', {
         id: props.id,
@@ -63,7 +63,7 @@ export const useInput = (emit, props) => {
       }
     }
 
-    if (props.type === 'text' || props.type === 'textarea') {
+    if (props.type !== 'number') {
       if (inputValue.value.trim() !== '') {
         // onFocus()
         // $input.value.focus()

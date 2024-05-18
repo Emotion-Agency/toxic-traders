@@ -53,8 +53,26 @@ defineExpose({
       >{{ title }} <span v-if="required === true">*</span>
     </span>
     <div class="input__wrapper">
+      <input
+        v-if="type === 'number'"
+        :id="id"
+        ref="$input"
+        v-model="inputValue"
+        class="input__type"
+        :class="error && 'input__type--error'"
+        :type="type"
+        :name="name"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :min="min"
+        :max="max"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+      />
+
       <textarea
-        v-if="type === 'textarea'"
+        v-else-if="type === 'textarea'"
         :id="id"
         ref="$input"
         v-model="inputValue"
@@ -74,25 +92,7 @@ defineExpose({
       />
 
       <input
-        v-if="type === 'number'"
-        :id="id"
-        ref="$input"
-        v-model="inputValue"
-        class="input__type"
-        :class="error && 'input__type--error'"
-        :type="type"
-        :name="name"
-        :placeholder="placeholder"
-        :disabled="disabled"
-        :min="min"
-        :max="max"
-        @focus="onFocus"
-        @blur="onBlur"
-        @input="onInput"
-      />
-
-      <input
-        v-if="type === 'text'"
+        v-else
         :id="id"
         ref="$input"
         v-model="inputValue"
