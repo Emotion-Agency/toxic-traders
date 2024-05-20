@@ -43,6 +43,7 @@ onMounted(async () => {
   <div class="platforms">
     <TheAccordion class="platforms__accordion" title="Platforms">
       <TagsInput
+        id="platforms"
         :dropdown-list="platformsFullList"
         :badges-list="filteredPlatformsList"
         badge-variant="fill"

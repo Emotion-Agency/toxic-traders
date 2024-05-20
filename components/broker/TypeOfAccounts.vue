@@ -12,6 +12,7 @@ export interface iAccountModalItem {
   isLeftButton?: boolean
   isRightButton?: boolean
   options?: string[]
+  isPassword?: boolean
 }
 
 interface iProps {
@@ -23,10 +24,13 @@ const props = defineProps<iProps>()
 const { getAllBrokerServers } = useBrokerServer()
 
 const newAccountModalOpened = ref(false)
+const editAccountModalOpened = ref(false)
+const deleteAccountModalOpened = ref(false)
+const isPassword = ref(false)
 
 const accountList = ref<iBrokerServer[]>([])
 
-const newAccountModalItems = reactive<iAccountModalItem[]>([
+const accountModalItems = reactive<iAccountModalItem[]>([
   {
     required: false,
     id: 'account-name',
@@ -50,6 +54,7 @@ const newAccountModalItems = reactive<iAccountModalItem[]>([
     type: 'password',
     value: '',
     placeholder: 'Password',
+    isRightButton: true,
   },
   {
     placeholder: 'Server',
@@ -83,6 +88,35 @@ const newAccountModalClose = () => {
   newAccountModalOpened.value = false
 }
 
+const editAccountModalOpen = () => {
+  editAccountModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+const deleteAccountModalOpen = () => {
+  deleteAccountModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const editAccountModalClose = () => {
+  editAccountModalOpened.value = false
+}
+
+const deleteAccountModalClose = () => {
+  deleteAccountModalOpened.value = false
+}
+
+const getEditedSelectedItem = (item: string) => {
+  console.log(item)
+}
+
+const onEditedChange = val => {
+  console.log(val)
+}
+
+const showPassword = () => {
+  isPassword.value = !isPassword.value
+}
+
 onMounted(async () => {
   const { brokerServers } = await getAllBrokerServers(props.brokerId)
 
@@ -105,6 +139,8 @@ onMounted(async () => {
         :account-id="account.id"
         :title="account.serverName"
         class="type-accounts__item"
+        @account-edit="editAccountModalOpen"
+        @account-delete="deleteAccountModalOpen"
       />
     </div>
     <TheModal
@@ -114,7 +150,7 @@ onMounted(async () => {
     >
       <div class="type-accounts__modal-list">
         <div
-          v-for="(input, idx) in newAccountModalItems"
+          v-for="(input, idx) in accountModalItems"
           :key="idx"
           class="type-accounts__modal-item"
         >
@@ -131,11 +167,15 @@ onMounted(async () => {
             :name="input.name"
             :type="input.type"
             :placeholder="input.placeholder"
-            :disabled="input.disabled"
-            :is-left-button="input.isLeftButton"
             :is-right-button="input.isRightButton"
+            :is-password="isPassword"
             @input-value="onChange"
-          />
+            @right-click="showPassword"
+          >
+            <template #right-icon>
+              <IconsPasswordEye :is-visible="isPassword" />
+            </template>
+          </TheInput>
         </div>
       </div>
       <div class="type-accounts__buttons">
@@ -150,6 +190,94 @@ onMounted(async () => {
         <TheButton tag="button" variant="fill" button-size="medium">
           Add
         </TheButton>
+      </div>
+    </TheModal>
+
+    <TheModal
+      :modal-opened="editAccountModalOpened"
+      title="Edit MT4 Standart"
+      @close="editAccountModalClose"
+    >
+      <div class="type-accounts-item__modal-wrapper">
+        <div class="type-accounts-item__modal-list">
+          <div
+            v-for="(input, idx) in accountModalItems"
+            :key="idx"
+            class="type-accounts__modal-item"
+          >
+            <CustomSelect
+              v-if="input.options"
+              :options="input.options"
+              :placeholder="input.placeholder"
+              @select="getEditedSelectedItem"
+            />
+            <TheInput
+              v-else
+              :id="input.id"
+              :required="input.required"
+              :name="input.name"
+              :type="input.type"
+              :placeholder="input.placeholder"
+              :is-right-button="input.isRightButton"
+              :is-password="input.isPassword"
+              @input-value="onEditedChange"
+              @right-click="showPassword"
+            >
+              <template #right-icon>
+                <IconsPasswordEye :is-visible="isPassword" />
+              </template>
+            </TheInput>
+          </div>
+        </div>
+
+        <div class="type-accounts-item__modal-btn-wrapper">
+          <TheButton
+            class="type-accounts-item__modal-btn"
+            tag="button"
+            variant="close"
+            button-size="medium"
+          >
+            Close
+          </TheButton>
+          <TheButton
+            class="type-accounts-item__modal-btn"
+            tag="button"
+            variant="fill"
+            button-size="medium"
+          >
+            Update
+          </TheButton>
+        </div>
+      </div>
+    </TheModal>
+    <TheModal
+      :modal-opened="deleteAccountModalOpened"
+      title="Delete confirmation"
+      @close="deleteAccountModalClose"
+    >
+      <div class="type-accounts-item__modal-wrapper">
+        <p class="type-accounts-item__delete-text">
+          Are you sure you want to delete this item? This action cannot be
+          prevented
+        </p>
+        <div class="type-accounts-item__modal-btn-wrapper">
+          <TheButton
+            class="type-accounts-item__modal-btn"
+            tag="button"
+            variant="close"
+            button-size="medium"
+          >
+            Cancel
+          </TheButton>
+          <TheButton
+            class="type-accounts-item__modal-btn"
+            tag="button"
+            variant="danger"
+            button-size="medium"
+          >
+            Delete
+          </TheButton>
+        </div>
       </div>
     </TheModal>
   </div>

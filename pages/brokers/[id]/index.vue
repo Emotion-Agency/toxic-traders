@@ -59,6 +59,10 @@ const historyModalClose = () => {
           <h2 class="main-broker__title">Type of Accounts</h2>
           <BrokerTypeOfAccounts :broker-id="Number(brokerId)" />
         </div>
+        <div class="main-broker__item">
+          <h2 class="main-broker__title">Statistics</h2>
+          <BrokerStatistics :broker-id="Number(brokerId)" />
+        </div>
       </section>
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">

@@ -46,6 +46,7 @@ onMounted(async () => {
   <div class="deposit-methods">
     <TheAccordion class="deposit-methods__accordion" title="Method of deposit">
       <TagsInput
+        id="deposit-methods"
         :dropdown-list="depositFullList"
         :badges-list="filteredDepositList"
         badge-variant="fill"

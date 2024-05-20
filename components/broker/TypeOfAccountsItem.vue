@@ -19,8 +19,7 @@ const emit = defineEmits([
 const route = useRoute()
 const $el = ref<HTMLElement | null>(null)
 const menuOpened = ref(false)
-const editAccountModalOpened = ref(false)
-const deleteAccountModalOpened = ref(false)
+
 const editAccountModalItems = reactive<iAccountModalItem[]>([
   {
     required: false,
@@ -70,31 +69,6 @@ const outsideClick = event => {
   if (!$el.value.contains(event.target)) {
     menuOpened.value = false
   }
-}
-
-const editAccountModalOpen = () => {
-  editAccountModalOpened.value = true
-  document.body.classList.add('modal-open')
-}
-const deleteAccountModalOpen = () => {
-  deleteAccountModalOpened.value = true
-  document.body.classList.add('modal-open')
-}
-
-const editAccountModalClose = () => {
-  editAccountModalOpened.value = false
-}
-
-const deleteAccountModalClose = () => {
-  deleteAccountModalOpened.value = false
-}
-
-const getSelectedItem = (item: string) => {
-  console.log(item)
-}
-
-const onChange = val => {
-  console.log(val)
 }
 
 onMounted(() => {
@@ -150,102 +124,19 @@ onUnmounted(() => {
       <div class="type-accounts-item__menu-wrapper">
         <button
           class="type-accounts-item__menu-btn"
-          @click="editAccountModalOpen"
+          @click="emit('accountEdit')"
         >
           <IconsEdit />
           Edit
         </button>
         <button
           class="type-accounts-item__menu-btn"
-          @click="deleteAccountModalOpen"
+          @click="emit('accountDelete')"
         >
           <IconsTrash />
           Delete
         </button>
       </div>
     </div>
-    <TheModal
-      :modal-opened="editAccountModalOpened"
-      title="Edit MT4 Standart"
-      @close="editAccountModalClose"
-    >
-      <div class="type-accounts-item__modal-wrapper">
-        <div class="type-accounts-item__modal-list">
-          <div
-            v-for="(input, idx) in editAccountModalItems"
-            :key="idx"
-            class="type-accounts__modal-item"
-          >
-            <CustomSelect
-              v-if="input.options"
-              :options="input.options"
-              :placeholder="input.placeholder"
-              @select="getSelectedItem"
-            />
-            <TheInput
-              v-else
-              :id="input.id"
-              :required="input.required"
-              :name="input.name"
-              :type="input.type"
-              :placeholder="input.placeholder"
-              :disabled="input.disabled"
-              :is-left-button="input.isLeftButton"
-              :is-right-button="input.isRightButton"
-              @input-value="onChange"
-            />
-          </div>
-        </div>
-
-        <div class="type-accounts-item__modal-btn-wrapper">
-          <TheButton
-            class="type-accounts-item__modal-btn"
-            tag="button"
-            variant="close"
-            button-size="medium"
-          >
-            Close
-          </TheButton>
-          <TheButton
-            class="type-accounts-item__modal-btn"
-            tag="button"
-            variant="fill"
-            button-size="medium"
-          >
-            Update
-          </TheButton>
-        </div>
-      </div>
-    </TheModal>
-    <TheModal
-      :modal-opened="deleteAccountModalOpened"
-      title="Delete confirmation"
-      @close="deleteAccountModalClose"
-    >
-      <div class="type-accounts-item__modal-wrapper">
-        <p class="type-accounts-item__delete-text">
-          Are you sure you want to delete this item? This action cannot be
-          prevented
-        </p>
-        <div class="type-accounts-item__modal-btn-wrapper">
-          <TheButton
-            class="type-accounts-item__modal-btn"
-            tag="button"
-            variant="close"
-            button-size="medium"
-          >
-            Cancel
-          </TheButton>
-          <TheButton
-            class="type-accounts-item__modal-btn"
-            tag="button"
-            variant="danger"
-            button-size="medium"
-          >
-            Delete
-          </TheButton>
-        </div>
-      </div>
-    </TheModal>
   </div>
 </template>

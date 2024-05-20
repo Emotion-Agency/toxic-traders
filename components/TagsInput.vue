@@ -2,6 +2,7 @@
 import type { iCountries } from '~/types/countries/countries'
 
 interface iProps {
+  id: string
   dropdownList: string[]
   badgesList?: string[]
   countryList?: iCountries[]
@@ -89,7 +90,7 @@ onUnmounted(() => {
               </template>
             </TheBadge>
             <input
-              id="tags-input"
+              :id="id"
               class="tags-input__input"
               type="text"
               name="Tags input"
@@ -110,7 +111,7 @@ onUnmounted(() => {
               @click="removeBadge(idx)"
             />
             <input
-              id="tags-input"
+              :id="id"
               class="tags-input__input"
               type="text"
               name="Tags input"

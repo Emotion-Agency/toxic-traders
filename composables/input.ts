@@ -12,6 +12,15 @@ export const useInput = (emit, props) => {
   const inputBlur = ref(false)
   const error = ref(false)
   const $input = ref(null)
+  const isPasswordVisible = ref(false)
+
+  const inputType = computed(() => {
+    if (props.type === 'password') {
+      return isPasswordVisible.value ? 'text' : 'password'
+    }
+
+    return props.type
+  })
 
   watch(
     () => props.value,
@@ -74,6 +83,10 @@ export const useInput = (emit, props) => {
         })
       }
     }
+  }
+
+  const onPasswordVisibilityChange = () => {
+    isPasswordVisible.value = !isPasswordVisible.value
   }
 
   const validationResult = () => {
@@ -150,5 +163,8 @@ export const useInput = (emit, props) => {
     reset,
     resetSearch,
     throwError,
+    onPasswordVisibilityChange,
+    isPasswordVisible,
+    inputType,
   }
 }

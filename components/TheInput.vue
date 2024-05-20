@@ -19,7 +19,13 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const emit = defineEmits(['inputValue', 'inputFocus', 'inputBlur'])
+const emit = defineEmits([
+  'inputValue',
+  'inputFocus',
+  'inputBlur',
+  'rightClick',
+  'leftClick',
+])
 
 const {
   inputValue,
@@ -31,12 +37,26 @@ const {
   onInput,
   reset,
   throwError,
+  inputType,
+  onPasswordVisibilityChange,
 } = useInput(emit, props)
 
 defineExpose({
   throwError,
   reset,
 })
+
+const onRightClick = () => {
+  emit('rightClick')
+
+  if (props.type === 'password') {
+    onPasswordVisibilityChange()
+  }
+}
+
+const onLeftClick = () => {
+  emit('leftClick')
+}
 </script>
 
 <template>
@@ -102,7 +122,7 @@ defineExpose({
           isLeftButton && 'input__type--left-btn',
           isRightButton && 'input__type--right-btn',
         ]"
-        :type="type"
+        :type="inputType"
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
@@ -114,12 +134,14 @@ defineExpose({
       <button
         v-if="isLeftButton && type !== 'textarea'"
         class="left-button input__btn"
+        @click="onLeftClick"
       >
         <slot name="left-icon" />
       </button>
       <button
         v-if="isRightButton && type !== 'textarea'"
         class="right-button input__btn"
+        @click="onRightClick"
       >
         <slot name="right-icon" />
       </button>

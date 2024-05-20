@@ -69,6 +69,7 @@ onMounted(async () => {
       title="Restricted countries"
     >
       <TagsInput
+        id="restricted-countries"
         :dropdown-list="requestCountriesList"
         :country-list="filteredSelectedCountries"
         badge-variant="outlined"

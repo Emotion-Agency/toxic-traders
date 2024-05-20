@@ -7,15 +7,15 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const companyNames = ref<iCompanyNamesItem[]>([])
+const companyNamesList = ref<iCompanyNamesItem[]>([])
 
 const { getCompanyNamesById } = useBrokerCompanyNames()
 
 onMounted(async () => {
-  const data = await getCompanyNamesById(props.brokerId)
+  const { companyNames } = await getCompanyNamesById(props.brokerId)
 
-  if (data?.length) {
-    companyNames.value = data[0]?.companyNames
+  if (companyNames?.length) {
+    companyNamesList.value = companyNames
   }
 })
 </script>
@@ -24,7 +24,7 @@ onMounted(async () => {
   <div class="company-name">
     <TheAccordion title="Company Name" :is-inputs="true">
       <div
-        v-for="(item, idx) in companyNames"
+        v-for="(item, idx) in companyNamesList"
         :key="idx"
         class="company-name__item"
       >
@@ -32,7 +32,7 @@ onMounted(async () => {
           {{ item?.companyName }}
         </p>
       </div>
-      <div v-if="!companyNames?.length" class="company-name__item">
+      <div v-if="!companyNamesList?.length" class="company-name__item">
         <p class="company-name__text">Company names is not found</p>
       </div>
     </TheAccordion>
