@@ -12,11 +12,11 @@ const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
 const itemsCount = ref(route.query.count ? Number(route.query.count) : 10)
 const searchValue = ref<string>('1')
-
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
+
 const { getAllBrokers } = useBrokers()
 
 const toggleSearch = () => {
@@ -79,7 +79,7 @@ const prevPageClick = () => {
 }
 
 const nextPageClick = () => {
-  if (currentPage.value < computedTotalPages.value) {
+  if (currentPage.value - 1 < computedTotalPages.value) {
     currentPage.value++
   }
 }
@@ -101,19 +101,10 @@ const onBlur = (input: iInput) => {
 }
 
 watch([currentPage, itemsCount], async () => {
-  let offset = 1
-
-  if (currentPage.value > 1) {
-    offset = currentPage.value * itemsCount.value
-  }
-
-  if (offset > totalCountPages.value) {
-    offset = totalCountPages.value - 1
-  }
-
-  console.log(offset, totalCountPages.value)
-
-  const { brokers } = await getAllBrokers(offset, itemsCount.value)
+  const { brokers } = await getAllBrokers(
+    currentPage.value - 1,
+    itemsCount.value
+  )
 
   brokersList.value = brokers
 
@@ -123,13 +114,15 @@ watch([currentPage, itemsCount], async () => {
       count: itemsCount.value,
     },
   })
+
+  console.log(currentPage.value, totalCountPages.value)
 })
 
 onMounted(async () => {
   isLoading.value = true
 
   const { brokers, totalCount } = await getAllBrokers(
-    currentPage.value,
+    currentPage.value - 1,
     itemsCount.value
   )
 

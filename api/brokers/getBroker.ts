@@ -3,10 +3,10 @@ import type { iBrokersData } from '~/types/broker/broker'
 
 export const getBroker = async (offset: number, count: number) => {
   try {
-    const { data }: iBrokersData = await axiosInstance.get('Broker', {
+    const { data }: iBrokersData = await axiosInstance.get('Broker/Page', {
       params: {
-        offset,
-        count,
+        page: offset,
+        pageSize: count,
         sortOrder: 1,
         sortBy: 'companyNames',
       },
