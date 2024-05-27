@@ -125,26 +125,42 @@ onMounted(async () => {
       additional-button="Edit"
       @open="reviewsModalOpen"
     >
-      <BrokerReviewsItem
-        v-for="(item, idx) in reviewsList"
-        :key="idx"
-        :rating="item.rating"
-        :reviews-count="item.numberOfReviews"
-        :review-link="item.url"
-      >
-        <IconsReviewsForexPeaceArmy
-          v-if="item.serviceName.toLowerCase() === 'forexpeacearmy'"
-        />
-        <IconsReviewsTrustpilot
-          v-if="item.serviceName.toLowerCase() === 'trustpilot'"
-        />
-        <IconsReviewsWikifx
-          v-if="item.serviceName.toLowerCase() === 'wikifx'"
-        />
-        <IconsReviewsFx123
-          v-if="item.serviceName.toLowerCase() === 'forexratings'"
-        />
-      </BrokerReviewsItem>
+      <div v-if="reviewsList.length" class="reviews__content">
+        <BrokerReviewsItem
+          v-for="(item, idx) in reviewsList"
+          :key="idx"
+          :rating="item.rating"
+          :reviews-count="item.numberOfReviews"
+          :review-link="item.url"
+        >
+          <IconsReviewsForexPeaceArmy
+            v-if="item.serviceName.toLowerCase() === 'forexpeacearmy'"
+          />
+          <IconsReviewsTrustpilot
+            v-if="item.serviceName.toLowerCase() === 'trustpilot'"
+          />
+          <IconsReviewsWikifx
+            v-if="item.serviceName.toLowerCase() === 'wikifx'"
+          />
+          <IconsReviewsFx123
+            v-if="item.serviceName.toLowerCase() === 'forexratings'"
+          />
+        </BrokerReviewsItem>
+      </div>
+
+      <div v-else class="reviews__content">
+        <BrokerReviewsItem
+          v-for="(_, idx) in 4"
+          :key="idx"
+          :rating="0"
+          :reviews-count="0"
+        >
+          <IconsReviewsForexPeaceArmy v-if="idx === 0" />
+          <IconsReviewsTrustpilot v-if="idx === 1" />
+          <IconsReviewsWikifx v-if="idx === 2" />
+          <IconsReviewsFx123 v-if="idx === 3" />
+        </BrokerReviewsItem>
+      </div>
     </TheAccordion>
     <TheModal
       :modal-opened="reviewsModalOpened"

@@ -10,7 +10,7 @@ const brokersList = ref<iBroker[]>([])
 const filteredBrokers = ref<iBroker[]>([])
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
 const totalCountPages = ref(0)
-const itemsCount = ref(route.query.count ? Number(route.query.count) : 10)
+const itemsCount = ref(route.query.count ? Number(route.query.count) : 25)
 const searchValue = ref<string>('1')
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
@@ -85,7 +85,11 @@ const nextPageClick = () => {
 }
 
 const selectItem = (val: string) => {
-  itemsCount.value = Number(val)
+  itemsCount.value = parseInt(val)
+
+  if (currentPage.value > computedTotalPages.value) {
+    currentPage.value = computedTotalPages.value
+  }
 }
 
 const onChange = (input: iInput) => {
@@ -114,8 +118,6 @@ watch([currentPage, itemsCount], async () => {
       count: itemsCount.value,
     },
   })
-
-  console.log(currentPage.value, totalCountPages.value)
 })
 
 onMounted(async () => {
@@ -191,7 +193,7 @@ onMounted(async () => {
             class="brokers__pagination"
             :total-pages="totalCountPages"
             :current-page="currentPage"
-            :options="['25', '50', '100']"
+            :options="['25 rows', '50 rows', '100 rows']"
             :items-count="itemsCount"
             :input-value="searchValue"
             input-id="brokers-navigation"

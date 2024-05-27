@@ -23,7 +23,7 @@ const filledStars = computed(() => {
       <div class="reviews-item__rating">
         <slot />
         <p class="reviews-item__rating-text">
-          {{ rating }}
+          {{ rating || 0 }}
         </p>
       </div>
       <ul class="reviews-item__list">
@@ -33,6 +33,6 @@ const filledStars = computed(() => {
         </li>
       </ul>
     </div>
-    <p class="reviews-item__count">{{ reviewsCount }} reviews</p>
+    <p class="reviews-item__count">{{ reviewsCount || 0 }} reviews</p>
   </a>
 </template>

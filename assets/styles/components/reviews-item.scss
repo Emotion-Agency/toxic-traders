@@ -1,11 +1,9 @@
 $step: 24px;
 
-.reviews-item {
-  margin-top: 8px;
-
-  &:first-child {
-    margin-top: 0;
-  }
+.reviews__content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
 }
 
 .reviews-item__rating-wrapper {
