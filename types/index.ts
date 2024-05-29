@@ -17,3 +17,17 @@ export interface iInput {
   value: string
   error: boolean
 }
+
+export interface iAccountModalItem {
+  required?: boolean
+  id?: string
+  name?: string
+  type?: string
+  value?: string
+  placeholder?: string
+  disabled?: boolean
+  isLeftButton?: boolean
+  isRightButton?: boolean
+  options?: string[]
+  isPassword?: boolean
+}

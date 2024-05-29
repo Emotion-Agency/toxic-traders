@@ -86,14 +86,14 @@ onUnmounted(() => {
       <div class="type-accounts-item__menu-wrapper">
         <button
           class="type-accounts-item__menu-btn"
-          @click="emit('accountEdit')"
+          @click="emit('accountEdit', accountId)"
         >
           <IconsEdit />
           Edit
         </button>
         <button
           class="type-accounts-item__menu-btn"
-          @click="emit('accountDelete')"
+          @click="emit('accountDelete', accountId)"
         >
           <IconsTrash />
           Delete

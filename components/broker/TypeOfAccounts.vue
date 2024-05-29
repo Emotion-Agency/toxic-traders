@@ -1,20 +1,6 @@
 <script setup lang="ts">
 import type { iBrokerServerAccount } from '~/types/broker/brokerServer'
 
-export interface iAccountModalItem {
-  required?: boolean
-  id?: string
-  name?: string
-  type?: string
-  value?: string
-  placeholder?: string
-  disabled?: boolean
-  isLeftButton?: boolean
-  isRightButton?: boolean
-  options?: string[]
-  isPassword?: boolean
-}
-
 interface iProps {
   brokerId: number
 }
@@ -24,161 +10,52 @@ const props = defineProps<iProps>()
 const { getAllBrokerServers } = useBrokerServer()
 
 const newAccountModalOpened = ref(false)
-const editAccountModalOpened = ref(false)
+const editAccountModalState = ref<{
+  isOpened: boolean
+  account: iBrokerServerAccount
+}>({
+  isOpened: false,
+  account: null,
+})
+
 const deleteAccountModalOpened = ref(false)
-const isPassword = ref(false)
-
 const accountList = ref<iBrokerServerAccount[]>([])
-
-const editedAccountItems = ref<iAccountModalItem[]>([
-  {
-    required: false,
-    id: 'account-edited-name',
-    name: 'Account name',
-    type: 'text',
-    value: '',
-    placeholder: 'Account Name',
-  },
-  {
-    required: false,
-    id: 'account-edited-login',
-    name: 'Account login',
-    type: 'text',
-    value: '',
-    placeholder: 'Login',
-  },
-  {
-    required: false,
-    id: 'account-edited-password',
-    name: 'Account password',
-    type: 'password',
-    value: '',
-    placeholder: 'Password',
-    isRightButton: true,
-  },
-])
-
-const createdAccountItems = ref<iAccountModalItem[]>([
-  {
-    required: false,
-    id: 'account-name',
-    name: 'Account name',
-    type: 'text',
-    value: '',
-    placeholder: 'Account Name',
-  },
-  {
-    required: false,
-    id: 'account-login',
-    name: 'Account login',
-    type: 'text',
-    value: '',
-    placeholder: 'Login',
-  },
-  {
-    required: false,
-    id: 'account-password',
-    name: 'Account password',
-    type: 'password',
-    value: '',
-    placeholder: 'Password',
-    isRightButton: true,
-  },
-  {
-    placeholder: 'Server',
-    options: [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5',
-      'Option 6',
-      'Option 7',
-      'Option 8',
-    ],
-  },
-])
-
-const onChange = val => {
-  console.log(val)
-}
-
-const getSelectedItem = (item: string) => {
-  console.log(item)
-}
 
 const newAccountModalOpen = () => {
   newAccountModalOpened.value = true
   document.body.classList.add('modal-open')
 }
 
-const newAccountModalClose = () => {
-  newAccountModalOpened.value = false
-}
+const editAccountModalOpen = (accountId: number) => {
+  editAccountModalState.value = {
+    account: accountList.value.find(item => item.id === accountId),
+    isOpened: true,
+  }
 
-const editAccountModalOpen = () => {
-  editAccountModalOpened.value = true
-  document.body.classList.add('modal-open')
-}
-const deleteAccountModalOpen = () => {
-  deleteAccountModalOpened.value = true
   document.body.classList.add('modal-open')
 }
 
 const editAccountModalClose = () => {
-  editAccountModalOpened.value = false
+  editAccountModalState.value = {
+    account: null,
+    isOpened: false,
+  }
+  document.body.classList.remove('modal-open')
+}
+
+const newAccountModalClose = () => {
+  newAccountModalOpened.value = false
+  document.body.classList.remove('modal-open')
+}
+
+const deleteAccountModalOpen = (accountId: number) => {
+  deleteAccountModalOpened.value = true
+  document.body.classList.add('modal-open')
 }
 
 const deleteAccountModalClose = () => {
   deleteAccountModalOpened.value = false
 }
-
-const getEditedSelectedItem = (item: string) => {
-  console.log(item)
-}
-
-const onEditedChange = val => {
-  console.log(val)
-}
-
-const showPassword = () => {
-  isPassword.value = !isPassword.value
-}
-
-// watch(
-//   () => accountList.value,
-//   () => {
-//     editedAccountItems.value = accountList.value.map(item => [
-//       {
-//         required: false,
-//         id: `account-edited-name-${item?.id}`,
-//         name: 'Account name',
-//         type: 'text',
-//         value: item?.accountType,
-//         placeholder: 'Account Name',
-//         isRightButton: false,
-//       },
-//       {
-//         required: false,
-//         id: `account-edited-login-${item?.id}`,
-//         name: 'Account login',
-//         type: 'text',
-//         value: item?.login,
-//         placeholder: 'Login',
-//         isRightButton: false,
-//       },
-//       {
-//         required: false,
-//         id: `account-edited-password-${item?.id}`,
-//         name: 'Account password',
-//         type: 'password',
-//         value: item?.password,
-//         placeholder: 'Password',
-//         isRightButton: true,
-//       },
-//     ])
-//   }
-// )
 
 onMounted(async () => {
   const { brokerServerAccounts, brokerServers } = await getAllBrokerServers(
@@ -209,112 +86,17 @@ onMounted(async () => {
         @account-delete="deleteAccountModalOpen"
       />
     </div>
-    <TheModal
+
+    <BrokerTypeOfAccountsNewModal
       :modal-opened="newAccountModalOpened"
-      title="Add new Account"
       @close="newAccountModalClose"
-    >
-      <div class="type-accounts__modal-list">
-        <div
-          v-for="(input, idx) in createdAccountItems"
-          :key="idx"
-          class="type-accounts__modal-item"
-        >
-          <CustomSelect
-            v-if="input.options"
-            :options="input.options"
-            :placeholder="input.placeholder"
-            @select="getSelectedItem"
-          />
-          <TheInput
-            v-else
-            :id="input.id"
-            :required="input.required"
-            :name="input.name"
-            :type="input.type"
-            :placeholder="input.placeholder"
-            :is-right-button="input.isRightButton"
-            @input-value="onChange"
-            @right-click="showPassword"
-          >
-            <template #right-icon>
-              <IconsPasswordEye :is-visible="isPassword" />
-            </template>
-          </TheInput>
-        </div>
-      </div>
-      <div class="type-accounts__buttons">
-        <TheButton
-          tag="button"
-          variant="close"
-          button-size="medium"
-          @click="newAccountModalClose"
-        >
-          Close
-        </TheButton>
-        <TheButton tag="button" variant="fill" button-size="medium">
-          Add
-        </TheButton>
-      </div>
-    </TheModal>
-
-    <TheModal
-      :modal-opened="editAccountModalOpened"
-      title="Edit MT4 Standart"
+    />
+    <BrokerTypeOfAccountsEditModal
+      :modal-opened="editAccountModalState.isOpened"
+      :account="editAccountModalState.account"
       @close="editAccountModalClose"
-    >
-      <div class="type-accounts-item__modal-wrapper">
-        <div class="type-accounts-item__modal-list">
-          <div
-            v-for="(input, idx) in editedAccountItems"
-            :key="idx"
-            class="type-accounts__modal-item"
-          >
-            <CustomSelect
-              v-if="input?.options"
-              :options="input?.options"
-              :placeholder="input?.placeholder"
-              @select="getEditedSelectedItem"
-            />
-            <TheInput
-              v-else
-              :id="input?.id"
-              :required="input?.required"
-              :name="input?.name"
-              :type="input?.type"
-              :placeholder="input?.placeholder"
-              :is-right-button="input?.isRightButton"
-              :value="input?.value"
-              @input-value="onEditedChange"
-              @right-click="showPassword"
-            >
-              <template #right-icon>
-                <IconsPasswordEye :is-visible="isPassword" />
-              </template>
-            </TheInput>
-          </div>
-        </div>
+    />
 
-        <div class="type-accounts-item__modal-btn-wrapper">
-          <TheButton
-            class="type-accounts-item__modal-btn"
-            tag="button"
-            variant="close"
-            button-size="medium"
-          >
-            Close
-          </TheButton>
-          <TheButton
-            class="type-accounts-item__modal-btn"
-            tag="button"
-            variant="fill"
-            button-size="medium"
-          >
-            Update
-          </TheButton>
-        </div>
-      </div>
-    </TheModal>
     <TheModal
       :modal-opened="deleteAccountModalOpened"
       title="Delete confirmation"
