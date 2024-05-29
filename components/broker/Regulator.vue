@@ -97,7 +97,7 @@ onMounted(async () => {
       additional-button="Edit"
       @open="regulatorModalOpen"
     >
-      <ul v-if="regulatorItems.length" class="regulator__list">
+      <ul v-if="regulatorItems?.length" class="regulator__list">
         <li
           v-for="(item, idx) in regulatorItems"
           :key="idx"

@@ -8,9 +8,12 @@ export const useBrokerServer = () => {
 
   const getAllBrokerServers = async (brokerId: number) => {
     try {
-      const data = await getBrokerServer(brokerId)
+      const { brokerServers } = await getBrokerServer(brokerId)
+      const brokerServerAccounts = brokerServers.map(
+        account => account.brokerServerAccounts
+      )
 
-      return data
+      return { brokerServers, brokerServerAccounts }
     } catch (error) {
       console.error('Error fetching broker servers:', error)
       addToast({

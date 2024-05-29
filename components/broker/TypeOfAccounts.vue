@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iBrokerServer } from '~/types/broker/brokerServer'
+import type { iBrokerServerAccount } from '~/types/broker/brokerServer'
 
 export interface iAccountModalItem {
   required?: boolean
@@ -7,7 +7,7 @@ export interface iAccountModalItem {
   name?: string
   type?: string
   value?: string
-  placeholder: string
+  placeholder?: string
   disabled?: boolean
   isLeftButton?: boolean
   isRightButton?: boolean
@@ -28,9 +28,37 @@ const editAccountModalOpened = ref(false)
 const deleteAccountModalOpened = ref(false)
 const isPassword = ref(false)
 
-const accountList = ref<iBrokerServer[]>([])
+const accountList = ref<iBrokerServerAccount[]>([])
 
-const accountModalItems = reactive<iAccountModalItem[]>([
+const editedAccountItems = ref<iAccountModalItem[]>([
+  {
+    required: false,
+    id: 'account-edited-name',
+    name: 'Account name',
+    type: 'text',
+    value: '',
+    placeholder: 'Account Name',
+  },
+  {
+    required: false,
+    id: 'account-edited-login',
+    name: 'Account login',
+    type: 'text',
+    value: '',
+    placeholder: 'Login',
+  },
+  {
+    required: false,
+    id: 'account-edited-password',
+    name: 'Account password',
+    type: 'password',
+    value: '',
+    placeholder: 'Password',
+    isRightButton: true,
+  },
+])
+
+const createdAccountItems = ref<iAccountModalItem[]>([
   {
     required: false,
     id: 'account-name',
@@ -117,11 +145,49 @@ const showPassword = () => {
   isPassword.value = !isPassword.value
 }
 
-onMounted(async () => {
-  const { brokerServers } = await getAllBrokerServers(props.brokerId)
+// watch(
+//   () => accountList.value,
+//   () => {
+//     editedAccountItems.value = accountList.value.map(item => [
+//       {
+//         required: false,
+//         id: `account-edited-name-${item?.id}`,
+//         name: 'Account name',
+//         type: 'text',
+//         value: item?.accountType,
+//         placeholder: 'Account Name',
+//         isRightButton: false,
+//       },
+//       {
+//         required: false,
+//         id: `account-edited-login-${item?.id}`,
+//         name: 'Account login',
+//         type: 'text',
+//         value: item?.login,
+//         placeholder: 'Login',
+//         isRightButton: false,
+//       },
+//       {
+//         required: false,
+//         id: `account-edited-password-${item?.id}`,
+//         name: 'Account password',
+//         type: 'password',
+//         value: item?.password,
+//         placeholder: 'Password',
+//         isRightButton: true,
+//       },
+//     ])
+//   }
+// )
 
-  accountList.value = brokerServers
-  console.log(brokerServers)
+onMounted(async () => {
+  const { brokerServerAccounts, brokerServers } = await getAllBrokerServers(
+    props.brokerId
+  )
+
+  accountList.value = brokerServerAccounts.flat()
+
+  console.log(accountList.value, brokerServers)
 })
 </script>
 
@@ -136,8 +202,8 @@ onMounted(async () => {
       <BrokerTypeOfAccountsItem
         v-for="(account, idx) in accountList"
         :key="idx"
-        :account-id="account.id"
-        :title="account.serverName"
+        :account-id="account?.id"
+        :title="account?.accountType"
         class="type-accounts__item"
         @account-edit="editAccountModalOpen"
         @account-delete="deleteAccountModalOpen"
@@ -150,7 +216,7 @@ onMounted(async () => {
     >
       <div class="type-accounts__modal-list">
         <div
-          v-for="(input, idx) in accountModalItems"
+          v-for="(input, idx) in createdAccountItems"
           :key="idx"
           class="type-accounts__modal-item"
         >
@@ -168,7 +234,6 @@ onMounted(async () => {
             :type="input.type"
             :placeholder="input.placeholder"
             :is-right-button="input.isRightButton"
-            :is-password="isPassword"
             @input-value="onChange"
             @right-click="showPassword"
           >
@@ -201,25 +266,25 @@ onMounted(async () => {
       <div class="type-accounts-item__modal-wrapper">
         <div class="type-accounts-item__modal-list">
           <div
-            v-for="(input, idx) in accountModalItems"
+            v-for="(input, idx) in editedAccountItems"
             :key="idx"
             class="type-accounts__modal-item"
           >
             <CustomSelect
-              v-if="input.options"
-              :options="input.options"
-              :placeholder="input.placeholder"
+              v-if="input?.options"
+              :options="input?.options"
+              :placeholder="input?.placeholder"
               @select="getEditedSelectedItem"
             />
             <TheInput
               v-else
-              :id="input.id"
-              :required="input.required"
-              :name="input.name"
-              :type="input.type"
-              :placeholder="input.placeholder"
-              :is-right-button="input.isRightButton"
-              :is-password="input.isPassword"
+              :id="input?.id"
+              :required="input?.required"
+              :name="input?.name"
+              :type="input?.type"
+              :placeholder="input?.placeholder"
+              :is-right-button="input?.isRightButton"
+              :value="input?.value"
               @input-value="onEditedChange"
               @right-click="showPassword"
             >

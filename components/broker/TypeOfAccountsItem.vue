@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type { iAccountModalItem } from './TypeOfAccounts.vue'
-
 interface iProps {
   title: string
   accountId?: number
   isNewAccount?: boolean
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const emit = defineEmits([
   'openMenu',
@@ -20,46 +18,6 @@ const route = useRoute()
 const $el = ref<HTMLElement | null>(null)
 const menuOpened = ref(false)
 
-const editAccountModalItems = reactive<iAccountModalItem[]>([
-  {
-    required: false,
-    id: 'account-name',
-    name: 'Account name',
-    type: 'text',
-    value: '',
-    placeholder: 'Account Name',
-  },
-  {
-    required: false,
-    id: 'account-login',
-    name: 'Account login',
-    type: 'text',
-    value: '',
-    placeholder: 'Login',
-  },
-  {
-    required: false,
-    id: 'account-password',
-    name: 'Account password',
-    type: 'password',
-    value: '',
-    placeholder: 'Password',
-  },
-  {
-    placeholder: 'Server',
-    options: [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5',
-      'Option 6',
-      'Option 7',
-      'Option 8',
-    ],
-  },
-])
-
 const toggleMenu = () => {
   menuOpened.value = !menuOpened.value
   emit('openMenu')
@@ -70,6 +28,10 @@ const outsideClick = event => {
     menuOpened.value = false
   }
 }
+
+const typeOfAccountsRoute = computed(() => {
+  return route.fullPath + `/type-of-accounts/${props.accountId}`
+})
 
 onMounted(() => {
   document.body.addEventListener('click', outsideClick)
@@ -98,7 +60,7 @@ onUnmounted(() => {
 
     <NuxtLink
       v-else
-      :to="route.fullPath + `/type-of-accounts/${accountId}`"
+      :to="typeOfAccountsRoute"
       class="type-accounts-item__wrapper"
     >
       <div class="type-accounts-item__content">

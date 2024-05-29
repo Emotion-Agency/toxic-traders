@@ -114,7 +114,11 @@ watch(
 onMounted(async () => {
   const data = await getReviews(props.brokerId)
 
-  reviewsList.value = Object.values(data).filter(el => typeof el !== 'string')
+  if (data) {
+    reviewsList.value = Object.values(data)?.filter(
+      el => typeof el !== 'string'
+    )
+  }
 })
 </script>
 
@@ -125,7 +129,7 @@ onMounted(async () => {
       additional-button="Edit"
       @open="reviewsModalOpen"
     >
-      <div v-if="reviewsList.length" class="reviews__content">
+      <div v-if="reviewsList?.length" class="reviews__content">
         <BrokerReviewsItem
           v-for="(item, idx) in reviewsList"
           :key="idx"
