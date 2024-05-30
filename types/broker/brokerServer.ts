@@ -1,9 +1,3 @@
-export interface iBrokerServerDataItem {
-  name: string
-  licenseNumber: number
-  licenseLink: string
-}
-
 export interface iBrokerServerAccountSymbolMT5CommissionInfoCommission {
   unitType: number
   unitMode: number
@@ -120,4 +114,18 @@ export interface iBrokerServer {
   serverType: number
   brokerServerAccounts: iBrokerServerAccount[]
   brokerServerIPAddresses: iBrokerServerIPAddress[]
+}
+
+export interface iBrokerServerData {
+  data: {
+    brokerServers: iBrokerServer[]
+    message: string
+  }
+}
+
+export interface iBrokerServerPostRes {
+  data: {
+    id: number
+    message: string
+  }
 }

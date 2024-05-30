@@ -65,13 +65,15 @@ onUnmounted(() => {
     >
       <div class="type-accounts-item__content">
         <button
-          class="type-accounts-item__btn"
+          class="type-accounts-item__btn-wrapper"
           @click.prevent="toggleMenu"
           @click.stop
         >
-          <span />
-          <span />
-          <span />
+          <div class="type-accounts-item__btn">
+            <span />
+            <span />
+            <span />
+          </div>
         </button>
         <p class="type-accounts-item__title">{{ title }}</p>
       </div>

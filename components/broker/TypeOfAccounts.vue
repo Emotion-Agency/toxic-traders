@@ -8,6 +8,7 @@ interface iProps {
 const props = defineProps<iProps>()
 
 const { getAllBrokerServers } = useBrokerServer()
+const { deleteBrokerAccount } = useBrokerServerAccount()
 
 const newAccountModalOpened = ref(false)
 const editAccountModalState = ref<{
@@ -17,6 +18,7 @@ const editAccountModalState = ref<{
   isOpened: false,
   account: null,
 })
+const accountIdToDelete = ref(null)
 
 const deleteAccountModalOpened = ref(false)
 const accountList = ref<iBrokerServerAccount[]>([])
@@ -51,20 +53,34 @@ const newAccountModalClose = () => {
 const deleteAccountModalOpen = (accountId: number) => {
   deleteAccountModalOpened.value = true
   document.body.classList.add('modal-open')
+
+  accountIdToDelete.value = accountId
 }
 
 const deleteAccountModalClose = () => {
   deleteAccountModalOpened.value = false
+
+  accountIdToDelete.value = null
+}
+
+const onCreated = newAccount => {
+  accountList.value = [...accountList.value, newAccount]
+}
+
+const onDelete = async () => {
+  await deleteBrokerAccount(accountIdToDelete.value)
+
+  accountList.value = accountList.value.filter(
+    item => item.id !== accountIdToDelete.value
+  )
+
+  deleteAccountModalClose()
 }
 
 onMounted(async () => {
-  const { brokerServerAccounts, brokerServers } = await getAllBrokerServers(
-    props.brokerId
-  )
+  const { brokerServerAccounts } = await getAllBrokerServers(props.brokerId)
 
   accountList.value = brokerServerAccounts.flat()
-
-  console.log(accountList.value, brokerServers)
 })
 </script>
 
@@ -89,7 +105,9 @@ onMounted(async () => {
 
     <BrokerTypeOfAccountsNewModal
       :modal-opened="newAccountModalOpened"
+      :broker-id="brokerId"
       @close="newAccountModalClose"
+      @created="onCreated"
     />
     <BrokerTypeOfAccountsEditModal
       :modal-opened="editAccountModalState.isOpened"
@@ -121,6 +139,7 @@ onMounted(async () => {
             tag="button"
             variant="danger"
             button-size="medium"
+            @click="onDelete()"
           >
             Delete
           </TheButton>

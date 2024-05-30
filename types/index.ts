@@ -28,6 +28,6 @@ export interface iAccountModalItem {
   disabled?: boolean
   isLeftButton?: boolean
   isRightButton?: boolean
-  options?: string[]
+  options?: string[] | Ref<string[]>
   isPassword?: boolean
 }

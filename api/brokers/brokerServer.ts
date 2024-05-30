@@ -21,7 +21,7 @@ export const getBrokerServer = async (brokerId: number) => {
 
 export const getBrokerServerById = async (serverId: number) => {
   try {
-    const { data }: iBrokerServerData = await axiosInstance.get(
+    const data: iBrokerServerData = await axiosInstance.get(
       `BrokerServer/BrokerServer`,
       {
         params: {

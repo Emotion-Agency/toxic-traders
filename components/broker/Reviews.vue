@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { initialReviews } from '~/data/initialReviews'
 import type { iBrokerReviewsItem } from '~/types/broker/brokerReviews'
 
 interface iProps {
@@ -21,7 +22,7 @@ interface iReviewsInput {
 
 const props = defineProps<iProps>()
 
-const { getReviews, updateReview } = useBrokerReviews()
+const { getReviews, updateReview, createReview } = useBrokerReviews()
 const reviewsModalOpened = ref(false)
 const reviewsList = ref<iBrokerReviewsItem[]>([])
 const reviewsInputs = ref<iReviewsInput[]>([])
@@ -60,12 +61,24 @@ const onSave = () => {
   })
 
   dataToSave.forEach(async item => {
-    await updateReview(
-      item.id,
-      item.serviceName,
+    if (reviewsList.value.length) {
+      await updateReview(
+        item.id,
+        item.serviceName,
+        item.url,
+        item.rating,
+        item.numberOfReviews
+      )
+
+      return
+    }
+
+    await createReview(
+      props.brokerId,
       item.url,
       item.rating,
-      item.numberOfReviews
+      item.numberOfReviews,
+      item.serviceName
     )
   })
 
@@ -74,42 +87,41 @@ const onSave = () => {
   reviewsModalClose()
 }
 
-watch(
-  () => reviewsList.value,
-  () => {
-    reviewsInputs.value = reviewsList.value.map(item => ({
-      title: item.serviceName,
-      input: [
-        {
-          required: false,
-          id: `${item.serviceName}-link`,
-          name: 'Link',
-          type: 'text',
-          value: item.url,
-          placeholder: 'Link',
-        },
-        {
-          required: false,
-          id: `${item.serviceName}-count`,
-          name: 'Reviews count',
-          type: 'number',
-          value: item.numberOfReviews.toString(),
-          placeholder: 'Reviews count',
-        },
-        {
-          required: false,
-          id: `${item.serviceName}-rating`,
-          name: 'Rating',
-          type: 'number',
-          value: item.rating.toString(),
-          placeholder: 'Rating from 0 to 5',
-          min: 0,
-          max: 5,
-        },
-      ],
-    }))
-  }
-)
+watchEffect(() => {
+  const reviews = reviewsList.value?.length ? reviewsList.value : initialReviews
+
+  reviewsInputs.value = reviews.map(item => ({
+    title: item.serviceName,
+    input: [
+      {
+        required: false,
+        id: `${item.serviceName}-link`,
+        name: 'Link',
+        type: 'text',
+        value: item.url,
+        placeholder: 'Link',
+      },
+      {
+        required: false,
+        id: `${item.serviceName}-count`,
+        name: 'Reviews count',
+        type: 'number',
+        value: item.numberOfReviews.toString(),
+        placeholder: 'Reviews count',
+      },
+      {
+        required: false,
+        id: `${item.serviceName}-rating`,
+        name: 'Rating',
+        type: 'number',
+        value: item.rating.toString(),
+        placeholder: 'Rating from 0 to 5',
+        min: 0,
+        max: 5,
+      },
+    ],
+  }))
+})
 
 onMounted(async () => {
   const data = await getReviews(props.brokerId)
@@ -119,6 +131,8 @@ onMounted(async () => {
       el => typeof el !== 'string'
     )
   }
+
+  console.log(reviewsList?.value.length)
 })
 </script>
 
@@ -133,21 +147,21 @@ onMounted(async () => {
         <BrokerReviewsItem
           v-for="(item, idx) in reviewsList"
           :key="idx"
-          :rating="item.rating"
-          :reviews-count="item.numberOfReviews"
-          :review-link="item.url"
+          :rating="item?.rating"
+          :reviews-count="item?.numberOfReviews"
+          :review-link="item?.url"
         >
           <IconsReviewsForexPeaceArmy
-            v-if="item.serviceName.toLowerCase() === 'forexpeacearmy'"
+            v-if="item?.serviceName.toLowerCase() === 'forexpeacearmy'"
           />
           <IconsReviewsTrustpilot
-            v-if="item.serviceName.toLowerCase() === 'trustpilot'"
+            v-if="item?.serviceName.toLowerCase() === 'trustpilot'"
           />
           <IconsReviewsWikifx
-            v-if="item.serviceName.toLowerCase() === 'wikifx'"
+            v-if="item?.serviceName.toLowerCase() === 'wikifx'"
           />
           <IconsReviewsFx123
-            v-if="item.serviceName.toLowerCase() === 'forexratings'"
+            v-if="item?.serviceName.toLowerCase() === 'forexratings'"
           />
         </BrokerReviewsItem>
       </div>

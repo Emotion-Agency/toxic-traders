@@ -11,6 +11,8 @@ const props = defineProps<iProps>()
 
 const emit = defineEmits(['close'])
 
+const { updateBrokerAccount } = useBrokerServerAccount()
+
 const isPassword = ref(false)
 const editedAccountItems = ref<iAccountModalItem[]>([])
 
@@ -58,6 +60,8 @@ const onEditedChange = val => {
 const showPassword = () => {
   isPassword.value = !isPassword.value
 }
+
+const updateAccount = async () => {}
 </script>
 
 <template>
@@ -105,6 +109,7 @@ const showPassword = () => {
           tag="button"
           variant="fill"
           button-size="medium"
+          @click="updateAccount"
         >
           Update
         </TheButton>

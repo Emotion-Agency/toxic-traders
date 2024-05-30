@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import type { iAccountModalItem } from '~/types'
+import type { iBrokerServer } from '~/types/broker/brokerServer'
 
 interface iProps {
   modalOpened: boolean
+  brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'created'])
+
+const { createBrokerAccount } = useBrokerServerAccount()
+const { getAllBrokerServers } = useBrokerServer()
 
 const isPassword = ref(false)
+const serversList = ref<iBrokerServer[]>([])
+const serversNames = ref<string[]>([])
+const selectedServer = ref<number>(null)
 const createdAccountItems = ref<iAccountModalItem[]>([
   {
     required: false,
@@ -38,16 +46,7 @@ const createdAccountItems = ref<iAccountModalItem[]>([
   },
   {
     placeholder: 'Server',
-    options: [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5',
-      'Option 6',
-      'Option 7',
-      'Option 8',
-    ],
+    options: serversNames,
   },
 ])
 
@@ -59,13 +58,55 @@ const showPassword = () => {
   isPassword.value = !isPassword.value
 }
 
-const onChange = val => {
-  console.log(val)
+const onChange = (e: iInputData) => {
+  createdAccountItems.value = createdAccountItems.value.map(item => {
+    if (item.id === e.id) {
+      item.value = e.value
+    }
+
+    return item
+  })
+
+  console.log(createdAccountItems.value)
 }
 
 const getSelectedItem = (item: string) => {
-  console.log(item)
+  serversList.value.forEach(server => {
+    if (server.serverName === item) {
+      selectedServer.value = server.id
+    }
+  })
+
+  console.log(selectedServer.value)
 }
+
+const createAccount = async () => {
+  const { id } = await createBrokerAccount(
+    createdAccountItems.value[0].value,
+    createdAccountItems.value[1].value,
+    createdAccountItems.value[2].value,
+    selectedServer.value
+  )
+
+  const newAccount = {
+    accountType: createdAccountItems.value[0].value,
+    login: createdAccountItems.value[1].value,
+    password: createdAccountItems.value[2].value,
+    brokerServerId: selectedServer.value,
+    id,
+  }
+
+  emit('created', newAccount)
+  emit('close')
+}
+
+onMounted(async () => {
+  const { brokerServers } = await getAllBrokerServers(props.brokerId)
+
+  serversList.value = brokerServers
+  serversNames.value = serversList.value.map(item => item.serverName)
+  console.log(serversList.value)
+})
 </script>
 
 <template>
@@ -112,7 +153,12 @@ const getSelectedItem = (item: string) => {
       >
         Close
       </TheButton>
-      <TheButton tag="button" variant="fill" button-size="medium">
+      <TheButton
+        tag="button"
+        variant="fill"
+        button-size="medium"
+        @click="createAccount"
+      >
         Add
       </TheButton>
     </div>
