@@ -9,7 +9,7 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'edit'])
 
 const { updateBrokerAccount } = useBrokerServerAccount()
 
@@ -53,15 +53,41 @@ const editAccountModalClose = () => {
   emit('close')
 }
 
-const onEditedChange = val => {
-  console.log(val)
+const onEditedChange = (e: iInputData) => {
+  editedAccountItems.value = editedAccountItems.value.map(item => {
+    if (item.id === e.id) {
+      item.value = e.value
+    }
+
+    return item
+  })
+
+  console.log(editedAccountItems.value)
 }
 
 const showPassword = () => {
   isPassword.value = !isPassword.value
 }
 
-const updateAccount = async () => {}
+const updateAccount = async () => {
+  await updateBrokerAccount(
+    props.account.id,
+    editedAccountItems.value[0].value,
+    editedAccountItems.value[1].value,
+    editedAccountItems.value[2].value
+  )
+
+  const editedAccount = {
+    brokerServerAccountId: props.account.id,
+    accountType: editedAccountItems.value[0].value,
+    login: editedAccountItems.value[1].value,
+    password: editedAccountItems.value[2].value,
+  }
+
+  editAccountModalClose()
+
+  emit('edit', editedAccount)
+}
 </script>
 
 <template>

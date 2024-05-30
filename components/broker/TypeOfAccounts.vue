@@ -67,6 +67,14 @@ const onCreated = newAccount => {
   accountList.value = [...accountList.value, newAccount]
 }
 
+const onEdit = editedAccount => {
+  accountList.value = accountList.value.filter(
+    item => item.id !== editedAccount.brokerServerAccountId
+  )
+
+  accountList.value = [...accountList.value, editedAccount]
+}
+
 const onDelete = async () => {
   await deleteBrokerAccount(accountIdToDelete.value)
 
@@ -113,6 +121,7 @@ onMounted(async () => {
       :modal-opened="editAccountModalState.isOpened"
       :account="editAccountModalState.account"
       @close="editAccountModalClose"
+      @edit="onEdit"
     />
 
     <TheModal
