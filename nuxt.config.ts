@@ -16,4 +16,10 @@ export default defineNuxtConfig({
       ENVIROMENT: process.env.NODE_ENV,
     },
   },
+
+  build: {
+    transpile: [
+      process.env.NODE_ENV === 'production' ? '@emotionagency/utils' : null,
+    ],
+  },
 })
