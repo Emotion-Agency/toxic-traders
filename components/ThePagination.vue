@@ -37,7 +37,7 @@ const computedTotalPages = computed(() => {
   return Math.ceil(props.totalPages / props.itemsCount)
 })
 
-const inputItem = ref({
+const inputItem = computed(() => ({
   id: props.inputId,
   name: props.inputName,
   type: 'number',
@@ -47,7 +47,7 @@ const inputItem = ref({
   isRightButton: false,
   min: 1,
   max: computedTotalPages.value,
-})
+}))
 </script>
 
 <template>

@@ -41,7 +41,7 @@ export const usePagination = (
     itemsCount.value = parseInt(val)
 
     if (currentPage.value > computedTotalPages.value) {
-      currentPage.value = computedTotalPages.value
+      currentPage.value = computedTotalPages.value + 1
     }
   }
 
