@@ -94,7 +94,7 @@ onMounted(async () => {
   <div class="regulator">
     <TheAccordion
       title="Regulator"
-      :additional-button="regulatorItems?.length && 'Edit'"
+      :additional-button="regulatorItems?.length ? 'Edit' : null"
       @open="regulatorModalOpen"
     >
       <ul v-if="regulatorItems?.length" class="regulator__list">

@@ -10,13 +10,14 @@ interface iProps {
 }
 
 const props = defineProps<iProps>()
-
 const emit = defineEmits(['select', 'remove'])
 
 const inputValue = ref('')
 const dropdownOpened = ref(false)
 const selectedBadge = ref('')
 const $el = ref<HTMLElement | null>(null)
+
+const filteredDropdownList = ref([...props.dropdownList])
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -29,6 +30,11 @@ const onFocus = () => {
 
 const selectDropdownItem = (item: string) => {
   selectedBadge.value = item
+
+  filteredDropdownList.value = filteredDropdownList.value.filter(
+    el => el !== item
+  )
+
   emit('select', selectedBadge.value)
 }
 
@@ -36,10 +42,20 @@ const removeBadge = (idx: number) => {
   emit('remove', idx)
 }
 
-const outsideClick = event => {
-  if (!$el.value.contains(event.target)) {
+const outsideClick = (event: Event) => {
+  if ($el.value && !$el.value.contains(event.target as Node)) {
     dropdownOpened.value = false
   }
+}
+
+const updateFilteredList = () => {
+  const filteredList = props.dropdownList.filter(item =>
+    item.toLowerCase().includes(inputValue.value.toLowerCase())
+  )
+
+  filteredDropdownList.value = filteredList.filter(
+    item => !selectedBadge.value.includes(item)
+  )
 }
 
 watch(inputValue, () => {
@@ -48,18 +64,13 @@ watch(inputValue, () => {
   if (inputValue.value === '') {
     dropdownOpened.value = false
   }
-})
 
-const filteredDropdownList = computed(() => {
-  const filteredList = props.dropdownList.filter(item =>
-    item.toLowerCase().includes(inputValue.value.toLowerCase())
-  )
-
-  return filteredList
+  updateFilteredList()
 })
 
 onMounted(() => {
   document.body.addEventListener('click', outsideClick)
+  updateFilteredList()
 })
 
 onUnmounted(() => {
