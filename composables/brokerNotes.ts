@@ -26,6 +26,11 @@ export const useBrokerNotes = () => {
     try {
       const data = await updateBrokerNotes(brokerId, notes)
 
+      addToast({
+        color: ToastColor.success,
+        text: 'Notes successfully updated.',
+      })
+
       return data
     } catch (error) {
       console.error('Error updating notes:', error)
@@ -40,6 +45,11 @@ export const useBrokerNotes = () => {
     try {
       const data = await createBrokerNotes(brokerId, notes)
 
+      addToast({
+        color: ToastColor.success,
+        text: 'Notes successfully created.',
+      })
+
       return data
     } catch (error) {
       console.error('Error creating notes:', error)
@@ -53,6 +63,11 @@ export const useBrokerNotes = () => {
   const deleteNotes = async (brokerId: number) => {
     try {
       const data = await deleteBrokerNotes(brokerId)
+
+      addToast({
+        color: ToastColor.success,
+        text: 'Notes successfully deleted.',
+      })
 
       return data
     } catch (error) {

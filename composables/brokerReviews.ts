@@ -37,6 +37,11 @@ export const useBrokerReviews = () => {
         numberReviews
       )
 
+      addToast({
+        color: ToastColor.success,
+        text: 'Review successfully updated.',
+      })
+
       return data
     } catch (error) {
       console.error('Error updating review:', error)
@@ -62,6 +67,11 @@ export const useBrokerReviews = () => {
         numberReviews,
         serviceName
       )
+
+      addToast({
+        color: ToastColor.success,
+        text: 'Review successfully created.',
+      })
 
       return data
     } catch (error) {

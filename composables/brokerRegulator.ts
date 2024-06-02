@@ -30,6 +30,11 @@ export const useBrokerRegulator = () => {
     try {
       const { regulators } = await updateBrokerRegulator(brokerId, regulator)
 
+      addToast({
+        color: ToastColor.success,
+        text: 'Regulator successfully updated.',
+      })
+
       return regulators
     } catch (error) {
       console.error('Error updating regulator:', error)
@@ -44,6 +49,11 @@ export const useBrokerRegulator = () => {
     try {
       const data = await createBrokerRegulator(brokerId)
 
+      addToast({
+        color: ToastColor.success,
+        text: 'Regulator successfully created.',
+      })
+
       return data
     } catch (error) {
       console.error('Error creating regulator:', error)
@@ -57,6 +67,11 @@ export const useBrokerRegulator = () => {
   const deleteRegulator = async (brokerId: number) => {
     try {
       const data = await deleteBrokerRegulator(brokerId)
+
+      addToast({
+        color: ToastColor.success,
+        text: 'Regulator successfully deleted.',
+      })
 
       return data
     } catch (error) {

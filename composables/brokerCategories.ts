@@ -28,6 +28,11 @@ export const useBrokerCategories = () => {
         category
       )
 
+      addToast({
+        color: ToastColor.success,
+        text: 'Category successfully created.',
+      })
+
       return brokerCategories
     } catch (error) {
       console.error('Error creating categories:', error)
@@ -41,6 +46,11 @@ export const useBrokerCategories = () => {
   const deleteCategories = async (brokerId: number) => {
     try {
       const data = await deleteBrokerCategories(brokerId)
+
+      addToast({
+        color: ToastColor.success,
+        text: 'Category successfully deleted.',
+      })
 
       return data
     } catch (error) {
