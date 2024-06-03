@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { iInput } from '~/types'
 import type { iBroker } from '~/types/broker/broker'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
@@ -8,10 +7,7 @@ const route = useRoute()
 
 const brokersList = ref<iBroker[]>([])
 const filteredBrokers = ref<iBroker[]>([])
-const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
-const totalCountPages = ref(0)
-const itemsCount = ref(route.query.count ? Number(route.query.count) : 25)
-const searchValue = ref<string>('1')
+
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
@@ -68,41 +64,20 @@ const filteredBrokerHeading = computed(() => {
   return getBrokerHeadings(filteredBrokers.value[0] ?? {})
 })
 
-const computedTotalPages = computed(() => {
-  return Math.floor(totalCountPages.value / itemsCount.value)
-})
-
-const prevPageClick = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
-}
-
-const nextPageClick = () => {
-  if (currentPage.value - 1 < computedTotalPages.value) {
-    currentPage.value++
-  }
-}
-
-const selectItem = (val: string) => {
-  itemsCount.value = parseInt(val)
-
-  if (currentPage.value > computedTotalPages.value) {
-    currentPage.value = computedTotalPages.value
-  }
-}
-
-const onChange = (input: iInput) => {
-  const inputPage = input.value
-
-  if (Number(inputPage) > computedTotalPages.value) {
-    searchValue.value = computedTotalPages.value.toString()
-  }
-}
-
-const onBlur = (input: iInput) => {
-  currentPage.value = Number(input.value)
-}
+const {
+  currentPage,
+  itemsCount,
+  searchValue,
+  totalCountPages,
+  nextPageClick,
+  prevPageClick,
+  onInputBlur,
+  onInputChange,
+  onChangeCount,
+} = usePagination(
+  route.query.page && Number(route.query.page),
+  route.query.count && Number(route.query.count)
+)
 
 watch([currentPage, itemsCount], async () => {
   const { brokers } = await getAllBrokers(
@@ -200,9 +175,9 @@ onMounted(async () => {
             input-name="Brokers navigation"
             @next-click="nextPageClick"
             @prev-click="prevPageClick"
-            @selected-item="selectItem"
-            @on-blur-value="onBlur"
-            @on-change-value="onChange"
+            @selected-item="onChangeCount"
+            @on-blur-value="onInputBlur"
+            @on-change-value="onInputChange"
           />
         </div>
       </div>

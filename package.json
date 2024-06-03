@@ -1,6 +1,6 @@
 {
   "name": "@emotionagency/nuxt3-emotion-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -21,6 +21,7 @@
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.7.1",
+    "esm": "^3.2.25",
     "nuxt": "^3.8.0",
     "prettier": "^2.6.2",
     "sass": "^1.51.0",
