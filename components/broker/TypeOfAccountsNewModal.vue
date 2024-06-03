@@ -105,7 +105,6 @@ onMounted(async () => {
 
   serversList.value = brokerServers
   serversNames.value = serversList.value.map(item => item.serverName)
-  console.log(serversList.value)
 })
 </script>
 

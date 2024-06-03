@@ -7,6 +7,8 @@ onMounted(async () => {
   const { providerNames } = await getBrokerStatisticProviders()
 
   headerFields.value = providerNames
+
+  console.log(headerFields.value)
 })
 </script>
 

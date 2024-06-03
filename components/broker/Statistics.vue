@@ -5,30 +5,32 @@ interface iProps {
 
 defineProps<iProps>()
 
-const statisticOptions = ref({
-  placeholder: 'Placeholder',
-  options: [
-    'Option 1',
-    'Option 2',
-    'Option 3',
-    'Option 4',
-    'Option 5',
-    'Option 6',
-    'Option 7',
-    'Option 8',
-  ],
-})
+const { getCompanyNames } = useBrokerCompanyNames()
+
+const websites = ref([])
 
 const getSelectedItem = item => {
   console.log(item)
 }
+
+onMounted(async () => {
+  const companyNamesRequestData = await getCompanyNames()
+
+  companyNamesRequestData.forEach(item => {
+    item.companyNames.forEach(company => {
+      websites.value = [...websites.value, company.website].filter(
+        website => website !== null
+      )
+    })
+  })
+})
 </script>
 
 <template>
   <div class="statistics">
     <CustomSelect
-      :options="statisticOptions.options"
-      :placeholder="statisticOptions.placeholder"
+      :options="websites"
+      :placeholder="websites[0] || 'Choose website'"
       class="statistics__select"
       @select="getSelectedItem"
     />
