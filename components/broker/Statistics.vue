@@ -8,9 +8,19 @@ defineProps<iProps>()
 const { getCompanyNames } = useBrokerCompanyNames()
 
 const websites = ref([])
+const statisticsModalOpened = ref(false)
 
-const getSelectedItem = item => {
-  console.log(item)
+const getSelectedItem = (website: string) => {
+  console.log(website)
+}
+
+const statisticsModalOpen = () => {
+  statisticsModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const statisticsModalClose = () => {
+  statisticsModalOpened.value = false
 }
 
 onMounted(async () => {
@@ -34,8 +44,27 @@ onMounted(async () => {
       class="statistics__select"
       @select="getSelectedItem"
     />
-    <div class="statistics__table">
-      <BrokerStatisticsTable />
+    <div class="statistics__table-wrapper">
+      <div class="statistics__table">
+        <BrokerStatisticsTable />
+      </div>
+
+      <TheButton
+        tag="button"
+        button-size="small"
+        variant="fill"
+        class="statistics__table-btn"
+        @click="statisticsModalOpen"
+      >
+        More info
+      </TheButton>
     </div>
+    <SlidingModal
+      :modal-opened="statisticsModalOpened"
+      title="Statistics"
+      @close="statisticsModalClose"
+    >
+      Statistics modal
+    </SlidingModal>
   </div>
 </template>
