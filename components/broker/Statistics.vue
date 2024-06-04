@@ -3,9 +3,9 @@ interface iProps {
   brokerId: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
-const { getCompanyNames } = useBrokerCompanyNames()
+const { getCompanyNamesById } = useBrokerCompanyNames()
 
 const websites = ref([])
 const statisticsModalOpened = ref(false)
@@ -24,15 +24,9 @@ const statisticsModalClose = () => {
 }
 
 onMounted(async () => {
-  const companyNamesRequestData = await getCompanyNames()
+  const { companyNames } = await getCompanyNamesById(props.brokerId)
 
-  companyNamesRequestData.forEach(item => {
-    item.companyNames.forEach(company => {
-      websites.value = [...websites.value, company.website].filter(
-        website => website !== null
-      )
-    })
-  })
+  websites.value = companyNames.map(item => item.website)
 })
 </script>
 

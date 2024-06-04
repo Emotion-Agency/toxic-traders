@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { getBrokerStatisticProviders } from '~/api/brokers/brokerStatisticProviders'
+const { getStatisticProviders } = useBrokerStatistic()
 
 const headerFields = ref([])
 
 onMounted(async () => {
-  const { providerNames } = await getBrokerStatisticProviders()
+  const { providerNames } = await getStatisticProviders()
 
   headerFields.value = providerNames
 
