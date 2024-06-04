@@ -40,7 +40,7 @@ onMounted(async () => {
     />
     <div class="statistics__table-wrapper">
       <div class="statistics__table">
-        <BrokerStatisticsTable />
+        <BrokerStatisticsTable :broker-id="brokerId" />
       </div>
 
       <TheButton

@@ -1,14 +1,42 @@
 <script setup lang="ts">
-const { getStatisticProviders } = useBrokerStatistic()
+interface iProps {
+  brokerId: number
+}
+
+const props = defineProps<iProps>()
+
+const { getStatisticProviders, getCurrentStatisticTraffic } =
+  useBrokerStatistic()
 
 const headerFields = ref([])
+const ahrefsTraffic = ref<string>('')
+const semrushTraffic = ref<string>('')
+const similarWebTraffic = ref<string>('')
 
 onMounted(async () => {
   const { providerNames } = await getStatisticProviders()
 
+  const ahrefsRequestData = await getCurrentStatisticTraffic(
+    'Ahrefs',
+    props.brokerId
+  )
+  const semrushRequestData = await getCurrentStatisticTraffic(
+    'Semrush',
+    props.brokerId
+  )
+  const similarWebRequestData = await getCurrentStatisticTraffic(
+    'SimilarWeb',
+    props.brokerId
+  )
+
   headerFields.value = providerNames
 
-  console.log(headerFields.value)
+  ahrefsTraffic.value =
+    ahrefsRequestData?.companyNamesTraffic[0]?.traffic || 'N/A'
+  semrushTraffic.value =
+    semrushRequestData?.companyNamesTraffic[0]?.traffic || 'N/A'
+  similarWebTraffic.value =
+    similarWebRequestData?.companyNamesTraffic[0]?.traffic || 'N/A'
 })
 </script>
 
@@ -16,25 +44,13 @@ onMounted(async () => {
   <div class="statistics-table">
     <Table>
       <TableHead :header-fields="headerFields" />
-      <!-- <TableBody>
-        <TableRow v-for="(item, idx) in filteredServersList" :key="idx">
-          <TableCell
-            v-for="(cell, i) in item"
-            :key="i"
-            :item="cell?.serverName || 'N/A'"
-            :class="`table-cell--${i}`"
-            :is-modal="!!cell?.serverName"
-            @open="serversModalOpen(idx)"
-          />
-          <TheModal
-            :modal-opened="isOpenedServersModal[idx]"
-            title="Server info"
-            @close="serversModalClose(idx)"
-          >
-            <ProviderStatistic opened/>
-          </TheModal>
+      <TableBody>
+        <TableRow>
+          <TableCell :item="ahrefsTraffic" />
+          <TableCell :item="semrushTraffic" />
+          <TableCell :item="similarWebTraffic" />
         </TableRow>
-      </TableBody> -->
+      </TableBody>
     </Table>
   </div>
 </template>
