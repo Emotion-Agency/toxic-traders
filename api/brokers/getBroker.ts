@@ -1,5 +1,5 @@
 import axiosInstance from '../axiosInstance'
-import type { iBrokersData } from '~/types/broker/broker'
+import type { iBrokersData, iSearchBrokerParams } from '~/types/broker/broker'
 
 export const getBroker = async (offset: number, count: number) => {
   try {
@@ -12,6 +12,21 @@ export const getBroker = async (offset: number, count: number) => {
       },
     })
 
+    return data
+  } catch (e) {
+    console.error(e.message)
+    throw e
+  }
+}
+
+export const getSearchBroker = async (params: iSearchBrokerParams) => {
+  try {
+    const { data }: iBrokersData = await axiosInstance.get(
+      'Broker/Search/Page',
+      {
+        params,
+      }
+    )
     return data
   } catch (e) {
     console.error(e.message)

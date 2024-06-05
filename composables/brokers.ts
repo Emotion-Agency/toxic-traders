@@ -1,8 +1,37 @@
 import { getBrokerById } from '~/api/brokers/getBrokerById'
 import { getBroker } from '~/api/brokers/getBroker'
+import type { iSearchInput } from '~/types'
 
 export const useBrokers = () => {
   const { addToast } = useToasts()
+
+  interface IBrokerSearchParams {
+    offset: number
+    count: number
+    sortOrder: number
+    sortBy: string
+    data: iSearchInput[]
+  }
+
+  const getAllBrokersBySearch = async ({
+    offset,
+    count,
+    sortOrder,
+    sortBy,
+    data,
+  }: IBrokerSearchParams) => {
+    try {
+      const { brokers, totalCount } = await getSearchBroker()
+
+      return { brokers, totalCount }
+    } catch (error) {
+      console.error('Error fetching brokers:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching brokers. Please try again.',
+      })
+    }
+  }
 
   const getAllBrokers = async (offset: number, count: number) => {
     try {

@@ -35,3 +35,28 @@ export interface iBrokerData {
 }
 
 // export type iBrokerData = iBroker
+
+export interface iSearchBrokerParams {
+  page: number
+  pageSize: number
+  sortBy: string
+  sortOrder: number
+  companyName: string
+  category: string
+  locationServers: string
+  addressCompany: string
+  website: string
+  serverType: number
+  regulator: number
+  platforms: number
+  depositMethods: number
+  leverage: number
+  serverTimezone: number
+  symbolName: string
+  description: string
+  digits: number
+  contractSize: number
+  fillPolicy: number
+  executionType: number
+  execution: number
+}

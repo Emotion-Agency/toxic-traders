@@ -122,7 +122,7 @@ const initialSearchItems: iSearchInput[] = [
     required: false,
     id: 'leverage',
     name: 'Leverage',
-    type: 'text',
+    type: 'number',
     value: '',
     placeholder: 'Placeholder',
     disabled: false,
@@ -146,7 +146,7 @@ const initialSearchItems: iSearchInput[] = [
     required: false,
     id: 'order-id-digits',
     name: 'Order ID Digits',
-    type: 'text',
+    type: 'number',
     value: '',
     placeholder: 'Placeholder',
     disabled: false,
@@ -182,7 +182,7 @@ const initialSearchItems: iSearchInput[] = [
     required: false,
     id: 'digits',
     name: 'Digits',
-    type: 'text',
+    type: 'number',
     value: '',
     placeholder: 'Placeholder',
     disabled: false,
@@ -194,7 +194,7 @@ const initialSearchItems: iSearchInput[] = [
     required: false,
     id: 'contract-size',
     name: 'Contract Size',
-    type: 'text',
+    type: 'number',
     value: '',
     placeholder: 'Placeholder',
     disabled: false,
@@ -246,7 +246,7 @@ const onChange = (val: iInput) => {
     if (item.id === val.id) {
       item = {
         ...item,
-        value: val.value,
+        value: val.value?.toString(),
       }
     }
     return item
