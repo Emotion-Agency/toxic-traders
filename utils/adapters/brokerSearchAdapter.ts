@@ -3,9 +3,9 @@ import type {
   IBrokerSearchParams,
 } from '~/types/broker/broker'
 
-export const brokerSearchAdapter: iSearchBrokerParams = (
+export const brokerSearchAdapter = (
   params: IBrokerSearchParams
-) => {
+): iSearchBrokerParams => {
   return {
     searchResultPage: params.offset,
     searchResultPageSize: params.count,

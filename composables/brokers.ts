@@ -1,19 +1,15 @@
 import { getBrokerById } from '~/api/brokers/getBrokerById'
-import { getBroker } from '~/api/brokers/getBroker'
+import { getBroker, getSearchBroker } from '~/api/brokers/getBroker'
 import type { IBrokerSearchParams } from '~/types/broker/broker'
+import { brokerSearchAdapter } from '~/utils/adapters/brokerSearchAdapter'
 
 export const useBrokers = () => {
   const { addToast } = useToasts()
 
-  const getAllBrokersBySearch = async ({
-    offset,
-    count,
-    sortOrder,
-    sortBy,
-    data,
-  }: IBrokerSearchParams) => {
+  const getAllBrokersBySearch = async (params: IBrokerSearchParams) => {
     try {
-      const { brokers, totalCount } = await getSearchBroker()
+      const transformedParams = brokerSearchAdapter(params)
+      const { brokers, totalCount } = await getSearchBroker(transformedParams)
 
       return { brokers, totalCount }
     } catch (error) {
@@ -53,5 +49,5 @@ export const useBrokers = () => {
     }
   }
 
-  return { getAllBrokers, getCurrentBroker }
+  return { getAllBrokers, getAllBrokersBySearch, getCurrentBroker }
 }
