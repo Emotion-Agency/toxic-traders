@@ -6,13 +6,23 @@ interface iProps {
   placeholder: string
   title?: string
   searchInput?: iSearchInput
+  id?: string
+  name?: string
+  value?: string
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
-const selectedItem = ref('')
+const selectedItem = ref(props.value ?? '')
+
+watch(
+  () => props.value,
+  () => {
+    selectedItem.value = props.value
+  }
+)
 
 const emit = defineEmits(['select', 'search'])
 
@@ -23,7 +33,7 @@ const toggleList = () => {
 const closeList = (option = '') => {
   isOpened.value = false
   selectedItem.value = option
-  emit('select', option)
+  emit('select', option, { id: props.id, value: option })
 }
 
 const outsideClick = event => {
@@ -47,7 +57,9 @@ onUnmounted(() => {
 
 <template>
   <div
+    :id="id"
     ref="$el"
+    :name="name"
     class="custom-select"
     :class="isOpened && 'custom-select--opened'"
   >

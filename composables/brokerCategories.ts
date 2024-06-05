@@ -3,9 +3,23 @@ import {
   deleteBrokerCategories,
   getBrokerCategories,
 } from '~/api/brokers/brokerCategories'
+import { getBrokerCategoriesList } from '~/api/brokers/brokerCategoriesList'
 
 export const useBrokerCategories = () => {
   const { addToast } = useToasts()
+
+  const getCategoriesList = async () => {
+    try {
+      const data = await getBrokerCategoriesList()
+      return data
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching categories. Please try again.',
+      })
+    }
+  }
 
   const getCategories = async (brokerId: number) => {
     try {
@@ -62,5 +76,10 @@ export const useBrokerCategories = () => {
     }
   }
 
-  return { getCategories, createCategories, deleteCategories }
+  return {
+    getCategoriesList,
+    getCategories,
+    createCategories,
+    deleteCategories,
+  }
 }

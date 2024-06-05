@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { iSearchInput } from '~/types'
+import { deepClone } from '~/utils/deepClone'
+import type { iInput, iSearchInput, iSelectInput } from '~/types'
 
 interface iProps {
   isOpened: boolean
@@ -7,7 +8,11 @@ interface iProps {
 
 defineProps<iProps>()
 
-const searchItems = reactive<iSearchInput[]>([
+const { getCategoriesList } = useBrokerCategories()
+
+const categoriesList = await getCategoriesList()
+
+const initialSearchItems: iSearchInput[] = [
   {
     title: 'Name',
     required: false,
@@ -21,18 +26,12 @@ const searchItems = reactive<iSearchInput[]>([
     isRightButton: false,
   },
   {
+    id: 'category',
+    name: 'Category',
     title: 'Category',
     placeholder: 'Placeholder',
-    options: [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5',
-      'Option 6',
-      'Option 7',
-      'Option 8',
-    ],
+    options: categoriesList,
+    value: '',
   },
   {
     title: 'Location Servers',
@@ -71,30 +70,12 @@ const searchItems = reactive<iSearchInput[]>([
     isRightButton: false,
   },
   {
-    title: 'Servers MT4',
+    id: 'servers',
+    name: 'Servers',
+    title: 'Servers (MT4 or MT5)',
     placeholder: 'Placeholder',
-    options: [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5',
-      'Option 6',
-      'Option 7',
-      'Option 8',
-    ],
-  },
-  {
-    title: 'Servers MT5',
-    required: false,
-    id: 'servers-mt5',
-    name: 'Servers MT5',
-    type: 'text',
+    options: ['MT4', 'MT5'],
     value: '',
-    placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
     title: 'Regulator',
@@ -252,18 +233,36 @@ const searchItems = reactive<iSearchInput[]>([
     isLeftButton: false,
     isRightButton: false,
   },
-])
+]
 
-const onChange = val => {
-  console.log(val)
+const searchItems = ref<iSearchInput[]>(deepClone(initialSearchItems))
+
+const onChange = (val: iInput) => {
+  searchItems.value = searchItems.value.map(item => {
+    if (item.id === val.id) {
+      item = {
+        ...item,
+        value: val.value,
+      }
+    }
+    return item
+  })
 }
 
-const getSelectedItem = (item: string) => {
-  console.log(item)
+const getSelectedItem = (_, opts: iSelectInput) => {
+  searchItems.value = searchItems.value.map(item => {
+    if (item.id === opts.id) {
+      item = {
+        ...item,
+        value: opts.value,
+      }
+    }
+    return item
+  })
 }
 
 const resetSearch = () => {
-  console.log('search reset')
+  searchItems.value = initialSearchItems
 }
 </script>
 
@@ -285,9 +284,12 @@ const resetSearch = () => {
           >
             <CustomSelect
               v-if="input.options"
+              :id="input.id"
+              :name="input.name"
               :options="input.options"
               :title="input.title"
               :placeholder="input.placeholder"
+              :value="input.value"
               @select="getSelectedItem"
             />
             <TheInput
@@ -299,6 +301,7 @@ const resetSearch = () => {
               :type="input.type"
               :placeholder="input.placeholder"
               :disabled="input.disabled"
+              :value="input.value"
               :is-left-button="input.isLeftButton"
               :is-right-button="input.isRightButton"
               @input-value="onChange"

@@ -3,7 +3,7 @@ export interface iSearchInput {
   required?: boolean
   id: string
   name: string
-  type: string
+  type?: string
   value?: string
   placeholder?: string
   disabled?: boolean
@@ -16,6 +16,11 @@ export interface iInput {
   id: string
   value: string
   error: boolean
+}
+
+export interface iSelectInput {
+  id: string
+  value: string
 }
 
 export interface iAccountModalItem {
