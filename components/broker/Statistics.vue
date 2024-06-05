@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { iCompanyNamesItem } from '~/types/broker/brokerCompanyNames'
+
 interface iProps {
   brokerId: number
 }
@@ -6,17 +8,29 @@ interface iProps {
 const props = defineProps<iProps>()
 
 const { getCompanyNamesById } = useBrokerCompanyNames()
+const { getCurrentStatisticProviders } = useBrokerStatistic()
 
+const companyNamesList = ref<iCompanyNamesItem[]>([])
 const websites = ref([])
 const statisticsModalOpened = ref(false)
+const selectedWebsiteId = ref(null)
 
 const getSelectedItem = (website: string) => {
-  console.log(website)
+  selectedWebsiteId.value = companyNamesList.value.find(
+    item => item.website === website
+  )?.id
 }
 
-const statisticsModalOpen = () => {
+const statisticsModalOpen = async () => {
   statisticsModalOpened.value = true
   document.body.classList.add('modal-open')
+
+  const data = await getCurrentStatisticProviders(
+    selectedWebsiteId.value,
+    'Ahrefs'
+  )
+
+  console.log(data)
 }
 
 const statisticsModalClose = () => {
@@ -26,7 +40,10 @@ const statisticsModalClose = () => {
 onMounted(async () => {
   const { companyNames } = await getCompanyNamesById(props.brokerId)
 
+  companyNamesList.value = companyNames
   websites.value = companyNames.map(item => item.website)
+
+  selectedWebsiteId.value = companyNamesList.value[0]?.id
 })
 </script>
 
@@ -40,7 +57,10 @@ onMounted(async () => {
     />
     <div class="statistics__table-wrapper">
       <div class="statistics__table">
-        <BrokerStatisticsTable :broker-id="brokerId" />
+        <BrokerStatisticsTable
+          :broker-id="brokerId"
+          :website-id="selectedWebsiteId"
+        />
       </div>
 
       <TheButton

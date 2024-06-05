@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface iProps {
   brokerId: number
+  websiteId: number | null
 }
 
 const props = defineProps<iProps>()
@@ -8,35 +9,55 @@ const props = defineProps<iProps>()
 const { getStatisticProviders, getCurrentStatisticTraffic } =
   useBrokerStatistic()
 
+const ahrefsRequestData = ref(null)
+const semrushRequestData = ref(null)
+const similarWebRequestData = ref(null)
+
 const headerFields = ref([])
-const ahrefsTraffic = ref<string>('')
-const semrushTraffic = ref<string>('')
-const similarWebTraffic = ref<string>('')
+
+const ahrefsTraffic = computed(() => {
+  return (
+    ahrefsRequestData.value?.companyNamesTraffic.find(
+      item => item.companyName.id === props.websiteId
+    )?.traffic || 'N/A'
+  )
+})
+
+const semrushTraffic = computed(() => {
+  return (
+    semrushRequestData.value?.companyNamesTraffic.find(
+      item => item.companyName.id === props.websiteId
+    )?.traffic || 'N/A'
+  )
+})
+
+const similarWebTraffic = computed(() => {
+  return (
+    similarWebRequestData.value?.companyNamesTraffic.find(
+      item => item.companyName.id === props.websiteId
+    )?.traffic || 'N/A'
+  )
+})
 
 onMounted(async () => {
   const { providerNames } = await getStatisticProviders()
 
-  const ahrefsRequestData = await getCurrentStatisticTraffic(
+  ahrefsRequestData.value = await getCurrentStatisticTraffic(
     'Ahrefs',
     props.brokerId
   )
-  const semrushRequestData = await getCurrentStatisticTraffic(
+
+  semrushRequestData.value = await getCurrentStatisticTraffic(
     'Semrush',
     props.brokerId
   )
-  const similarWebRequestData = await getCurrentStatisticTraffic(
+
+  similarWebRequestData.value = await getCurrentStatisticTraffic(
     'SimilarWeb',
     props.brokerId
   )
 
   headerFields.value = providerNames
-
-  ahrefsTraffic.value =
-    ahrefsRequestData?.companyNamesTraffic[0]?.traffic || 'N/A'
-  semrushTraffic.value =
-    semrushRequestData?.companyNamesTraffic[0]?.traffic || 'N/A'
-  similarWebTraffic.value =
-    similarWebRequestData?.companyNamesTraffic[0]?.traffic || 'N/A'
 })
 </script>
 
