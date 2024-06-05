@@ -6,16 +6,21 @@ import type {
 export const brokerSearchAdapter = (
   params: IBrokerSearchParams
 ): iSearchBrokerParams => {
+  const getParameter = (id: string) => {
+    return params.data.find(item => item.id === id)?.value ?? ''
+  }
+
   return {
     searchResultPage: params.offset,
     searchResultPageSize: params.count,
     sortBy: params.sortBy ?? 'companyNames',
     sortOrder: params.sortOrder ?? 1,
-    companyName: '',
-    category: '',
-    locationServers: '',
-    addressCompany: '',
-    website: '',
+    companyName: getParameter('name'),
+    category: getParameter('category'),
+    locationServers: getParameter('location-servers'),
+
+    addressCompany: getParameter('address-company'),
+    website: getParameter('websites'),
     serverType: -1,
     regulator: -1,
     platforms: -1,
