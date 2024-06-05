@@ -12,8 +12,6 @@
 
   &--opened {
     width: 260px;
-    padding: 20px;
-    margin-left: 20px;
     opacity: 1;
     pointer-events: visible;
     flex: 1 0 auto;
@@ -21,7 +19,8 @@
 }
 
 .broker__search-clip {
-  width: 220px;
+  width: 260px;
+  padding: 20px;
 }
 
 .brokers-search__header {

@@ -24,6 +24,8 @@
   column-gap: 0;
   transition: column-gap 0.3s ease;
   margin-top: 32px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   &--search {
     column-gap: 16px;
@@ -31,9 +33,10 @@
 }
 
 .brokers__table-wrapper {
-  width: calc(100% - 40px); // width search + column-gap
-
+  // width: calc(100% - 40px); // width search + column-gap
+  flex: 0 100%;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .brokers__pagination {
