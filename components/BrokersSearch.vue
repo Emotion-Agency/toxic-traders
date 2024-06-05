@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import debounce from 'debounce'
+
 import { deepClone } from '~/utils/deepClone'
 import type { iInput, iSearchInput, iSelectInput } from '~/types'
 
@@ -7,6 +9,8 @@ interface iProps {
 }
 
 defineProps<iProps>()
+
+const emit = defineEmits(['search'])
 
 const { getCategoriesList } = useBrokerCategories()
 
@@ -264,6 +268,14 @@ const getSelectedItem = (_, opts: iSelectInput) => {
 const resetSearch = () => {
   searchItems.value = initialSearchItems
 }
+
+const debounceSearch = debounce(() => {
+  emit('search', searchItems.value)
+}, 500)
+
+watch(searchItems, () => {
+  debounceSearch()
+})
 </script>
 
 <template>

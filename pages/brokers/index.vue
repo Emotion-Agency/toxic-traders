@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { iSearchInput } from '~/types'
 import type { iBroker } from '~/types/broker/broker'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
 
@@ -108,6 +109,10 @@ onMounted(async () => {
   filteredBrokers.value = brokersList.value
   totalCountPages.value = totalCount
 })
+
+const onSearch = (searchData: iSearchInput[]) => {
+  console.log(searchData)
+}
 </script>
 
 <template>
@@ -157,7 +162,7 @@ onMounted(async () => {
         class="brokers__content"
         :class="isSearchOpened && 'brokers__content--search'"
       >
-        <BrokersSearch :is-opened="isSearchOpened" />
+        <BrokersSearch :is-opened="isSearchOpened" @search="onSearch" />
         <div class="brokers__table-wrapper">
           <BrokersTable
             :is-search-opened="isSearchOpened"

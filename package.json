@@ -32,6 +32,7 @@
     "@emotionagency/emotion-scroll": "latest",
     "@emotionagency/utils": "latest",
     "axios": "^1.6.7",
+    "debounce": "^2.1.0",
     "gsap": "^3.12.5"
   }
 }
