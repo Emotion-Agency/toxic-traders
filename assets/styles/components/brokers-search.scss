@@ -7,16 +7,20 @@
   border-radius: 10px;
   padding: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   height: 76vh;
 
   &--opened {
     width: 260px;
-    padding: 20px;
-    margin-left: 20px;
     opacity: 1;
     pointer-events: visible;
     flex: 1 0 auto;
   }
+}
+
+.broker__search-clip {
+  width: 260px;
+  padding: 20px;
 }
 
 .brokers-search__header {

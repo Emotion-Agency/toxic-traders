@@ -269,39 +269,41 @@ const resetSearch = () => {
 
 <template>
   <div class="brokers-search" :class="isOpened && 'brokers-search--opened'">
-    <div class="brokers-search__wrapper">
-      <div class="brokers-search__header">
-        <h5 class="brokers-search__title">Search</h5>
-        <button class="brokers-search__reset" @click="resetSearch">
-          Reset
-        </button>
-      </div>
-      <div class="brokers-search__content">
-        <div
-          v-for="(input, idx) in searchItems"
-          :key="idx"
-          class="brokers-search__item"
-        >
-          <CustomSelect
-            v-if="input.options"
-            :options="input.options"
-            :title="input.title"
-            :placeholder="input.placeholder"
-            @select="getSelectedItem"
-          />
-          <TheInput
-            v-else
-            :id="input.id"
-            :required="input.required"
-            :title="input.title"
-            :name="input.name"
-            :type="input.type"
-            :placeholder="input.placeholder"
-            :disabled="input.disabled"
-            :is-left-button="input.isLeftButton"
-            :is-right-button="input.isRightButton"
-            @input-value="onChange"
-          />
+    <div class="broker__search-clip">
+      <div class="brokers-search__wrapper">
+        <div class="brokers-search__header">
+          <h5 class="brokers-search__title">Search</h5>
+          <button class="brokers-search__reset" @click="resetSearch">
+            Reset
+          </button>
+        </div>
+        <div class="brokers-search__content">
+          <div
+            v-for="(input, idx) in searchItems"
+            :key="idx"
+            class="brokers-search__item"
+          >
+            <CustomSelect
+              v-if="input.options"
+              :options="input.options"
+              :title="input.title"
+              :placeholder="input.placeholder"
+              @select="getSelectedItem"
+            />
+            <TheInput
+              v-else
+              :id="input.id"
+              :required="input.required"
+              :title="input.title"
+              :name="input.name"
+              :type="input.type"
+              :placeholder="input.placeholder"
+              :disabled="input.disabled"
+              :is-left-button="input.isLeftButton"
+              :is-right-button="input.isRightButton"
+              @input-value="onChange"
+            />
+          </div>
         </div>
       </div>
     </div>
