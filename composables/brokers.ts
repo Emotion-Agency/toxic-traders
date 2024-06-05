@@ -1,17 +1,9 @@
 import { getBrokerById } from '~/api/brokers/getBrokerById'
 import { getBroker } from '~/api/brokers/getBroker'
-import type { iSearchInput } from '~/types'
+import type { IBrokerSearchParams } from '~/types/broker/broker'
 
 export const useBrokers = () => {
   const { addToast } = useToasts()
-
-  interface IBrokerSearchParams {
-    offset: number
-    count: number
-    sortOrder: number
-    sortBy: string
-    data: iSearchInput[]
-  }
 
   const getAllBrokersBySearch = async ({
     offset,

@@ -1,3 +1,5 @@
+import type { iSearchInput } from '..'
+
 export interface iBroker {
   baseBrokerServerLocation?: string | null
   brokerCategories?: string | null
@@ -36,9 +38,17 @@ export interface iBrokerData {
 
 // export type iBrokerData = iBroker
 
+export interface IBrokerSearchParams {
+  offset: number
+  count: number
+  sortOrder: number
+  sortBy: string
+  data: iSearchInput[]
+}
+
 export interface iSearchBrokerParams {
-  page: number
-  pageSize: number
+  searchResultPage: number
+  searchResultPageSize: number
   sortBy: string
   sortOrder: number
   companyName: string
