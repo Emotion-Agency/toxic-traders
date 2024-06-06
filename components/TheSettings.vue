@@ -18,6 +18,7 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
+const initialCheckboxList = ref([])
 const checkboxList = ref([])
 
 const selectedCheckboxItems = ref<string[]>([])
@@ -33,11 +34,19 @@ watch(
       disabled: false,
       checked: true,
     }))
+
+    initialCheckboxList.value = checkboxList.value
   }
 )
 
-const onChange = val => {
-  console.log(val)
+const onChange = (inputData: iInputData) => {
+  const filteredList = initialCheckboxList.value.filter(item => {
+    return item.value?.toLowerCase()?.includes(inputData?.value.toLowerCase())
+  })
+
+  // checkboxList.value = filteredList.length
+  //   ? filteredList
+  //   : initialCheckboxList.value
 }
 
 const selectAllItems = () => {
