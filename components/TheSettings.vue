@@ -18,7 +18,6 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
-const initialCheckboxList = ref([])
 const checkboxList = ref([])
 
 const selectedCheckboxItems = ref<string[]>([])
@@ -33,20 +32,25 @@ watch(
       type: 'checkbox',
       disabled: false,
       checked: true,
+      isShow: true,
     }))
-
-    initialCheckboxList.value = checkboxList.value
   }
 )
 
 const onChange = (inputData: iInputData) => {
-  const filteredList = initialCheckboxList.value.filter(item => {
-    return item.value?.toLowerCase()?.includes(inputData?.value.toLowerCase())
-  })
+  checkboxList.value = checkboxList.value.map(item => {
+    if (item.value.toLowerCase().includes(inputData.value.toLowerCase())) {
+      return {
+        ...item,
+        isShow: true,
+      }
+    }
 
-  // checkboxList.value = filteredList.length
-  //   ? filteredList
-  //   : initialCheckboxList.value
+    return {
+      ...item,
+      isShow: false,
+    }
+  })
 }
 
 const selectAllItems = () => {
@@ -117,6 +121,7 @@ watch(
     <div class="settings__content">
       <CheckboxInput
         v-for="(item, idx) in checkboxList"
+        v-show="item.isShow"
         :id="item.id"
         :key="idx"
         :value="item.value"
