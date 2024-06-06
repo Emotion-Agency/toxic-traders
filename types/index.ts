@@ -12,6 +12,11 @@ export interface iSearchInput {
   options?: string[]
 }
 
+export interface iLink {
+  text: string
+  url: string
+}
+
 export interface iInput {
   id: string
   value: string
