@@ -14,7 +14,7 @@ const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
 
-const { getAllBrokers } = useBrokers()
+const { getAllBrokers, getAllBrokersBySearch } = useBrokers()
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value
@@ -96,22 +96,29 @@ watch([currentPage, itemsCount], async () => {
   })
 })
 
-onMounted(async () => {
+const getBrokersRequest = async (data?: iSearchInput[]) => {
   isLoading.value = true
 
-  const { brokers, totalCount } = await getAllBrokers(
-    currentPage.value - 1,
-    itemsCount.value
-  )
+  const { brokers, totalCount } = await getAllBrokersBySearch({
+    offset: currentPage.value - 1,
+    count: itemsCount.value,
+    sortBy: 'companyName',
+    sortOrder: 1,
+    data: data ?? [],
+  })
 
   isLoading.value = false
   brokersList.value = brokers
   filteredBrokers.value = brokersList.value
   totalCountPages.value = totalCount
+}
+
+onMounted(async () => {
+  await getBrokersRequest()
 })
 
-const onSearch = (searchData: iSearchInput[]) => {
-  console.log(searchData)
+const onSearch = async (searchData: iSearchInput[]) => {
+  await getBrokersRequest(searchData)
 }
 </script>
 
