@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { initialReviews } from '~/data/initialReviews'
+import type { iSelectInput } from '~/types'
 import type { iBrokerReviewsItem } from '~/types/broker/brokerReviews'
 
 interface iProps {
@@ -9,20 +9,25 @@ interface iProps {
 interface iReviewsInput {
   title?: string
   input?: {
-    required: boolean
+    required?: boolean
     id: string
     name: string
-    type: string
+    type?: string
     value: string
     placeholder: string
     min?: number
     max?: number
+    title?: string
+    options?: string[]
   }[]
 }
 
 const props = defineProps<iProps>()
 
-const { getReviews, updateReview, createReview } = useBrokerReviews()
+const services = ['Trustpilot', 'ForexPeaceArmy', 'Wikifx', 'Fx123']
+
+const { getReviews, updateReview, createReview, deleteReview } =
+  useBrokerReviews()
 const reviewsModalOpened = ref(false)
 const reviewsList = ref<iBrokerReviewsItem[]>([])
 const reviewsInputs = ref<iReviewsInput[]>([])
@@ -48,10 +53,22 @@ const onInputChange = (e: iInputData) => {
   })
 }
 
+const onSelectChange = (_, e: iSelectInput) => {
+  reviewsInputs.value = reviewsInputs.value.map(item => {
+    item.input.map(input => {
+      if (input.id === e.id) {
+        input.value = e.value
+      }
+      return input
+    })
+    return item
+  })
+}
+
 const onSave = () => {
   const dataToSave = reviewsInputs.value.map(item => {
     return {
-      serviceName: item.title,
+      serviceName: item.input.find(el => el.name === 'service').value,
       url: item.input.find(el => el.name === 'Link').value,
       numberOfReviews: +item.input.find(el => el.name === 'Reviews count')
         .value,
@@ -87,15 +104,38 @@ const onSave = () => {
   reviewsModalClose()
 }
 
-watchEffect(() => {
-  const reviews = reviewsList.value?.length ? reviewsList.value : initialReviews
+onMounted(async () => {
+  const data = await getReviews(props.brokerId)
 
-  reviewsInputs.value = reviews.map(item => ({
-    title: item.serviceName,
+  console.log(data)
+
+  if (data) {
+    reviewsList.value = Object.values(data)?.filter(
+      el => !!el && typeof el !== 'string'
+    )
+  }
+})
+
+const reviewListSelectedServices = computed(() => {
+  return reviewsList.value?.map(item => item.serviceName)
+})
+
+watchEffect(() => {
+  console.log(reviewsList.value)
+  reviewsInputs.value = reviewsList.value.map((item, idx) => ({
+    title: `#${idx + 1}`,
     input: [
       {
+        id: `_${idx}-service`,
+        name: 'service',
+
+        placeholder: 'Choose Service',
+        options: services,
+        value: item.serviceName,
+      },
+      {
         required: false,
-        id: `${item.serviceName}-link`,
+        id: `_${idx}-link`,
         name: 'Link',
         type: 'text',
         value: item.url,
@@ -103,7 +143,7 @@ watchEffect(() => {
       },
       {
         required: false,
-        id: `${item.serviceName}-count`,
+        id: `_${idx}-count`,
         name: 'Reviews count',
         type: 'number',
         value: item.numberOfReviews.toString(),
@@ -111,7 +151,7 @@ watchEffect(() => {
       },
       {
         required: false,
-        id: `${item.serviceName}-rating`,
+        id: `_${idx}-rating`,
         name: 'Rating',
         type: 'number',
         value: item.rating.toString(),
@@ -123,17 +163,62 @@ watchEffect(() => {
   }))
 })
 
-onMounted(async () => {
-  const data = await getReviews(props.brokerId)
-
-  if (data) {
-    reviewsList.value = Object.values(data)?.filter(
-      el => typeof el !== 'string'
-    )
+const addNewReviewInput = () => {
+  if (reviewsInputs.value.length >= 4) {
+    return
   }
 
-  console.log(reviewsList?.value.length)
-})
+  const currentIdx = reviewsInputs.value.length
+
+  const newItem = {
+    title: `#${currentIdx + 1}`,
+    input: [
+      {
+        id: `_${currentIdx}-service`,
+        name: 'service',
+
+        placeholder: 'Choose Service',
+        options: services.filter(
+          service => !reviewListSelectedServices.value.includes(service)
+        ),
+        value: '',
+      },
+      {
+        id: `_${currentIdx}-link`,
+        name: 'Link',
+        required: false,
+        type: 'text',
+        value: '',
+        placeholder: 'Link',
+      },
+      {
+        required: false,
+        id: `_${currentIdx}-count`,
+        name: 'Reviews count',
+        type: 'number',
+        value: '',
+        placeholder: 'Reviews count',
+      },
+      {
+        required: false,
+        id: `_${currentIdx}-rating`,
+        name: 'Rating',
+        type: 'number',
+        value: '',
+        placeholder: 'Rating from 0 to 5',
+        min: 0,
+        max: 5,
+      },
+    ],
+  }
+
+  reviewsInputs.value = [...reviewsInputs.value, newItem]
+}
+
+const removeReviewInput = async (idx: number) => {
+  await deleteReview(reviewsList.value[idx].id)
+  reviewsInputs.value = reviewsInputs.value.filter((_, index) => index !== idx)
+}
 </script>
 
 <template>
@@ -167,17 +252,7 @@ onMounted(async () => {
       </div>
 
       <div v-else class="reviews__content">
-        <BrokerReviewsItem
-          v-for="(_, idx) in 4"
-          :key="idx"
-          :rating="0"
-          :reviews-count="0"
-        >
-          <IconsReviewsForexPeaceArmy v-if="idx === 0" />
-          <IconsReviewsTrustpilot v-if="idx === 1" />
-          <IconsReviewsWikifx v-if="idx === 2" />
-          <IconsReviewsFx123 v-if="idx === 3" />
-        </BrokerReviewsItem>
+        <p class="reviews__content-text">No reviews yet</p>
       </div>
     </TheAccordion>
     <TheModal
@@ -185,28 +260,56 @@ onMounted(async () => {
       title="Edit reviews"
       @close="reviewsModalClose"
     >
-      <div
+      <TheAccordion
         v-for="(item, idx) in reviewsInputs"
         :key="idx"
+        :title="'#' + (idx + 1)"
+        additional-button="Remove"
         class="reviews__item"
+        @action-click="removeReviewInput(idx)"
       >
-        <p class="reviews__item-title">
-          {{ item.title }}
-        </p>
-        <TheInput
+        <div
           v-for="(input, index) in item.input"
-          :id="input.id"
           :key="index"
-          :required="input.required"
-          :name="input.name"
-          :type="input.type"
-          :placeholder="input.placeholder"
-          :value="input.value.toString()"
-          :min="input.min"
-          :max="input.max"
-          @input-value="onInputChange"
-        />
-      </div>
+          class="review__input-item"
+        >
+          <CustomSelect
+            v-if="input.options"
+            :id="input.id"
+            :name="input.name"
+            :options="input.options"
+            :placeholder="input.placeholder"
+            :value="input.value"
+            @select="onSelectChange"
+          />
+          <TheInput
+            v-else
+            :id="input.id"
+            :key="index"
+            :required="input.required"
+            :name="input.name"
+            :type="input.type"
+            :placeholder="input.placeholder"
+            :value="input.value.toString()"
+            :min="input.min"
+            :max="input.max"
+            @input-value="onInputChange"
+          />
+        </div>
+      </TheAccordion>
+      <TheButton
+        v-if="reviewsInputs?.length < 4"
+        tag="button"
+        variant="outlined"
+        button-size="medium"
+        class="reviews__add-btn"
+        @click="addNewReviewInput"
+      >
+        <template #start-icon>
+          <IconsPlus />
+        </template>
+        Add new
+      </TheButton>
       <TheButton
         class="reviews__item-btn"
         tag="button"

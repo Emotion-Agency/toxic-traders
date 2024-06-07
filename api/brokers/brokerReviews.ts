@@ -76,3 +76,18 @@ export const createBrokerReview = async (
     throw e
   }
 }
+
+export const deleteBrokerReview = async (brokerReviewId: number) => {
+  try {
+    const data = await axiosInstance.delete(`Broker/Reviews`, {
+      params: {
+        BrokerReviewId: brokerReviewId,
+      },
+    })
+
+    return data
+  } catch (e) {
+    console.error(e.message)
+    throw e
+  }
+}

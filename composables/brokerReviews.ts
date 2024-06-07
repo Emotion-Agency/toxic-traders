@@ -1,5 +1,6 @@
 import {
   createBrokerReview,
+  deleteBrokerReview,
   getBrokerReviews,
   updateBrokerReview,
 } from '~/api/brokers/brokerReviews'
@@ -83,5 +84,24 @@ export const useBrokerReviews = () => {
     }
   }
 
-  return { getReviews, createReview, updateReview }
+  const deleteReview = async (brokerReviewId: number) => {
+    try {
+      const data = await deleteBrokerReview(brokerReviewId)
+
+      addToast({
+        color: ToastColor.success,
+        text: 'Review successfully deleted.',
+      })
+
+      return data
+    } catch (error) {
+      console.error('Error deleting review:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while deleting review. Please try again.',
+      })
+    }
+  }
+
+  return { getReviews, createReview, updateReview, deleteReview }
 }
