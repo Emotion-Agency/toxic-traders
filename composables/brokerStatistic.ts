@@ -26,12 +26,13 @@ export const useBrokerStatistic = () => {
     providerName: string
   ) => {
     try {
-      const data = await getCurrentBrokerStatisticProvider(
-        brokerCompanyNameId,
-        providerName
-      )
+      const { brokerCompanyNameStatistic } =
+        await getCurrentBrokerStatisticProvider(
+          brokerCompanyNameId,
+          providerName
+        )
 
-      return data
+      return brokerCompanyNameStatistic
     } catch (error) {
       console.error('Error fetching statistic provider:', error)
       addToast({

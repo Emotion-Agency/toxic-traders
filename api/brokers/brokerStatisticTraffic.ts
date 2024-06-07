@@ -9,7 +9,6 @@ export const getCurrentBrokerStatisticTraffic = async (
     const { data }: iStatisticTrafficData = await axiosInstance.get(
       `Broker/BrokerCompanyNamesStatisticTraffic/${providerName}/${brokerId}`
     )
-    console.log(data)
 
     return data
   } catch (e) {

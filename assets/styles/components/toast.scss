@@ -4,6 +4,9 @@
   top: 8%;
   width: fit-content;
   right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .toast {

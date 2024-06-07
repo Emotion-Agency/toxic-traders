@@ -1,21 +1,21 @@
-interface iBrokerCompanyName {
+export interface iBrokerCompanyName {
   id: number
   companyName: string
   website: string
   domainCreateDateTime: string | null
 }
 
-interface iTrafficHistory {
+export interface iTrafficHistory {
   date: string
   organic: number
 }
 
-interface iTopCountry {
+export interface iTopCountry {
   country: string
   share: number
 }
 
-interface iBrokerCompanyNameStatisticAhrefs {
+export interface iBrokerCompanyNameStatisticAhrefs {
   trafficHistory: iTrafficHistory[]
   trafficMonthlyAvg: string
   trafficMonthlyCost: string
@@ -27,17 +27,17 @@ interface iBrokerCompanyNameStatisticAhrefs {
   brokerCompanyName: iBrokerCompanyName
 }
 
-interface iIdentifier {
+export interface iIdentifier {
   uuid: string
 }
 
-interface iLocationIdentifier extends iIdentifier {
+export interface iLocationIdentifier extends iIdentifier {
   value: string
   permalink: string
   entity_def_id: string
 }
 
-interface iLocation {
+export interface iLocation {
   identifier: iIdentifier
   visits_mom_pct: number | null
   uuid: string
@@ -47,7 +47,7 @@ interface iLocation {
   visits_pct: number
 }
 
-interface iBrokerCompanyNameStatisticSemrush {
+export interface iBrokerCompanyNameStatisticSemrush {
   organicSearchTraffic: string
   globalRank: number
   locationList: iLocation[]
@@ -59,37 +59,30 @@ interface iBrokerCompanyNameStatisticSemrush {
   brokerCompanyName: iBrokerCompanyName
 }
 
-interface iEngagements {
+export interface iEngagements {
   Month: string
   Year: string
   Visits: string
 }
 
-interface iCountryRank {
+export interface iCountryRank {
   Country: number
   CountryCode: string
   Rank: number
 }
 
-interface iCategoryRank {
+export interface iCategoryRank {
   Rank: string
   Category: string
 }
 
-interface iTopCountryShare {
+export interface iTopCountryShare {
   Country: number
   CountryCode: string
   Value: number
 }
 
-interface iBrokerCompanyName {
-  id: number
-  companyName: string
-  website: string
-  domainCreateDateTime: string | null
-}
-
-interface iBrokerCompanyNameStatisticSimilarWeb {
+export interface iBrokerCompanyNameStatisticSimilarWeb {
   engagments: iEngagements
   engagmentsVisists: string
   estimatedMonthlyVisits: string
