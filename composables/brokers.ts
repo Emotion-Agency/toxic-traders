@@ -9,6 +9,7 @@ export const useBrokers = () => {
   const getAllBrokersBySearch = async (params: IBrokerSearchParams) => {
     try {
       const transformedParams = brokerSearchAdapter(params)
+
       const { brokers, totalCount } = await getSearchBroker(transformedParams)
 
       return { brokers, totalCount }
