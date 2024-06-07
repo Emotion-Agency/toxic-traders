@@ -22,12 +22,22 @@ const selectedWebsiteId = ref(null)
 const ahrefsStatistic = ref<iBrokerCompanyNameStatisticAhrefs[]>(null)
 const semrushStatistic = ref<iBrokerCompanyNameStatisticSemrush[]>(null)
 const similarWebStatistic = ref<iBrokerCompanyNameStatisticSimilarWeb[]>(null)
-const timeArr = ref([])
+const statisticsData = ref([])
+const activeStatisticItem = ref(null)
 
 const getSelectedItem = (website: string) => {
   selectedWebsiteId.value = companyNamesList.value.find(
     item => item.website === website
   )?.id
+}
+
+const getStatisticItem = (item: string) => {
+  const [provider, timestamp] = item.split(' - ')
+
+  activeStatisticItem.value = statisticsData.value.find(
+    item => item.provider === provider && item.parsingTimestamp === timestamp
+  )
+  console.log(activeStatisticItem.value)
 }
 
 const statisticsModalOpen = async () => {
@@ -49,14 +59,23 @@ const statisticsModalOpen = async () => {
     'SimilarWeb'
   )) as iBrokerCompanyNameStatisticSimilarWeb[]
 
-  timeArr.value = [
-    ...ahrefsStatistic.value.map(item => `ahrefs - ${item.parsingTimestamp}`),
-    ...semrushStatistic.value.map(item => `semrush - ${item.parsingTimestamp}`),
-    ...similarWebStatistic.value.map(
-      item => `similarWeb - ${item.parsingTimestamp}`
-    ),
+  statisticsData.value = [
+    ...ahrefsStatistic.value.map(item => ({ ...item, provider: 'Ahrefs' })),
+    ...semrushStatistic.value.map(item => ({ ...item, provider: 'Semrush' })),
+    ...similarWebStatistic.value.map(item => ({
+      ...item,
+      provider: 'SimilarWeb',
+    })),
   ]
+
+  console.log(statisticsData.value)
 }
+
+const timeArr = computed(() => {
+  return statisticsData.value.map(
+    item => `${item.provider} - ${item.parsingTimestamp}`
+  )
+})
 
 const statisticsModalClose = () => {
   statisticsModalOpened.value = false
@@ -108,17 +127,15 @@ onMounted(async () => {
           :options="timeArr"
           :placeholder="timeArr[0] || 'Choose item'"
           class="statistics__modal-select"
-          @select="getSelectedItem"
+          @select="getStatisticItem"
         />
         <div class="statistics__modal-content">
-          <div class="statistics__info-wrapper">
-            <BrokerStatisticsOverview />
-            <BrokerStatisticsEngagement />
-            <BrokerStatisticsTrafficHistory />
-            <BrokerStatisticsMonthlyVisits />
-            <BrokerStatisticsTopCountries />
-            <BrokerStatisticsTopCountryShares />
-          </div>
+          <BrokerStatisticsOverview />
+          <BrokerStatisticsEngagement />
+          <BrokerStatisticsTrafficHistory />
+          <BrokerStatisticsMonthlyVisits />
+          <BrokerStatisticsTopCountries />
+          <BrokerStatisticsTopCountryShares />
         </div>
       </div>
     </SlidingModal>
