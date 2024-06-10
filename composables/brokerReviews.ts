@@ -12,7 +12,9 @@ export const useBrokerReviews = () => {
     try {
       const data = await getBrokerReviews(brokerId)
 
-      return Object.values(data)?.filter(el => !!el && typeof el !== 'string')
+      return (
+        Object.values(data)?.filter(el => !!el && typeof el !== 'string') || []
+      )
     } catch (error) {
       console.error('Error fetching reviews:', error)
       addToast({

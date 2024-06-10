@@ -79,11 +79,7 @@ export const createBrokerReview = async (
 
 export const deleteBrokerReview = async (brokerReviewId: number) => {
   try {
-    const data = await axiosInstance.delete(`Broker/Reviews`, {
-      params: {
-        BrokerReviewId: brokerReviewId,
-      },
-    })
+    const data = await axiosInstance.delete(`Broker/Reviews/${brokerReviewId}`)
 
     return data
   } catch (e) {
