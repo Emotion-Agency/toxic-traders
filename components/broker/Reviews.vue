@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iSelectInput } from '~/types'
+import type { iInput, iSelectInput } from '~/types'
 import type { iBrokerReviewsItem } from '~/types/broker/brokerReviews'
 
 interface iProps {
@@ -7,19 +7,16 @@ interface iProps {
 }
 
 interface iReviewsInput {
+  required?: boolean
+  id: string
+  name: string
+  type?: string
+  value: string
+  placeholder: string
+  min?: number
+  max?: number
   title?: string
-  input?: {
-    required?: boolean
-    id: string
-    name: string
-    type?: string
-    value: string
-    placeholder: string
-    min?: number
-    max?: number
-    title?: string
-    options?: string[]
-  }[]
+  options?: string[]
 }
 
 const props = defineProps<iProps>()
@@ -30,7 +27,52 @@ const { getReviews, updateReview, createReview, deleteReview } =
   useBrokerReviews()
 const reviewsModalOpened = ref(false)
 const reviewsList = ref<iBrokerReviewsItem[]>([])
-const reviewsInputs = ref<iReviewsInput[]>([])
+
+const availableServices = computed(() => {
+  const allReviewsServices = reviewsList.value.map(item =>
+    item.serviceName.toLowerCase()
+  )
+
+  return services.filter(
+    service => !allReviewsServices.includes(service.toLowerCase())
+  )
+})
+
+const reviewsInputs = ref<iReviewsInput[]>([
+  {
+    type: 'select',
+    id: `review-service`,
+    name: 'service',
+    placeholder: 'Choose Service',
+    value: '',
+  },
+  {
+    required: false,
+    id: `review-link`,
+    name: 'Link',
+    type: 'text',
+    value: '',
+    placeholder: 'Link',
+  },
+  {
+    required: false,
+    id: `review-count`,
+    name: 'Reviews count',
+    type: 'number',
+    value: '',
+    placeholder: 'Reviews count',
+  },
+  {
+    required: false,
+    id: `review-rating`,
+    name: 'Rating',
+    type: 'number',
+    value: '',
+    placeholder: 'Rating from 0 to 5',
+    min: 0,
+    max: 5,
+  },
+])
 
 const reviewsModalOpen = () => {
   reviewsModalOpened.value = true
@@ -41,183 +83,59 @@ const reviewsModalClose = () => {
   reviewsModalOpened.value = false
 }
 
-const onInputChange = (e: iInputData) => {
-  reviewsInputs.value = reviewsInputs.value.map(item => {
-    item.input.map(input => {
-      if (input.id === e.id) {
-        input.value = e.value
-      }
-      return input
-    })
-    return item
-  })
-}
-
-const onSelectChange = (_, e: iSelectInput) => {
-  reviewsInputs.value = reviewsInputs.value.map(item => {
-    item.input.map(input => {
-      if (input.id === e.id) {
-        input.value = e.value
-      }
-      return input
-    })
-    return item
-  })
-}
-
-const onSave = () => {
-  const dataToSave = reviewsInputs.value.map(item => {
-    return {
-      serviceName: item.input.find(el => el.name === 'service').value,
-      url: item.input.find(el => el.name === 'Link').value,
-      numberOfReviews: +item.input.find(el => el.name === 'Reviews count')
-        .value,
-      rating: +item.input.find(el => el.name === 'Rating').value,
-      id: reviewsList.value.find(el => el.serviceName === item.title)?.id,
-    }
-  })
-
-  dataToSave.forEach(async item => {
-    if (reviewsList.value.length) {
-      await updateReview(
-        item.id,
-        item.serviceName,
-        item.url,
-        item.rating,
-        item.numberOfReviews
-      )
-
-      return
-    }
-
-    await createReview(
-      props.brokerId,
-      item.url,
-      item.rating,
-      item.numberOfReviews,
-      item.serviceName
-    )
-  })
-
-  reviewsList.value = dataToSave
-
-  reviewsModalClose()
-}
-
 onMounted(async () => {
   const data = await getReviews(props.brokerId)
 
-  console.log(data)
-
-  if (data) {
-    reviewsList.value = Object.values(data)?.filter(
-      el => !!el && typeof el !== 'string'
-    )
-  }
+  reviewsList.value = data
 })
 
-const reviewListSelectedServices = computed(() => {
-  return reviewsList.value?.map(item => item.serviceName)
-})
-
-watchEffect(() => {
-  console.log(reviewsList.value)
-  reviewsInputs.value = reviewsList.value.map((item, idx) => ({
-    title: `#${idx + 1}`,
-    input: [
-      {
-        id: `_${idx}-service`,
-        name: 'service',
-
-        placeholder: 'Choose Service',
-        options: services,
-        value: item.serviceName,
-      },
-      {
-        required: false,
-        id: `_${idx}-link`,
-        name: 'Link',
-        type: 'text',
-        value: item.url,
-        placeholder: 'Link',
-      },
-      {
-        required: false,
-        id: `_${idx}-count`,
-        name: 'Reviews count',
-        type: 'number',
-        value: item.numberOfReviews.toString(),
-        placeholder: 'Reviews count',
-      },
-      {
-        required: false,
-        id: `_${idx}-rating`,
-        name: 'Rating',
-        type: 'number',
-        value: item.rating.toString(),
-        placeholder: 'Rating from 0 to 5',
-        min: 0,
-        max: 5,
-      },
-    ],
-  }))
-})
-
-const addNewReviewInput = () => {
-  if (reviewsInputs.value.length >= 4) {
-    return
-  }
-
-  const currentIdx = reviewsInputs.value.length
-
-  const newItem = {
-    title: `#${currentIdx + 1}`,
-    input: [
-      {
-        id: `_${currentIdx}-service`,
-        name: 'service',
-
-        placeholder: 'Choose Service',
-        options: services.filter(
-          service => !reviewListSelectedServices.value.includes(service)
-        ),
-        value: '',
-      },
-      {
-        id: `_${currentIdx}-link`,
-        name: 'Link',
-        required: false,
-        type: 'text',
-        value: '',
-        placeholder: 'Link',
-      },
-      {
-        required: false,
-        id: `_${currentIdx}-count`,
-        name: 'Reviews count',
-        type: 'number',
-        value: '',
-        placeholder: 'Reviews count',
-      },
-      {
-        required: false,
-        id: `_${currentIdx}-rating`,
-        name: 'Rating',
-        type: 'number',
-        value: '',
-        placeholder: 'Rating from 0 to 5',
-        min: 0,
-        max: 5,
-      },
-    ],
-  }
-
-  reviewsInputs.value = [...reviewsInputs.value, newItem]
+const onInputChange = (e: iInput) => {
+  reviewsInputs.value = reviewsInputs.value.map(item => {
+    if (item.id === e.id) {
+      item.value = e.value
+    }
+    return item
+  })
 }
 
-const removeReviewInput = async (idx: number) => {
-  await deleteReview(reviewsList.value[idx].id)
-  reviewsInputs.value = reviewsInputs.value.filter((_, index) => index !== idx)
+const onSelectChange = (_: string, e: iSelectInput) => {
+  reviewsInputs.value = reviewsInputs.value.map(item => {
+    if (item.id === e.id) {
+      item.value = e.value
+    }
+    return item
+  })
+}
+
+const resetInputs = () => {
+  reviewsInputs.value = reviewsInputs.value.map(item => {
+    item.value = ''
+    return item
+  })
+}
+
+const onAddClick = async () => {
+  const serviceName = reviewsInputs.value.find(
+    el => el.name === 'service'
+  ).value
+
+  const url = reviewsInputs.value.find(el => el.name === 'Link').value
+
+  const numberOfReviews = +reviewsInputs.value.find(
+    el => el.name === 'Reviews count'
+  ).value
+
+  const rating = +reviewsInputs.value.find(el => el.name === 'Rating').value
+
+  await createReview(props.brokerId, url, rating, numberOfReviews, serviceName)
+
+  reviewsModalClose()
+
+  resetInputs()
+
+  const data = await getReviews(props.brokerId)
+
+  reviewsList.value = data
 }
 </script>
 
@@ -225,7 +143,7 @@ const removeReviewInput = async (idx: number) => {
   <div class="reviews">
     <TheAccordion
       title="Reviews"
-      additional-button="Edit"
+      :additional-button="reviewsList.length >= 4 ? null : 'Add new'"
       @open="reviewsModalOpen"
     >
       <div v-if="reviewsList?.length" class="reviews__content">
@@ -257,68 +175,55 @@ const removeReviewInput = async (idx: number) => {
     </TheAccordion>
     <TheModal
       :modal-opened="reviewsModalOpened"
-      title="Edit reviews"
+      title="Add new review"
       @close="reviewsModalClose"
     >
-      <TheAccordion
-        v-for="(item, idx) in reviewsInputs"
-        :key="idx"
-        :title="'#' + (idx + 1)"
-        additional-button="Remove"
-        class="reviews__item"
-        @action-click="removeReviewInput(idx)"
+      <div
+        v-for="(input, index) in reviewsInputs"
+        :key="index"
+        class="review__input-item"
       >
-        <div
-          v-for="(input, index) in item.input"
+        <CustomSelect
+          v-if="input.type === 'select'"
+          :id="input.id"
+          :name="input.name"
+          :options="availableServices"
+          :placeholder="input.placeholder"
+          :value="input.value"
+          @select="onSelectChange"
+        />
+        <TheInput
+          v-else
+          :id="input.id"
           :key="index"
-          class="review__input-item"
+          :required="input.required"
+          :name="input.name"
+          :type="input.type"
+          :placeholder="input.placeholder"
+          :value="input.value.toString()"
+          :min="input.min"
+          :max="input.max"
+          @input-value="onInputChange"
+        />
+      </div>
+      <div class="reviews__buttons">
+        <TheButton
+          tag="button"
+          variant="close"
+          button-size="medium"
+          @click="reviewsModalClose"
         >
-          <CustomSelect
-            v-if="input.options"
-            :id="input.id"
-            :name="input.name"
-            :options="input.options"
-            :placeholder="input.placeholder"
-            :value="input.value"
-            @select="onSelectChange"
-          />
-          <TheInput
-            v-else
-            :id="input.id"
-            :key="index"
-            :required="input.required"
-            :name="input.name"
-            :type="input.type"
-            :placeholder="input.placeholder"
-            :value="input.value.toString()"
-            :min="input.min"
-            :max="input.max"
-            @input-value="onInputChange"
-          />
-        </div>
-      </TheAccordion>
-      <TheButton
-        v-if="reviewsInputs?.length < 4"
-        tag="button"
-        variant="outlined"
-        button-size="medium"
-        class="reviews__add-btn"
-        @click="addNewReviewInput"
-      >
-        <template #start-icon>
-          <IconsPlus />
-        </template>
-        Add new
-      </TheButton>
-      <TheButton
-        class="reviews__item-btn"
-        tag="button"
-        variant="fill"
-        button-size="medium"
-        @click="onSave"
-      >
-        Save
-      </TheButton>
+          Close
+        </TheButton>
+        <TheButton
+          tag="button"
+          variant="fill"
+          button-size="medium"
+          @click="onAddClick"
+        >
+          Add
+        </TheButton>
+      </div>
     </TheModal>
   </div>
 </template>
