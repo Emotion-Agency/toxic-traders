@@ -18,22 +18,24 @@ const props = defineProps<iProps>()
 const engagementData = ref<iBrokerStatisticEngagement>(null)
 const countryRank = computed(() => {
   const { Country, CountryCode, Rank } = engagementData.value?.countryRank || {}
+  const fields = [Country, CountryCode, Rank].filter(item => !!item)
 
-  if (!Country || !CountryCode || !Rank) {
+  if (!fields.length) {
     return 'N/A'
   }
 
-  return `${Country} ${CountryCode} ${Rank}`
+  return fields.join(' ')
 })
 
 const engagement = computed(() => {
   const { Month, Year } = engagementData.value?.engagments || {}
+  const fields = [Month, Year].filter(item => !!item)
 
-  if (!Month || !Year) {
+  if (!fields.length) {
     return 'N/A'
   }
 
-  return `${Month}/${Year}`
+  return fields.join(' ')
 })
 
 watch(
