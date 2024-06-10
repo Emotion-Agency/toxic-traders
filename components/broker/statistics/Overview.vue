@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { iBrokerStatisticOverview } from '~/types/broker/brokerStatisticOverview'
 import type {
   iBrokerCompanyNameStatisticAhrefs,
   iBrokerCompanyNameStatisticSemrush,
   iBrokerCompanyNameStatisticSimilarWeb,
 } from '~/types/broker/brokerStatisticProvider'
+import { brokerStatisticsOverviewAdapter } from '~/utils/adapters/brokerStatisticsOverview'
 
 interface iProps {
   activeItem?: iBrokerCompanyNameStatisticAhrefs &
@@ -11,7 +13,20 @@ interface iProps {
     iBrokerCompanyNameStatisticSimilarWeb
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
+
+const overviewData = ref<iBrokerStatisticOverview>(null)
+
+watch(
+  () => props.activeItem,
+  () => {
+    overviewData.value = brokerStatisticsOverviewAdapter(props.activeItem)
+  }
+)
+
+onMounted(() => {
+  overviewData.value = brokerStatisticsOverviewAdapter(props.activeItem)
+})
 </script>
 
 <template>
@@ -22,15 +37,15 @@ defineProps<iProps>()
         <BrokerStatisticsInfoItem
           title="Website"
           :link="{
-            url: activeItem?.webSite,
-            text: activeItem?.webSite,
+            url: overviewData?.webSite,
+            text: overviewData?.webSite,
           }"
         />
       </li>
       <li class="statistics-items overview__info-column">
         <BrokerStatisticsInfoItem
           title="Last updated"
-          :text="activeItem?.parsingTimestamp"
+          :text="overviewData?.parsingTimestamp"
         />
       </li>
     </ul>

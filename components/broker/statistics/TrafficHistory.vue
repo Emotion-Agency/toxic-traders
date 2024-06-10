@@ -1,4 +1,18 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type {
+  iBrokerCompanyNameStatisticAhrefs,
+  iBrokerCompanyNameStatisticSemrush,
+  iBrokerCompanyNameStatisticSimilarWeb,
+} from '~/types/broker/brokerStatisticProvider'
+
+interface iProps {
+  activeItem?: iBrokerCompanyNameStatisticAhrefs &
+    iBrokerCompanyNameStatisticSemrush &
+    iBrokerCompanyNameStatisticSimilarWeb
+}
+
+defineProps<iProps>()
+</script>
 
 <template>
   <div class="statistics-content traffic-history">
