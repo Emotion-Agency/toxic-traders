@@ -37,7 +37,6 @@ const getStatisticItem = (item: string) => {
   activeStatisticItem.value = statisticsData.value.find(
     item => item.provider === provider && item.parsingTimestamp === timestamp
   )
-  console.log(activeStatisticItem.value)
 }
 
 const statisticsModalOpen = async () => {
@@ -68,7 +67,7 @@ const statisticsModalOpen = async () => {
     })),
   ]
 
-  console.log(statisticsData.value)
+  activeStatisticItem.value = statisticsData.value[0]
 }
 
 const timeArr = computed(() => {
@@ -130,12 +129,14 @@ onMounted(async () => {
           @select="getStatisticItem"
         />
         <div class="statistics__modal-content">
-          <BrokerStatisticsOverview />
-          <BrokerStatisticsEngagement />
-          <BrokerStatisticsTrafficHistory />
-          <BrokerStatisticsMonthlyVisits />
-          <BrokerStatisticsTopCountries />
-          <BrokerStatisticsTopCountryShares />
+          <BrokerStatisticsOverview :active-item="activeStatisticItem" />
+          <BrokerStatisticsEngagement :active-item="activeStatisticItem" />
+          <BrokerStatisticsTrafficHistory :active-item="activeStatisticItem" />
+          <BrokerStatisticsMonthlyVisits :active-item="activeStatisticItem" />
+          <BrokerStatisticsTopCountries :active-item="activeStatisticItem" />
+          <BrokerStatisticsTopCountryShares
+            :active-item="activeStatisticItem"
+          />
         </div>
       </div>
     </SlidingModal>

@@ -1,4 +1,53 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { iBrokerStatisticEngagement } from '~/types/broker/brokerStatisticEngagement'
+import type {
+  iBrokerCompanyNameStatisticAhrefs,
+  iBrokerCompanyNameStatisticSemrush,
+  iBrokerCompanyNameStatisticSimilarWeb,
+} from '~/types/broker/brokerStatisticProvider'
+import { brokerStatisticsEngagementAdapter } from '~/utils/adapters/brokerStatisticsEngagementAdapter'
+
+interface iProps {
+  activeItem?: iBrokerCompanyNameStatisticAhrefs &
+    iBrokerCompanyNameStatisticSemrush &
+    iBrokerCompanyNameStatisticSimilarWeb
+}
+
+const props = defineProps<iProps>()
+
+const engagementData = ref<iBrokerStatisticEngagement>(null)
+const countryRank = computed(() => {
+  const { Country, CountryCode, Rank } = engagementData.value?.countryRank || {}
+
+  if (!Country || !CountryCode || !Rank) {
+    return 'N/A'
+  }
+
+  return `${Country} ${CountryCode} ${Rank}`
+})
+
+const engagement = computed(() => {
+  const { Month, Year } = engagementData.value?.engagments || {}
+
+  if (!Month || !Year) {
+    return 'N/A'
+  }
+
+  return `${Month}/${Year}`
+})
+
+watch(
+  () => props.activeItem,
+  () => {
+    engagementData.value = brokerStatisticsEngagementAdapter(props.activeItem)
+    console.log(engagementData.value, props.activeItem)
+  }
+)
+
+onMounted(() => {
+  engagementData.value = brokerStatisticsEngagementAdapter(props.activeItem)
+})
+</script>
 
 <template>
   <div class="statistics-content engagement">
@@ -7,26 +56,45 @@
       <li
         class="statistics-items engagement__info-column statistics-items--uniq"
       >
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
+        <BrokerStatisticsInfoItem
+          title="Global Rank"
+          :text="engagementData?.globalRank"
+        />
+        <BrokerStatisticsInfoItem
+          title="Category Rank"
+          :text="engagementData?.categoryRank?.Category"
+          :additional-text="engagementData?.categoryRank?.Rank"
+        />
+        <BrokerStatisticsInfoItem title="Country Rank" :text="countryRank" />
       </li>
       <li
         class="statistics-items engagement__info-column statistics-items--uniq"
       >
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
         <BrokerStatisticsInfoItem
-          title="hello world"
-          text1="hello world 2"
-          text2="hello world 2"
+          title="Engagements Visits"
+          :text="engagementData?.engagmentsVisists"
+        />
+        <BrokerStatisticsInfoItem
+          title="Engagements"
+          :text="engagement"
+          :additional-text="engagementData?.engagments.Visits"
         />
       </li>
       <li class="statistics-items engagement__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
+        <BrokerStatisticsInfoItem
+          title="TrafficMonthlyAvg"
+          :text="engagementData?.trafficMonthlyAvg"
+        />
+        <BrokerStatisticsInfoItem
+          title="TrafficMonthlyCost"
+          :text="engagementData?.trafficMonthlyCost"
+        />
       </li>
       <li class="statistics-items engagement__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 2" />
+        <BrokerStatisticsInfoItem
+          title="Organic Search Traffic"
+          :text="engagementData?.organicSearchTraffic"
+        />
       </li>
     </ul>
   </div>

@@ -16,15 +16,16 @@ export interface iTopCountry {
 }
 
 export interface iBrokerCompanyNameStatisticAhrefs {
-  trafficHistory: iTrafficHistory[]
+  trafficHistory: string
   trafficMonthlyAvg: string
   trafficMonthlyCost: string
-  topCountries: iTopCountry[]
+  topCountries: string
   id: number
   parsingTimestamp: string
   webSite: string
   brokerCompanyNameId: number
   brokerCompanyName: iBrokerCompanyName
+  provider?: string
 }
 
 export interface iIdentifier {
@@ -50,13 +51,14 @@ export interface iLocation {
 export interface iBrokerCompanyNameStatisticSemrush {
   organicSearchTraffic: string
   globalRank: number
-  locationList: iLocation[]
+  locationList: string
   lastUpdated: string
   id: number
   parsingTimestamp: string
   webSite: string
   brokerCompanyNameId: number
   brokerCompanyName: iBrokerCompanyName
+  provider?: string
 }
 
 export interface iEngagements {
@@ -83,12 +85,12 @@ export interface iTopCountryShare {
 }
 
 export interface iBrokerCompanyNameStatisticSimilarWeb {
-  engagments: iEngagements
+  engagments: string
   engagmentsVisists: string
   estimatedMonthlyVisits: string
   globalRank: number
-  countryRank: iCountryRank
-  categoryRank: iCategoryRank
+  countryRank: string
+  categoryRank: string
   globalCategoryRank: string | null
   topCountryShares: iTopCountryShare
   lastUpdated: string
@@ -97,6 +99,7 @@ export interface iBrokerCompanyNameStatisticSimilarWeb {
   webSite: string
   brokerCompanyNameId: number
   brokerCompanyName: iBrokerCompanyName
+  provider?: string
 }
 
 export interface iStatisticCurrentProviderData {

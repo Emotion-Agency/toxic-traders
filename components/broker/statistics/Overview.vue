@@ -1,4 +1,18 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type {
+  iBrokerCompanyNameStatisticAhrefs,
+  iBrokerCompanyNameStatisticSemrush,
+  iBrokerCompanyNameStatisticSimilarWeb,
+} from '~/types/broker/brokerStatisticProvider'
+
+interface iProps {
+  activeItem?: iBrokerCompanyNameStatisticAhrefs &
+    iBrokerCompanyNameStatisticSemrush &
+    iBrokerCompanyNameStatisticSimilarWeb
+}
+
+defineProps<iProps>()
+</script>
 
 <template>
   <div class="statistics-content overview">
@@ -6,18 +20,18 @@
     <ul class="statistics-list overview__info">
       <li class="statistics-items overview__info-column">
         <BrokerStatisticsInfoItem
-          title="hello world"
-          :link="{ url: '#', text: 'hello world 1' }"
+          title="Website"
+          :link="{
+            url: activeItem?.webSite,
+            text: activeItem?.webSite,
+          }"
         />
       </li>
       <li class="statistics-items overview__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 1" />
-      </li>
-      <li class="statistics-items overview__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 1" />
-      </li>
-      <li class="statistics-items overview__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 1" />
+        <BrokerStatisticsInfoItem
+          title="Last updated"
+          :text="activeItem?.parsingTimestamp"
+        />
       </li>
     </ul>
   </div>
