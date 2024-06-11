@@ -175,6 +175,7 @@ const onSearch = async (searchData: iSearchInput[]) => {
             :is-search-opened="isSearchOpened"
             :brokers="filteredBrokers"
             :heading-fields="filteredBrokerHeading"
+            class="brokers__table"
           />
           <ThePagination
             class="brokers__pagination"

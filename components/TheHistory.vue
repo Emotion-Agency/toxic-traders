@@ -74,7 +74,11 @@ onMounted(async () => {
 
 <template>
   <div class="history">
-    <HistoryTable v-if="logsList?.length" :logs="logsList" />
+    <HistoryTable
+      v-if="logsList?.length"
+      class="history__table"
+      :logs="logsList"
+    />
     <ThePagination
       class="history__pagination"
       :total-pages="totalCountPages"
