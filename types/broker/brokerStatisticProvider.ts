@@ -92,7 +92,7 @@ export interface iBrokerCompanyNameStatisticSimilarWeb {
   countryRank: string
   categoryRank: string
   globalCategoryRank: string | null
-  topCountryShares: iTopCountryShare
+  topCountryShares: string
   lastUpdated: string
   id: number
   parsingTimestamp: string
