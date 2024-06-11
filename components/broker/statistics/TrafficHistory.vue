@@ -4,6 +4,7 @@ import type {
   iBrokerCompanyNameStatisticSemrush,
   iBrokerCompanyNameStatisticSimilarWeb,
 } from '~/types/broker/brokerStatisticProvider'
+import { brokerStatisticsTrafficHistoryAdapter } from '~/utils/adapters/brokerStatisticsTrafficHistoryAdapter'
 
 interface iProps {
   activeItem?: iBrokerCompanyNameStatisticAhrefs &
@@ -11,21 +12,40 @@ interface iProps {
     iBrokerCompanyNameStatisticSimilarWeb
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
+
+const trafficHistory = ref<{ title: string; text: string }[]>([])
+
+watch(
+  () => props.activeItem,
+  () => {
+    trafficHistory.value = brokerStatisticsTrafficHistoryAdapter(
+      props.activeItem
+    )
+  }
+)
+
+onMounted(() => {
+  trafficHistory.value = brokerStatisticsTrafficHistoryAdapter(props.activeItem)
+})
 </script>
 
 <template>
   <div class="statistics-content traffic-history">
     <h3 class="statistics-title traffic-history__title">Traffic History</h3>
     <ul class="statistics-list traffic-history__info">
-      <li class="statistics-items traffic-history__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 3" />
+      <li
+        v-for="(item, idx) in trafficHistory"
+        :key="idx"
+        class="statistics-items traffic-history__info-column"
+      >
+        <BrokerStatisticsInfoItem :title="item.title" :text="item.text" />
       </li>
-      <li class="statistics-items traffic-history__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 3" />
-      </li>
-      <li class="statistics-items traffic-history__info-column">
-        <BrokerStatisticsInfoItem title="hello world" text1="hello world 3" />
+      <li
+        v-if="!trafficHistory.length"
+        class="statistics-items traffic-history__info-column"
+      >
+        <BrokerStatisticsInfoItem title="Date" text="N/A" />
       </li>
     </ul>
   </div>

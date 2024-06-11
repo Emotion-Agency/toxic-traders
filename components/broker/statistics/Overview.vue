@@ -5,7 +5,7 @@ import type {
   iBrokerCompanyNameStatisticSemrush,
   iBrokerCompanyNameStatisticSimilarWeb,
 } from '~/types/broker/brokerStatisticProvider'
-import { brokerStatisticsOverviewAdapter } from '~/utils/adapters/brokerStatisticsOverview'
+import { brokerStatisticsOverviewAdapter } from '~/utils/adapters/brokerStatisticsOverviewAdapter'
 
 interface iProps {
   activeItem?: iBrokerCompanyNameStatisticAhrefs &

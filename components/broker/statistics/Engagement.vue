@@ -42,7 +42,6 @@ watch(
   () => props.activeItem,
   () => {
     engagementData.value = brokerStatisticsEngagementAdapter(props.activeItem)
-    console.log(engagementData.value, props.activeItem)
   }
 )
 

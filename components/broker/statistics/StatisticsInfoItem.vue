@@ -2,7 +2,7 @@
 import type { iLink } from '~/types'
 
 interface iProps {
-  title: string
+  title: string | number
   link?: iLink
   text?: string | number
   additionalText?: string | number | iLink
