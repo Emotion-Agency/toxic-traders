@@ -29,11 +29,6 @@ export const useBrokerDepositMethods = () => {
     try {
       const data = await updateBrokerDepositMethods(brokerId, depositItems)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Deposit methods successfully updated.',
-      })
-
       return data
     } catch (error) {
       console.error('Error updating deposit methods:', error)
@@ -54,11 +49,6 @@ export const useBrokerDepositMethods = () => {
         depositItems
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Deposit methods successfully created.',
-      })
-
       return depositMethods
     } catch (error) {
       console.error('Error creating deposit methods:', error)
@@ -72,11 +62,6 @@ export const useBrokerDepositMethods = () => {
   const deleteDepositMethods = async (brokerId: number) => {
     try {
       const data = await deleteBrokerDepositMethods(brokerId)
-
-      addToast({
-        color: ToastColor.success,
-        text: 'Deposit methods successfully deleted.',
-      })
 
       return data
     } catch (error) {

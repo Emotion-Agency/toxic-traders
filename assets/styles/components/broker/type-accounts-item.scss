@@ -130,6 +130,10 @@
   column-gap: 6px;
   background-color: transparent;
   @include button-small;
+  transition: opacity 0.3s ease;
+  &:hover {
+    opacity: 0.5;
+  }
 
   &:first-child {
     color: var(--secodary-dark);

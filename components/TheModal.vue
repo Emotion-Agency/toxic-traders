@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resize } from '@emotionagency/utils'
+import { raf } from '@emotionagency/utils'
 
 interface IProps {
   modalOpened: boolean
@@ -31,13 +31,13 @@ watch(
   () => props.modalOpened,
   () => {
     if (props.modalOpened) {
-      resize.on(detectModalContentHeight)
+      raf.on(detectModalContentHeight)
     }
   }
 )
 
 onBeforeUnmount(() => {
-  resize.off(detectModalContentHeight)
+  raf.off(detectModalContentHeight)
 })
 </script>
 

@@ -12,33 +12,40 @@ const depositList = ref<number[]>([])
 const filteredDepositList = computed(() => {
   return removeUnderlines(
     depositList.value?.map(index => depositFullList.value[index]) || []
-  )
+  ).map(item => ({ text: item }))
 })
 
 const { createDepositMethods, getDepositMethods, updateDepositMethods } =
   useBrokerDepositMethods()
+
+const getDepositList = async () => {
+  const depositData = await getDepositMethods(props.brokerId)
+  depositList.value =
+    depositData?.depositMethods?.map(item => item.depositMethod) || []
+}
 
 const selectDeposit = async (deposit: string) => {
   const depositIndex = depositFullList.value.findIndex(el => el === deposit)
 
   depositList.value.push(depositIndex)
   await createDepositMethods(props.brokerId, depositList.value)
+  await getDepositList()
 }
 
 const removeDeposit = async (index: number) => {
   depositList.value.splice(index, 1)
   await updateDepositMethods(props.brokerId, depositList.value)
+  await getDepositList()
 }
 
 onMounted(async () => {
   const depositMethodsListRequest = await getBrokerDepositMethodsList()
-  const depositData = await getDepositMethods(props.brokerId)
 
   depositFullList.value = removeUnderlines(
     Object.values(depositMethodsListRequest)
   )
-  depositList.value =
-    depositData?.depositMethods?.map(item => item.depositMethod) || []
+
+  await getDepositList()
 })
 </script>
 

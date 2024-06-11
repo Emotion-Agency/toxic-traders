@@ -11,14 +11,24 @@ interface iProps {
 const props = defineProps<iProps>()
 
 const countriesFullNames = ref<iCountries[]>([])
-const requestCountriesList = ref<string[]>([])
+const restrictedCountriesList = ref<string[]>([])
 const selectedCountries = ref<number[]>([])
-const countriesList = ref<iCountries[]>([])
+
 const filteredSelectedCountries = computed(() => {
   return (
     selectedCountries.value?.map(index => countriesFullNames.value[index]) || []
-  )
+  ).map(item => ({
+    text: item?.countryFullName,
+    icon: {
+      url: item?.countryFlag.url,
+      alt: item?.countryFlag.alt,
+    },
+  }))
 })
+
+// watch(filteredSelectedCountries, () => {
+//   console.log(filteredSelectedCountries.value)
+// })
 
 const {
   createRestrictedCountries,
@@ -26,39 +36,48 @@ const {
   updateRestrictedCountries,
 } = useBrokerRestrictedCountries()
 
+const getCountriesList = async () => {
+  const countriesData = await getRestrictedCountries(props.brokerId)
+
+  selectedCountries.value =
+    countriesData?.restrictedCountries?.map(item => item.countryCode) || []
+}
+
 const selectCountries = async (country: string) => {
-  const countriesIndex = requestCountriesList.value.findIndex(
+  const countriesIndex = restrictedCountriesList.value.findIndex(
     el => el === country
   )
 
   selectedCountries.value = [...selectedCountries.value, countriesIndex]
   await createRestrictedCountries(props.brokerId, selectedCountries.value)
+
+  await getCountriesList()
 }
 
 const removeCountries = async (index: number) => {
   selectedCountries.value.splice(index, 1)
   await updateRestrictedCountries(props.brokerId, selectedCountries.value)
+
+  await getCountriesList()
 }
 
 onMounted(async () => {
-  const { restrictedCountries } = await getBrokerRestrictedCountriesList()
-  const countriesData = await getRestrictedCountries(props.brokerId)
   const countriesFlags = await getCountriesFlag()
 
-  requestCountriesList.value = restrictedCountries
-  countriesList.value = countriesFlags
+  const { restrictedCountries } = await getBrokerRestrictedCountriesList()
+
+  restrictedCountriesList.value = restrictedCountries // ['USA', 'UK', 'Canada']
 
   countriesFullNames.value = getCountriesFullNames(
-    requestCountriesList.value,
-    countriesList.value
+    restrictedCountriesList.value,
+    countriesFlags
   )
 
-  selectedCountries.value =
-    countriesData?.restrictedCountries?.map(item => item.countryCode) || []
-
-  requestCountriesList.value = countriesFullNames.value.map(
+  restrictedCountriesList.value = countriesFullNames.value.map(
     item => item.countryFullName
   )
+
+  await getCountriesList()
 })
 </script>
 
@@ -70,8 +89,8 @@ onMounted(async () => {
     >
       <TagsInput
         id="restricted-countries"
-        :dropdown-list="requestCountriesList"
-        :country-list="filteredSelectedCountries"
+        :dropdown-list="restrictedCountriesList"
+        :badges-list="filteredSelectedCountries"
         badge-variant="outlined"
         @select="selectCountries"
         @remove="removeCountries"

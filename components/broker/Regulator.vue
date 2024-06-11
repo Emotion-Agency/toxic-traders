@@ -86,7 +86,8 @@ onMounted(async () => {
   const brokerRegulatorData = await getBrokerRegulatorNames()
 
   regulatorNames.value = removeUnderlines(Object.values(brokerRegulatorData))
-  regulatorItems.value = await getRegulator(props.brokerId)
+  const regulatorData = await getRegulator(props.brokerId)
+  regulatorItems.value = regulatorData || []
 })
 </script>
 
@@ -94,7 +95,7 @@ onMounted(async () => {
   <div class="regulator">
     <TheAccordion
       title="Regulator"
-      :additional-button="regulatorItems?.length ? 'Edit' : null"
+      additional-button="Edit"
       @open="regulatorModalOpen"
     >
       <ul v-if="regulatorItems?.length" class="regulator__list">

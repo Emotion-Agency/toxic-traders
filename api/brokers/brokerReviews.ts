@@ -14,6 +14,9 @@ export const getBrokerReviews = async (brokerId: number) => {
 
     return data
   } catch (e) {
+    if (e.response.status === 400) {
+      return {}
+    }
     console.error(e.message)
     throw e
   }
@@ -69,6 +72,17 @@ export const createBrokerReview = async (
         },
       }
     )
+
+    return data
+  } catch (e) {
+    console.error(e.message)
+    throw e
+  }
+}
+
+export const deleteBrokerReview = async (brokerReviewId: number) => {
+  try {
+    const data = await axiosInstance.delete(`Broker/Reviews/${brokerReviewId}`)
 
     return data
   } catch (e) {
