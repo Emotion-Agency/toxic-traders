@@ -17,25 +17,34 @@ const filteredPlatformsList = computed(() => {
 
 const { createPlatform, getPlatform, updatePlatform } = useBrokerPlatforms()
 
+const getPlatformList = async () => {
+  const platformsData = await getPlatform(props.brokerId)
+  platformsList.value =
+    platformsData?.platforms?.map(item => item.platform) || []
+}
+
 const selectPlatform = async (platform: string) => {
   const platformIndex = platformsFullList.value.findIndex(el => el === platform)
 
   platformsList.value.push(platformIndex)
   await createPlatform(props.brokerId, platformsList.value)
+
+  await getPlatformList()
 }
 
 const removePlatform = async (index: number) => {
   platformsList.value.splice(index, 1)
   await updatePlatform(props.brokerId, platformsList.value)
+
+  await getPlatformList()
 }
 
 onMounted(async () => {
   const data = await getBrokerPlatformsList()
-  const platformsData = await getPlatform(props.brokerId)
 
   platformsFullList.value = removeUnderlines(Object.values(data))
-  platformsList.value =
-    platformsData?.platforms?.map(item => item.platform) || []
+
+  await getPlatformList()
 })
 </script>
 

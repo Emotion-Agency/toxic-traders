@@ -12,8 +12,12 @@ const headerFields = ['ID', 'Message', 'Timestamp', 'Level']
 const logsList = ref<iBrokerLogItem[]>([])
 
 onMounted(async () => {
-  const { brokerLogs } = await getBrokerLogs(props.brokerId)
-  logsList.value = brokerLogs
+  try {
+    const { brokerLogs } = await getBrokerLogs(props.brokerId)
+    logsList.value = brokerLogs || []
+  } catch (error) {
+    logsList.value = []
+  }
 })
 </script>
 

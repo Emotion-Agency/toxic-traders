@@ -17,7 +17,16 @@ const dropdownOpened = ref(false)
 const selectedBadge = ref('')
 const $el = ref<HTMLElement | null>(null)
 
-const filteredDropdownList = ref([...props.dropdownList])
+const filteredDropdownList = ref(props.dropdownList)
+
+watch(
+  () => [props.dropdownList, props.badgesList],
+  () => {
+    filteredDropdownList.value = props.dropdownList.filter(
+      item => !props.badgesList?.includes(item)
+    )
+  }
+)
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -36,6 +45,8 @@ const selectDropdownItem = (item: string) => {
   )
 
   emit('select', selectedBadge.value)
+
+  dropdownOpened.value = false
 }
 
 const removeBadge = (idx: number) => {
@@ -59,12 +70,6 @@ const updateFilteredList = () => {
 }
 
 watch(inputValue, () => {
-  dropdownOpened.value = true
-
-  if (inputValue.value === '') {
-    dropdownOpened.value = false
-  }
-
   updateFilteredList()
 })
 
@@ -73,7 +78,7 @@ onMounted(() => {
   updateFilteredList()
 })
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
   document.body.removeEventListener('click', outsideClick)
 })
 </script>
@@ -109,6 +114,7 @@ onUnmounted(() => {
               autocomplete="off"
               @focus="onFocus"
               @input="onChange"
+              @click="onFocus"
             />
           </div>
           <div v-else class="tags-input__badge-wrapper">
