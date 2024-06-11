@@ -14,6 +14,9 @@ export const getBrokerReviews = async (brokerId: number) => {
 
     return data
   } catch (e) {
+    if (e.response.status === 400) {
+      return {}
+    }
     console.error(e.message)
     throw e
   }

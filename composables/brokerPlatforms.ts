@@ -26,11 +26,6 @@ export const useBrokerPlatforms = () => {
     try {
       const data = await updateBrokerPlatforms(brokerId, platformItems)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Platform successfully updated.',
-      })
-
       return data
     } catch (error) {
       console.error('Error updating platform:', error)
@@ -45,11 +40,6 @@ export const useBrokerPlatforms = () => {
     try {
       const { platforms } = await createBrokerPlatforms(brokerId, platformItems)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Platform successfully created.',
-      })
-
       return platforms
     } catch (error) {
       console.error('Error creating platform:', error)
@@ -63,11 +53,6 @@ export const useBrokerPlatforms = () => {
   const deletePlatform = async (brokerId: number) => {
     try {
       const data = await deleteBrokerPlatforms(brokerId)
-
-      addToast({
-        color: ToastColor.success,
-        text: 'Platform successfully deleted.',
-      })
 
       return data
     } catch (error) {

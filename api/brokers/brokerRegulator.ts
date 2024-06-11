@@ -17,6 +17,10 @@ export const getBrokerRegulator = async (brokerId: number) => {
 
     return data
   } catch (e) {
+    if (e.response.status === 400) {
+      return { regulators: [] }
+    }
+
     console.error(e.message)
     throw e
   }

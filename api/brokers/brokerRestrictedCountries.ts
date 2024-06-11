@@ -14,6 +14,9 @@ export const getBrokerRestrictedCountries = async (brokerId: number) => {
 
     return data
   } catch (e) {
+    if (e.response.status === 400) {
+      return { restrictedCountries: [] }
+    }
     console.error(e.message)
     throw e
   }

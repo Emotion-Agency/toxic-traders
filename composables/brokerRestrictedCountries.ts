@@ -32,11 +32,6 @@ export const useBrokerRestrictedCountries = () => {
         countriesItems
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Restricted country successfully updated.',
-      })
-
       return data
     } catch (error) {
       console.error('Error updating restricted countries:', error)
@@ -57,11 +52,6 @@ export const useBrokerRestrictedCountries = () => {
         countriesItems
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Restricted country successfully created.',
-      })
-
       return restrictedCountries
     } catch (error) {
       console.error('Error creating restricted countries:', error)
@@ -75,11 +65,6 @@ export const useBrokerRestrictedCountries = () => {
   const deleteRestrictedCountries = async (brokerId: number) => {
     try {
       const data = await deleteBrokerRestrictedCountries(brokerId)
-
-      addToast({
-        color: ToastColor.success,
-        text: 'Restricted country successfully deleted.',
-      })
 
       return data
     } catch (error) {
