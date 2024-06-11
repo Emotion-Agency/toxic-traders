@@ -17,7 +17,7 @@ const showMoreServerAddresses = () => {
 }
 
 const showLessServerAddresses = () => {
-  filteredCompanyNamesList.value = companyNamesList.value.slice(0, 1)
+  filteredCompanyNamesList.value = companyNamesList.value.slice(0, 3)
 }
 
 onMounted(async () => {
@@ -59,14 +59,14 @@ onMounted(async () => {
       </div>
       <OptionalButton
         v-if="
-          companyNamesList.length > 1 &&
+          companyNamesList.length > 3 &&
           filteredCompanyNamesList.length !== companyNamesList.length
         "
         @on-click="showMoreServerAddresses"
         >Show more</OptionalButton
       >
       <OptionalButton
-        v-if="filteredCompanyNamesList.length > 1"
+        v-if="filteredCompanyNamesList.length > 3"
         @on-click="showLessServerAddresses"
         >Show less</OptionalButton
       >
