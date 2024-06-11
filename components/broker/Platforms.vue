@@ -12,7 +12,7 @@ const platformsList = ref<number[]>([])
 const filteredPlatformsList = computed(() => {
   return removeUnderlines(
     platformsList.value?.map(index => platformsFullList.value[index]) || []
-  )
+  ).map(item => ({ text: item }))
 })
 
 const { createPlatform, getPlatform, updatePlatform } = useBrokerPlatforms()
