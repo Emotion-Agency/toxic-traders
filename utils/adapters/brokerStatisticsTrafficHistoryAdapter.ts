@@ -10,16 +10,14 @@ export const brokerStatisticsTrafficHistoryAdapter = (
     iBrokerCompanyNameStatisticSemrush &
     iBrokerCompanyNameStatisticSimilarWeb
 ) => {
-  const trafficObject: iBrokerStatisticTrafficHistory = JSON.parse(
-    params?.estimatedMonthlyVisits || '[]'
+  const trafficHistory: iBrokerStatisticTrafficHistory[] = JSON.parse(
+    params?.trafficHistory || '[]'
   )
 
-  const objectsOfArray: { title: string; text: string }[] = []
+  const updatedItem = trafficHistory.map(item => ({
+    date: item.date,
+    organic: numberToString(item.organic, 2),
+  }))
 
-  for (const [title, text] of Object.entries(trafficObject)) {
-    const transformedText = numberToString(text, 2)
-    objectsOfArray.push({ title, text: transformedText })
-  }
-
-  return objectsOfArray
+  return updatedItem
 }

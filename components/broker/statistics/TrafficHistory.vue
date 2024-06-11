@@ -14,7 +14,7 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const trafficHistory = ref<{ title: string; text: string }[]>([])
+const trafficHistory = ref<{ date: string; organic: string }[]>([])
 
 watch(
   () => props.activeItem,
@@ -39,7 +39,7 @@ onMounted(() => {
         :key="idx"
         class="statistics-items traffic-history__info-column"
       >
-        <BrokerStatisticsInfoItem :title="item.title" :text="item.text" />
+        <BrokerStatisticsInfoItem :title="item.date" :text="item.organic" />
       </li>
       <li
         v-if="!trafficHistory.length"

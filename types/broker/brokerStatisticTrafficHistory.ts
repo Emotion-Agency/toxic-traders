@@ -1,3 +1,4 @@
 export interface iBrokerStatisticTrafficHistory {
-  [date: string]: number
+  date: string
+  organic: number
 }
