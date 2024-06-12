@@ -55,7 +55,17 @@ onMounted(async () => {
 <template>
   <div class="servers-table">
     <Table>
-      <TableHead :header-fields="headerFields" />
+      <TableHead>
+        <TableRow>
+          <TableCell
+            v-for="(headerItem, idx) in headerFields"
+            :key="idx"
+            :item="headerItem"
+            :class="`table-cell--${idx}`"
+            :is-sort="true"
+          />
+        </TableRow>
+      </TableHead>
       <TableBody>
         <TableRow v-for="(item, idx) in filteredServersList" :key="idx">
           <TableCell

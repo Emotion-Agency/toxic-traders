@@ -30,11 +30,26 @@ const props = defineProps<iProps>()
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
 })
+
+const onSort = (e, e2) => {
+  console.log(e, e2)
+}
 </script>
 
 <template>
   <Table>
-    <TableHead :header-fields="formattedHeadingFields" />
+    <TableHead>
+      <TableRow>
+        <TableCell
+          v-for="(headerItem, idx) in formattedHeadingFields"
+          :key="idx"
+          :item="headerItem"
+          :class="`table-cell--${idx}`"
+          :is-sort="true"
+          @sort="onSort"
+        />
+      </TableRow>
+    </TableHead>
     <TableBody>
       <TableRow v-for="(broker, idx) in brokers" :key="idx">
         <TableCell
@@ -55,4 +70,3 @@ const formattedHeadingFields = computed(() => {
     </TableBody>
   </Table>
 </template>
-~/types/broker/brokers

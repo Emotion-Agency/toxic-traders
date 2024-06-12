@@ -23,7 +23,17 @@ onMounted(async () => {
 
 <template>
   <Table>
-    <TableHead :header-fields="headerFields" />
+    <TableHead>
+      <TableRow>
+        <TableCell
+          v-for="(headerItem, idx) in headerFields"
+          :key="idx"
+          :item="headerItem"
+          :class="`table-cell--${idx}`"
+          :is-sort="true"
+        />
+      </TableRow>
+    </TableHead>
     <TableBody>
       <TableRow v-for="(log, idx) in logsList" :key="idx">
         <TableCell
