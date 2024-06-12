@@ -28,7 +28,6 @@ watch(
     topCountryShares.value = brokerStatisticsCountrySharesAdapter(
       props.activeItem
     )
-    console.log(props.activeItem)
   }
 )
 

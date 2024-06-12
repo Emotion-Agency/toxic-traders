@@ -12,7 +12,7 @@ export const brokerStatisticsOverviewAdapter = (
 ): iBrokerStatisticOverview => {
   const obj = {
     webSite: params?.webSite,
-    parsingTimestamp: params?.parsingTimestamp,
+    parsingTimestamp: transformDate(params?.parsingTimestamp),
   }
 
   return obj

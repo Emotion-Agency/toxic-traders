@@ -17,7 +17,7 @@ export const brokerStatisticsMonthlyVisitsAdapter = (
   const objectsOfArray: { title: string; text: string }[] = []
 
   for (const [title, text] of Object.entries(monthlyVisitsObject)) {
-    const transformedText = numberToString(text, 2)
+    const transformedText = formatNumber(text)
     objectsOfArray.push({ title, text: transformedText })
   }
 

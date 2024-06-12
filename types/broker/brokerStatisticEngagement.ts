@@ -1,5 +1,5 @@
 export interface iBrokerStatisticEngagement {
-  globalRank?: number
+  globalRank?: number | string
   categoryRank?: {
     Rank: string
     Category: string

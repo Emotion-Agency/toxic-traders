@@ -16,7 +16,7 @@ export const brokerStatisticsTrafficHistoryAdapter = (
 
   const updatedItem = trafficHistory.map(item => ({
     date: item.date,
-    organic: numberToString(item.organic, 2),
+    organic: formatNumber(item.organic),
   }))
 
   return updatedItem

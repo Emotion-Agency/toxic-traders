@@ -18,9 +18,9 @@ export const brokerStatisticsEngagementAdapter = (
   }
 
   const obj = {
-    globalRank: updatedItem?.globalRank,
+    globalRank: formatNumber(+updatedItem?.globalRank),
     categoryRank: {
-      Rank: updatedItem?.categoryRank?.Rank,
+      Rank: formatNumber(+updatedItem?.categoryRank?.Rank),
       Category: updatedItem?.categoryRank?.Category,
     },
     countryRank: {
@@ -28,15 +28,15 @@ export const brokerStatisticsEngagementAdapter = (
       CountryCode: updatedItem?.countryRank?.CountryCode,
       Rank: updatedItem?.countryRank?.Rank,
     },
-    engagmentsVisists: updatedItem?.engagmentsVisists,
+    engagmentsVisists: formatNumber(+updatedItem?.engagmentsVisists),
     engagments: {
       Month: updatedItem?.engagments?.Month,
       Year: updatedItem?.engagments?.Year,
-      Visits: updatedItem?.engagments?.Visits,
+      Visits: formatNumber(+updatedItem?.engagments?.Visits),
     },
-    trafficMonthlyAvg: updatedItem?.trafficMonthlyAvg,
-    trafficMonthlyCost: updatedItem?.trafficMonthlyCost,
-    organicSearchTraffic: updatedItem?.organicSearchTraffic,
+    trafficMonthlyAvg: formatNumber(+updatedItem?.trafficMonthlyAvg),
+    trafficMonthlyCost: formatNumber(+updatedItem?.trafficMonthlyCost),
+    organicSearchTraffic: formatNumber(+updatedItem?.organicSearchTraffic),
   }
 
   return obj

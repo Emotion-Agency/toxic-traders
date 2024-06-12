@@ -35,7 +35,7 @@ const engagement = computed(() => {
     return 'N/A'
   }
 
-  return fields.join(' ')
+  return fields.join('/')
 })
 
 watch(
