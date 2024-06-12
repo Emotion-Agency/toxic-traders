@@ -5,6 +5,10 @@ interface iProps {
 }
 
 defineProps<iProps>()
+
+const onSort = (e, e2) => {
+  console.log(e, e2)
+}
 </script>
 
 <template>
@@ -16,6 +20,7 @@ defineProps<iProps>()
         :item="headerItem"
         :class="`table-cell--${idx}`"
         :is-sort="true"
+        @sort="onSort"
       />
     </TableRow>
   </div>

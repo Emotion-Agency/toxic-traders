@@ -19,18 +19,22 @@ const emit = defineEmits(['sort', 'open'])
 const onSort = () => {
   if (sortOrder.value === null) {
     sortOrder.value = 1
+    return
   }
 
   if (sortOrder.value === 1) {
     sortOrder.value = 2
+    return
   }
 
   if (sortOrder.value === 2) {
     sortOrder.value = null
   }
-
-  emit('sort', props.item, sortOrder.value)
 }
+
+watch(sortOrder, () => {
+  emit('sort', props.item, sortOrder.value)
+})
 </script>
 
 <template>
@@ -45,7 +49,9 @@ const onSort = () => {
     </NuxtLink>
     <button v-else-if="isSort" class="table-cell__btn" @click="onSort">
       {{ item }}
-      <IconsDownUpArrow />
+      <IconsDownArrow v-if="sortOrder === 1" />
+      <IconsUpArrow v-else-if="sortOrder === 2" />
+      <IconsDownUpArrow v-else />
     </button>
     <button
       v-else-if="isModal && item"
