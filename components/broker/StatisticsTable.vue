@@ -67,9 +67,9 @@ onMounted(async () => {
       <TableHead :header-fields="headerFields" />
       <TableBody>
         <TableRow>
-          <TableCell :item="ahrefsTraffic" />
-          <TableCell :item="semrushTraffic" />
-          <TableCell :item="similarWebTraffic" />
+          <TableCell :item="formatNumber(ahrefsTraffic)" />
+          <TableCell :item="formatNumber(semrushTraffic)" />
+          <TableCell :item="formatNumber(similarWebTraffic)" />
         </TableRow>
       </TableBody>
     </Table>
