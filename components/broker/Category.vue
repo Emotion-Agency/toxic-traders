@@ -26,8 +26,6 @@ const { createCategories } = useBrokerCategories()
 
 const categoryOnChange = (input: iInput) => {
   categoryValue.value = input.value
-
-  console.log(categoryValue.value, input.value)
 }
 
 const onAddCategory = async () => {
