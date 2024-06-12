@@ -28,11 +28,6 @@ export const useBrokerServerLocation = () => {
     try {
       const data = await createBrokerServerLocation(brokerId, serverLocation)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Server location successfully created.',
-      })
-
       return data
     } catch (error) {
       console.error('Error creating server location:', error)
@@ -46,11 +41,6 @@ export const useBrokerServerLocation = () => {
   const deleteServerLocation = async (brokerId: number) => {
     try {
       const data = await deleteBrokerServerLocation(brokerId)
-
-      addToast({
-        color: ToastColor.success,
-        text: 'Server location successfully deleted.',
-      })
 
       return data
     } catch (error) {
