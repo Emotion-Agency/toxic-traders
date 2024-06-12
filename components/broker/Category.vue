@@ -32,6 +32,9 @@ const categoryOnChange = (input: iInput) => {
 
 const onAddCategory = async () => {
   await createCategories(props.brokerId, categoryValue.value)
+
+  categoriesData.value = [categoryValue.value, ...categoriesData.value]
+
   categoryValue.value = ''
   categoryModalClose()
 }
