@@ -13,6 +13,8 @@ const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
+const sortedBy = ref('companynames')
+const sortOrder = ref<1 | 2>(1)
 
 const { getAllBrokers, getAllBrokersBySearch } = useBrokers()
 
@@ -102,8 +104,8 @@ const getBrokersRequest = async (data?: iSearchInput[]) => {
   const { brokers, totalCount } = await getAllBrokersBySearch({
     offset: currentPage.value - 1,
     count: itemsCount.value,
-    sortBy: 'companyName',
-    sortOrder: 1,
+    sortBy: sortedBy.value || 'companynames',
+    sortOrder: sortOrder.value || 0,
     data: data ?? [],
   })
 
