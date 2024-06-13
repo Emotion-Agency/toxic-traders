@@ -64,6 +64,7 @@ const historyModalClose = () => {
           <BrokerStatistics :broker-id="Number(brokerId)" />
         </div>
       </section>
+
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">

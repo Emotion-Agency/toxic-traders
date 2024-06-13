@@ -14,6 +14,9 @@ export const getBrokerServerAddresses = async (brokerId: number) => {
 
     return data
   } catch (e) {
+    if (e.response.status === 400) {
+      return { brokerServerAddresses: [] }
+    }
     console.error(e.message)
     throw e
   }

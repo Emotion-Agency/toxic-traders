@@ -93,59 +93,67 @@ onMounted(async () => {
   companyNamesList.value = companyNames
   websites.value = companyNames.map(item => item.website)
 
-  selectedWebsiteId.value = companyNamesList.value[0]?.id
+  selectedWebsiteId.value = companyNamesList.value[0]?.id || null
 })
 </script>
 
 <template>
   <div class="statistics">
-    <CustomSelect
-      :options="websites"
-      :placeholder="websites[0] || 'Choose website'"
-      class="statistics__select"
-      @select="getSelectedItem"
-    />
-    <div class="statistics__table-wrapper">
-      <div class="statistics__table">
-        <BrokerStatisticsTable
-          :broker-id="brokerId"
-          :website-id="selectedWebsiteId"
-        />
-      </div>
-
-      <TheButton
-        tag="button"
-        button-size="small"
-        variant="fill"
-        class="statistics__table-btn"
-        @click="statisticsModalOpen"
-      >
-        More info
-      </TheButton>
-    </div>
-    <SlidingModal
-      :modal-opened="statisticsModalOpened"
-      title="Statistics"
-      @close="statisticsModalClose"
-    >
-      <div class="statistics__modal-wrapper">
-        <CustomSelect
-          :options="timeArr"
-          :placeholder="timeArr[0] || 'Choose item'"
-          class="statistics__modal-select"
-          @select="getStatisticItem"
-        />
-        <div class="statistics__modal-content">
-          <BrokerStatisticsOverview :active-item="activeStatisticItem" />
-          <BrokerStatisticsEngagement :active-item="activeStatisticItem" />
-          <BrokerStatisticsTrafficHistory :active-item="activeStatisticItem" />
-          <BrokerStatisticsMonthlyVisits :active-item="activeStatisticItem" />
-          <BrokerStatisticsTopCountries :active-item="activeStatisticItem" />
-          <BrokerStatisticsTopCountryShares
-            :active-item="activeStatisticItem"
+    <div v-if="websites?.length" class="statistics-data">
+      <CustomSelect
+        :options="websites"
+        :placeholder="websites[0] || 'Choose website'"
+        class="statistics__select"
+        @select="getSelectedItem"
+      />
+      <div class="statistics__table-wrapper">
+        <div class="statistics__table">
+          <BrokerStatisticsTable
+            :broker-id="brokerId"
+            :website-id="selectedWebsiteId"
           />
         </div>
+
+        <TheButton
+          v-if="selectedWebsiteId"
+          tag="button"
+          button-size="small"
+          variant="fill"
+          class="statistics__table-btn"
+          @click="statisticsModalOpen"
+        >
+          More info
+        </TheButton>
       </div>
-    </SlidingModal>
+      <SlidingModal
+        :modal-opened="statisticsModalOpened"
+        title="Statistics"
+        @close="statisticsModalClose"
+      >
+        <div class="statistics__modal-wrapper">
+          <CustomSelect
+            :options="timeArr"
+            :placeholder="timeArr[0] || 'Choose item'"
+            class="statistics__modal-select"
+            @select="getStatisticItem"
+          />
+          <div class="statistics__modal-content">
+            <BrokerStatisticsOverview :active-item="activeStatisticItem" />
+            <BrokerStatisticsEngagement :active-item="activeStatisticItem" />
+            <BrokerStatisticsTrafficHistory
+              :active-item="activeStatisticItem"
+            />
+            <BrokerStatisticsMonthlyVisits :active-item="activeStatisticItem" />
+            <BrokerStatisticsTopCountries :active-item="activeStatisticItem" />
+            <BrokerStatisticsTopCountryShares
+              :active-item="activeStatisticItem"
+            />
+          </div>
+        </div>
+      </SlidingModal>
+    </div>
+    <div v-else style="margin: 0auto; text-align: center">
+      This broker does not have a website to display statistics
+    </div>
   </div>
 </template>
