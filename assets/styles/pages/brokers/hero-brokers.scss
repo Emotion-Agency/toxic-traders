@@ -67,7 +67,10 @@
 }
 
 .brokers__table {
-  .table-cell--0 {
+  .table-cell {
+    min-width: 240px;
+  }
+  .table-cell--id {
     min-width: 100px;
     width: 100px;
   }

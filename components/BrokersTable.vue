@@ -40,6 +40,16 @@ const { sortState, onSort } = useSort(
   },
   () => emit('sort', sortState.value)
 )
+
+const notSortableFields = [
+  'Broker Platforms',
+  'Regulator Name',
+  'Restricted Countries',
+]
+
+const isSortable = (field: string) => {
+  return !notSortableFields.includes(field)
+}
 </script>
 
 <template>
@@ -50,8 +60,8 @@ const { sortState, onSort } = useSort(
           v-for="(headerItem, idx) in formattedHeadingFields"
           :key="idx"
           :item="headerItem"
-          :class="`table-cell--${idx}`"
-          :is-sort="true"
+          :class="[`table-cell--${idx}`, `table-cell--${headingFields[idx]}`]"
+          :is-sort="isSortable(headerItem)"
           :sort-order="sortState.sortOrder"
           :is-active="sortState.sortBy === headerItem"
           @sort="onSort"
@@ -64,7 +74,10 @@ const { sortState, onSort } = useSort(
           v-for="(item, id, index) in broker"
           :key="id"
           :item="item"
-          :class="`table-cell--${index}`"
+          :class="[
+            `table-cell--${index}`,
+            `table-cell--${headingFields[index]}`,
+          ]"
           :link="
             broker.companyNames === item
               ? {
