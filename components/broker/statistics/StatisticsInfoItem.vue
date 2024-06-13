@@ -3,6 +3,7 @@ import type { iLink } from '~/types'
 
 interface iProps {
   title: string | number
+  img?: { url: string; alt: string }
   link?: iLink
   text?: string | number
   additionalText?: string | number | iLink
@@ -13,9 +14,17 @@ defineProps<iProps>()
 
 <template>
   <div class="statistics-item">
-    <h4 class="statistics-item__title">
-      {{ title }}
-    </h4>
+    <div class="statistics-item__title-wrapper">
+      <img
+        v-if="img"
+        class="statistics-item__img"
+        :src="img.url"
+        :alt="img.alt"
+      />
+      <h4 class="statistics-item__title">
+        {{ title }}
+      </h4>
+    </div>
     <a
       v-if="link"
       :href="link?.url"
