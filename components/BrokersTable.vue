@@ -69,7 +69,13 @@ const isSortable = (field: string) => {
       </TableRow>
     </TableHead>
     <TableBody>
-      <TableRow v-for="(broker, idx) in brokers" :key="idx">
+      <TableRow
+        v-for="(broker, idx) in brokers"
+        :key="idx"
+        :link="{
+          url: `/brokers/${broker.id}`,
+        }"
+      >
         <TableCell
           v-for="(item, id, index) in broker"
           :key="id"
