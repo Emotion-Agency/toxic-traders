@@ -25,7 +25,7 @@ export const useBrokerCategories = () => {
     try {
       const { brokerCategories } = await getBrokerCategories(brokerId)
 
-      return brokerCategories
+      return brokerCategories?.map(categoryData => categoryData.category)
     } catch (error) {
       console.error('Error fetching categories:', error)
       addToast({
@@ -41,11 +41,6 @@ export const useBrokerCategories = () => {
         brokerId,
         category
       )
-
-      addToast({
-        color: ToastColor.success,
-        text: 'Category successfully created.',
-      })
 
       return brokerCategories
     } catch (error) {

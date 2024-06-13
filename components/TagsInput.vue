@@ -16,6 +16,7 @@ const props = defineProps<iProps>()
 const emit = defineEmits(['select', 'remove'])
 
 const inputValue = ref('')
+const inputWidth = ref(1)
 const dropdownOpened = ref(false)
 const selectedBadge = ref('')
 const $el = ref<HTMLElement | null>(null)
@@ -36,6 +37,8 @@ watch(
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   inputValue.value = target.value
+
+  inputWidth.value = target.value?.trim()?.length
 }
 
 const onFocus = () => {
@@ -86,6 +89,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.body.removeEventListener('click', outsideClick)
 })
+
+const onBackSpace = () => {
+  if (inputValue.value.length || !props.badgesList.length) return
+
+  removeBadge(props.badgesList.length - 1)
+}
 </script>
 
 <template>
@@ -118,9 +127,11 @@ onBeforeUnmount(() => {
               name="Tags input"
               :placeholder="!props.badgesList?.length ? 'Type a value' : null"
               autocomplete="off"
+              :style="{ '--width': `${inputWidth}ch` }"
               @focus="onFocus"
               @input="onChange"
               @click="onFocus"
+              @keydown.delete="onBackSpace"
             />
           </div>
         </div>

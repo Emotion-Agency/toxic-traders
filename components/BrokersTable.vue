@@ -5,9 +5,12 @@ interface iProps {
   brokers: iBroker[]
   isSearchOpened: boolean
   headingFields: string[] | []
+  defaultSortBy?: string
 }
 
 const props = defineProps<iProps>()
+
+const emit = defineEmits(['sort'])
 
 // onMounted(() => {
 //   console.log(
@@ -30,11 +33,31 @@ const props = defineProps<iProps>()
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
 })
+
+const { sortState, onSort } = useSort(
+  {
+    sortBy: props.defaultSortBy,
+  },
+  () => emit('sort', sortState.value)
+)
 </script>
 
 <template>
   <Table>
-    <TableHead :header-fields="formattedHeadingFields" />
+    <TableHead>
+      <TableRow>
+        <TableCell
+          v-for="(headerItem, idx) in formattedHeadingFields"
+          :key="idx"
+          :item="headerItem"
+          :class="`table-cell--${idx}`"
+          :is-sort="true"
+          :sort-order="sortState.sortOrder"
+          :is-active="sortState.sortBy === headerItem"
+          @sort="onSort"
+        />
+      </TableRow>
+    </TableHead>
     <TableBody>
       <TableRow v-for="(broker, idx) in brokers" :key="idx">
         <TableCell
@@ -55,4 +78,3 @@ const formattedHeadingFields = computed(() => {
     </TableBody>
   </Table>
 </template>
-~/types/broker/brokers

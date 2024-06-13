@@ -2,16 +2,16 @@ import axiosInstance from '../axiosInstance'
 import type { iLogsData } from '~/types/logs'
 
 export const getLogs = async (
-  offset: number,
-  count: number,
+  page: number,
+  pageSize: number,
   sortBy: string,
   sortOrder: number
 ) => {
   try {
-    const { data }: iLogsData = await axiosInstance.get('Log', {
+    const { data }: iLogsData = await axiosInstance.get('Log/Page', {
       params: {
-        offset,
-        count,
+        page,
+        pageSize,
         sortBy,
         sortOrder,
       },

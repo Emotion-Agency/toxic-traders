@@ -7,29 +7,18 @@ interface iProps {
   }
   isSort?: boolean
   isModal?: boolean
+  sortOrder?: 1 | 2
+  isActive?: boolean
 }
 
 const props = withDefaults(defineProps<iProps>(), {
   link: null,
 })
 
-const sortOrder = ref<1 | 2 | null>(null)
 const emit = defineEmits(['sort', 'open'])
 
 const onSort = () => {
-  if (sortOrder.value === null) {
-    sortOrder.value = 1
-  }
-
-  if (sortOrder.value === 1) {
-    sortOrder.value = 2
-  }
-
-  if (sortOrder.value === 2) {
-    sortOrder.value = null
-  }
-
-  emit('sort', props.item, sortOrder.value)
+  emit('sort', props.item)
 }
 </script>
 
@@ -45,7 +34,9 @@ const onSort = () => {
     </NuxtLink>
     <button v-else-if="isSort" class="table-cell__btn" @click="onSort">
       {{ item }}
-      <IconsDownUpArrow />
+      <IconsDownArrow v-if="sortOrder === 1 && isActive" />
+      <IconsUpArrow v-else-if="sortOrder === 2 && isActive" />
+      <IconsDownUpArrow v-else />
     </button>
     <button
       v-else-if="isModal && item"

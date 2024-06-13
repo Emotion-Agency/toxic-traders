@@ -98,13 +98,11 @@ const historyModalClose = () => {
         </div>
       </aside>
     </div>
-    <SlidingModal
-      :modal-opened="historyModalOpened"
-      title="History"
+    <BrokerHistory
+      :broker-id="Number(brokerId)"
+      :is-opened="historyModalOpened"
       @close="historyModalClose"
-    >
-      <BrokerHistoryTable :broker-id="Number(brokerId)" />
-    </SlidingModal>
+    />
 
     <TheModal
       :modal-opened="settingsModalOpened"
