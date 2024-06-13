@@ -64,7 +64,16 @@ onMounted(async () => {
 <template>
   <div class="statistics-table">
     <Table>
-      <TableHead :header-fields="headerFields" />
+      <TableHead>
+        <TableRow>
+          <TableCell
+            v-for="(headerItem, idx) in headerFields"
+            :key="idx"
+            :item="headerItem"
+            :class="`table-cell--${idx}`"
+          />
+        </TableRow>
+      </TableHead>
       <TableBody>
         <TableRow>
           <TableCell :item="formatNumber(ahrefsTraffic)" />

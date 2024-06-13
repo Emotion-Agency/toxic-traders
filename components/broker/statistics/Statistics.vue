@@ -61,9 +61,9 @@ const statisticsModalOpen = async () => {
   )) as iBrokerCompanyNameStatisticSimilarWeb[]
 
   statisticsData.value = [
-    ...ahrefsStatistic.value.map(item => ({ ...item, provider: 'Ahrefs' })),
-    ...semrushStatistic.value.map(item => ({ ...item, provider: 'Semrush' })),
-    ...similarWebStatistic.value.map(item => ({
+    ...ahrefsStatistic.value?.map(item => ({ ...item, provider: 'Ahrefs' })),
+    ...semrushStatistic.value?.map(item => ({ ...item, provider: 'Semrush' })),
+    ...similarWebStatistic.value?.map(item => ({
       ...item,
       provider: 'SimilarWeb',
     })),
@@ -73,9 +73,14 @@ const statisticsModalOpen = async () => {
 }
 
 const timeArr = computed(() => {
-  return statisticsData.value.map(
-    item => `${item.provider} - ${transformDateWithTime(item.parsingTimestamp)}`
-  )
+  return statisticsData.value
+    .sort((a, b) => {
+      return a.parsingTimestamp < b.parsingTimestamp ? 1 : -1
+    })
+    .map(
+      item =>
+        `${item.provider} - ${transformDateWithTime(item.parsingTimestamp)}`
+    )
 })
 
 const statisticsModalClose = () => {
