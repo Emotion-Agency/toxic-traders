@@ -61,9 +61,9 @@ const statisticsModalOpen = async () => {
   )) as iBrokerCompanyNameStatisticSimilarWeb[]
 
   statisticsData.value = [
-    ...ahrefsStatistic.value?.map(item => ({ ...item, provider: 'Ahrefs' })),
-    ...semrushStatistic.value?.map(item => ({ ...item, provider: 'Semrush' })),
-    ...similarWebStatistic.value?.map(item => ({
+    ...ahrefsStatistic.value.map(item => ({ ...item, provider: 'Ahrefs' })),
+    ...semrushStatistic.value.map(item => ({ ...item, provider: 'Semrush' })),
+    ...similarWebStatistic.value.map(item => ({
       ...item,
       provider: 'SimilarWeb',
     })),

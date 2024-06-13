@@ -34,11 +34,12 @@ export const useBrokerStatistic = () => {
 
       return brokerCompanyNameStatistic
     } catch (error) {
-      console.error('Error fetching statistic provider:', error)
+      console.error(`Error fetching ${providerName} provider:`, error)
       addToast({
         color: ToastColor.danger,
-        text: 'An error occurred while fetching statistic provider. Please try again.',
+        text: `An error occurred while fetching ${providerName} provider. Please try again.`,
       })
+      return []
     }
   }
 

@@ -179,12 +179,11 @@ const onSort = async (sortState: ISortState) => {
         </div>
       </div>
       <div
-        v-if="brokersList.length"
         class="brokers__content"
         :class="isSearchOpened && 'brokers__content--search'"
       >
         <BrokersSearch :is-opened="isSearchOpened" @search="onSearch" />
-        <div class="brokers__table-wrapper">
+        <div v-if="brokersList.length" class="brokers__table-wrapper">
           <BrokersTable
             :is-search-opened="isSearchOpened"
             :brokers="filteredBrokers"
@@ -209,11 +208,16 @@ const onSort = async (sortState: ISortState) => {
             @on-change-value="onInputChange"
           />
         </div>
+        <p
+          v-if="!isLoading && !brokersList.length"
+          class="brokers__error-message"
+        >
+          No items found
+        </p>
       </div>
-      <div v-else-if="isLoading && !brokersList.length">
+      <div v-if="isLoading && !brokersList.length">
         <UiLoader />
       </div>
-      <p v-else class="brokers__error-message">No items found</p>
     </section>
     <TheModal
       :modal-opened="isSettingsOpened"
