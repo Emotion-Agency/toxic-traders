@@ -12,6 +12,7 @@ const categoryModalOpened = ref(false)
 const categoryOptions = ref<string[]>([])
 const categoriesData = ref<string[]>([])
 const categoryValue = ref<string>('')
+const activeCategory = ref<string>('')
 
 const categoryInputData = {
   required: false,
@@ -22,17 +23,25 @@ const categoryInputData = {
   placeholder: 'Category name',
 }
 
-const { createCategories } = useBrokerCategories()
+const { createCategories, getCategories } = useBrokerCategories()
 
 const categoryOnChange = (input: iInput) => {
   categoryValue.value = input.value
 }
 
+const { addToast } = useToasts()
+
 const onAddCategory = async () => {
   await createCategories(props.brokerId, categoryValue.value)
 
+  addToast({
+    color: ToastColor.success,
+    text: 'Category successfully created.',
+  })
+
   categoriesData.value = [categoryValue.value, ...categoriesData.value]
 
+  activeCategory.value = categoryValue.value
   categoryValue.value = ''
   categoryModalClose()
 }
@@ -50,8 +59,20 @@ const categoryModalClose = () => {
   categoryModalOpened.value = false
 }
 
+const onSelectCategory = async (value: string) => {
+  activeCategory.value = value
+
+  await createCategories(props.brokerId, value)
+}
+
 onMounted(async () => {
   categoriesData.value = await getBrokerCategoriesList()
+
+  const brokerCategories = await getCategories(props.brokerId)
+
+  if (brokerCategories.length) {
+    activeCategory.value = brokerCategories[0]
+  }
 })
 </script>
 
@@ -63,7 +84,12 @@ onMounted(async () => {
       :is-inputs="true"
       @open="categoryModalOpen"
     >
-      <CustomSelect :options="categoryOptions" placeholder="Choose category" />
+      <CustomSelect
+        :options="categoryOptions"
+        placeholder="Choose category"
+        :value="activeCategory"
+        @select="onSelectCategory"
+      />
     </TheAccordion>
     <TheModal
       :modal-opened="categoryModalOpened"
