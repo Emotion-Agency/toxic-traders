@@ -70,6 +70,10 @@ onMounted(async () => {
   logsList.value = logs
   totalCountPages.value = totalCount
 })
+
+const onSort = data => {
+  console.log(data)
+}
 </script>
 
 <template>
@@ -78,6 +82,7 @@ onMounted(async () => {
       v-if="logsList?.length"
       class="history__table"
       :logs="logsList"
+      @sort="onSort"
     />
     <ThePagination
       class="history__pagination"
