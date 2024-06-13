@@ -55,6 +55,8 @@ const selectDropdownItem = (item: string) => {
   emit('select', selectedBadge.value)
 
   dropdownOpened.value = false
+
+  inputValue.value = ''
 }
 
 const removeBadge = (idx: number) => {
@@ -128,6 +130,7 @@ const onBackSpace = () => {
               :placeholder="!props.badgesList?.length ? 'Type a value' : null"
               autocomplete="off"
               :style="{ '--width': `${inputWidth}ch` }"
+              :value="inputValue"
               @focus="onFocus"
               @input="onChange"
               @click="onFocus"
