@@ -37,7 +37,7 @@ const getStatisticItem = (item: string) => {
   activeStatisticItem.value = statisticsData.value.find(
     item =>
       item.provider === provider &&
-      transformDate(item.parsingTimestamp) === timestamp
+      transformDateWithTime(item.parsingTimestamp) === timestamp
   )
 }
 
@@ -74,7 +74,7 @@ const statisticsModalOpen = async () => {
 
 const timeArr = computed(() => {
   return statisticsData.value.map(
-    item => `${item.provider} - ${transformDate(item.parsingTimestamp)}`
+    item => `${item.provider} - ${transformDateWithTime(item.parsingTimestamp)}`
   )
 })
 
