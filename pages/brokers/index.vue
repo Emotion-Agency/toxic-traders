@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { ISortState } from '~/composables/sort'
 import type { iSearchInput } from '~/types'
 import type { iBroker } from '~/types/broker/broker'
 import { getBrokerHeadings } from '~/utils/formatBrokerHeaders'
+import { removeSpaces } from '~/utils/removeSpaces'
 
 const router = useRouter()
 const route = useRoute()
@@ -14,7 +16,8 @@ const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
 const sortedBy = ref('companynames')
-const sortOrder = ref<1 | 2>(1)
+const sortedOrder = ref<1 | 2>(1)
+const searchData = ref<iSearchInput[]>([])
 
 const { getAllBrokers, getAllBrokersBySearch } = useBrokers()
 
@@ -98,15 +101,15 @@ watch([currentPage, itemsCount], async () => {
   })
 })
 
-const getBrokersRequest = async (data?: iSearchInput[]) => {
+const getBrokersRequest = async () => {
   isLoading.value = true
 
   const { brokers, totalCount } = await getAllBrokersBySearch({
     offset: currentPage.value - 1,
     count: itemsCount.value,
     sortBy: sortedBy.value || 'companynames',
-    sortOrder: sortOrder.value || 0,
-    data: data ?? [],
+    sortOrder: sortedOrder.value || 0,
+    data: searchData.value ?? [],
   })
 
   isLoading.value = false
@@ -119,8 +122,17 @@ onMounted(async () => {
   await getBrokersRequest()
 })
 
-const onSearch = async (searchData: iSearchInput[]) => {
-  await getBrokersRequest(searchData)
+const onSearch = async (data: iSearchInput[]) => {
+  searchData.value = data
+
+  await getBrokersRequest()
+}
+
+const onSort = async (sortState: ISortState) => {
+  sortedBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
+  sortedOrder.value = sortState.sortOrder
+
+  await getBrokersRequest()
 }
 </script>
 
@@ -177,7 +189,9 @@ const onSearch = async (searchData: iSearchInput[]) => {
             :is-search-opened="isSearchOpened"
             :brokers="filteredBrokers"
             :heading-fields="filteredBrokerHeading"
+            :default-sort-by="sortedBy"
             class="brokers__table"
+            @sort="onSort"
           />
           <ThePagination
             class="brokers__pagination"
