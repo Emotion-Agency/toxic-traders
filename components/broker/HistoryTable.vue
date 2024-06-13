@@ -19,6 +19,23 @@ onMounted(async () => {
     logsList.value = []
   }
 })
+
+const onSorted = () => {
+  logsList.value = logsList.value.sort((a, b) => {
+    if (sortState.value.sortOrder === 1) {
+      return a[sortState.value.sortBy] > b[sortState.value.sortBy] ? 1 : -1
+    } else {
+      return a[sortState.value.sortBy] < b[sortState.value.sortBy] ? 1 : -1
+    }
+  })
+}
+
+const { sortState, onSort } = useSort(
+  {
+    sortBy: 'ID',
+  },
+  onSorted
+)
 </script>
 
 <template>
@@ -31,6 +48,9 @@ onMounted(async () => {
           :item="headerItem"
           :class="`table-cell--${idx}`"
           :is-sort="true"
+          :sort-order="sortState.sortOrder"
+          :is-active="sortState.sortBy === headerItem"
+          @sort="onSort"
         />
       </TableRow>
     </TableHead>

@@ -37,6 +37,7 @@ const showMoreServers = () => {
 
 const showLessServers = () => {
   filteredServersList.value = serversConvertedList.value.slice(0, 5)
+  console.log(serversConvertedList.value)
 }
 
 onMounted(async () => {
@@ -49,6 +50,10 @@ onMounted(async () => {
   ).fill(false)
 
   showLessServers()
+})
+
+watchEffect(() => {
+  console.log(serversConvertedList.value)
 })
 </script>
 

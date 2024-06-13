@@ -1,6 +1,7 @@
 .servers-table {
   .table-body {
     height: fit-content;
+    max-height: none;
   }
 
   .table-cell {
