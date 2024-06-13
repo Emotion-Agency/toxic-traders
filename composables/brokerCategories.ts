@@ -28,10 +28,6 @@ export const useBrokerCategories = () => {
       return brokerCategories?.map(categoryData => categoryData.category)
     } catch (error) {
       console.error('Error fetching categories:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching categories. Please try again.',
-      })
     }
   }
 
