@@ -50,3 +50,13 @@
     }
   }
 }
+
+.statistics-table {
+  .table-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .table-cell {
+    min-width: auto;
+  }
+}

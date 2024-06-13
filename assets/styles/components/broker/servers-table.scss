@@ -4,8 +4,12 @@
     max-height: none;
   }
 
+  .table-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .table-cell {
-    width: 50%;
+    min-width: auto;
   }
 }
 
