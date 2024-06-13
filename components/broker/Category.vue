@@ -68,11 +68,13 @@ const onSelectCategory = async (value: string) => {
 onMounted(async () => {
   categoriesData.value = await getBrokerCategoriesList()
 
-  const brokerCategories = await getCategories(props.brokerId)
+  try {
+    const brokerCategories = await getCategories(props.brokerId)
 
-  if (brokerCategories.length) {
-    activeCategory.value = brokerCategories[0]
-  }
+    if (brokerCategories.length) {
+      activeCategory.value = brokerCategories[0]
+    }
+  } catch (error) {}
 })
 </script>
 
