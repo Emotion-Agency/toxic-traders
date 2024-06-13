@@ -10,7 +10,9 @@ const { getAllBrokerServers } = useBrokerServer()
 const isOpenedServersModal = ref<Array<boolean>>([])
 const headerFields = ['Servers MT4', 'Servers MT5']
 const serversList = ref<iBrokerServer[]>([])
+const showState = ref<'more' | 'less'>('more')
 const filteredServersList = ref([])
+
 const serversConvertedList = computed(() => {
   return serversList.value.map(item => {
     const type0 = item.serverType === 0 ? item : null
@@ -32,13 +34,20 @@ const serversModalClose = (index: number) => {
 }
 
 const showMoreServers = () => {
-  filteredServersList.value = serversConvertedList.value
+  showState.value = 'more'
 }
 
 const showLessServers = () => {
-  filteredServersList.value = serversConvertedList.value.slice(0, 5)
-  console.log(serversConvertedList.value)
+  showState.value = 'less'
 }
+
+watch([serversConvertedList, showState], () => {
+  if (showState.value === 'more') {
+    filteredServersList.value = serversConvertedList.value
+  } else {
+    filteredServersList.value = serversConvertedList.value.slice(0, 5)
+  }
+})
 
 onMounted(async () => {
   const data = await getAllBrokerServers(props.brokerId)
@@ -52,9 +61,22 @@ onMounted(async () => {
   showLessServers()
 })
 
-watchEffect(() => {
-  console.log(serversConvertedList.value)
-})
+const onSorted = () => {
+  serversList.value = serversList.value.sort((a, b) => {
+    if (sortState.value.sortOrder === 1) {
+      return a[sortState.value.sortBy] > b[sortState.value.sortBy] ? 1 : -1
+    } else {
+      return a[sortState.value.sortBy] < b[sortState.value.sortBy] ? 1 : -1
+    }
+  })
+}
+
+const { sortState, onSort } = useSort(
+  {
+    sortBy: 'Servers MT4',
+  },
+  onSorted
+)
 </script>
 
 <template>
@@ -68,6 +90,9 @@ watchEffect(() => {
             :item="headerItem"
             :class="`table-cell--${idx}`"
             :is-sort="true"
+            :sort-order="sortState.sortOrder"
+            :is-active="sortState.sortBy === headerItem"
+            @sort="onSort"
           />
         </TableRow>
       </TableHead>
