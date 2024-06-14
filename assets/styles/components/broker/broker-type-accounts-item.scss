@@ -1,4 +1,4 @@
-.type-accounts-item {
+.broker-type-accounts-item {
   position: relative;
   height: 104px;
   width: 100%;
@@ -11,11 +11,11 @@
     padding: 0;
     background-color: var(--white);
 
-    .type-accounts-item__title {
+    .broker-type-accounts-item__title {
       color: var(--primary-default);
     }
 
-    .type-accounts-item__content {
+    .broker-type-accounts-item__content {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -38,7 +38,7 @@
   }
 }
 
-.type-accounts-item__wrapper {
+.broker-type-accounts-item__wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,7 +47,7 @@
   height: 100%;
 }
 
-.type-accounts-item__btn-wrapper {
+.broker-type-accounts-item__btn-wrapper {
   position: absolute;
   top: 0;
   right: 0;
@@ -57,7 +57,7 @@
   background-color: transparent;
 }
 
-.type-accounts-item__btn {
+.broker-type-accounts-item__btn {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -90,13 +90,13 @@
   }
 }
 
-.type-accounts-item__title {
+.broker-type-accounts-item__title {
   @include heading-m-h5;
   color: var(--white);
   text-align: center;
 }
 
-.type-accounts-item__menu {
+.broker-type-accounts-item__menu {
   position: absolute;
   top: 12px;
   right: 23px;
@@ -115,7 +115,7 @@
   }
 }
 
-.type-accounts-item__menu-wrapper {
+.broker-type-accounts-item__menu-wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -124,7 +124,7 @@
   height: 100%;
 }
 
-.type-accounts-item__menu-btn {
+.broker-type-accounts-item__menu-btn {
   display: flex;
   align-items: center;
   column-gap: 6px;
@@ -144,22 +144,22 @@
   }
 }
 
-.type-accounts-item__modal-wrapper {
+.broker-type-accounts-item__modal-wrapper {
   padding-top: 16px;
 }
 
-.type-accounts-item__modal-list {
+.broker-type-accounts-item__modal-list {
   display: flex;
   flex-direction: column;
   row-gap: 12px;
 }
 
-.type-accounts-item__delete-text {
+.broker-type-accounts-item__delete-text {
   @include text-body;
   color: var(--secondary-default);
 }
 
-.type-accounts-item__modal-btn-wrapper {
+.broker-type-accounts-item__modal-btn-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-end;

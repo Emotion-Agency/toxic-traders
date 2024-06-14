@@ -96,8 +96,8 @@ const updateAccount = async () => {
     title="Edit MT4 Standart"
     @close="editAccountModalClose"
   >
-    <div class="type-accounts-item__modal-wrapper">
-      <div class="type-accounts-item__modal-list">
+    <div class="broker-type-accounts-item__modal-wrapper">
+      <div class="broker-type-accounts-item__modal-list">
         <div
           v-for="(input, idx) in editedAccountItems"
           :key="idx"
@@ -121,9 +121,9 @@ const updateAccount = async () => {
         </div>
       </div>
 
-      <div class="type-accounts-item__modal-btn-wrapper">
+      <div class="broker-type-accounts-item__modal-btn-wrapper">
         <TheButton
-          class="type-accounts-item__modal-btn"
+          class="broker-type-accounts-item__modal-btn"
           tag="button"
           variant="close"
           button-size="medium"
@@ -131,7 +131,7 @@ const updateAccount = async () => {
           Close
         </TheButton>
         <TheButton
-          class="type-accounts-item__modal-btn"
+          class="broker-type-accounts-item__modal-btn"
           tag="button"
           variant="fill"
           button-size="medium"

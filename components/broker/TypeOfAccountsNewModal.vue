@@ -114,11 +114,11 @@ onMounted(async () => {
     title="Add new Account"
     @close="newAccountModalClose"
   >
-    <div class="type-accounts__modal-list">
+    <div class="broker-type-accounts__modal-list">
       <div
         v-for="(input, idx) in createdAccountItems"
         :key="idx"
-        class="type-accounts__modal-item"
+        class="broker-type-accounts__modal-item"
       >
         <CustomSelect
           v-if="input.options"
@@ -143,7 +143,7 @@ onMounted(async () => {
         </TheInput>
       </div>
     </div>
-    <div class="type-accounts__buttons">
+    <div class="broker-type-accounts__buttons">
       <TheButton
         tag="button"
         variant="close"

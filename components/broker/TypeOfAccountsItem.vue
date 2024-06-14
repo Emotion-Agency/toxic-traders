@@ -44,15 +44,15 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="type-accounts-item"
-    :class="isNewAccount && 'type-accounts-item--new'"
+    class="broker-type-accounts-item"
+    :class="isNewAccount && 'broker-type-accounts-item--new'"
   >
-    <div v-if="isNewAccount" class="type-accounts-item__wrapper">
+    <div v-if="isNewAccount" class="broker-type-accounts-item__wrapper">
       <button
-        class="type-accounts-item__content"
+        class="broker-type-accounts-item__content"
         @click="emit('addNewAccount')"
       >
-        <p class="type-accounts-item__title">{{ title }}</p>
+        <p class="broker-type-accounts-item__title">{{ title }}</p>
 
         <IconsPlus />
       </button>
@@ -61,40 +61,40 @@ onUnmounted(() => {
     <NuxtLink
       v-else
       :to="typeOfAccountsRoute"
-      class="type-accounts-item__wrapper"
+      class="broker-type-accounts-item__wrapper"
     >
-      <div class="type-accounts-item__content">
+      <div class="broker-type-accounts-item__content">
         <button
-          class="type-accounts-item__btn-wrapper"
+          class="broker-type-accounts-item__btn-wrapper"
           @click.prevent="toggleMenu"
           @click.stop
         >
-          <div class="type-accounts-item__btn">
+          <div class="broker-type-accounts-item__btn">
             <span />
             <span />
             <span />
           </div>
         </button>
-        <p class="type-accounts-item__title">{{ title }}</p>
+        <p class="broker-type-accounts-item__title">{{ title }}</p>
       </div>
     </NuxtLink>
 
     <div
       ref="$el"
-      class="type-accounts-item__menu"
-      :class="menuOpened && 'type-accounts-item__menu--opened'"
+      class="broker-type-accounts-item__menu"
+      :class="menuOpened && 'broker-type-accounts-item__menu--opened'"
       @click.stop
     >
-      <div class="type-accounts-item__menu-wrapper">
+      <div class="broker-type-accounts-item__menu-wrapper">
         <button
-          class="type-accounts-item__menu-btn"
+          class="broker-type-accounts-item__menu-btn"
           @click="emit('accountEdit', accountId)"
         >
           <IconsEdit />
           Edit
         </button>
         <button
-          class="type-accounts-item__menu-btn"
+          class="broker-type-accounts-item__menu-btn"
           @click="emit('accountDelete', accountId)"
         >
           <IconsTrash />

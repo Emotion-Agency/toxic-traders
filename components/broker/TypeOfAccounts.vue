@@ -93,8 +93,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="type-accounts">
-    <div class="type-accounts__list">
+  <div class="broker-type-accounts">
+    <div class="broker-type-accounts__list">
       <BrokerTypeOfAccountsItem
         title="Add new"
         :is-new-account="true"
@@ -105,7 +105,7 @@ onMounted(async () => {
         :key="idx"
         :account-id="account?.id"
         :title="account?.accountType"
-        class="type-accounts__item"
+        class="broker-type-accounts__item"
         @account-edit="editAccountModalOpen"
         @account-delete="deleteAccountModalOpen"
       />
@@ -129,14 +129,14 @@ onMounted(async () => {
       title="Delete confirmation"
       @close="deleteAccountModalClose"
     >
-      <div class="type-accounts-item__modal-wrapper">
-        <p class="type-accounts-item__delete-text">
+      <div class="broker-type-accounts-item__modal-wrapper">
+        <p class="broker-type-accounts-item__delete-text">
           Are you sure you want to delete this item? This action cannot be
           prevented
         </p>
-        <div class="type-accounts-item__modal-btn-wrapper">
+        <div class="broker-type-accounts-item__modal-btn-wrapper">
           <TheButton
-            class="type-accounts-item__modal-btn"
+            class="broker-type-accounts-item__modal-btn"
             tag="button"
             variant="close"
             button-size="medium"
@@ -144,7 +144,7 @@ onMounted(async () => {
             Cancel
           </TheButton>
           <TheButton
-            class="type-accounts-item__modal-btn"
+            class="broker-type-accounts-item__modal-btn"
             tag="button"
             variant="danger"
             button-size="medium"
