@@ -85,22 +85,6 @@ const {
   route.query.count && Number(route.query.count)
 )
 
-watch([currentPage, itemsCount], async () => {
-  const { brokers } = await getAllBrokers(
-    currentPage.value - 1,
-    itemsCount.value
-  )
-
-  brokersList.value = brokers
-
-  router.push({
-    query: {
-      page: currentPage.value,
-      count: itemsCount.value,
-    },
-  })
-})
-
 const getBrokersRequest = async () => {
   isLoading.value = true
 
@@ -118,6 +102,17 @@ const getBrokersRequest = async () => {
   totalCountPages.value = totalCount
 }
 
+watch([currentPage, itemsCount], async () => {
+  await getBrokersRequest()
+
+  router.push({
+    query: {
+      page: currentPage.value,
+      count: itemsCount.value,
+    },
+  })
+})
+
 onMounted(async () => {
   await getBrokersRequest()
 })
@@ -125,6 +120,7 @@ onMounted(async () => {
 const onSearch = async (data: iSearchInput[]) => {
   searchData.value = data
 
+  currentPage.value = 1
   await getBrokersRequest()
 }
 
