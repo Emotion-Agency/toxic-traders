@@ -25,7 +25,7 @@ export const useBrokerServer = () => {
 
   const getCurrentBrokerServer = async (brokerServerId: number) => {
     try {
-      const data = await getBrokerServerById(brokerServerId)
+      const { data } = await getBrokerServerById(brokerServerId)
 
       return data
     } catch (error) {
