@@ -21,8 +21,6 @@ export const createBrokerServerAccount = async (
       }
     )
 
-    console.log(data)
-
     return data
   } catch (e) {
     console.error(e.message)

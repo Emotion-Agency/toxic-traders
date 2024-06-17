@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { iInput } from '~/types'
+import type { iBrokerServerAccount } from '~/types/broker/brokerServer'
 
 const route = useRoute()
 
@@ -16,23 +17,38 @@ const notesInput = ref({
 })
 
 const [serverId, accountId] = (route.params.slug as string).split('-')
-const currentAccount = ref(null)
+const currentAccount = ref<iBrokerServerAccount>(null)
+const {
+  getBrokerAccountNotes,
+  updateBrokerAccountNotes,
+  deleteBrokerAccountNotes,
+} = useBrokerServerAccountNotes()
 
 const notesOnChange = (val: iInput) => {
   notesValue.value = val?.value
 }
 
-const onBlur = () => {
-  'Blur notes'
+const onBlur = async () => {
+  if (notesValue.value?.length === 0) {
+    await deleteBrokerAccountNotes(+accountId)
+    return
+  }
+
+  await updateBrokerAccountNotes(+accountId, notesValue.value)
 }
 
 onMounted(async () => {
   const { brokerServers } = await getCurrentBrokerServer(Number(serverId))
+  const notesRequestValue = await getBrokerAccountNotes(+accountId)
+
+  notesValue.value = notesRequestValue || ''
 
   currentAccount.value = brokerServers
     .map(server => server.brokerServerAccounts)
     .flat()
     .find(account => account.id === +accountId)
+
+  console.log(currentAccount.value)
 })
 </script>
 
@@ -41,15 +57,19 @@ onMounted(async () => {
     <section class="type-of-account">
       <div class="container type-of-account__wrapper">
         <div class="grid type-of-account__top-block">
-          <div class="type-of-account__server-info">
+          <div class="type-of-account__info">
             <ul class="type-of-account__info-list">
               <li class="type-of-account__info-item">
                 <p class="type-of-account__info-title">Leverage:</p>
-                <p class="type-of-account__info-text">1:500</p>
+                <p class="type-of-account__info-text">
+                  {{ currentAccount?.brokerLeverage || 'N/A' }}
+                </p>
               </li>
               <li class="type-of-account__info-item">
                 <p class="type-of-account__info-title">Timezome:</p>
-                <p class="type-of-account__info-text">GMT+2</p>
+                <p class="type-of-account__info-text">
+                  {{ getGMTOffset(currentAccount?.brokerServerTimeZone) }}
+                </p>
               </li>
               <li class="type-of-account__info-item">
                 <p class="type-of-account__info-title">OrderId Digits:</p>
