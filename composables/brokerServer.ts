@@ -9,8 +9,10 @@ export const useBrokerServer = () => {
   const getAllBrokerServers = async (brokerId: number) => {
     try {
       const { brokerServers } = await getBrokerServer(brokerId)
-      const brokerServerAccounts = brokerServers.map(
-        account => account.brokerServerAccounts
+      const brokerServerAccounts = brokerServers.map(servers =>
+        servers.brokerServerAccounts.map(account => {
+          return { ...account, serverId: servers.id }
+        })
       )
 
       return { brokerServers, brokerServerAccounts }

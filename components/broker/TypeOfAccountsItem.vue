@@ -3,6 +3,7 @@ interface iProps {
   title: string
   accountId?: number
   isNewAccount?: boolean
+  serverId?: number
 }
 
 const props = defineProps<iProps>()
@@ -30,7 +31,9 @@ const outsideClick = event => {
 }
 
 const typeOfAccountsRoute = computed(() => {
-  return route.fullPath + `/type-of-accounts/${props.accountId}`
+  return (
+    route.fullPath + `/type-of-accounts/${props.serverId}-${props.accountId}`
+  )
 })
 
 onMounted(() => {

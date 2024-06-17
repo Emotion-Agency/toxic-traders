@@ -2,7 +2,7 @@
 import type { iInput } from '~/types'
 
 const route = useRoute()
-console.log(route.params.slug)
+
 const { getCurrentBrokerServer } = useBrokerServer()
 
 const notesValue = ref('')
@@ -15,6 +15,9 @@ const notesInput = ref({
   placeholder: 'Add your notes...',
 })
 
+const [serverId, accountId] = (route.params.slug as string).split('-')
+const currentAccount = ref(null)
+
 const notesOnChange = (val: iInput) => {
   notesValue.value = val?.value
 }
@@ -24,17 +27,12 @@ const onBlur = () => {
 }
 
 onMounted(async () => {
-  const { brokerServers } = await getCurrentBrokerServer(
-    Number(route.params.slug) // 5741
-  )
+  const { brokerServers } = await getCurrentBrokerServer(Number(serverId))
 
-  // brokerServers[0].brokerServerAccounts.filter(
-  //   item => item.id === +route.params.slug
-  // )
-  console.log(brokerServers)
-  // currentAccount.value = accounts.value.filter(item => console.log(item))
-
-  // console.log(currentAccount.value)
+  currentAccount.value = brokerServers
+    .map(server => server.brokerServerAccounts)
+    .flat()
+    .find(account => account.id === +accountId)
 })
 </script>
 

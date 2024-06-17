@@ -105,6 +105,7 @@ onMounted(async () => {
         :key="idx"
         :account-id="account?.id"
         :title="account?.accountType"
+        :server-id="account?.serverId"
         class="broker-type-accounts__item"
         @account-edit="editAccountModalOpen"
         @account-delete="deleteAccountModalOpen"

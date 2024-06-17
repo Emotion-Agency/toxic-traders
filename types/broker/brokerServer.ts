@@ -101,6 +101,7 @@ export interface iBrokerServerAccount {
   brokerServerAccountOrders: iBrokerServerAccountOrder[]
   brokerServerAccountSymbolsMT5: iBrokerServerAccountSymbolMT5[]
   brokerServerAccountSymbolsMT4: iBrokerServerAccountSymbolMT4[]
+  serverId: number
 }
 
 export interface iBrokerServerIPAddress {
