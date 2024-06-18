@@ -41,3 +41,9 @@ export interface iAccountModalItem {
   options?: string[] | Ref<string[]>
   isPassword?: boolean
 }
+
+export interface iData {
+  data: {
+    [key: number]: string
+  }
+}

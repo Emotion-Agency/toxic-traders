@@ -74,6 +74,7 @@ const initialSearchItems: iSearchInput[] = [
     isRightButton: false,
   },
   {
+    type: 'select',
     id: 'servers',
     name: 'Servers',
     title: 'Servers (MT4 or MT5)',
@@ -86,36 +87,31 @@ const initialSearchItems: iSearchInput[] = [
     required: false,
     id: 'regulator',
     name: 'Regulator',
-    type: 'text',
+    type: 'select',
+    options: [],
     value: '',
     placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
     title: 'Platforms',
     required: false,
     id: 'platforms',
     name: 'Platforms',
-    type: 'text',
+    type: 'select',
+    options: [],
     value: '',
     placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
     title: 'Method of Deposits',
     required: false,
     id: 'method-of-deposits',
     name: 'Method of Deposits',
-    type: 'text',
+    type: 'select',
+    options: [],
+
     value: '',
     placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
     title: 'Leverage',
@@ -206,36 +202,30 @@ const initialSearchItems: iSearchInput[] = [
     required: false,
     id: 'fillpolicy',
     name: 'FillPolicy',
-    type: 'text',
+    type: 'select',
+    options: [],
     value: '',
     placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
     title: 'ExecutionType (MT5)',
     required: false,
     id: 'executiontype-mt5',
     name: 'ExecutionType (MT5)',
-    type: 'text',
+    type: 'select',
+    options: [],
     value: '',
     placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
     title: 'ExecutionType (MT4)',
     required: false,
     id: 'executiontype-mt4',
     name: 'ExecutionType (MT4)',
-    type: 'text',
+    type: 'select',
+    options: [],
     value: '',
     placeholder: 'Placeholder',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
 ]
 
@@ -269,12 +259,110 @@ const resetSearch = () => {
   searchItems.value = initialSearchItems
 }
 
+const getEnumIdx = (item: iSearchInput) => {
+  return item.options?.findIndex(option => option === item.value)?.toString()
+}
+
 const debounceSearch = debounce(() => {
-  emit('search', searchItems.value)
+  const searchItemsWithEnums = searchItems.value.map(item => {
+    if (item.id === 'platforms') {
+      item = {
+        ...item,
+        value: getEnumIdx(item),
+      }
+    }
+    if (item.id === 'method-of-deposits') {
+      item = {
+        ...item,
+        value: getEnumIdx(item),
+      }
+    }
+    if (item.id === 'regulator') {
+      item = {
+        ...item,
+        value: getEnumIdx(item),
+      }
+    }
+    if (item.id === 'fillpolicy') {
+      item = {
+        ...item,
+        value: getEnumIdx(item),
+      }
+    }
+    if (item.id === 'executiontype-mt4') {
+      item = {
+        ...item,
+        value: getEnumIdx(item),
+      }
+    }
+    if (item.id === 'executiontype-mt5') {
+      item = {
+        ...item,
+        value: getEnumIdx(item),
+      }
+    }
+    return item
+  })
+  emit('search', searchItemsWithEnums)
 }, 500)
 
 watch(searchItems, () => {
   debounceSearch()
+
+  console.log(searchItems.value)
+})
+
+const { getAllEnums } = useEnums()
+
+onMounted(async () => {
+  const {
+    depositMethods,
+    platforms,
+    regulators,
+    fillPolicy,
+    executionMT4,
+    executionMT5,
+  } = await getAllEnums()
+
+  searchItems.value = searchItems.value.map(item => {
+    if (item.id === 'platforms') {
+      item = {
+        ...item,
+        options: Object.values(platforms),
+      }
+    }
+    if (item.id === 'method-of-deposits') {
+      item = {
+        ...item,
+        options: Object.values(depositMethods),
+      }
+    }
+    if (item.id === 'regulator') {
+      item = {
+        ...item,
+        options: Object.values(regulators),
+      }
+    }
+    if (item.id === 'fillpolicy') {
+      item = {
+        ...item,
+        options: Object.values(fillPolicy),
+      }
+    }
+    if (item.id === 'executiontype-mt4') {
+      item = {
+        ...item,
+        options: Object.values(executionMT4),
+      }
+    }
+    if (item.id === 'executiontype-mt5') {
+      item = {
+        ...item,
+        options: Object.values(executionMT5),
+      }
+    }
+    return item
+  })
 })
 </script>
 
