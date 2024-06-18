@@ -15,6 +15,8 @@ const notesInput = ref({
   value: notesValue,
   placeholder: 'Add your notes...',
 })
+const isSettingsOpened = ref(false)
+const isOrderIdListOpened = ref(false)
 
 const [serverId, accountId] = (route.params.slug as string).split('-')
 const currentAccount = ref<iBrokerServerAccount>(null)
@@ -35,6 +37,28 @@ const onBlur = async () => {
   }
 
   await updateBrokerAccountNotes(+accountId, notesValue.value)
+}
+
+const openSettings = () => {
+  isSettingsOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const closeSettings = () => {
+  isSettingsOpened.value = false
+}
+
+const openOrderIdList = () => {
+  isOrderIdListOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const closeOrderIdList = () => {
+  isOrderIdListOpened.value = false
+}
+
+const changeTableColumns = (properties: string[]) => {
+  console.log(properties)
 }
 
 onMounted(async () => {
@@ -81,6 +105,7 @@ onMounted(async () => {
               button-size="medium"
               variant="fill"
               class="type-of-account__info-btn"
+              @click="openOrderIdList"
             >
               <template #start-icon>
                 <IconsList />
@@ -103,12 +128,15 @@ onMounted(async () => {
             />
           </div>
           <div class="type-of-account__server">
-            <h1 class="type-of-account__title">Alpari MT4 Standart</h1>
+            <h1 class="type-of-account__title">
+              {{ currentAccount?.accountType || 'N/A' }}
+            </h1>
             <TheButton
               tag="button"
               button-size="medium"
               variant="fill"
               class="type-of-account__settings-btn"
+              @click="openSettings"
             >
               <template #start-icon>
                 <IconsSettings />
@@ -120,5 +148,23 @@ onMounted(async () => {
         <div class="type-of-account__bottom-block"></div>
       </div>
     </section>
+    <TheModal
+      :modal-opened="isSettingsOpened"
+      title="Choose needed properties"
+      class-name="brokers__modal"
+      @close="closeSettings"
+    >
+      <TheSettings
+        :properties="['property1', 'property2', 'property3']"
+        @change="changeTableColumns"
+      />
+    </TheModal>
+    <SlidingModal
+      :modal-opened="isOrderIdListOpened"
+      title="History"
+      @close="closeOrderIdList"
+    >
+      Table
+    </SlidingModal>
   </main>
 </template>
