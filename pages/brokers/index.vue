@@ -211,7 +211,7 @@ const onSort = async (sortState: ISortState) => {
         </p>
       </div>
       <div v-if="isLoading">
-        <UiLoader />
+        <UiLoader class="brokers__loader" />
       </div>
     </section>
     <TheModal

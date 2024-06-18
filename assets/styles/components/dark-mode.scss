@@ -1,0 +1,24 @@
+.dark-mode {
+  background-color: var(--secondary-dark);
+  color: var(--white);
+  .table-row {
+    background-color: var(--gray-700);
+  }
+  .table-head .table-row {
+    background-color: var(--primary-default);
+  }
+
+  .header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--gray-700);
+  }
+
+  .header__theme-btn {
+    path {
+      fill: var(--white);
+    }
+  }
+  .accordion__main-btn {
+    color: var(--white);
+  }
+}
