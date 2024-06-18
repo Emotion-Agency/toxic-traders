@@ -20,6 +20,7 @@
 }
 
 .brokers__content {
+  --search-width: 0px;
   display: flex;
   column-gap: 0;
   transition: column-gap 0.3s ease;
@@ -29,14 +30,16 @@
 
   &--search {
     column-gap: 16px;
+    --search-width: 256px;
   }
 }
 
 .brokers__table-wrapper {
   // width: calc(100% - 40px); // width search + column-gap
   flex: 0 100%;
+  width: calc(100% - var(--search-width));
   margin: 0 auto;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .brokers__pagination {
