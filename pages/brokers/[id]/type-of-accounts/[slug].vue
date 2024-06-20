@@ -71,8 +71,6 @@ onMounted(async () => {
     .map(server => server.brokerServerAccounts)
     .flat()
     .find(account => account.id === +accountId)
-
-  console.log(currentAccount.value)
 })
 </script>
 
@@ -145,7 +143,9 @@ onMounted(async () => {
             </TheButton>
           </div>
         </div>
-        <div class="type-of-account__bottom-block"></div>
+        <div class="type-of-account__bottom-block">
+          <BrokerTypeOfAccountsTable />
+        </div>
       </div>
     </section>
     <TheModal
@@ -161,10 +161,12 @@ onMounted(async () => {
     </TheModal>
     <SlidingModal
       :modal-opened="isOrderIdListOpened"
-      title="History"
+      title="OrderId List"
       @close="closeOrderIdList"
     >
-      Table
+      <BrokerOrderListTable
+        :account-orders="currentAccount?.brokerServerAccountOrders || []"
+      />
     </SlidingModal>
   </main>
 </template>
