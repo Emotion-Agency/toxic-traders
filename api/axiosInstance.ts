@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'https://toxictraders.com:5001/Api',
+  baseURL: 'https://toxictraders.com:5001/api',
   // timeout: 1000,
 })
 

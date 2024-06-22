@@ -26,6 +26,9 @@ const {
   deleteBrokerAccountNotes,
 } = useBrokerServerAccountNotes()
 
+const { getServerAccountSymbolsMT4, getServerAccountSymbolsMT5 } =
+  useBrokerServerAccountSymbols()
+
 const notesOnChange = (val: iInput) => {
   notesValue.value = val?.value
 }
@@ -64,6 +67,8 @@ const changeTableColumns = (properties: string[]) => {
 onMounted(async () => {
   const { brokerServers } = await getCurrentBrokerServer(Number(serverId))
   const notesRequestValue = await getBrokerAccountNotes(+accountId)
+  const mt4data = await getServerAccountSymbolsMT4(+accountId)
+  const mt5data = await getServerAccountSymbolsMT5(+accountId)
 
   notesValue.value = notesRequestValue || ''
 
@@ -71,6 +76,8 @@ onMounted(async () => {
     .map(server => server.brokerServerAccounts)
     .flat()
     .find(account => account.id === +accountId)
+
+  console.log('mt4:', mt4data, 'mt5:', mt5data)
 })
 </script>
 
