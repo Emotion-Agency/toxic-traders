@@ -1,20 +1,58 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type {
+  iBrokerServerAccountSymbolsMT4,
+  iBrokerServerAccountSymbolsMT5,
+} from '~/types/broker/brokerServerAccountSymbols'
+
+interface iProps {
+  accountId: number
+  serverType: number | null
+}
+
+const props = defineProps<iProps>()
+
+const { getServerAccountSymbolsMT4, getServerAccountSymbolsMT5 } =
+  useBrokerServerAccountSymbols()
+const headerFields = ref<string[]>([])
+
+const serverAccountSymbols = ref<
+  iBrokerServerAccountSymbolsMT4[] | iBrokerServerAccountSymbolsMT5[]
+>([])
+
+watch(
+  () => props.serverType,
+  async () => {
+    if (props.serverType === 0) {
+      serverAccountSymbols.value = await getServerAccountSymbolsMT4(
+        props.accountId
+      )
+    }
+
+    if (props.serverType === 1) {
+      serverAccountSymbols.value = await getServerAccountSymbolsMT5(
+        props.accountId
+      )
+    }
+
+    headerFields.value = Object.keys(serverAccountSymbols.value[0])
+  }
+)
+
+onMounted(async () => {})
+</script>
 
 <template>
   <div class="type-of-account-table">
     <Table>
       <TableHead>
         <TableRow>
-          <!-- <TableCell
+          <TableCell
             v-for="(headerItem, idx) in headerFields"
             :key="idx"
-            :item="headerItem"
+            :item="formatNameToNormalCase(headerItem)"
             :class="`table-cell--${idx}`"
             :is-sort="true"
-            :sort-order="sortState.sortOrder"
-            :is-active="sortState.sortBy === headerItem"
-            @sort="onSort"
-          /> -->
+          />
         </TableRow>
       </TableHead>
       <TableBody>
