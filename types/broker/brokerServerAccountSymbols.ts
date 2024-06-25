@@ -76,6 +76,25 @@ export interface iBrokerServerAccountSymbolsMT4 {
   newsSpread: number
 }
 
+export interface iBrokerServerAccountTable {
+  currency: string
+  description: string
+  schedule: string
+  digits: number
+  contractSize: number
+  minLots: number
+  maxLots: number
+  spread: number
+  newsSpread: number
+  tickSize: number
+  commision: string
+  id: number
+  lotsStep: number
+  tradeMode: string
+  fillPolicy: string
+  isin: string
+}
+
 export interface iBrokerServerAccountSymbolsMT5Data {
   data: iBrokerServerAccountSymbolsMT5[]
 }
