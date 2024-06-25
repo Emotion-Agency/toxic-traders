@@ -59,7 +59,19 @@ const closeOrderIdList = () => {
 }
 
 const changeTableColumns = (properties: string[]) => {
-  console.log(properties)
+  // filteredBrokers.value = brokersList.value.map(broker => {
+  //   const formattedColumnsName = Object.keys(broker)
+  //   let newObj = {}
+  //   formattedColumnsName.forEach(column => {
+  //     if (properties.includes(column)) {
+  //       newObj = {
+  //         ...newObj,
+  //         [column]: broker[column],
+  //       }
+  //     }
+  //   })
+  //   return newObj
+  // })
 }
 
 onMounted(async () => {

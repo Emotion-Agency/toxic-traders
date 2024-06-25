@@ -19,7 +19,7 @@ const sortedBy = ref('companynames')
 const sortedOrder = ref<1 | 2>(1)
 const searchData = ref<iSearchInput[]>([])
 
-const { getAllBrokers, getAllBrokersBySearch } = useBrokers()
+const { getAllBrokersBySearch } = useBrokers()
 
 const toggleSearch = () => {
   isSearchOpened.value = !isSearchOpened.value

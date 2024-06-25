@@ -18,6 +18,7 @@ const headerFields = ref<string[]>([])
 const serverAccountSymbolsMT4 = ref<iBrokerServerAccountSymbolsMT4[]>([])
 const serverAccountSymbolsMT5 = ref<iBrokerServerAccountSymbolsMT5[]>([])
 const isLoading = ref(true)
+const isOpenedModals = ref<Array<boolean>>([])
 
 const tableItems = computed(() => {
   if (serverAccountSymbolsMT4.value.length) {
@@ -90,10 +91,18 @@ watch(
     }
 
     headerFields.value = Object.keys(tableItems.value[0])
+    isOpenedModals.value = new Array(tableItems.value.length).fill(false)
   }
 )
 
-const onModalOpen = () => {}
+const onModalOpen = (index: number) => {
+  isOpenedModals.value[index] = true
+  document.body.classList.add('modal-open')
+}
+
+const onModalClose = (index: number) => {
+  isOpenedModals.value[index] = false
+}
 </script>
 
 <template>
@@ -118,8 +127,17 @@ const onModalOpen = () => {}
               :key="i"
               :item="cell || 'N/A'"
               :class="`table-cell--${i}`"
-              @open="onModalOpen"
+              :is-modal="cell === item?.currency"
+              @open="onModalOpen(idx)"
             />
+
+            <TheModal
+              :modal-opened="isOpenedModals[idx]"
+              title="Server info"
+              @close="onModalClose(idx)"
+            >
+              Modal {{ idx }}
+            </TheModal>
           </TableRow>
         </TableBody>
       </Table>
