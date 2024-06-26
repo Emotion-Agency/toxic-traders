@@ -1,10 +1,33 @@
 <script setup lang="ts">
 import type { iInput } from '~/types'
 import type { iBrokerServerAccount } from '~/types/broker/brokerServer'
+import type {
+  iBrokerServerAccountSymbolsMT4,
+  iBrokerServerAccountSymbolsMT5,
+} from '~/types/broker/brokerServerAccountSymbols'
 
 const route = useRoute()
 
 const { getCurrentBrokerServer } = useBrokerServer()
+const { getServerAccountSymbolsMT4, getServerAccountSymbolsMT5 } =
+  useBrokerServerAccountSymbols()
+const {
+  getBrokerAccountNotes,
+  updateBrokerAccountNotes,
+  deleteBrokerAccountNotes,
+} = useBrokerServerAccountNotes()
+
+const {
+  currentPage,
+  itemsCount,
+  searchValue,
+  totalCountPages,
+  nextPageClick,
+  prevPageClick,
+  onInputBlur,
+  onInputChange,
+  onChangeCount,
+} = usePagination()
 
 const notesValue = ref('')
 const notesInput = ref({
@@ -19,13 +42,71 @@ const isSettingsOpened = ref(false)
 const isOrderIdListOpened = ref(false)
 const serverType = ref<number>(null)
 
+const serverAccountSymbolsMT4 = ref<iBrokerServerAccountSymbolsMT4[]>([])
+const serverAccountSymbolsMT5 = ref<iBrokerServerAccountSymbolsMT5[]>([])
+const isTableLoading = ref(true)
+const filteredTableItems = ref([])
+
 const [serverId, accountId] = (route.params.slug as string).split('-')
 const currentAccount = ref<iBrokerServerAccount>(null)
-const {
-  getBrokerAccountNotes,
-  updateBrokerAccountNotes,
-  deleteBrokerAccountNotes,
-} = useBrokerServerAccountNotes()
+
+const tableItems = computed(() => {
+  if (serverAccountSymbolsMT4.value.length) {
+    return serverAccountSymbolsMT4.value.map(item => {
+      return {
+        currency: item.marginCurrency,
+        description: item.description,
+        schedule: 'N/A',
+        digits: item.digits,
+        contractSize: item.contractSize,
+        minLots: item.minLot,
+        maxLots: item.maxLot,
+        spread: item.spread,
+        newsSpread: item.newsSpread,
+        tickSize: item.tickSize,
+        commision: 'N/A',
+        // id: item.,
+        lotsStep: item.lotStep,
+        tradeMode: item.tradeMode,
+        fillPolicy: 'N/A',
+        isin: 'N/A',
+      }
+    })
+  }
+
+  if (serverAccountSymbolsMT5.value.length) {
+    return serverAccountSymbolsMT5.value.map(item => {
+      return {
+        currency: item.marginCurrency,
+        description: item.description,
+        schedule: 'N/A',
+        digits: item.digits,
+        contractSize: item.contractSize,
+        minLots: item.minLots,
+        maxLots: item.maxLots,
+        spread: item.spread,
+        newsSpread: item.newsSpread,
+        tickSize: item.tickSize,
+        commision: item.brokerServerAccountSymbolMT5CommissionsInfo,
+        // id: item.,
+        lotsStep: item.lotsStep,
+        tradeMode: item.tradeMode,
+        fillPolicy: item.fillPolicy,
+        isin: item.isin,
+      }
+    })
+  }
+
+  return []
+})
+
+const headerFields = computed(() => {
+  return Object.keys(tableItems.value[0] ?? {})
+})
+
+const filteredHeaderFields = computed(() => {
+  return getBrokerHeadings(filteredTableItems.value[0] ?? {})
+})
 
 const notesOnChange = (val: iInput) => {
   notesValue.value = val?.value
@@ -59,20 +140,55 @@ const closeOrderIdList = () => {
 }
 
 const changeTableColumns = (properties: string[]) => {
-  // filteredBrokers.value = brokersList.value.map(broker => {
-  //   const formattedColumnsName = Object.keys(broker)
-  //   let newObj = {}
-  //   formattedColumnsName.forEach(column => {
-  //     if (properties.includes(column)) {
-  //       newObj = {
-  //         ...newObj,
-  //         [column]: broker[column],
-  //       }
-  //     }
-  //   })
-  //   return newObj
-  // })
+  filteredTableItems.value = tableItems.value.map(item => {
+    const formattedColumnsName = Object.keys(item)
+    let newObj = {}
+    formattedColumnsName.forEach(column => {
+      if (properties.includes(column)) {
+        newObj = {
+          ...newObj,
+          [column]: item[column],
+        }
+      }
+    })
+    return newObj
+  })
 }
+
+const onSorted = (sortState: ISortState) => {
+  filteredTableItems.value = filteredTableItems.value.sort((a, b) => {
+    if (sortState.sortOrder === 1) {
+      return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+    } else {
+      return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+    }
+  })
+}
+
+watch(
+  () => serverType.value,
+  async () => {
+    try {
+      isTableLoading.value = true
+
+      if (serverType.value === 0) {
+        serverAccountSymbolsMT4.value = await getServerAccountSymbolsMT4(
+          +accountId
+        )
+      }
+
+      if (serverType.value === 1) {
+        serverAccountSymbolsMT5.value = await getServerAccountSymbolsMT5(
+          +accountId
+        )
+      }
+    } finally {
+      isTableLoading.value = false
+    }
+
+    totalCountPages.value = tableItems.value.length
+  }
+)
 
 onMounted(async () => {
   const { brokerServers } = await getCurrentBrokerServer(+serverId)
@@ -103,7 +219,7 @@ onMounted(async () => {
                 </p>
               </li>
               <li class="type-of-account__info-item">
-                <p class="type-of-account__info-title">Timezome:</p>
+                <p class="type-of-account__info-title">Timezone:</p>
                 <p class="type-of-account__info-text">
                   {{ getGMTOffset(currentAccount?.brokerServerTimeZone) }}
                 </p>
@@ -159,10 +275,32 @@ onMounted(async () => {
           </div>
         </div>
         <div class="type-of-account__bottom-block">
-          <BrokerTypeOfAccountsTable
-            :account-id="+accountId"
-            :server-type="serverType"
-          />
+          <div
+            v-if="!isTableLoading"
+            class="type-of-account__bottom-table-wrapper"
+          >
+            <BrokerTypeOfAccountsTable
+              :header-fields="filteredHeaderFields"
+              :table-items="filteredTableItems"
+              @sort="onSorted"
+            />
+            <ThePagination
+              class="type-of-account__pagination"
+              :total-pages="totalCountPages"
+              :current-page="currentPage"
+              :options="['25 rows', '50 rows', '100 rows']"
+              :items-count="itemsCount"
+              :input-value="searchValue"
+              input-id="type-of-account-tabe"
+              input-name="Type of account table"
+              @next-click="nextPageClick"
+              @prev-click="prevPageClick"
+              @selected-item="onChangeCount"
+              @on-blur-value="onInputBlur"
+              @on-change-value="onInputChange"
+            />
+          </div>
+          <UiLoader v-else />
         </div>
       </div>
     </section>
@@ -172,10 +310,7 @@ onMounted(async () => {
       class-name="brokers__modal"
       @close="closeSettings"
     >
-      <TheSettings
-        :properties="['property1', 'property2', 'property3']"
-        @change="changeTableColumns"
-      />
+      <TheSettings :properties="headerFields" @change="changeTableColumns" />
     </TheModal>
     <SlidingModal
       :modal-opened="isOrderIdListOpened"
