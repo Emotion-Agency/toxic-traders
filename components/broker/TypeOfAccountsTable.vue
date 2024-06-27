@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Clock from '~/components/icons/Clock.vue'
 import type { iBrokerServerAccountTable } from '~/types/broker/brokerServerAccountSymbols'
 
 interface iProps {
@@ -9,6 +10,7 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
+const isOpenedScheduleModals = ref<Array<boolean>>([])
 const isOpenedModals = ref<Array<boolean>>([])
 
 const emit = defineEmits(['sort'])
@@ -27,6 +29,15 @@ const onModalOpen = (index: number) => {
 
 const onModalClose = (index: number) => {
   isOpenedModals.value[index] = false
+}
+
+const onScheduleOpen = (index: number) => {
+  isOpenedScheduleModals.value[index] = true
+  document.body.classList.add('modal-open')
+}
+
+const onScheduleClose = (index: number) => {
+  isOpenedScheduleModals.value[index] = false
 }
 
 const notSortableFields = ['schedule']
@@ -62,7 +73,9 @@ const isSortable = (field: string) => {
               :item="cell || 'N/A'"
               :class="`table-cell--${i}`"
               :is-modal="cell === item?.currency"
+              :custom-component="cell === item?.schedule ? Clock : null"
               @open="onModalOpen(idx)"
+              @click-custom-component="onScheduleOpen(idx)"
             />
 
             <TheModal
@@ -70,7 +83,14 @@ const isSortable = (field: string) => {
               title="Modal"
               @close="onModalClose(idx)"
             >
-              Modal {{ idx }}
+              Modal {{ item }}
+            </TheModal>
+            <TheModal
+              :modal-opened="isOpenedScheduleModals[idx] || false"
+              title="Schedule Modal"
+              @close="onScheduleClose(idx)"
+            >
+              Modal {{ item }}
             </TheModal>
           </TableRow>
         </TableBody>

@@ -54,9 +54,9 @@ const tableItems = computed(() => {
   if (serverAccountSymbolsMT4.value.length) {
     return serverAccountSymbolsMT4.value.map(item => {
       return {
-        currency: item.marginCurrency,
+        currency: item.symbol,
         description: item.description,
-        schedule: 'N/A',
+        schedule: null,
         digits: item.digits,
         contractSize: item.contractSize,
         minLots: item.minLot,
@@ -77,9 +77,9 @@ const tableItems = computed(() => {
   if (serverAccountSymbolsMT5.value.length) {
     return serverAccountSymbolsMT5.value.map(item => {
       return {
-        currency: item.marginCurrency,
+        currency: item.currency,
         description: item.description,
-        schedule: 'N/A',
+        schedule: null,
         digits: item.digits,
         contractSize: item.contractSize,
         minLots: item.minLots,
@@ -187,6 +187,8 @@ watch(
     }
 
     totalCountPages.value = tableItems.value.length
+
+    console.log(serverAccountSymbolsMT5.value)
   }
 )
 

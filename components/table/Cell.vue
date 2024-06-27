@@ -9,13 +9,14 @@ interface iProps {
   isModal?: boolean
   sortOrder?: 1 | 2
   isActive?: boolean
+  customComponent?: Component
 }
 
 const props = withDefaults(defineProps<iProps>(), {
   link: null,
 })
 
-const emit = defineEmits(['sort', 'open'])
+const emit = defineEmits(['sort', 'open', 'clickCustomComponent'])
 
 const onSort = () => {
   emit('sort', props.item)
@@ -45,6 +46,13 @@ const onSort = () => {
     >
       {{ item }}
       <IconsLinkArrow />
+    </button>
+    <button
+      v-else-if="customComponent"
+      class="table-cell__img-btn"
+      @click="emit('clickCustomComponent')"
+    >
+      <component :is="props.customComponent" />
     </button>
     <p v-else class="table-cell__text">
       {{ item }}
