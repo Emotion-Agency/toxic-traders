@@ -187,8 +187,6 @@ watch(
     }
 
     totalCountPages.value = tableItems.value.length
-
-    console.log(serverAccountSymbolsMT5.value)
   }
 )
 

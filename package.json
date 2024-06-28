@@ -31,6 +31,7 @@
   "dependencies": {
     "@emotionagency/emotion-scroll": "latest",
     "@emotionagency/utils": "latest",
+    "@vuepic/vue-datepicker": "^8.8.0",
     "axios": "^1.6.7",
     "debounce": "^2.1.0",
     "gsap": "^3.12.5"

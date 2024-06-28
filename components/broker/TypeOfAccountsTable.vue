@@ -10,8 +10,14 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const isOpenedScheduleModals = ref<Array<boolean>>([])
-const isOpenedModals = ref<Array<boolean>>([])
+const isOpenedScheduleModal = ref<boolean>(false)
+const activeScheduleItem = ref(null)
+const isOpenedModal = ref<boolean>(false)
+const activeModalItem = ref(null)
+const spreadStartDate = ref()
+const spreadEndDate = ref()
+const newsSpreadStartDate = ref()
+const newsSpreadEndDate = ref()
 
 const emit = defineEmits(['sort'])
 
@@ -22,22 +28,34 @@ const { sortState, onSort } = useSort(
   () => emit('sort', sortState.value)
 )
 
-const onModalOpen = (index: number) => {
-  isOpenedModals.value[index] = true
+const onModalOpen = (item: iBrokerServerAccountTable) => {
+  activeModalItem.value = item
+  isOpenedModal.value = true
   document.body.classList.add('modal-open')
 }
 
-const onModalClose = (index: number) => {
-  isOpenedModals.value[index] = false
+const getSpreadsDate = () => {
+  const date = {
+    spreadStartDate: spreadStartDate.value,
+    spreadEndDate: spreadEndDate.value,
+    newsSpreadStartDate: newsSpreadStartDate.value,
+    newsSpreadEndDate: newsSpreadEndDate.value,
+  }
+  console.log(date)
 }
 
-const onScheduleOpen = (index: number) => {
-  isOpenedScheduleModals.value[index] = true
+const onModalClose = () => {
+  isOpenedModal.value = false
+}
+
+const onScheduleOpen = (item: iBrokerServerAccountTable) => {
+  activeScheduleItem.value = item
+  isOpenedScheduleModal.value = true
   document.body.classList.add('modal-open')
 }
 
-const onScheduleClose = (index: number) => {
-  isOpenedScheduleModals.value[index] = false
+const onScheduleClose = () => {
+  isOpenedScheduleModal.value = false
 }
 
 const notSortableFields = ['schedule']
@@ -74,27 +92,104 @@ const isSortable = (field: string) => {
               :class="`table-cell--${i}`"
               :is-modal="cell === item?.currency"
               :custom-component="cell === item?.schedule ? Clock : null"
-              @open="onModalOpen(idx)"
-              @click-custom-component="onScheduleOpen(idx)"
+              @open="onModalOpen(item)"
+              @click-custom-component="onScheduleOpen(item)"
             />
-
-            <TheModal
-              :modal-opened="isOpenedModals[idx] || false"
-              title="Modal"
-              @close="onModalClose(idx)"
-            >
-              Modal {{ item }}
-            </TheModal>
-            <TheModal
-              :modal-opened="isOpenedScheduleModals[idx] || false"
-              title="Schedule Modal"
-              @close="onScheduleClose(idx)"
-            >
-              Modal {{ item }}
-            </TheModal>
           </TableRow>
         </TableBody>
       </Table>
+      <TheModal
+        :modal-opened="isOpenedScheduleModal"
+        :title="`Setup schedule for ${activeScheduleItem?.currency}`"
+        @close="onScheduleClose"
+      >
+        <div class="type-of-account-table__schedule">
+          <div class="type-of-account-table__schedule-list">
+            <div class="type-of-account-table__schedule-item">
+              <h3 class="type-of-account-table__schedule-title">Spread</h3>
+              <div class="type-of-account-table__schedule-content">
+                <div class="type-of-account-table__schedule-content-wrapper">
+                  <h4 class="type-of-account-table__schedule-subtitle">
+                    Measurement start date
+                  </h4>
+                  <div class="type-of-account-table__schedule-date">
+                    <VueDatePicker
+                      v-model="spreadStartDate"
+                      enable-seconds
+                      placeholder="Select Date"
+                      @update:model-value="getSpreadsDate"
+                    />
+                  </div>
+                </div>
+                <div class="type-of-account-table__schedule-content-wrapper">
+                  <h4 class="type-of-account-table__schedule-subtitle">
+                    Measurement end date
+                  </h4>
+                  <div class="type-of-account-table__schedule-date">
+                    <VueDatePicker
+                      v-model="spreadEndDate"
+                      enable-seconds
+                      placeholder="Select Date"
+                      @update:model-value="getSpreadsDate"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="type-of-account-table__schedule-item">
+              <h3 class="type-of-account-table__schedule-title">News Spread</h3>
+              <div class="type-of-account-table__schedule-content">
+                <div class="type-of-account-table__schedule-content-wrapper">
+                  <h4 class="type-of-account-table__schedule-subtitle">
+                    Measurement start date
+                  </h4>
+                  <div class="type-of-account-table__schedule-date">
+                    <VueDatePicker
+                      v-model="newsSpreadStartDate"
+                      enable-seconds
+                      placeholder="Select Date"
+                      @update:model-value="getSpreadsDate"
+                    />
+                  </div>
+                </div>
+                <div class="type-of-account-table__schedule-content-wrapper">
+                  <h4 class="type-of-account-table__schedule-subtitle">
+                    Measurement end date
+                  </h4>
+                  <div class="type-of-account-table__schedule-date">
+                    <VueDatePicker
+                      v-model="newsSpreadEndDate"
+                      enable-seconds
+                      placeholder="Select Date"
+                      @update:model-value="getSpreadsDate"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="type-of-account-table__schedule-buttons">
+            <TheButton
+              tag="button"
+              variant="close"
+              button-size="medium"
+              @click="onScheduleClose"
+            >
+              Close
+            </TheButton>
+            <TheButton tag="button" variant="fill" button-size="medium">
+              Save Changes
+            </TheButton>
+          </div>
+        </div>
+      </TheModal>
+      <TheModal
+        :modal-opened="isOpenedModal"
+        title="Modal"
+        @close="onModalClose"
+      >
+        Modal
+      </TheModal>
     </div>
   </div>
 </template>
