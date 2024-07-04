@@ -291,7 +291,7 @@ onMounted(async () => {
               :options="['25 rows', '50 rows', '100 rows']"
               :items-count="itemsCount"
               :input-value="searchValue"
-              input-id="type-of-account-tabe"
+              input-id="type-of-account-table"
               input-name="Type of account table"
               @next-click="nextPageClick"
               @prev-click="prevPageClick"
@@ -300,7 +300,10 @@ onMounted(async () => {
               @on-change-value="onInputChange"
             />
           </div>
-          <UiLoader v-else />
+          <UiLoader v-else-if="isTableLoading" />
+          <p v-else class="type-of-account__error">
+            Type of account table data is not found
+          </p>
         </div>
       </div>
     </section>

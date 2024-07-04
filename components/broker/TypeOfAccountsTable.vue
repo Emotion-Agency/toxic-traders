@@ -54,6 +54,10 @@ const onScheduleOpen = (item: iBrokerServerAccountTable) => {
   document.body.classList.add('modal-open')
 }
 
+const onScheduleSave = () => {
+  onScheduleClose()
+}
+
 const onScheduleClose = () => {
   isOpenedScheduleModal.value = false
 }
@@ -177,7 +181,12 @@ const isSortable = (field: string) => {
             >
               Close
             </TheButton>
-            <TheButton tag="button" variant="fill" button-size="medium">
+            <TheButton
+              tag="button"
+              variant="fill"
+              button-size="medium"
+              @click="onScheduleSave"
+            >
               Save Changes
             </TheButton>
           </div>
