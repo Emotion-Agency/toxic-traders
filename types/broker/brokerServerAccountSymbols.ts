@@ -17,6 +17,7 @@ export interface iBrokerServerAccountSymbolMT5CommissionsInfo {
 }
 
 export interface iBrokerServerAccountSymbolsMT5 {
+  id: number
   marginCurrency: string
   calcMode: number
   precision: number
@@ -49,6 +50,7 @@ export interface iBrokerServerAccountSymbolsMT5 {
 }
 
 export interface iBrokerServerAccountSymbolsMT4 {
+  id: number
   contractSize: number
   digits: number
   tickSize: number
