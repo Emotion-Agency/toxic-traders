@@ -1,0 +1,23 @@
+.spreads {
+  padding-top: 120px;
+}
+
+.spreads__title {
+  @include heading-m-h1;
+  color: var(--secondary-dark);
+}
+
+.spreads__content {
+  margin-top: 102px;
+}
+
+.spreads__select-list {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 20px;
+}
+
+.spreads__select-item {
+  width: 100%;
+  max-width: 330px;
+}
