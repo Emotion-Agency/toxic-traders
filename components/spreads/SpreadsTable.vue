@@ -1,0 +1,52 @@
+<script setup lang="ts">
+import type { iBrokerServerAccountTable } from '~/types/broker/brokerServerAccountSymbols'
+
+interface iProps {
+  tableItems: iBrokerServerAccountTable[]
+  headerFields: string[]
+  defaultSortBy?: string
+}
+
+const props = defineProps<iProps>()
+
+const emit = defineEmits(['sort'])
+
+const { sortState, onSort } = useSort(
+  {
+    sortBy: props.defaultSortBy,
+  },
+  () => emit('sort', sortState.value)
+)
+</script>
+
+<template>
+  <div class="spreads-table">
+    <div class="spreads-table__wrapper">
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell
+              v-for="(headerItem, idx) in headerFields"
+              :key="idx"
+              :item="formatNameToNormalCase(headerItem)"
+              :class="`table-cell--${idx}`"
+              :sort-order="sortState.sortOrder"
+              :is-active="sortState.sortBy === headerItem"
+              @sort="onSort"
+            />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow v-for="(item, idx) in tableItems" :key="idx">
+            <TableCell
+              v-for="(cell, i) in item"
+              :key="i"
+              :item="cell || 'N/A'"
+              :class="`table-cell--${i}`"
+            />
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+</template>

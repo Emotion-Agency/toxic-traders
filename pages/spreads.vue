@@ -1,4 +1,15 @@
 <script setup lang="ts">
+const { getServerAccountSymbolsSpreads } = useBrokerServerAccountSymbols()
+const params = ref({
+  symbolName: 'O2D_CFD.DE',
+  brokerPlatform: -1,
+  description: 'none',
+  page: 0,
+  pageSize: -1,
+  sortBy: 'Spread',
+  sortOrder: 1,
+})
+
 const selectData = ref([
   {
     options: ['Option 1', 'Option 2', 'Option 3'],
@@ -31,6 +42,26 @@ const selectData = ref([
 const searchItems = (val: string) => {
   console.log(val)
 }
+
+// const onSorted = (sortState: ISortState) => {
+//   filteredTableItems.value = filteredTableItems.value?.sort((a, b) => {
+//     if (sortState.sortOrder === 1) {
+//       return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+//     } else {
+//       return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+//     }
+//   })
+// }
+
+// const headerFields = computed(() => {
+//   return getBrokerHeadings(filteredTableItems.value[0] ?? {})
+// })
+
+onMounted(async () => {
+  const data = await getServerAccountSymbolsSpreads(params.value)
+
+  console.log(data)
+})
 </script>
 
 <template>
@@ -60,6 +91,11 @@ const searchItems = (val: string) => {
             </li>
           </ul>
         </div>
+        <!-- <SpreadsTable
+          :header-fields="headerFields"
+          :table-items="filteredTableItems"
+          @sort="onSorted"
+        /> -->
       </div>
     </div>
   </main>

@@ -2,7 +2,35 @@ import axiosInstance from '../axiosInstance'
 import type {
   iBrokerServerAccountSymbolsMT4Data,
   iBrokerServerAccountSymbolsMT5Data,
+  iBrokerServerAccountSymbolsSpreadsData,
+  iBrokerServerAccountSymbolsSpreadsParams,
 } from '~/types/broker/brokerServerAccountSymbols'
+
+export const getBrokerServerAccountSymbolsSpreads = async (
+  params: iBrokerServerAccountSymbolsSpreadsParams
+) => {
+  try {
+    const { data }: iBrokerServerAccountSymbolsSpreadsData =
+      await axiosInstance.get(`BrokerServerAccountSymbols/spreads`, {
+        params: {
+          symbolName: params?.symbolName,
+          brokerPlatform: params?.brokerPlatform,
+          description: params?.description,
+          page: params?.page,
+          pageSize: params?.pageSize,
+          sortBy: params?.sortBy,
+          sortOrder: params?.sortOrder,
+        },
+      })
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
 
 export const getBrokerServerAccountSymbolsMT4 = async (
   brokerServerAccountId: number

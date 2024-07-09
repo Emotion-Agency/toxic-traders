@@ -97,10 +97,34 @@ export interface iBrokerServerAccountTable {
   isin: string
 }
 
+export interface iBrokerServerAccountSymbolsSpread {
+  spread: number
+  newsSpread: number
+  brokerCompanyNames: string[]
+  accountType: string
+  brokerPlatforms: number[]
+}
+
+export interface iBrokerServerAccountSymbolsSpreadsParams {
+  symbolName: string
+  brokerPlatform: number
+  description: string
+  page: number
+  pageSize: number
+  sortBy: string
+  sortOrder: number
+}
+
 export interface iBrokerServerAccountSymbolsMT5Data {
   data: iBrokerServerAccountSymbolsMT5[]
 }
 
 export interface iBrokerServerAccountSymbolsMT4Data {
   data: iBrokerServerAccountSymbolsMT4[]
+}
+
+export interface iBrokerServerAccountSymbolsSpreadsData {
+  data: {
+    brokerServerAccountSymbols: iBrokerServerAccountSymbolsSpread[]
+  }
 }
