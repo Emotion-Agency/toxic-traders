@@ -16,7 +16,7 @@ const navigationList = [
   },
   {
     text: 'Spreads',
-    link: '/',
+    link: '/spreads',
   },
 ]
 

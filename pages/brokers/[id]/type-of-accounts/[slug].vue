@@ -77,22 +77,24 @@ const tableItems = computed(() => {
   if (serverAccountSymbolsMT5.value.length) {
     return serverAccountSymbolsMT5.value.map(item => {
       return {
-        currency: item.currency,
-        description: item.description,
+        currency: item?.currency,
+        description: item?.description,
         schedule: null,
-        digits: item.digits,
-        contractSize: item.contractSize,
-        minLots: item.minLots,
-        maxLots: item.maxLots,
-        spread: item.spread,
-        newsSpread: item.newsSpread,
-        tickSize: item.tickSize,
-        commision: item.brokerServerAccountSymbolMT5CommissionsInfo,
-        id: item.id,
-        lotsStep: item.lotsStep,
-        tradeMode: item.tradeMode,
-        fillPolicy: item.fillPolicy,
-        isin: item.isin,
+        digits: item?.digits,
+        contractSize: item?.contractSize,
+        minLots: item?.minLots,
+        maxLots: item?.maxLots,
+        spread: item?.spread,
+        newsSpread: item?.newsSpread,
+        tickSize: item?.tickSize,
+        commision:
+          item?.brokerServerAccountSymbolMT5CommissionsInfo[0]
+            ?.commissionPeriod,
+        id: item?.id,
+        lotsStep: item?.lotsStep,
+        tradeMode: item?.tradeMode,
+        fillPolicy: item?.fillPolicy,
+        isin: item?.isin,
       }
     })
   }
@@ -156,7 +158,7 @@ const changeTableColumns = (properties: string[]) => {
 }
 
 const onSorted = (sortState: ISortState) => {
-  filteredTableItems.value = filteredTableItems.value.sort((a, b) => {
+  filteredTableItems.value = filteredTableItems.value?.sort((a, b) => {
     if (sortState.sortOrder === 1) {
       return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
     } else {

@@ -52,7 +52,11 @@ const searchItems = (val: string) => {
                 :title="item.title"
                 class="main-broker__settings-select"
                 @search="searchItems"
-              />
+              >
+                <template #right-icon>
+                  <IconsSearch />
+                </template>
+              </CustomSelect>
             </li>
           </ul>
         </div>

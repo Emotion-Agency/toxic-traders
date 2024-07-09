@@ -89,7 +89,7 @@ export interface iBrokerServerAccountTable {
   spread: number
   newsSpread: number
   tickSize: number
-  commision: string
+  commision: number
   id: number
   lotsStep: number
   tradeMode: string
