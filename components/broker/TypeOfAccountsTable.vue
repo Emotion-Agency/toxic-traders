@@ -139,6 +139,15 @@ const isSortable = (field: string) => {
                   </div>
                 </div>
               </div>
+              <TheButton
+                tag="button"
+                variant="fill"
+                button-size="medium"
+                class="type-of-account-table__btn"
+                @click="onScheduleSave"
+              >
+                Save Changes
+              </TheButton>
             </div>
             <div class="type-of-account-table__schedule-item">
               <h3 class="type-of-account-table__schedule-title">News Spread</h3>
@@ -170,9 +179,18 @@ const isSortable = (field: string) => {
                   </div>
                 </div>
               </div>
+              <TheButton
+                tag="button"
+                variant="fill"
+                button-size="medium"
+                class="type-of-account-table__btn"
+                @click="onScheduleSave"
+              >
+                Save Changes
+              </TheButton>
             </div>
           </div>
-          <div class="type-of-account-table__schedule-buttons">
+          <div class="type-of-account-table__schedule-btn">
             <TheButton
               tag="button"
               variant="close"
@@ -180,14 +198,6 @@ const isSortable = (field: string) => {
               @click="onScheduleClose"
             >
               Close
-            </TheButton>
-            <TheButton
-              tag="button"
-              variant="fill"
-              button-size="medium"
-              @click="onScheduleSave"
-            >
-              Save Changes
             </TheButton>
           </div>
         </div>

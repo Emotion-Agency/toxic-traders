@@ -12,12 +12,12 @@ export const createBrokerRunSpreadMeasurements = async (
       'Broker/RunSpreadMeasurements',
       {
         params: {
-          symbolId: params.symbolId,
-          serverType: params.serverType,
-          symbolName: params.symbolName,
-          timeLengthSec: params.timeLengthSec,
-          startDateTime: params.startDateTime,
-          SpreadOrNewsSpread: params.SpreadOrNewsSpread,
+          symbolId: params?.symbolId,
+          serverType: params?.serverType,
+          symbolName: params?.symbolName,
+          timeLengthSec: params?.timeLengthSec,
+          startDateTime: params?.startDateTime,
+          SpreadOrNewsSpread: params?.SpreadOrNewsSpread,
         },
       }
     )

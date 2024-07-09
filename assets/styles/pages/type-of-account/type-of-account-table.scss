@@ -48,7 +48,12 @@
   }
 }
 
-.type-of-account-table__schedule-buttons {
+.type-of-account-table__btn {
+  margin: 0 auto;
+  margin-top: 28px;
+}
+
+.type-of-account-table__schedule-btn {
   display: flex;
   justify-content: flex-end;
   column-gap: 8px;
