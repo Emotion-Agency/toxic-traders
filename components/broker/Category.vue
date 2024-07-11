@@ -57,6 +57,7 @@ const categoryModalOpen = () => {
 
 const categoryModalClose = () => {
   categoryModalOpened.value = false
+  document.body.classList.remove('modal-open')
 }
 
 const onSelectCategory = async (value: string) => {

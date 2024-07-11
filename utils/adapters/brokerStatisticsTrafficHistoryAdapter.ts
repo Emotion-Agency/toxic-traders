@@ -1,3 +1,4 @@
+import { formatDate } from '../transformDate'
 import type {
   iBrokerCompanyNameStatisticAhrefs,
   iBrokerCompanyNameStatisticSemrush,
@@ -15,8 +16,8 @@ export const brokerStatisticsTrafficHistoryAdapter = (
   )
 
   const updatedItem = trafficHistory.map(item => ({
-    date: transformDate(item.date),
-    organic: formatNumber(item.organic),
+    date: formatDate(item?.date),
+    organic: formatNumber(item?.organic),
   }))
 
   return updatedItem

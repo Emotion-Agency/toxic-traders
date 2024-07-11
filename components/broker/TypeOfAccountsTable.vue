@@ -6,18 +6,20 @@ interface iProps {
   tableItems: iBrokerServerAccountTable[]
   headerFields: string[]
   defaultSortBy?: string
+  serverType?: number
 }
 
 const props = defineProps<iProps>()
 
 const isOpenedScheduleModal = ref<boolean>(false)
-const activeScheduleItem = ref(null)
+const activeScheduleItem = ref<iBrokerServerAccountTable>(null)
 const isOpenedModal = ref<boolean>(false)
 const activeModalItem = ref(null)
-const spreadStartDate = ref()
-const spreadEndDate = ref()
-const newsSpreadStartDate = ref()
-const newsSpreadEndDate = ref()
+const spreadStartDate = ref('')
+const spreadEndDate = ref('')
+const newsSpreadStartDate = ref('')
+const newsSpreadEndDate = ref('')
+const { createRunSpreadMeasurements } = useBrokerRunSpreadMeasurements()
 
 const emit = defineEmits(['sort'])
 
@@ -28,20 +30,40 @@ const { sortState, onSort } = useSort(
   () => emit('sort', sortState.value)
 )
 
+const dateSpreadParams = computed(() => {
+  const spreadSeconds =
+    formatDateToSeconds(spreadEndDate.value) -
+    formatDateToSeconds(spreadStartDate.value)
+
+  return {
+    symbolId: activeScheduleItem.value?.id,
+    serverType: props.serverType,
+    symbolName: activeScheduleItem.value?.currency,
+    timeLengthSec: spreadSeconds,
+    startDateTime: formatDateWithTime(spreadStartDate.value),
+    SpreadOrNewsSpread: 0,
+  }
+})
+
+const dateNewsSpreadParams = computed(() => {
+  const newsSpreadSeconds =
+    formatDateToSeconds(newsSpreadEndDate.value) -
+    formatDateToSeconds(newsSpreadStartDate.value)
+
+  return {
+    symbolId: activeScheduleItem.value?.id,
+    serverType: props.serverType,
+    symbolName: activeScheduleItem.value?.currency,
+    timeLengthSec: newsSpreadSeconds,
+    startDateTime: formatDateWithTime(newsSpreadStartDate.value),
+    SpreadOrNewsSpread: 1,
+  }
+})
+
 const onModalOpen = (item: iBrokerServerAccountTable) => {
   activeModalItem.value = item
   isOpenedModal.value = true
   document.body.classList.add('modal-open')
-}
-
-const getSpreadsDate = () => {
-  const date = {
-    spreadStartDate: spreadStartDate.value,
-    spreadEndDate: spreadEndDate.value,
-    newsSpreadStartDate: newsSpreadStartDate.value,
-    newsSpreadEndDate: newsSpreadEndDate.value,
-  }
-  console.log(date)
 }
 
 const onModalClose = () => {
@@ -54,12 +76,17 @@ const onScheduleOpen = (item: iBrokerServerAccountTable) => {
   document.body.classList.add('modal-open')
 }
 
-const onScheduleSave = () => {
-  onScheduleClose()
+const onSpreadScheduleSave = () => {
+  createRunSpreadMeasurements(dateSpreadParams.value)
+}
+
+const onNewsSpreadScheduleSave = () => {
+  createRunSpreadMeasurements(dateNewsSpreadParams.value)
 }
 
 const onScheduleClose = () => {
   isOpenedScheduleModal.value = false
+  console.log(dateSpreadParams.value, dateNewsSpreadParams.value)
 }
 
 const notSortableFields = ['schedule']
@@ -121,7 +148,6 @@ const isSortable = (field: string) => {
                       v-model="spreadStartDate"
                       enable-seconds
                       placeholder="Select Date"
-                      @update:model-value="getSpreadsDate"
                     />
                   </div>
                 </div>
@@ -134,7 +160,6 @@ const isSortable = (field: string) => {
                       v-model="spreadEndDate"
                       enable-seconds
                       placeholder="Select Date"
-                      @update:model-value="getSpreadsDate"
                     />
                   </div>
                 </div>
@@ -144,7 +169,8 @@ const isSortable = (field: string) => {
                 variant="fill"
                 button-size="medium"
                 class="type-of-account-table__btn"
-                @click="onScheduleSave"
+                :disabled="!spreadStartDate || !spreadEndDate"
+                @click="onSpreadScheduleSave"
               >
                 Save Changes
               </TheButton>
@@ -161,7 +187,6 @@ const isSortable = (field: string) => {
                       v-model="newsSpreadStartDate"
                       enable-seconds
                       placeholder="Select Date"
-                      @update:model-value="getSpreadsDate"
                     />
                   </div>
                 </div>
@@ -174,7 +199,6 @@ const isSortable = (field: string) => {
                       v-model="newsSpreadEndDate"
                       enable-seconds
                       placeholder="Select Date"
-                      @update:model-value="getSpreadsDate"
                     />
                   </div>
                 </div>
@@ -184,7 +208,8 @@ const isSortable = (field: string) => {
                 variant="fill"
                 button-size="medium"
                 class="type-of-account-table__btn"
-                @click="onScheduleSave"
+                :disabled="!newsSpreadStartDate || !newsSpreadEndDate"
+                @click="onNewsSpreadScheduleSave"
               >
                 Save Changes
               </TheButton>

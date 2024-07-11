@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { getServerAccountSymbolsSpreads } = useBrokerServerAccountSymbols()
+
 const params = ref({
   symbolName: 'O2D_CFD.DE',
   brokerPlatform: -1,

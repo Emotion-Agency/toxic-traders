@@ -54,20 +54,20 @@ const tableItems = computed(() => {
   if (serverAccountSymbolsMT4.value.length) {
     return serverAccountSymbolsMT4.value.map(item => {
       return {
-        currency: item.symbol,
-        description: item.description,
+        currency: item?.symbol,
+        description: item?.description,
         schedule: null,
-        digits: item.digits,
-        contractSize: item.contractSize,
-        minLots: item.minLot,
-        maxLots: item.maxLot,
-        spread: item.spread,
-        newsSpread: item.newsSpread,
-        tickSize: item.tickSize,
+        digits: item?.digits,
+        contractSize: item?.contractSize,
+        minLots: item?.minLot,
+        maxLots: item?.maxLot,
+        spread: item?.spread,
+        newsSpread: item?.newsSpread,
+        tickSize: item?.tickSize,
         commision: 'N/A',
-        id: item.id,
-        lotsStep: item.lotStep,
-        tradeMode: item.tradeMode,
+        id: item?.id,
+        lotsStep: item?.lotStep,
+        tradeMode: item?.tradeMode,
         fillPolicy: 'N/A',
         isin: 'N/A',
       }
@@ -284,6 +284,7 @@ onMounted(async () => {
             <BrokerTypeOfAccountsTable
               :header-fields="filteredHeaderFields"
               :table-items="filteredTableItems"
+              :server-type="serverType"
               @sort="onSorted"
             />
             <ThePagination

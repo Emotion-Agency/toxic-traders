@@ -1,4 +1,4 @@
-export const transformDate = (input: string): string => {
+export const formatDate = (input: string): string => {
   const date = new Date(input)
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -7,7 +7,21 @@ export const transformDate = (input: string): string => {
   return `${year}-${month}-${day}`
 }
 
-export const transformDateWithTime = (input: string): string => {
+export const formatDateWithTime = (dateStr: string): string => {
+  const date = new Date(dateStr)
+  const pad = (num: number) => num.toString().padStart(2, '0')
+
+  const year = date.getFullYear()
+  const month = pad(date.getMonth() + 1)
+  const day = pad(date.getDate())
+  const hours = pad(date.getHours())
+  const minutes = pad(date.getMinutes())
+  const seconds = pad(date.getSeconds())
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+export const formatDateAmpm = (input: string): string => {
   const date = new Date(input)
 
   const year = date.getFullYear()
@@ -25,4 +39,10 @@ export const transformDateWithTime = (input: string): string => {
   const formattedHours = String(hours).padStart(2, '0')
 
   return `${year}-${month}-${day} ${formattedHours}:${minutes}:${seconds} ${ampm}`
+}
+
+export const formatDateToSeconds = (dateStr: string): number => {
+  const date = new Date(dateStr)
+
+  return Math.floor(date.getTime() / 1000)
 }

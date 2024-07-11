@@ -1,3 +1,4 @@
+import { formatDateAmpm } from '../transformDate'
 import type { iBrokerStatisticOverview } from '~/types/broker/brokerStatisticOverview'
 import type {
   iBrokerCompanyNameStatisticAhrefs,
@@ -12,7 +13,7 @@ export const brokerStatisticsOverviewAdapter = (
 ): iBrokerStatisticOverview => {
   const obj = {
     webSite: params?.webSite,
-    parsingTimestamp: transformDateWithTime(params?.parsingTimestamp),
+    parsingTimestamp: formatDateAmpm(params?.parsingTimestamp),
   }
 
   return obj

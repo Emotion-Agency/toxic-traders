@@ -5,6 +5,7 @@ import type {
   iBrokerCompanyNameStatisticSemrush,
   iBrokerCompanyNameStatisticSimilarWeb,
 } from '~/types/broker/brokerStatisticProvider'
+import { formatDateAmpm } from '~/utils/transformDate'
 
 interface iProps {
   brokerId: number
@@ -37,7 +38,7 @@ const getStatisticItem = (item: string) => {
   activeStatisticItem.value = statisticsData.value.find(
     item =>
       item.provider === provider &&
-      transformDateWithTime(item.parsingTimestamp) === timestamp
+      formatDateAmpm(item.parsingTimestamp) === timestamp
   )
 }
 
@@ -77,10 +78,7 @@ const timeArr = computed(() => {
     .sort((a, b) => {
       return a.parsingTimestamp < b.parsingTimestamp ? 1 : -1
     })
-    .map(
-      item =>
-        `${item.provider} - ${transformDateWithTime(item.parsingTimestamp)}`
-    )
+    .map(item => `${item.provider} - ${formatDateAmpm(item.parsingTimestamp)}`)
 })
 
 const statisticsModalClose = () => {
