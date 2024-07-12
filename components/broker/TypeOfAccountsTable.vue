@@ -169,7 +169,11 @@ const isSortable = (field: string) => {
                 variant="fill"
                 button-size="medium"
                 class="type-of-account-table__btn"
-                :disabled="!spreadStartDate || !spreadEndDate"
+                :disabled="
+                  !spreadStartDate ||
+                  !spreadEndDate ||
+                  spreadEndDate < spreadStartDate
+                "
                 @click="onSpreadScheduleSave"
               >
                 Save Changes
@@ -208,7 +212,11 @@ const isSortable = (field: string) => {
                 variant="fill"
                 button-size="medium"
                 class="type-of-account-table__btn"
-                :disabled="!newsSpreadStartDate || !newsSpreadEndDate"
+                :disabled="
+                  !newsSpreadStartDate ||
+                  !newsSpreadEndDate ||
+                  newsSpreadEndDate < newsSpreadStartDate
+                "
                 @click="onNewsSpreadScheduleSave"
               >
                 Save Changes
