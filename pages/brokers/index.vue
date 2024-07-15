@@ -140,7 +140,6 @@ const onSort = async (sortState: ISortState) => {
           <h1 class="brokers__title">All Brokers</h1>
           <div class="brokers__menu">
             <TheButton
-              v-if="brokersList?.length"
               tag="button"
               button-size="medium"
               variant="outlined"
@@ -211,8 +210,8 @@ const onSort = async (sortState: ISortState) => {
           No items found
         </p>
       </div>
-      <div v-if="isLoading && !brokersList.length">
-        <UiLoader />
+      <div v-if="isLoading">
+        <UiLoader class="brokers__loader" />
       </div>
     </section>
     <TheModal
