@@ -2,6 +2,8 @@ import axiosInstance from '../axiosInstance'
 import type {
   iBrokerServerAccountSymbolsMT4Data,
   iBrokerServerAccountSymbolsMT5Data,
+  iBrokerServerAccountSymbolsNamesData,
+  iBrokerServerAccountSymbolsSpreadsAllParams,
   iBrokerServerAccountSymbolsSpreadsData,
   iBrokerServerAccountSymbolsSpreadsParams,
 } from '~/types/broker/brokerServerAccountSymbols'
@@ -16,6 +18,29 @@ export const getBrokerServerAccountSymbolsSpreads = async (
           symbolName: params?.symbolName,
           brokerPlatform: params?.brokerPlatform,
           description: params?.description,
+          page: params?.page,
+          pageSize: params?.pageSize,
+          sortBy: params?.sortBy,
+          sortOrder: params?.sortOrder,
+        },
+      })
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
+
+export const getBrokerServerAccountSymbolsSpreadsAll = async (
+  params: iBrokerServerAccountSymbolsSpreadsAllParams
+) => {
+  try {
+    const { data }: iBrokerServerAccountSymbolsSpreadsData =
+      await axiosInstance.get(`BrokerServerAccountSymbols/spreadsAll/page`, {
+        params: {
           page: params?.page,
           pageSize: params?.pageSize,
           sortBy: params?.sortBy,
@@ -62,6 +87,20 @@ export const getBrokerServerAccountSymbolsMT5 = async (
           BrokerServerAccountId: brokerServerAccountId,
         },
       })
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
+
+export const getBrokerServerAccountSymbolsNames = async () => {
+  try {
+    const { data }: iBrokerServerAccountSymbolsNamesData =
+      await axiosInstance.get(`BrokerServerAccountSymbols/symbols/names`)
 
     return data
   } catch (e) {

@@ -115,6 +115,13 @@ export interface iBrokerServerAccountSymbolsSpreadsParams {
   sortOrder: number
 }
 
+export interface iBrokerServerAccountSymbolsSpreadsAllParams {
+  page: number
+  pageSize: number
+  sortBy: string
+  sortOrder: number
+}
+
 export interface iBrokerServerAccountSymbolsMT5Data {
   data: iBrokerServerAccountSymbolsMT5[]
 }
@@ -127,4 +134,8 @@ export interface iBrokerServerAccountSymbolsSpreadsData {
   data: {
     brokerServerAccountSymbols: iBrokerServerAccountSymbolsSpread[]
   }
+}
+
+export interface iBrokerServerAccountSymbolsNamesData {
+  data: string[]
 }

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { getServerAccountSymbolsSpreads } = useBrokerServerAccountSymbols()
+const {
+  getServerAccountSymbolsSpreads,
+  getServerAccountSymbolsNames,
+  getServerAccountSymbolsSpreadsAll,
+} = useBrokerServerAccountSymbols()
 
 const params = ref({
   symbolName: 'O2D_CFD.DE',
@@ -8,6 +12,13 @@ const params = ref({
   page: 0,
   pageSize: -1,
   sortBy: 'Spread',
+  sortOrder: 1,
+})
+
+const spreadsParams = ref({
+  page: 0,
+  pageSize: -1,
+  sortBy: '',
   sortOrder: 1,
 })
 
@@ -60,8 +71,10 @@ const searchItems = (val: string) => {
 
 onMounted(async () => {
   const data = await getServerAccountSymbolsSpreads(params.value)
+  const names = await getServerAccountSymbolsNames()
+  const data2 = await getServerAccountSymbolsSpreadsAll(spreadsParams.value)
 
-  console.log(data)
+  console.log(data, names, data2)
 })
 </script>
 
