@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { iBrokerServerAccountTable } from '~/types/broker/brokerServerAccountSymbols'
+import type { iBrokerUniqueServerAccountSymbolsSpread } from '~/types/broker/brokerServerAccountSymbols'
 
 interface iProps {
-  tableItems: iBrokerServerAccountTable[]
+  tableItems: iBrokerUniqueServerAccountSymbolsSpread[]
   headerFields: string[]
   defaultSortBy?: string
 }

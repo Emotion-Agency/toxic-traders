@@ -1,27 +1,19 @@
 <script setup lang="ts">
+import type {
+  iBrokerServerAccountSymbolsSpread,
+  iBrokerUniqueServerAccountSymbolsSpread,
+} from '~/types/broker/brokerServerAccountSymbols'
 import type { iSpreadsInput } from '~/types/spreads/spreads'
 
 const inputsList = ref<iSpreadsInput[]>([])
 const symbolsNames = ref([])
 const filteredSymbolsNames = ref([])
-const spreadsList = ref([])
+const spreadsList = ref<iBrokerServerAccountSymbolsSpread[]>([])
+const filteredSpreadsList = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
 const selectedSymbol = ref('')
 
-const {
-  getServerAccountSymbolsSpreads,
-  getServerAccountSymbolsNames,
-  getServerAccountSymbolsSpreadsAll,
-} = useBrokerServerAccountSymbols()
-
-const params = ref({
-  symbolName: 'O2D_CFD.DE',
-  brokerPlatform: -1,
-  description: 'none',
-  page: 0,
-  pageSize: -1,
-  sortBy: 'Spread',
-  sortOrder: 1,
-})
+const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsAll } =
+  useBrokerServerAccountSymbols()
 
 const spreadsParams = ref({
   page: 0,
@@ -74,6 +66,21 @@ watch(
   }
 )
 
+watch(
+  () => spreadsList.value,
+  () => {
+    filteredSpreadsList.value = spreadsList.value.map(item => {
+      return {
+        broker: item?.brokerCompanyNames[0],
+        accountType: item?.accountType,
+        platform: item?.brokerPlatforms[0],
+        spread: item?.spread,
+        newsSpread: item?.newsSpread,
+      }
+    })
+  }
+)
+
 const searchSymbolsName = (searchValue: string) => {
   filteredSymbolsNames.value = symbolsNames.value?.filter(
     item =>
@@ -87,29 +94,26 @@ const selectSymbolsName = (item: string) => {
   filteredSymbolsNames.value = symbolsNames.value?.filter(name => name !== item)
 }
 
-// const onSorted = (sortState: ISortState) => {
-//   filteredTableItems.value = filteredTableItems.value?.sort((a, b) => {
-//     if (sortState.sortOrder === 1) {
-//       return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
-//     } else {
-//       return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
-//     }
-//   })
-// }
+const onSorted = (sortState: ISortState) => {
+  filteredSpreadsList.value = filteredSpreadsList.value?.sort((a, b) => {
+    if (sortState.sortOrder === 1) {
+      return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+    } else {
+      return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+    }
+  })
+}
 
-// const headerFields = computed(() => {
-//   return getBrokerHeadings(filteredTableItems.value[0] ?? {})
-// })
+const headerFields = computed(() => {
+  return Object.keys(filteredSpreadsList.value[0] ?? {})
+})
 
 onMounted(async () => {
-  const data = await getServerAccountSymbolsSpreads(params.value)
   symbolsNames.value = await getServerAccountSymbolsNames()
-  filteredSymbolsNames.value = symbolsNames.value
   spreadsList.value = await getServerAccountSymbolsSpreadsAll(
     spreadsParams.value
   )
-
-  console.log(data, symbolsNames.value, spreadsList.value)
+  filteredSymbolsNames.value = symbolsNames.value
 })
 </script>
 
@@ -158,11 +162,12 @@ onMounted(async () => {
             </li>
           </ul>
         </div>
-        <!-- <SpreadsTable
+        <SpreadsTable
           :header-fields="headerFields"
-          :table-items="filteredTableItems"
+          :table-items="filteredSpreadsList"
+          class="main-broker__table"
           @sort="onSorted"
-        /> -->
+        />
       </div>
     </div>
   </main>
