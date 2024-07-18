@@ -11,6 +11,7 @@ const filteredSymbolsNames = ref([])
 const spreadsList = ref<iBrokerServerAccountSymbolsSpread[]>([])
 const filteredSpreadsList = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
 const selectedSymbol = ref('')
+const isTableLoading = ref(true)
 
 const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsAll } =
   useBrokerServerAccountSymbols()
@@ -109,11 +110,16 @@ const headerFields = computed(() => {
 })
 
 onMounted(async () => {
-  symbolsNames.value = await getServerAccountSymbolsNames()
-  spreadsList.value = await getServerAccountSymbolsSpreadsAll(
-    spreadsParams.value
-  )
-  filteredSymbolsNames.value = symbolsNames.value
+  try {
+    isTableLoading.value = true
+    symbolsNames.value = await getServerAccountSymbolsNames()
+    spreadsList.value = await getServerAccountSymbolsSpreadsAll(
+      spreadsParams.value
+    )
+    filteredSymbolsNames.value = symbolsNames.value
+  } finally {
+    isTableLoading.value = false
+  }
 })
 </script>
 
@@ -122,52 +128,61 @@ onMounted(async () => {
     <div class="spreads">
       <div class="container spreads__wrapper">
         <h1 class="spreads__title">Spreads</h1>
-        <div class="spreads__content">
-          <ul class="spreads__select-list">
-            <li
-              v-for="(item, idx) in inputsList"
-              :key="idx"
-              class="spreads__select-item"
-            >
-              <CustomSelect
-                v-if="item.options"
-                :options="item.options"
-                :search-input="item.searchInput"
-                :placeholder="item.placeholder"
-                :title="item.title"
-                class="main-broker__settings-select"
-                @search="searchSymbolsName"
-                @select="selectSymbolsName"
+        <div v-if="!isTableLoading" class="spreads__main-content">
+          <div class="spreads__content">
+            <ul class="spreads__select-list">
+              <li
+                v-for="(item, idx) in inputsList"
+                :key="idx"
+                class="spreads__select-item"
               >
-                <template #right-icon>
-                  <IconsSearch />
-                </template>
-              </CustomSelect>
-              <TheInput
-                v-else
-                :id="item.id"
-                :required="item.required"
-                :title="item.title"
-                :name="item.name"
-                :type="item.type"
-                :placeholder="item.placeholder"
-                :value="item.value"
-                :is-right-button="item.isRightButton"
-                class="main-broker__settings-input"
-              >
-                <template #right-icon>
-                  <IconsSearch />
-                </template>
-              </TheInput>
-            </li>
-          </ul>
+                <CustomSelect
+                  v-if="item.options"
+                  :options="item.options"
+                  :search-input="item.searchInput"
+                  :placeholder="item.placeholder"
+                  :title="item.title"
+                  @search="searchSymbolsName"
+                  @select="selectSymbolsName"
+                >
+                  <template #right-icon>
+                    <IconsSearch />
+                  </template>
+                </CustomSelect>
+                <TheInput
+                  v-else
+                  :id="item.id"
+                  :required="item.required"
+                  :title="item.title"
+                  :name="item.name"
+                  :type="item.type"
+                  :placeholder="item.placeholder"
+                  :value="item.value"
+                  :is-right-button="item.isRightButton"
+                  class="spreads__description"
+                >
+                  <template #right-icon>
+                    <IconsSearch />
+                  </template>
+                </TheInput>
+              </li>
+            </ul>
+          </div>
+          <div class="main-broker__table-wrapper">
+            <div class="main-broker__table-content">
+              <SpreadsTable
+                :header-fields="headerFields"
+                :table-items="filteredSpreadsList"
+                class="main-broker__table"
+                @sort="onSorted"
+              />
+            </div>
+          </div>
         </div>
-        <SpreadsTable
-          :header-fields="headerFields"
-          :table-items="filteredSpreadsList"
-          class="main-broker__table"
-          @sort="onSorted"
-        />
+        <UiLoader v-else-if="isTableLoading" />
+        <p v-else class="type-of-account__error">
+          Spreads table data is not found
+        </p>
       </div>
     </div>
   </main>

@@ -7,7 +7,7 @@
   color: var(--secondary-dark);
 }
 
-.spreads__content {
+.spreads__main-content {
   margin-top: 102px;
 }
 
@@ -20,4 +20,21 @@
 .spreads__select-item {
   width: 100%;
   max-width: 330px;
+}
+
+.spreads__description {
+  button {
+    pointer-events: none;
+  }
+
+  path {
+    transition: fill 0.3s ease;
+    fill: var(--secondary-light);
+  }
+
+  &.js-focus {
+    path {
+      fill: var(--primary-default);
+    }
+  }
 }
