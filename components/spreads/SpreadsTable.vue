@@ -30,6 +30,7 @@ const { sortState, onSort } = useSort(
               :key="idx"
               :item="formatNameToNormalCase(headerItem)"
               :class="`table-cell--${idx}`"
+              :is-sort="true"
               :sort-order="sortState.sortOrder"
               :is-active="sortState.sortBy === headerItem"
               @sort="onSort"
