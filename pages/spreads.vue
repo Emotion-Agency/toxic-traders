@@ -13,6 +13,18 @@ const filteredSpreadsList = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
 const selectedSymbol = ref('')
 const isTableLoading = ref(true)
 
+const {
+  currentPage,
+  itemsCount,
+  searchValue,
+  totalCountPages,
+  nextPageClick,
+  prevPageClick,
+  onInputBlur,
+  onInputChange,
+  onChangeCount,
+} = usePagination()
+
 const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsAll } =
   useBrokerServerAccountSymbols()
 
@@ -30,7 +42,7 @@ watch(
       {
         options: filteredSymbolsNames.value,
         placeholder: 'Select symbol',
-        title: 'Sumbol',
+        title: 'Symbol',
         searchInput: {
           id: 'spreads-search-symbol',
           required: false,
@@ -117,6 +129,8 @@ onMounted(async () => {
       spreadsParams.value
     )
     filteredSymbolsNames.value = symbolsNames.value
+
+    totalCountPages.value = spreadsList.value?.length
   } finally {
     isTableLoading.value = false
   }
@@ -168,21 +182,34 @@ onMounted(async () => {
               </li>
             </ul>
           </div>
-          <div class="main-broker__table-wrapper">
-            <div class="main-broker__table-content">
+          <div class="spreads__table-wrapper">
+            <div class="spreads__table-content">
               <SpreadsTable
                 :header-fields="headerFields"
                 :table-items="filteredSpreadsList"
-                class="main-broker__table"
+                class="spreads__table"
                 @sort="onSorted"
+              />
+              <ThePagination
+                class="spreads__pagination"
+                :total-pages="totalCountPages"
+                :current-page="currentPage"
+                :options="['25 rows', '50 rows', '100 rows']"
+                :items-count="itemsCount"
+                :input-value="searchValue"
+                input-id="type-of-account-table"
+                input-name="Type of account table"
+                @next-click="nextPageClick"
+                @prev-click="prevPageClick"
+                @selected-item="onChangeCount"
+                @on-blur-value="onInputBlur"
+                @on-change-value="onInputChange"
               />
             </div>
           </div>
         </div>
         <UiLoader v-else-if="isTableLoading" />
-        <p v-else class="type-of-account__error">
-          Spreads table data is not found
-        </p>
+        <p v-else class="spreads__error">Spreads table data is not found</p>
       </div>
     </div>
   </main>

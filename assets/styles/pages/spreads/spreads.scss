@@ -1,5 +1,6 @@
 .spreads {
   padding-top: 120px;
+  padding-bottom: 50px;
 }
 
 .spreads__title {
@@ -37,4 +38,12 @@
       fill: var(--primary-default);
     }
   }
+}
+
+.spreads__table-wrapper {
+  margin-top: 15px;
+}
+
+.spreads__pagination {
+  margin-top: 46px;
 }
