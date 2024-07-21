@@ -63,17 +63,9 @@ watch(
         isRightButton: true,
       },
       {
-        options: ['Option 1', 'Option 2', 'Option 3'],
-        placeholder: 'Select platform',
-        title: 'Platforms',
-        searchInput: {
-          id: 'spreads-search-platform',
-          required: false,
-          name: 'Spreads search platform',
-          type: 'text',
-          placeholder: 'Search platform',
-          isRightButton: true,
-        },
+        options: ['MT 4', 'MT 5'],
+        placeholder: 'Select server type',
+        title: 'Server types',
       },
     ]
   }
@@ -86,7 +78,7 @@ watch(
       return {
         broker: item?.brokerCompanyNames[0],
         accountType: item?.accountType,
-        platform: item?.brokerPlatforms[0],
+        serverType: item?.serverType === 0 ? 'Server MT4' : 'Server MT5',
         spread: item?.spread,
         newsSpread: item?.newsSpread,
       }

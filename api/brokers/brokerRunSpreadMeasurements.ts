@@ -10,6 +10,7 @@ export const createBrokerRunSpreadMeasurements = async (
   try {
     const { data }: iBrokerRunSpreadMeasurementsData = await axiosInstance.post(
       'Broker/RunSpreadMeasurements',
+      null,
       {
         params: {
           symbolId: params?.symbolId,

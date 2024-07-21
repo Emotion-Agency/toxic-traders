@@ -105,12 +105,13 @@ export interface iBrokerServerAccountSymbolsSpread {
   accountType: string
   brokerPlatforms: number[]
   symbolName: string
+  serverType: number
 }
 
 export interface iBrokerUniqueServerAccountSymbolsSpread {
   broker: string
   accountType: string
-  platform: number
+  serverType: string
   spread: number
   newsSpread: number
 }

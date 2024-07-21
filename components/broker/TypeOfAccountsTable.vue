@@ -40,7 +40,8 @@ const dateSpreadParams = computed(() => {
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: spreadSeconds,
-    startDateTime: formatDateWithTime(spreadStartDate.value),
+    // startDateTime: formatDateWithTime(spreadStartDate.value),
+    startDateTime: spreadStartDate.value,
     SpreadOrNewsSpread: 0,
   }
 })
@@ -55,7 +56,8 @@ const dateNewsSpreadParams = computed(() => {
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: newsSpreadSeconds,
-    startDateTime: formatDateWithTime(newsSpreadStartDate.value),
+    // startDateTime: formatDateWithTime(newsSpreadStartDate.value),
+    startDateTime: spreadStartDate.value,
     SpreadOrNewsSpread: 1,
   }
 })
