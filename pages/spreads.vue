@@ -64,8 +64,8 @@ watch(
       },
       {
         options: ['MT 4', 'MT 5'],
-        placeholder: 'Select server type',
-        title: 'Server types',
+        placeholder: 'Select platform',
+        title: 'Platforms',
       },
     ]
   }
@@ -78,7 +78,7 @@ watch(
       return {
         broker: item?.brokerCompanyNames[0],
         accountType: item?.accountType,
-        serverType: item?.serverType === 0 ? 'Server MT4' : 'Server MT5',
+        serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
         spread: item?.spread,
         newsSpread: item?.newsSpread,
       }

@@ -6,6 +6,8 @@ import type {
   iBrokerServerAccountSymbolsSpreadsAllParams,
   iBrokerServerAccountSymbolsSpreadsData,
   iBrokerServerAccountSymbolsSpreadsParams,
+  iBrokerServerAccountSymbolsSpreadsScheduleData,
+  iBrokerServerAccountSymbolsSpreadsScheduleParams,
 } from '~/types/broker/brokerServerAccountSymbols'
 
 export const getBrokerServerAccountSymbolsSpreads = async (
@@ -85,6 +87,27 @@ export const getBrokerServerAccountSymbolsMT5 = async (
       await axiosInstance.get(`BrokerServerAccountSymbols/symbols/mt5`, {
         params: {
           BrokerServerAccountId: brokerServerAccountId,
+        },
+      })
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
+
+export const getBrokerServerAccountSymbolsSpreadsSchedule = async (
+  params: iBrokerServerAccountSymbolsSpreadsScheduleParams
+) => {
+  try {
+    const { data }: iBrokerServerAccountSymbolsSpreadsScheduleData =
+      await axiosInstance.get(`BrokerServerAccountSymbols/spreads/jobs`, {
+        params: {
+          symbolId: params?.symbolId,
+          serverType: params?.serverType,
         },
       })
 

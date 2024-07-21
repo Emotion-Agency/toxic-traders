@@ -150,3 +150,18 @@ export interface iBrokerServerAccountSymbolsSpreadsData {
 export interface iBrokerServerAccountSymbolsNamesData {
   data: string[]
 }
+
+export interface iBrokerServerAccountSymbolsSpreadsSchedule {
+  spreadType: string
+  scheduledAt: string
+  length: number
+}
+
+export interface iBrokerServerAccountSymbolsSpreadsScheduleParams {
+  symbolId: number
+  serverType: number
+}
+
+export interface iBrokerServerAccountSymbolsSpreadsScheduleData {
+  data: iBrokerServerAccountSymbolsSpreadsSchedule[]
+}
