@@ -133,6 +133,16 @@ export interface iBrokerServerAccountSymbolsSpreadsAllParams {
   sortOrder: number
 }
 
+export interface iBrokerServerAccountSymbolsSpreadsCurrent {
+  symbolName: string
+  serverType: number
+  description: string
+  page: number
+  pageSize: number
+  sortBy: string
+  sortOrder: number
+}
+
 export interface iBrokerServerAccountSymbolsMT5Data {
   data: iBrokerServerAccountSymbolsMT5[]
 }

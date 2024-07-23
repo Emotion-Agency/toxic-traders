@@ -35,41 +35,76 @@ const spreadsParams = ref({
   sortOrder: 1,
 })
 
-watch(
-  () => [symbolsNames.value, filteredSymbolsNames.value],
-  () => {
-    inputsList.value = [
-      {
-        options: filteredSymbolsNames.value,
-        placeholder: 'Select symbol',
-        title: 'Symbol',
-        searchInput: {
-          id: 'spreads-search-symbol',
-          required: false,
-          name: 'Spreads search symbol',
-          type: 'text',
-          placeholder: 'Search symbol',
-          isRightButton: true,
-        },
-      },
-      {
-        title: 'Description',
-        required: false,
-        id: 'spreads-description',
-        name: 'Spreads description',
-        type: 'text',
-        value: '',
-        placeholder: 'Write your desription',
-        isRightButton: true,
-      },
-      {
-        options: ['MT 4', 'MT 5'],
-        placeholder: 'Select platform',
-        title: 'Platforms',
-      },
-    ]
+const symbolSelect = computed(() => {
+  return {
+    options: filteredSymbolsNames.value,
+    placeholder: 'Select symbol',
+    title: 'Symbol',
+    searchInput: {
+      id: 'spreads-search-symbol',
+      required: false,
+      name: 'Spreads search symbol',
+      type: 'text',
+      placeholder: 'Search symbol',
+      isRightButton: true,
+    },
   }
-)
+})
+
+const platformsSelect = computed(() => {
+  return {
+    options: ['MT 4', 'MT 5'],
+    placeholder: 'Select platform',
+    title: 'Platforms',
+  }
+})
+
+const descriptionInput = ref({
+  title: 'Description',
+  required: false,
+  id: 'spreads-description',
+  name: 'Spreads description',
+  type: 'text',
+  value: '',
+  placeholder: 'Write your desription',
+  isRightButton: true,
+})
+
+// watch(
+//   () => [symbolsNames.value, filteredSymbolsNames.value],
+//   () => {
+//     inputsList.value = [
+//       {
+//         options: filteredSymbolsNames.value,
+//         placeholder: 'Select symbol',
+//         title: 'Symbol',
+//         searchInput: {
+//           id: 'spreads-search-symbol',
+//           required: false,
+//           name: 'Spreads search symbol',
+//           type: 'text',
+//           placeholder: 'Search symbol',
+//           isRightButton: true,
+//         },
+//       },
+//       {
+//         title: 'Description',
+//         required: false,
+//         id: 'spreads-description',
+//         name: 'Spreads description',
+//         type: 'text',
+//         value: '',
+//         placeholder: 'Write your desription',
+//         isRightButton: true,
+//       },
+//       {
+//         options: ['MT 4', 'MT 5'],
+//         placeholder: 'Select platform',
+//         title: 'Platforms',
+//       },
+//     ]
+//   }
+// )
 
 watch(
   () => spreadsList.value,
@@ -97,6 +132,10 @@ const searchSymbolsName = (searchValue: string) => {
 const selectSymbolsName = (item: string) => {
   selectedSymbol.value = item
   filteredSymbolsNames.value = symbolsNames.value?.filter(name => name !== item)
+}
+
+const selectPlatform = (item: string) => {
+  console.log(item)
 }
 
 const onSorted = (sortState: ISortState) => {
@@ -137,17 +176,12 @@ onMounted(async () => {
         <div v-if="!isTableLoading" class="spreads__main-content">
           <div class="spreads__content">
             <ul class="spreads__select-list">
-              <li
-                v-for="(item, idx) in inputsList"
-                :key="idx"
-                class="spreads__select-item"
-              >
+              <li class="spreads__select-item">
                 <CustomSelect
-                  v-if="item.options"
-                  :options="item.options"
-                  :search-input="item.searchInput"
-                  :placeholder="item.placeholder"
-                  :title="item.title"
+                  :options="symbolSelect.options"
+                  :search-input="symbolSelect.searchInput"
+                  :placeholder="symbolSelect.placeholder"
+                  :title="symbolSelect.title"
                   @search="searchSymbolsName"
                   @select="selectSymbolsName"
                 >
@@ -155,22 +189,35 @@ onMounted(async () => {
                     <IconsSearch />
                   </template>
                 </CustomSelect>
+              </li>
+              <li class="spreads__select-item">
                 <TheInput
-                  v-else
-                  :id="item.id"
-                  :required="item.required"
-                  :title="item.title"
-                  :name="item.name"
-                  :type="item.type"
-                  :placeholder="item.placeholder"
-                  :value="item.value"
-                  :is-right-button="item.isRightButton"
+                  :id="descriptionInput.id"
+                  :required="descriptionInput.required"
+                  :title="descriptionInput.title"
+                  :name="descriptionInput.name"
+                  :type="descriptionInput.type"
+                  :placeholder="descriptionInput.placeholder"
+                  :value="descriptionInput.value"
+                  :is-right-button="descriptionInput.isRightButton"
                   class="spreads__description"
                 >
                   <template #right-icon>
                     <IconsSearch />
                   </template>
                 </TheInput>
+              </li>
+              <li class="spreads__select-item">
+                <CustomSelect
+                  :options="platformsSelect.options"
+                  :placeholder="platformsSelect.placeholder"
+                  :title="platformsSelect.title"
+                  @select="selectPlatform"
+                >
+                  <template #right-icon>
+                    <IconsSearch />
+                  </template>
+                </CustomSelect>
               </li>
             </ul>
           </div>

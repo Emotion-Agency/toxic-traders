@@ -4,6 +4,7 @@ import type {
   iBrokerServerAccountSymbolsMT5Data,
   iBrokerServerAccountSymbolsNamesData,
   iBrokerServerAccountSymbolsSpreadsAllParams,
+  iBrokerServerAccountSymbolsSpreadsCurrent,
   iBrokerServerAccountSymbolsSpreadsData,
   iBrokerServerAccountSymbolsSpreadsParams,
   iBrokerServerAccountSymbolsSpreadsScheduleData,
@@ -43,6 +44,32 @@ export const getBrokerServerAccountSymbolsSpreadsAll = async (
     const { data }: iBrokerServerAccountSymbolsSpreadsData =
       await axiosInstance.get(`BrokerServerAccountSymbols/spreadsAll/page`, {
         params: {
+          page: params?.page,
+          pageSize: params?.pageSize,
+          sortBy: params?.sortBy,
+          sortOrder: params?.sortOrder,
+        },
+      })
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
+
+export const getBrokerServerAccountSymbolsSpreadsCurrent = async (
+  params: iBrokerServerAccountSymbolsSpreadsCurrent
+) => {
+  try {
+    const { data }: iBrokerServerAccountSymbolsSpreadsData =
+      await axiosInstance.get(`BrokerServerAccountSymbols/spreads/page`, {
+        params: {
+          symbolName: params?.symbolName,
+          serverType: params?.serverType,
+          description: params?.description,
           page: params?.page,
           pageSize: params?.pageSize,
           sortBy: params?.sortBy,
