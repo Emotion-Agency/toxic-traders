@@ -104,12 +104,9 @@ export const getBrokerServerAccountSymbolsSpreadsSchedule = async (
 ) => {
   try {
     const { data }: iBrokerServerAccountSymbolsSpreadsScheduleData =
-      await axiosInstance.get(`BrokerServerAccountSymbols/spreads/jobs`, {
-        params: {
-          symbolId: params?.symbolId,
-          serverType: params?.serverType,
-        },
-      })
+      await axiosInstance.get(
+        `BrokerServerAccountSymbols/spreads/jobs/${params.serverType}/${params.symbolId}`
+      )
 
     return data
   } catch (e) {

@@ -19,7 +19,16 @@ const spreadStartDate = ref('')
 const spreadEndDate = ref('')
 const newsSpreadStartDate = ref('')
 const newsSpreadEndDate = ref('')
+const scheduleParams = computed(() => {
+  return {
+    symbolId: activeScheduleItem.value?.id,
+    serverType: props.serverType,
+  }
+})
+
 const { createRunSpreadMeasurements } = useBrokerRunSpreadMeasurements()
+const { getServerAccountSymbolsSpreadsSchedule } =
+  useBrokerServerAccountSymbols()
 
 const emit = defineEmits(['sort'])
 
@@ -72,10 +81,26 @@ const onModalClose = () => {
   isOpenedModal.value = false
 }
 
-const onScheduleOpen = (item: iBrokerServerAccountTable) => {
+const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
   activeScheduleItem.value = item
   isOpenedScheduleModal.value = true
   document.body.classList.add('modal-open')
+
+  const spreadDate = await getServerAccountSymbolsSpreadsSchedule(
+    scheduleParams.value
+  )
+
+  spreadDate.forEach(date => {
+    if (date?.spreadType === 'MeasureNewsSpread') {
+      newsSpreadStartDate.value = date?.scheduledAt || ''
+    }
+
+    if (date?.spreadType === 'MeasureSpread') {
+      spreadStartDate.value = date?.scheduledAt || ''
+    }
+  })
+
+  console.log(spreadDate)
 }
 
 const onSpreadScheduleSave = () => {
@@ -96,6 +121,8 @@ const notSortableFields = ['schedule']
 const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
+
+onMounted(async () => {})
 </script>
 
 <template>
