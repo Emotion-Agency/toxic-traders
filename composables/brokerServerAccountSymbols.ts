@@ -4,10 +4,12 @@ import {
   getBrokerServerAccountSymbolsNames,
   getBrokerServerAccountSymbolsSpreads,
   getBrokerServerAccountSymbolsSpreadsAll,
+  getBrokerServerAccountSymbolsSpreadsCurrent,
   getBrokerServerAccountSymbolsSpreadsSchedule,
 } from '~/api/brokers/brokerServerAccountSymbols'
 import type {
   iBrokerServerAccountSymbolsSpreadsAllParams,
+  iBrokerServerAccountSymbolsSpreadsCurrent,
   iBrokerServerAccountSymbolsSpreadsParams,
   iBrokerServerAccountSymbolsSpreadsScheduleParams,
 } from '~/types/broker/brokerServerAccountSymbols'
@@ -55,10 +57,25 @@ export const useBrokerServerAccountSymbols = () => {
     params: iBrokerServerAccountSymbolsSpreadsAllParams
   ) => {
     try {
-      const { brokerServerAccountSymbols } =
-        await getBrokerServerAccountSymbolsSpreadsAll(params)
+      const data = await getBrokerServerAccountSymbolsSpreadsAll(params)
 
-      return brokerServerAccountSymbols
+      return data
+    } catch (error) {
+      console.error('Error fetching server account symbols spreads:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching server account symbols spreads. Please try again.',
+      })
+    }
+  }
+
+  const getServerAccountSymbolsSpreadsCurrent = async (
+    params: iBrokerServerAccountSymbolsSpreadsCurrent
+  ) => {
+    try {
+      const data = await getBrokerServerAccountSymbolsSpreadsCurrent(params)
+
+      return data
     } catch (error) {
       console.error('Error fetching server account symbols spreads:', error)
       addToast({
@@ -117,5 +134,6 @@ export const useBrokerServerAccountSymbols = () => {
     getServerAccountSymbolsSpreadsAll,
     getServerAccountSymbolsNames,
     getServerAccountSymbolsSpreadsSchedule,
+    getServerAccountSymbolsSpreadsCurrent,
   }
 }

@@ -90,7 +90,7 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
     scheduleParams.value
   )
 
-  spreadDate.forEach(date => {
+  spreadDate?.forEach(date => {
     if (date?.spreadType === 'MeasureNewsSpread') {
       newsSpreadStartDate.value = date?.scheduledAt || ''
     }

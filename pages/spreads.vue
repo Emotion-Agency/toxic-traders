@@ -3,15 +3,20 @@ import type {
   iBrokerServerAccountSymbolsSpread,
   iBrokerUniqueServerAccountSymbolsSpread,
 } from '~/types/broker/brokerServerAccountSymbols'
-import type { iSpreadsInput } from '~/types/spreads/spreads'
+// import type { iSpreadsInput } from '~/types/spreads/spreads'
 
-const inputsList = ref<iSpreadsInput[]>([])
+// const inputsList = ref<iSpreadsInput[]>([])
+const router = useRouter()
+const route = useRoute()
 const symbolsNames = ref([])
 const filteredSymbolsNames = ref([])
 const spreadsList = ref<iBrokerServerAccountSymbolsSpread[]>([])
 const filteredSpreadsList = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
 const selectedSymbol = ref('')
+const isContentLoading = ref(true)
 const isTableLoading = ref(true)
+const sortBy = ref('BrokerCompanyNames')
+const sortOrder = ref<1 | 2>(1)
 
 const {
   currentPage,
@@ -25,8 +30,11 @@ const {
   onChangeCount,
 } = usePagination()
 
-const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsAll } =
-  useBrokerServerAccountSymbols()
+const {
+  getServerAccountSymbolsNames,
+  getServerAccountSymbolsSpreadsAll,
+  getServerAccountSymbolsSpreadsCurrent,
+} = useBrokerServerAccountSymbols()
 
 const spreadsParams = ref({
   page: 0,
@@ -121,6 +129,72 @@ watch(
   }
 )
 
+const getCurrentSpreadRequest = async () => {
+  isTableLoading.value = true
+
+  const { brokerServerAccountSymbols, totalCount } =
+    await getServerAccountSymbolsSpreadsCurrent({
+      symbolName: selectedSymbol.value,
+      description: 'none',
+      page: currentPage.value - 1,
+      pageSize: itemsCount.value,
+      sortBy: sortBy.value || 'BrokerCompanyNames',
+      sortOrder: sortOrder.value || 0,
+    })
+
+  console.log(brokerServerAccountSymbols)
+
+  isTableLoading.value = false
+  spreadsList.value = brokerServerAccountSymbols
+  filteredSpreadsList.value = spreadsList.value.map(item => {
+    return {
+      broker: item?.brokerCompanyNames[0],
+      accountType: item?.accountType,
+      serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+      spread: item?.spread,
+      newsSpread: item?.newsSpread,
+    }
+  })
+  totalCountPages.value = totalCount
+}
+
+const getAllSpreadsRequest = async () => {
+  isTableLoading.value = true
+
+  const { brokerServerAccountSymbols, totalCount } =
+    await getServerAccountSymbolsSpreadsAll({
+      page: currentPage.value - 1,
+      pageSize: itemsCount.value,
+      sortBy: sortBy.value || 'BrokerCompanyNames',
+      sortOrder: sortOrder.value || 1,
+    })
+
+  isTableLoading.value = false
+  spreadsList.value = brokerServerAccountSymbols
+  filteredSpreadsList.value = spreadsList.value.map(item => {
+    return {
+      broker: item?.brokerCompanyNames[0],
+      accountType: item?.accountType,
+      serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+      spread: item?.spread,
+      newsSpread: item?.newsSpread,
+    }
+  })
+
+  totalCountPages.value = totalCount
+}
+
+watch([currentPage, itemsCount], async () => {
+  await getAllSpreadsRequest()
+
+  router.push({
+    query: {
+      page: currentPage.value,
+      count: itemsCount.value,
+    },
+  })
+})
+
 const searchSymbolsName = (searchValue: string) => {
   filteredSymbolsNames.value = symbolsNames.value?.filter(
     item =>
@@ -132,20 +206,52 @@ const searchSymbolsName = (searchValue: string) => {
 const selectSymbolsName = (item: string) => {
   selectedSymbol.value = item
   filteredSymbolsNames.value = symbolsNames.value?.filter(name => name !== item)
+
+  // try {
+  //   isTableLoading.value = true
+  //   const spreadsParams = {
+  //     symbolName: selectedSymbol.value,
+  //     description: 'none',
+  //     page: 0,
+  //     pageSize: -1,
+  //     sortBy: 'BrokerCompanyNames',
+  //     sortOrder: 1,
+  //   }
+  //   const spread = await getServerAccountSymbolsSpreadsCurrent(spreadsParams)
+  //   console.log(spread)
+  //   filteredSpreadsList.value = spread.map(item => {
+  //     return {
+  //       broker: item?.brokerCompanyNames[0],
+  //       accountType: item?.accountType,
+  //       serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+  //       spread: item?.spread,
+  //       newsSpread: item?.newsSpread,
+  //     }
+  //   })
+  //   console.log(filteredSpreadsList.value)
+  // } finally {
+  //   isTableLoading.value = false
+  // }
 }
 
 const selectPlatform = (item: string) => {
   console.log(item)
 }
 
-const onSorted = (sortState: ISortState) => {
-  filteredSpreadsList.value = filteredSpreadsList.value?.sort((a, b) => {
-    if (sortState.sortOrder === 1) {
-      return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
-    } else {
-      return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
-    }
-  })
+const onSorted = async (sortState: ISortState) => {
+  sortBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
+  console.log(sortState.sortOrder)
+  sortOrder.value = sortState.sortOrder
+
+  await getAllSpreadsRequest()
+  // filteredSpreadsList.value = filteredSpreadsList.value?.sort((a, b) => {
+  //   if (sortState.sortOrder === 1) {
+  //     return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+  //   } else {
+  //     return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+  //   }
+  // })
+  // console.log(filteredSpreadsList.value)
 }
 
 const headerFields = computed(() => {
@@ -154,16 +260,12 @@ const headerFields = computed(() => {
 
 onMounted(async () => {
   try {
-    isTableLoading.value = true
+    isContentLoading.value = true
     symbolsNames.value = await getServerAccountSymbolsNames()
-    spreadsList.value = await getServerAccountSymbolsSpreadsAll(
-      spreadsParams.value
-    )
+    await getAllSpreadsRequest()
     filteredSymbolsNames.value = symbolsNames.value
-
-    totalCountPages.value = spreadsList.value?.length
   } finally {
-    isTableLoading.value = false
+    isContentLoading.value = false
   }
 })
 </script>
@@ -173,7 +275,7 @@ onMounted(async () => {
     <div class="spreads">
       <div class="container spreads__wrapper">
         <h1 class="spreads__title">Spreads</h1>
-        <div v-if="!isTableLoading" class="spreads__main-content">
+        <div v-if="!isContentLoading" class="spreads__main-content">
           <div class="spreads__content">
             <ul class="spreads__select-list">
               <li class="spreads__select-item">
@@ -221,11 +323,12 @@ onMounted(async () => {
               </li>
             </ul>
           </div>
-          <div class="spreads__table-wrapper">
+          <div v-if="!isTableLoading" class="spreads__table-wrapper">
             <div class="spreads__table-content">
               <SpreadsTable
                 :header-fields="headerFields"
                 :table-items="filteredSpreadsList"
+                :default-sort-by="sortBy"
                 class="spreads__table"
                 @sort="onSorted"
               />
@@ -236,8 +339,8 @@ onMounted(async () => {
                 :options="['25 rows', '50 rows', '100 rows']"
                 :items-count="itemsCount"
                 :input-value="searchValue"
-                input-id="type-of-account-table"
-                input-name="Type of account table"
+                input-id="spreads-table"
+                input-name="Spreads table"
                 @next-click="nextPageClick"
                 @prev-click="prevPageClick"
                 @selected-item="onChangeCount"
@@ -246,8 +349,10 @@ onMounted(async () => {
               />
             </div>
           </div>
+          <UiLoader v-else-if="isTableLoading" />
+          <p v-else class="spreads__error">Spreads table data is not found</p>
         </div>
-        <UiLoader v-else-if="isTableLoading" />
+        <UiLoader v-else-if="isContentLoading" />
         <p v-else class="spreads__error">Spreads table data is not found</p>
       </div>
     </div>

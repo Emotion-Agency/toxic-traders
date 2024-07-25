@@ -135,11 +135,11 @@ export interface iBrokerServerAccountSymbolsSpreadsAllParams {
 
 export interface iBrokerServerAccountSymbolsSpreadsCurrent {
   symbolName: string
-  serverType: number
+  serverType?: number
   description: string
   page: number
   pageSize: number
-  sortBy: string
+  sortBy?: string
   sortOrder: number
 }
 
@@ -154,6 +154,7 @@ export interface iBrokerServerAccountSymbolsMT4Data {
 export interface iBrokerServerAccountSymbolsSpreadsData {
   data: {
     brokerServerAccountSymbols: iBrokerServerAccountSymbolsSpread[]
+    totalCount: number
   }
 }
 
