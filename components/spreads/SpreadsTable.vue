@@ -11,6 +11,10 @@ const props = defineProps<iProps>()
 
 const emit = defineEmits(['sort'])
 
+const formattedHeadingFields = computed(() => {
+  return props.headerFields.map(field => formatNameToNormalCase(field))
+})
+
 const { sortState, onSort } = useSort(
   {
     sortBy: props.defaultSortBy,
@@ -26,9 +30,9 @@ const { sortState, onSort } = useSort(
         <TableHead>
           <TableRow>
             <TableCell
-              v-for="(headerItem, idx) in headerFields"
+              v-for="(headerItem, idx) in formattedHeadingFields"
               :key="idx"
-              :item="formatNameToNormalCase(headerItem)"
+              :item="headerItem"
               :class="`table-cell--${idx}`"
               :is-sort="true"
               :sort-order="sortState.sortOrder"

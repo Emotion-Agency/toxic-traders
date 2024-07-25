@@ -323,7 +323,7 @@ onMounted(async () => {
               </li>
             </ul>
           </div>
-          <div v-if="!isTableLoading" class="spreads__table-wrapper">
+          <div class="spreads__table-wrapper">
             <div class="spreads__table-content">
               <SpreadsTable
                 :header-fields="headerFields"
@@ -349,7 +349,7 @@ onMounted(async () => {
               />
             </div>
           </div>
-          <UiLoader v-else-if="isTableLoading" />
+          <UiLoader v-if="isTableLoading" />
           <p v-else class="spreads__error">Spreads table data is not found</p>
         </div>
         <UiLoader v-else-if="isContentLoading" />
