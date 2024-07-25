@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import debounce from 'debounce'
 import type {
   iBrokerServerAccountSymbolsSpread,
   iBrokerUniqueServerAccountSymbolsSpread,
@@ -14,6 +15,7 @@ const isContentLoading = ref(true)
 const isTableLoading = ref(true)
 const sortBy = ref('BrokerCompanyNames')
 const sortOrder = ref<1 | 2>(1)
+const descriptionValue = ref('none')
 
 const {
   currentPage,
@@ -29,6 +31,17 @@ const {
 
 const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsCurrent } =
   useBrokerServerAccountSymbols()
+
+const descriptionInput = reactive({
+  title: 'Description',
+  required: false,
+  id: 'spreads-description',
+  name: 'Spreads description',
+  type: 'text',
+  value: '',
+  placeholder: 'Write your desription',
+  isRightButton: true,
+})
 
 const symbolSelect = computed(() => {
   return {
@@ -46,47 +59,13 @@ const symbolSelect = computed(() => {
   }
 })
 
-// const platformsSelect = computed(() => {
-//   return {
-//     options: ['MT 4', 'MT 5'],
-//     placeholder: 'Select platform',
-//     title: 'Platforms',
-//   }
-// })
-
-const descriptionInput = ref({
-  title: 'Description',
-  required: false,
-  id: 'spreads-description',
-  name: 'Spreads description',
-  type: 'text',
-  value: '',
-  placeholder: 'Write your desription',
-  isRightButton: true,
-})
-
-watch(
-  () => spreads.value,
-  () => {
-    filteredSpreads.value = spreads.value.map(item => {
-      return {
-        broker: item?.brokerCompanyNames[0],
-        accountType: item?.accountType,
-        serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
-        spread: item?.spread,
-        newsSpread: item?.newsSpread,
-      }
-    })
-  }
-)
-
 const getCurrentSpreadRequest = async () => {
   isTableLoading.value = true
 
   const { brokerServerAccountSymbols, totalCount } =
     await getServerAccountSymbolsSpreadsCurrent({
       symbolName: selectedSymbol.value,
-      description: 'none',
+      description: descriptionValue.value,
       page: currentPage.value - 1,
       pageSize: itemsCount.value,
       sortBy: sortBy.value || 'BrokerCompanyNames',
@@ -107,6 +86,19 @@ const getCurrentSpreadRequest = async () => {
 
   totalCountPages.value = totalCount
 }
+
+// const platformsSelect = computed(() => {
+//   return {
+//     options: ['MT 4', 'MT 5'],
+//     placeholder: 'Select platform',
+//     title: 'Platforms',
+//   }
+// })
+
+const debounceDescription = debounce(async (val: string) => {
+  descriptionValue.value = val
+  await getCurrentSpreadRequest()
+}, 1000)
 
 // const getAllSpreadsRequest = async () => {
 //   isTableLoading.value = true
@@ -134,17 +126,6 @@ const getCurrentSpreadRequest = async () => {
 //   totalCountPages.value = totalCount
 // }
 
-watch([currentPage, itemsCount], async () => {
-  await getCurrentSpreadRequest()
-
-  router.push({
-    query: {
-      page: currentPage.value,
-      count: itemsCount.value,
-    },
-  })
-})
-
 const searchSymbolsName = (searchValue: string) => {
   filteredSymbolsNames.value = symbolsNames.value?.filter(
     item =>
@@ -163,6 +144,10 @@ const selectSymbolsName = async (item: string) => {
 //   console.log(item)
 // }
 
+const onChange = (inputData: iInputData) => {
+  debounceDescription(inputData.value)
+}
+
 const onSorted = async (sortState: ISortState) => {
   sortBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
   console.log(sortState.sortOrder)
@@ -173,6 +158,32 @@ const onSorted = async (sortState: ISortState) => {
 
 const headerFields = computed(() => {
   return Object.keys(filteredSpreads.value[0] ?? {})
+})
+
+watch(
+  () => spreads.value,
+  () => {
+    filteredSpreads.value = spreads.value.map(item => {
+      return {
+        broker: item?.brokerCompanyNames[0],
+        accountType: item?.accountType,
+        serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+        spread: item?.spread,
+        newsSpread: item?.newsSpread,
+      }
+    })
+  }
+)
+
+watch([currentPage, itemsCount], async () => {
+  await getCurrentSpreadRequest()
+
+  router.push({
+    query: {
+      page: currentPage.value,
+      count: itemsCount.value,
+    },
+  })
 })
 
 onMounted(async () => {
@@ -224,6 +235,7 @@ onMounted(async () => {
                   :value="descriptionInput.value"
                   :is-right-button="descriptionInput.isRightButton"
                   class="spreads__description"
+                  @input-value="onChange"
                 >
                   <template #right-icon>
                     <IconsSearch />
