@@ -9,7 +9,7 @@ const symbolsNames = ref([])
 const filteredSymbolsNames = ref([])
 const spreads = ref<iBrokerServerAccountSymbolsSpread[]>([])
 const filteredSpreads = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
-const selectedSymbol = ref<string>(filteredSymbolsNames.value[0])
+const selectedSymbol = ref<string>(symbolsNames.value[0])
 const isContentLoading = ref(true)
 const isTableLoading = ref(true)
 const sortBy = ref('BrokerCompanyNames')
@@ -33,7 +33,7 @@ const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsCurrent } =
 const symbolSelect = computed(() => {
   return {
     options: filteredSymbolsNames.value,
-    placeholder: filteredSymbolsNames.value[0],
+    placeholder: symbolsNames.value[0],
     title: 'Symbol',
     searchInput: {
       id: 'spreads-search-symbol',
@@ -181,8 +181,8 @@ onMounted(async () => {
     symbolsNames.value = await getServerAccountSymbolsNames()
     filteredSymbolsNames.value = symbolsNames.value
 
-    if (filteredSymbolsNames.value.length > 0) {
-      selectedSymbol.value = filteredSymbolsNames.value[0]
+    if (symbolsNames.value.length > 0) {
+      selectedSymbol.value = symbolsNames.value[0]
       await getCurrentSpreadRequest()
     }
   } finally {
