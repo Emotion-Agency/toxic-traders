@@ -66,6 +66,9 @@ export const getBrokerServerAccountSymbolsSpreadsCurrent = async (
   try {
     const { data }: iBrokerServerAccountSymbolsSpreadsData =
       await axiosInstance.get(`BrokerServerAccountSymbols/spreads/page`, {
+        paramsSerializer: {
+          encode: param => encodeURIComponent(param).replaceAll('+', '%20'),
+        },
         params: {
           symbolName: params?.symbolName,
           serverType: params?.serverType,
