@@ -285,6 +285,7 @@ onMounted(async () => {
               :header-fields="filteredHeaderFields"
               :table-items="filteredTableItems"
               :server-type="serverType"
+              :timezone="getGMTOffset(currentAccount?.brokerServerTimeZone)"
               @sort="onSorted"
             />
             <ThePagination

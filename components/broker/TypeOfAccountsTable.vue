@@ -7,6 +7,7 @@ interface iProps {
   headerFields: string[]
   defaultSortBy?: string
   serverType?: number
+  timezone?: string
 }
 
 const props = defineProps<iProps>()
@@ -91,12 +92,22 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
   )
 
   spreadDate?.forEach(date => {
-    if (date?.spreadType === 'MeasureNewsSpread') {
-      newsSpreadStartDate.value = date?.scheduledAt || ''
-    }
-
     if (date?.spreadType === 'MeasureSpread') {
       spreadStartDate.value = date?.scheduledAt || ''
+      spreadEndDate.value = getEndDateTime({
+        startDateTime: date?.scheduledAt,
+        seconds: date?.length,
+        timezone: props.timezone,
+      })
+    }
+
+    if (date?.spreadType === 'MeasureNewsSpread') {
+      newsSpreadStartDate.value = date?.scheduledAt || ''
+      newsSpreadEndDate.value = getEndDateTime({
+        startDateTime: date?.scheduledAt,
+        seconds: date?.length,
+        timezone: props.timezone,
+      })
     }
   })
 
@@ -121,8 +132,6 @@ const notSortableFields = ['schedule']
 const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
-
-onMounted(async () => {})
 </script>
 
 <template>

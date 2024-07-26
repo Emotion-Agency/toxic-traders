@@ -1,3 +1,9 @@
+interface iDateTimeParams {
+  startDateTime: string
+  seconds: number
+  timezone: string
+}
+
 export const formatDate = (input: string): string => {
   const date = new Date(input)
   const year = date.getFullYear()
@@ -45,4 +51,15 @@ export const formatDateToSeconds = (dateStr: string): number => {
   const date = new Date(dateStr)
 
   return Math.floor(date.getTime() / 1000)
+}
+
+export const getEndDateTime = ({
+  startDateTime,
+  seconds,
+  timezone,
+}: iDateTimeParams): string => {
+  const startDate = new Date(startDateTime)
+  const targetOffset = parseInt(timezone.split('GMT')[1]) * 60 * 60 * 1000
+  const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
+  return endDate.toISOString()
 }

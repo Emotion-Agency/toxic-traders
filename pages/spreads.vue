@@ -87,6 +87,11 @@ const getCurrentSpreadRequest = async () => {
   totalCountPages.value = totalCount
 }
 
+const debounceDescription = debounce(async (val: string) => {
+  descriptionValue.value = val
+  await getCurrentSpreadRequest()
+}, 1000)
+
 // const platformsSelect = computed(() => {
 //   return {
 //     options: ['MT 4', 'MT 5'],
@@ -94,11 +99,6 @@ const getCurrentSpreadRequest = async () => {
 //     title: 'Platforms',
 //   }
 // })
-
-const debounceDescription = debounce(async (val: string) => {
-  descriptionValue.value = val
-  await getCurrentSpreadRequest()
-}, 1000)
 
 // const getAllSpreadsRequest = async () => {
 //   isTableLoading.value = true
@@ -150,7 +150,6 @@ const onChange = (inputData: iInputData) => {
 
 const onSorted = async (sortState: ISortState) => {
   sortBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
-  console.log(sortState.sortOrder)
   sortOrder.value = sortState.sortOrder
 
   await getCurrentSpreadRequest()
@@ -190,12 +189,15 @@ onMounted(async () => {
   try {
     isContentLoading.value = true
     symbolsNames.value = await getServerAccountSymbolsNames()
-    filteredSymbolsNames.value = symbolsNames.value
 
-    if (symbolsNames.value.length > 0) {
+    if (symbolsNames.value?.length > 0) {
       selectedSymbol.value = symbolsNames.value[0]
       await getCurrentSpreadRequest()
     }
+
+    filteredSymbolsNames.value = symbolsNames.value?.filter(
+      name => name !== selectedSymbol.value
+    )
   } finally {
     isContentLoading.value = false
   }
