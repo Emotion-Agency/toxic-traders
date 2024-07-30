@@ -10,7 +10,7 @@ const symbolsNames = ref([])
 const filteredSymbolsNames = ref([])
 const spreads = ref<iBrokerServerAccountSymbolsSpread[]>([])
 const filteredSpreads = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
-const selectedSymbol = ref<string>(symbolsNames.value[0])
+const selectedSymbol = ref<string>(null)
 const isContentLoading = ref(true)
 const isTableLoading = ref(true)
 const sortBy = ref('BrokerCompanyNames')
@@ -46,7 +46,7 @@ const descriptionInput = reactive({
 const symbolSelect = computed(() => {
   return {
     options: filteredSymbolsNames.value,
-    placeholder: symbolsNames.value[0],
+    placeholder: 'Select symbol',
     title: 'Symbol',
     searchInput: {
       id: 'spreads-search-symbol',
@@ -64,7 +64,7 @@ const getCurrentSpreadRequest = async () => {
 
   const { brokerServerAccountSymbols, totalCount } =
     await getServerAccountSymbolsSpreadsCurrent({
-      symbolName: selectedSymbol.value,
+      symbolName: selectedSymbol.value || '*',
       description: descriptionValue.value,
       page: currentPage.value - 1,
       pageSize: itemsCount.value,
@@ -190,10 +190,7 @@ onMounted(async () => {
     isContentLoading.value = true
     symbolsNames.value = await getServerAccountSymbolsNames()
 
-    if (symbolsNames.value?.length > 0) {
-      selectedSymbol.value = symbolsNames.value[0]
-      await getCurrentSpreadRequest()
-    }
+    await getCurrentSpreadRequest()
 
     filteredSymbolsNames.value = symbolsNames.value?.filter(
       name => name !== selectedSymbol.value
