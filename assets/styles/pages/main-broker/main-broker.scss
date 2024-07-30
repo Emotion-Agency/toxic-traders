@@ -1,5 +1,5 @@
 .main-broker__wrapper {
-  padding-top: 100px;
+  // padding-top: 100px;
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   height: 100vh;
@@ -9,20 +9,24 @@
 
 .broker-aside {
   overflow-y: auto;
-  height: calc(100vh - 120px);
+  height: 100vh;
 }
 
 .broker-aside__content {
+  padding-top: 120px;
+  padding-bottom: 40px;
   display: flex;
   flex-direction: column;
   row-gap: 24px;
-  height: 100%;
+  height: fit-content;
 }
 
 .main-broker__content {
   padding: 0 74px;
+  padding-top: 120px;
+  padding-bottom: 40px;
   overflow-y: auto;
-  height: calc(100vh - 120px);
+  height: 100vh;
 }
 
 .main-broker__item {
