@@ -118,7 +118,6 @@ export interface iBrokerUniqueServerAccountSymbolsSpread {
 
 export interface iBrokerServerAccountSymbolsSpreadsParams {
   symbolName: string
-  brokerPlatform: number
   description: string
   page: number
   pageSize: number

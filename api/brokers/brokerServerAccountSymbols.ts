@@ -19,7 +19,6 @@ export const getBrokerServerAccountSymbolsSpreads = async (
       await axiosInstance.get(`BrokerServerAccountSymbols/spreads`, {
         params: {
           symbolName: params?.symbolName,
-          brokerPlatform: params?.brokerPlatform,
           description: params?.description,
           page: params?.page,
           pageSize: params?.pageSize,
