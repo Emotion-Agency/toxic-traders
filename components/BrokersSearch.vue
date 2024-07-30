@@ -308,8 +308,6 @@ const debounceSearch = debounce(() => {
 
 watch(searchItems, () => {
   debounceSearch()
-
-  console.log(searchItems.value)
 })
 
 const { getAllEnums } = useEnums()

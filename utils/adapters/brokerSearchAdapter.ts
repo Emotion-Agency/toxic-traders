@@ -19,7 +19,7 @@ export const brokerSearchAdapter = (
     searchResultPageSize: params.count,
     sortBy: params.sortBy ?? 'companyNames',
     sortOrder: params.sortOrder ?? 1,
-    companyName: getParameter('name'),
+    companyName: getParameter('name') || '*',
     category: getParameter('category'),
     locationServers: getParameter('location-servers'),
     addressCompany: getParameter('address-company'),
