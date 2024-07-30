@@ -288,7 +288,7 @@ onMounted(async () => {
               :timezone="getGMTOffset(currentAccount?.brokerServerTimeZone)"
               @sort="onSorted"
             />
-            <ThePagination
+            <!-- <ThePagination
               class="type-of-account__pagination"
               :total-pages="totalCountPages"
               :current-page="currentPage"
@@ -302,7 +302,7 @@ onMounted(async () => {
               @selected-item="onChangeCount"
               @on-blur-value="onInputBlur"
               @on-change-value="onInputChange"
-            />
+            /> -->
           </div>
           <UiLoader v-else-if="isTableLoading" />
           <p v-else class="type-of-account__error">
