@@ -21,6 +21,7 @@
 .tags-input__input {
   --width: 46px;
   flex: 1 1 auto;
+  background-color: transparent;
   max-width: 100%;
   // width: 46px;
   width: var(--width);

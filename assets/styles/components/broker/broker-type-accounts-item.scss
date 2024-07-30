@@ -6,6 +6,11 @@
   border-radius: 12px;
   padding: 0 10px;
   background-color: var(--primary-default);
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--primary-dark);
+  }
 
   &--new {
     padding: 0;
@@ -34,6 +39,10 @@
           fill: var(--primary-default);
         }
       }
+    }
+
+    &:hover {
+      background-color: var(--gray-200);
     }
   }
 }
