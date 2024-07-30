@@ -1,18 +1,29 @@
-.main-broker {
-  padding-top: 130px;
-}
-
 .main-broker__wrapper {
+  padding-top: 100px;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  height: 100vh;
+  overflow: hidden;
   align-items: flex-start;
 }
 
-.main-broker__content {
-  @include col(4, 9);
+.broker-aside {
+  overflow-y: auto;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
-.main-broker__title {
-  @include heading-m-h3;
-  margin-bottom: 20px;
+.broker-aside__content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  height: 100%;
+}
+
+.main-broker__content {
+  padding: 0 74px;
+  overflow-y: auto;
+  height: calc(100vh - 120px);
 }
 
 .main-broker__item {
@@ -23,35 +34,9 @@
   }
 }
 
-.broker-aside {
-  position: relative;
-  height: 100%;
-  max-width: 280px;
-
-  &:nth-of-type(1) {
-    @include col(1, 3);
-  }
-
-  &:nth-of-type(2) {
-    @include col(10, 12);
-    margin-left: auto;
-    width: 100%;
-  }
-}
-
-.broker-aside__wrapper {
-  position: sticky;
-  position: -webkit-sticky;
-  top: calc(var(--h) + 20px);
-  height: calc(100vh - 130px);
-}
-
-.broker-aside__content {
-  display: flex;
-  flex-direction: column;
-  row-gap: 24px;
-  overflow-y: auto;
-  height: 100%;
+.main-broker__title {
+  @include heading-m-h3;
+  margin-bottom: 20px;
 }
 
 .broker-aside__btn-wrapper {
@@ -65,6 +50,10 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+
+    svg {
+      flex: 1 0 auto;
+    }
   }
 }
 

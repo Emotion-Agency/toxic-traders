@@ -37,7 +37,7 @@ const historyModalClose = () => {
 
 <template>
   <main class="main-broker">
-    <div class="container grid main-broker__wrapper">
+    <div class="container main-broker__wrapper">
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
@@ -64,7 +64,6 @@ const historyModalClose = () => {
           <BrokerStatistics :broker-id="Number(brokerId)" />
         </div>
       </section>
-
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
