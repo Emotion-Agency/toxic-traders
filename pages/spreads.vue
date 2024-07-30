@@ -140,6 +140,13 @@ const selectSymbolsName = async (item: string) => {
   await getCurrentSpreadRequest()
 }
 
+const resetSelectedSymbol = async () => {
+  selectedSymbol.value = null
+  filteredSymbolsNames.value = symbolsNames.value
+
+  await getCurrentSpreadRequest()
+}
+
 // const selectPlatform = (item: string) => {
 //   console.log(item)
 // }
@@ -215,11 +222,18 @@ onMounted(async () => {
                   :search-input="symbolSelect.searchInput"
                   :placeholder="symbolSelect.placeholder"
                   :title="symbolSelect.title"
+                  :value="selectedSymbol"
                   @search="searchSymbolsName"
                   @select="selectSymbolsName"
                 >
-                  <template #right-icon>
-                    <IconsSearch />
+                  <template #select-icon>
+                    <button
+                      v-if="selectedSymbol"
+                      class="spreads__select-item-btn"
+                      @click.stop="resetSelectedSymbol"
+                    >
+                      <IconsClose />
+                    </button>
                   </template>
                 </CustomSelect>
               </li>

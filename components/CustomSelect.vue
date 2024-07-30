@@ -68,7 +68,11 @@ onUnmounted(() => {
       <p class="custom-select__text">
         {{ selectedItem || placeholder }}
       </p>
-      <IconsSelectionArrowDown />
+
+      <div class="custom-select-icon">
+        <slot name="select-icon" />
+        <IconsSelectionArrowDown class="custom-select__arrow" />
+      </div>
     </div>
     <div
       class="custom-select__content"
