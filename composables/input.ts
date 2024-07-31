@@ -9,6 +9,8 @@ export interface iInputData {
 
 export const useInput = (emit, props) => {
   const inputValue = ref(props.value ?? '')
+  const numberInputSave = ref('')
+  const isInputChanged = ref(false)
   const inputBlur = ref(false)
   const error = ref(false)
   const $input = ref(null)
@@ -31,6 +33,10 @@ export const useInput = (emit, props) => {
   )
 
   const onFocus = () => {
+    if (props.type === 'number') {
+      numberInputSave.value = inputValue.value
+      inputValue.value = ''
+    }
     inputBlur.value = true
     emit('inputFocus', {
       id: props.id,
@@ -42,6 +48,12 @@ export const useInput = (emit, props) => {
   const onBlur = () => {
     if (props.type === 'number') {
       inputBlur.value = false
+
+      if (!isInputChanged.value) {
+        inputValue.value = numberInputSave.value
+      }
+      isInputChanged.value = false
+
       emit('inputBlur', {
         id: props.id,
         value: inputValue.value.toString(),
@@ -114,6 +126,7 @@ export const useInput = (emit, props) => {
       typeof props.min === 'number' &&
       typeof props.max === 'number'
     ) {
+      isInputChanged.value = true
       inputValue.value = clamp(+inputValue.value, props.min, props.max)
     }
 
