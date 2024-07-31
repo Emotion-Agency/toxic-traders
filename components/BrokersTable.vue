@@ -42,6 +42,7 @@ const { sortState, onSort } = useSort(
 )
 
 const notSortableFields = [
+  'Id',
   'Broker Platforms',
   'Regulator Name',
   'Restricted Countries',
