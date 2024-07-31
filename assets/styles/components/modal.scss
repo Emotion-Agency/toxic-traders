@@ -45,11 +45,8 @@
   height: fit-content;
   background-color: var(--gray-100);
   border-radius: 10px;
-
-  &--full-height {
-    height: 90vh;
-    overflow: hidden;
-  }
+  max-height: 90vh;
+  overflow: auto;
 }
 
 .modal__header {
