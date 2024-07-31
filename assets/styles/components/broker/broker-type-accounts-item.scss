@@ -140,12 +140,10 @@
   background-color: transparent;
   @include button-small;
   transition: opacity 0.3s ease;
+  color: var(--secondary-dark);
+
   &:hover {
     opacity: 0.5;
-  }
-
-  &:first-child {
-    color: var(--secodary-dark);
   }
 
   &:last-child {

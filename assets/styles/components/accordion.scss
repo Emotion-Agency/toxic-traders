@@ -47,9 +47,10 @@
 }
 
 .accordion__content-wrapper {
-  transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
-  background-color: var(--white);
-  border-radius: 10px;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease,
+    margin-top 0.3s ease;
   opacity: 0;
   max-height: 0;
   pointer-events: none;
@@ -60,6 +61,7 @@
     border-radius: unset;
 
     .accordion__content {
+      background-color: transparent !important;
       row-gap: 12px;
       padding: 0;
     }
@@ -71,4 +73,6 @@
   flex-direction: column;
   row-gap: 8px;
   padding: 20px;
+  background-color: var(--white);
+  border-radius: 10px;
 }
