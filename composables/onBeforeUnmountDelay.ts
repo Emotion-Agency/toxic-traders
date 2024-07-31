@@ -1,4 +1,4 @@
-import { delayPromise } from '@emotionagency/utils'
+import { delayPromise } from '~/utils/ea'
 
 type TFunc = (...args: any) => any
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resize } from '@emotionagency/utils'
+import { resize } from '~/utils/ea'
 
 // let navbarPos
 const isDarkMode = ref(false)

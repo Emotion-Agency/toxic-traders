@@ -1,4 +1,4 @@
-import { raf } from '@emotionagency/utils'
+import { raf } from '~/utils/ea'
 
 export default class NavbarPos {
   scrollPos = 0

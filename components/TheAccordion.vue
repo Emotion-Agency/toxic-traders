@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { raf } from '@emotionagency/utils'
+import { raf } from '~/utils/ea'
 
 interface iProps {
   title: string

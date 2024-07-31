@@ -20,6 +20,9 @@
   padding-left: 0px;
   display: flex;
 
+  width: var(--w);
+  height: var(--h);
+
   &--y {
     --w: 12px;
     --h: 100%;
@@ -41,8 +44,7 @@
     align-items: center;
   }
 
-  width: var(--w);
-  height: var(--h);
+
 
   @media (min-width: $br2) {
     &:hover {

@@ -1,4 +1,4 @@
-import { clamp } from '@emotionagency/utils'
+import { clamp } from '~/utils/ea'
 import validator from '~/utils/Validation'
 
 export interface iInputData {

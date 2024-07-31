@@ -1,4 +1,4 @@
-import { resize } from '@emotionagency/utils'
+import { resize } from '~/utils/ea'
 
 function supportsOrientationChange(): boolean {
   return 'onorientationchange' in window

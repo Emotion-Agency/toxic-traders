@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { resize } from '@emotionagency/utils'
+import { resize } from '~/utils/ea'
 
 interface iProps {
   withLog?: boolean
