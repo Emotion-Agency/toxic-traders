@@ -4,6 +4,12 @@
   align-items: center;
 }
 
+.settings__btns {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
 .settings__search-input {
   max-width: 240px;
 

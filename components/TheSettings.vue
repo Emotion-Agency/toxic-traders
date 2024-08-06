@@ -62,6 +62,15 @@ const selectAllItems = () => {
   })
 }
 
+const resetAllItems = () => {
+  checkboxList.value = checkboxList.value.map(item => {
+    return {
+      ...item,
+      checked: false,
+    }
+  })
+}
+
 const onChangeCheckbox = (val: string, checked: boolean) => {
   checkboxList.value = checkboxList.value.map(item => {
     if (item.value === val) {
@@ -106,17 +115,27 @@ watch(
           <IconsSearch />
         </template>
       </TheInput>
-      <TheButton
-        tag="button"
-        button-size="small"
-        variant="outlined"
-        @click="selectAllItems"
-      >
-        Select all
-        <template #start-icon>
-          <IconsDoubleCheck />
-        </template>
-      </TheButton>
+      <div class="settings__btns">
+        <TheButton
+          tag="button"
+          button-size="small"
+          variant="outlined"
+          @click="selectAllItems"
+        >
+          Select all
+          <template #start-icon>
+            <IconsDoubleCheck />
+          </template>
+        </TheButton>
+        <TheButton
+          tag="button"
+          button-size="small"
+          variant="close"
+          @click="resetAllItems"
+        >
+          Reset all
+        </TheButton>
+      </div>
     </div>
     <div class="settings__content">
       <CheckboxInput

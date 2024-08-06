@@ -51,7 +51,7 @@ const [serverId, accountId] = (route.params.slug as string).split('-')
 const currentAccount = ref<iBrokerServerAccount>(null)
 
 const tableItems = computed(() => {
-  if (serverAccountSymbolsMT4.value.length) {
+  if (serverAccountSymbolsMT4.value?.length) {
     return serverAccountSymbolsMT4.value.map(item => {
       return {
         currency: item?.symbol,
@@ -74,7 +74,7 @@ const tableItems = computed(() => {
     })
   }
 
-  if (serverAccountSymbolsMT5.value.length) {
+  if (serverAccountSymbolsMT5.value?.length) {
     return serverAccountSymbolsMT5.value.map(item => {
       return {
         currency: item?.currency,
@@ -174,15 +174,13 @@ watch(
       isTableLoading.value = true
 
       if (serverType.value === 0) {
-        serverAccountSymbolsMT4.value = await getServerAccountSymbolsMT4(
-          +accountId
-        )
+        serverAccountSymbolsMT4.value =
+          await getServerAccountSymbolsMT4(+accountId)
       }
 
       if (serverType.value === 1) {
-        serverAccountSymbolsMT5.value = await getServerAccountSymbolsMT5(
-          +accountId
-        )
+        serverAccountSymbolsMT5.value =
+          await getServerAccountSymbolsMT5(+accountId)
       }
     } finally {
       isTableLoading.value = false

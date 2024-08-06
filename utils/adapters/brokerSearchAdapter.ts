@@ -4,7 +4,15 @@ import type {
 } from '~/types/broker/broker'
 
 const getServerType = (serverType: string) => {
-  return serverType === 'MT4' ? 0 : 1
+  if (serverType === 'MT4') {
+    return 0
+  }
+
+  if (serverType === 'MT5') {
+    return 1
+  }
+
+  return -1
 }
 
 export const brokerSearchAdapter = (
