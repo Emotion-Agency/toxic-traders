@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import type { iBrokerServerAccountOrder } from '~/types/broker/brokerServer'
+import type { iBrokerServerAccountOrder } from '~/types/broker/brokerServerAccountOrders'
 
 interface iProps {
-  accountOrders: iBrokerServerAccountOrder[]
+  accountId: number
 }
 
 const props = defineProps<iProps>()
 
-const headingFields = ref<string[]>([])
+const accountOrders = ref<iBrokerServerAccountOrder[]>([])
 
-onMounted(() => {
-  headingFields.value = Object.keys(props.accountOrders[0] || {})
+const { getServerAccountOrders } = useBrokerServerAccountOrders()
+
+const headerFields = computed(() => {
+  return Object.keys(accountOrders.value[0] ?? {})
+})
+
+onMounted(async () => {
+  accountOrders.value = await getServerAccountOrders(props.accountId)
 })
 </script>
 
@@ -20,9 +26,9 @@ onMounted(() => {
       <TableHead>
         <TableRow>
           <TableCell
-            v-for="(headerItem, idx) in headingFields"
+            v-for="(headerItem, idx) in headerFields"
             :key="idx"
-            :item="headerItem"
+            :item="formatNameToNormalCase(headerItem)"
             :class="`table-cell--${idx}`"
           />
         </TableRow>
@@ -32,7 +38,9 @@ onMounted(() => {
           <TableCell
             v-for="(item, id, index) in order"
             :key="id"
-            :item="item"
+            :item="
+              id === 'openTime' ? formatDateWithTime(item.toString()) : item
+            "
             :class="[`table-cell--${index}`]"
           />
         </TableRow>

@@ -76,14 +76,6 @@ export interface iBrokerServerAccountSymbolMT4 {
   newsSpread: number
 }
 
-export interface iBrokerServerAccountOrder {
-  login: string
-  openTime: string
-  ticket: number
-  type: number
-  comment: string
-}
-
 export interface iBrokerServerAccountLoginHistory {
   login: string
   password: string
@@ -98,7 +90,6 @@ export interface iBrokerServerAccount {
   brokerLeverage: number
   brokerServerTimeZone: number
   brokerServerAccountLoginHistory: iBrokerServerAccountLoginHistory[]
-  brokerServerAccountOrders: iBrokerServerAccountOrder[]
   brokerServerAccountSymbolsMT5: iBrokerServerAccountSymbolMT5[]
   brokerServerAccountSymbolsMT4: iBrokerServerAccountSymbolMT4[]
   serverId: number

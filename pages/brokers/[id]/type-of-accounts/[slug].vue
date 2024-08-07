@@ -30,7 +30,7 @@ const {
 } = usePagination()
 
 const notesValue = ref('')
-const notesInput = ref({
+const notesInput = reactive({
   required: false,
   id: 'type-of-account-notes',
   name: 'Notes',
@@ -322,9 +322,7 @@ onMounted(async () => {
       title="OrderId List"
       @close="closeOrderIdList"
     >
-      <BrokerOrderListTable
-        :account-orders="currentAccount?.brokerServerAccountOrders || []"
-      />
+      <BrokerOrderListTable :account-id="+accountId" />
     </SlidingModal>
   </main>
 </template>
