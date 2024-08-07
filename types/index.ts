@@ -28,6 +28,15 @@ export interface iSelectInput {
   value: string
 }
 
+export interface iTagsInput {
+  text: string
+  icon?: {
+    url: string
+    alt?: string
+  }
+  id?: number
+}
+
 export interface iAccountModalItem {
   required?: boolean
   id?: string

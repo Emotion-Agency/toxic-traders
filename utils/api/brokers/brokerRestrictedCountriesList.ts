@@ -4,7 +4,7 @@ import type { iRestrictedCountriesListData } from '~/types/broker/brokerRestrict
 export const getBrokerRestrictedCountriesList = async () => {
   try {
     const { data }: iRestrictedCountriesListData = await axiosInstance.get(
-      'Broker/BrokerRestrictedCountriesEnum'
+      'Enum/BrokerRestrictedCountryEnum'
     )
 
     return data

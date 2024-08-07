@@ -1,4 +1,4 @@
-const removeUnderlines = (arr: string[]) => {
+export const removeUnderlinesInArray = (arr: string[]) => {
   const arrWithoutUnderlines = arr.map(word =>
     word.replace(/^_/, '').replace(/_/g, ' ')
   )
@@ -6,4 +6,5 @@ const removeUnderlines = (arr: string[]) => {
   return arrWithoutUnderlines
 }
 
-export default removeUnderlines
+export const removeUnderlines = (item: string) =>
+  item.replace(/^_/, '').replace(/_/g, ' ')

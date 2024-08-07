@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { iTagsInput } from '~/types'
 import { getBrokerDepositMethodsList } from '~/utils/api/brokers/brokerDepositMethodsList'
 
 interface iProps {
@@ -7,43 +8,58 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const depositFullList = ref<string[]>([])
-const depositList = ref<number[]>([])
+const depositList = ref<{ id: number; text: string }[]>([])
+const selectedDepositList = ref<number[]>([])
+const depositNames = ref<string[]>([])
 const filteredDepositList = computed(() => {
-  return removeUnderlines(
-    depositList.value?.map(index => depositFullList.value[index]) || []
-  ).map(item => ({ text: item }))
+  return depositList.value
+    ?.filter(deposit => selectedDepositList.value?.includes(+deposit.id))
+    .map(item => ({
+      text: item?.text,
+      id: +item?.id,
+    }))
 })
 
 const { createDepositMethods, getDepositMethods, updateDepositMethods } =
   useBrokerDepositMethods()
 
 const getDepositList = async () => {
-  const depositData = await getDepositMethods(props.brokerId)
-  depositList.value =
-    depositData?.depositMethods?.map(item => item.depositMethod) || []
+  const { depositMethods } = await getDepositMethods(props.brokerId)
+
+  selectedDepositList.value =
+    depositMethods?.map(item => item?.depositMethod) || []
 }
 
 const selectDeposit = async (deposit: string) => {
-  const depositIndex = depositFullList.value.findIndex(el => el === deposit)
+  const currentDeposit = depositList.value?.find(item => item.text === deposit)
 
-  depositList.value.push(depositIndex)
-  await createDepositMethods(props.brokerId, depositList.value)
+  selectedDepositList.value = [
+    ...selectedDepositList.value,
+    +currentDeposit?.id,
+  ]
+
+  await createDepositMethods(props.brokerId, selectedDepositList.value)
   await getDepositList()
 }
 
-const removeDeposit = async (index: number) => {
-  depositList.value.splice(index, 1)
-  await updateDepositMethods(props.brokerId, depositList.value)
+const removeDeposit = async (item: iTagsInput) => {
+  selectedDepositList.value = selectedDepositList.value.filter(
+    depositId => depositId !== item?.id
+  )
+
+  await updateDepositMethods(props.brokerId, selectedDepositList.value)
   await getDepositList()
 }
 
 onMounted(async () => {
   const depositMethodsListRequest = await getBrokerDepositMethodsList()
 
-  depositFullList.value = removeUnderlines(
-    Object.values(depositMethodsListRequest)
-  )
+  depositList.value = Object.keys(depositMethodsListRequest).map(key => ({
+    id: Number(key),
+    text: removeUnderlines(depositMethodsListRequest[key]),
+  }))
+
+  depositNames.value = depositList.value.map(deposit => deposit?.text)
 
   await getDepositList()
 })
@@ -54,7 +70,7 @@ onMounted(async () => {
     <TheAccordion class="deposit-methods__accordion" title="Method of deposit">
       <TagsInput
         id="deposit-methods"
-        :dropdown-list="depositFullList"
+        :dropdown-list="depositNames"
         :badges-list="filteredDepositList"
         badge-variant="fill"
         @select="selectDeposit"
@@ -63,4 +79,3 @@ onMounted(async () => {
     </TheAccordion>
   </div>
 </template>
-~/assets/api/brokers/brokerDepositMethodsList~/utils/api/brokers/brokerDepositMethodsList

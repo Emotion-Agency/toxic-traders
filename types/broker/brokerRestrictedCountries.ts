@@ -10,6 +10,6 @@ export interface iRestrictedCountriesData {
 
 export interface iRestrictedCountriesListData {
   data: {
-    restrictedCountries: string[]
+    [key: number]: string
   }
 }

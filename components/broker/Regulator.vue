@@ -85,7 +85,9 @@ const onSave = async () => {
 onMounted(async () => {
   const brokerRegulatorData = await getBrokerRegulatorNames()
 
-  regulatorNames.value = removeUnderlines(Object.values(brokerRegulatorData))
+  regulatorNames.value = removeUnderlinesInArray(
+    Object.values(brokerRegulatorData)
+  )
   const regulatorData = await getRegulator(props.brokerId)
   regulatorItems.value = regulatorData || []
 })
@@ -192,4 +194,3 @@ onMounted(async () => {
     </TheModal>
   </div>
 </template>
-~/assets/api/brokers/brokerRegulatorNames~/utils/api/brokers/brokerRegulatorNames

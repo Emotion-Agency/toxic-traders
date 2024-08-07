@@ -2,7 +2,7 @@
 import { getBrokerRestrictedCountriesList } from '~/utils/api/brokers/brokerRestrictedCountriesList'
 import { getCountriesFlag } from '~/utils/api/countries/getCountries'
 import type { iCountries } from '~/types/countries/countries'
-import getCountriesFullNames from '~/utils/getFullCountriesNames'
+import type { iTagsInput } from '~/types'
 
 interface iProps {
   brokerId: number
@@ -10,25 +10,24 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const countriesFullNames = ref<iCountries[]>([])
-const restrictedCountriesList = ref<string[]>([])
+const countriesFullNames = ref<string[]>([])
+const restrictedCountriesList = ref<iCountries[]>([])
 const selectedCountries = ref<number[]>([])
 
 const filteredSelectedCountries = computed(() => {
-  return (
-    selectedCountries.value?.map(index => countriesFullNames.value[index]) || []
-  ).map(item => ({
-    text: item?.countryFullName,
-    icon: {
-      url: item?.countryFlag.url,
-      alt: item?.countryFlag.alt,
-    },
-  }))
+  return restrictedCountriesList.value
+    ?.filter(fullCountryObject =>
+      selectedCountries.value.includes(+fullCountryObject?.id)
+    )
+    .map(item => ({
+      text: item?.countryFullName,
+      icon: {
+        url: item?.countryFlag.url,
+        alt: item?.countryFlag.alt,
+      },
+      id: +item?.id,
+    }))
 })
-
-// watch(filteredSelectedCountries, () => {
-//   console.log(filteredSelectedCountries.value)
-// })
 
 const {
   createRestrictedCountries,
@@ -40,41 +39,54 @@ const getCountriesList = async () => {
   const countriesData = await getRestrictedCountries(props.brokerId)
 
   selectedCountries.value =
-    countriesData?.restrictedCountries?.map(item => item.countryCode) || []
+    countriesData?.restrictedCountries?.map(item => item?.countryCode) || []
 }
 
 const selectCountries = async (country: string) => {
-  const countriesIndex = restrictedCountriesList.value.findIndex(
-    el => el === country
+  const currentCountry = restrictedCountriesList.value?.find(
+    item => item.countryFullName === country
   )
 
-  selectedCountries.value = [...selectedCountries.value, countriesIndex]
+  selectedCountries.value = [...selectedCountries.value, +currentCountry?.id]
+
   await createRestrictedCountries(props.brokerId, selectedCountries.value)
 
   await getCountriesList()
 }
 
-const removeCountries = async (index: number) => {
-  selectedCountries.value.splice(index, 1)
+const removeCountries = async (item: iTagsInput) => {
+  selectedCountries.value = selectedCountries.value.filter(
+    countryId => countryId !== item?.id
+  )
+
   await updateRestrictedCountries(props.brokerId, selectedCountries.value)
 
   await getCountriesList()
 }
 
 onMounted(async () => {
-  const countriesFlags = await getCountriesFlag()
-
-  const { restrictedCountries } = await getBrokerRestrictedCountriesList()
-
-  restrictedCountriesList.value = restrictedCountries // ['USA', 'UK', 'Canada']
-
-  countriesFullNames.value = getCountriesFullNames(
-    restrictedCountriesList.value,
-    countriesFlags
+  const countriesApi = await getCountriesFlag()
+  const countries = await getBrokerRestrictedCountriesList()
+  const countryMap = new Map(
+    countriesApi.map(country => [country.countryShortName, country])
   )
 
-  restrictedCountriesList.value = countriesFullNames.value.map(
-    item => item.countryFullName
+  restrictedCountriesList.value = Object.entries(countries).reduce(
+    (accumulator, [id, shortName]) => {
+      if (shortName === countryMap?.get(shortName)?.countryShortName) {
+        accumulator.push({
+          ...countryMap?.get(shortName),
+          id,
+        })
+      }
+
+      return accumulator
+    },
+    []
+  )
+
+  countriesFullNames.value = restrictedCountriesList.value.map(
+    country => country?.countryFullName
   )
 
   await getCountriesList()
@@ -89,7 +101,7 @@ onMounted(async () => {
     >
       <TagsInput
         id="restricted-countries"
-        :dropdown-list="restrictedCountriesList"
+        :dropdown-list="countriesFullNames"
         :badges-list="filteredSelectedCountries"
         badge-variant="outlined"
         @select="selectCountries"
@@ -98,4 +110,3 @@ onMounted(async () => {
     </TheAccordion>
   </div>
 </template>
-~/assets/api/brokers/brokerRestrictedCountriesList~/assets/api/countries/getCountries~/utils/api/brokers/brokerRestrictedCountriesList~/utils/api/countries/getCountries

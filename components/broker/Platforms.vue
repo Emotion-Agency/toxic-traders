@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { iTagsInput } from '~/types'
 import { getBrokerPlatformsList } from '~/utils/api/brokers/brokerPlatformsList'
 
 interface iProps {
@@ -7,42 +8,54 @@ interface iProps {
 
 const props = defineProps<iProps>()
 
-const platformsFullList = ref<string[]>([])
-const platformsList = ref<number[]>([])
+const platformsList = ref<{ id: number; text: string }[]>([])
+const selectedPlatforms = ref<number[]>([])
+const platformsNames = ref<string[]>([])
 const filteredPlatformsList = computed(() => {
-  return removeUnderlines(
-    platformsList.value?.map(index => platformsFullList.value[index]) || []
-  ).map(item => ({ text: item }))
+  return platformsList.value
+    ?.filter(deposit => selectedPlatforms.value?.includes(+deposit.id))
+    .map(item => ({
+      text: item?.text,
+      id: +item?.id,
+    }))
 })
 
 const { createPlatform, getPlatform, updatePlatform } = useBrokerPlatforms()
 
 const getPlatformList = async () => {
-  const platformsData = await getPlatform(props.brokerId)
-  platformsList.value =
-    platformsData?.platforms?.map(item => item.platform) || []
+  const { platforms } = await getPlatform(props.brokerId)
+  selectedPlatforms.value = platforms?.map(item => item?.platform) || []
 }
 
 const selectPlatform = async (platform: string) => {
-  const platformIndex = platformsFullList.value.findIndex(el => el === platform)
+  const currentPlatform = platformsList.value?.find(
+    item => item.text === platform
+  )
 
-  platformsList.value.push(platformIndex)
-  await createPlatform(props.brokerId, platformsList.value)
+  selectedPlatforms.value = [...selectedPlatforms.value, +currentPlatform?.id]
 
+  await createPlatform(props.brokerId, selectedPlatforms.value)
   await getPlatformList()
 }
 
-const removePlatform = async (index: number) => {
-  platformsList.value.splice(index, 1)
-  await updatePlatform(props.brokerId, platformsList.value)
+const removePlatform = async (item: iTagsInput) => {
+  selectedPlatforms.value = selectedPlatforms.value.filter(
+    platformId => platformId !== item?.id
+  )
 
+  await updatePlatform(props.brokerId, selectedPlatforms.value)
   await getPlatformList()
 }
 
 onMounted(async () => {
-  const data = await getBrokerPlatformsList()
+  const platformsListRequest = await getBrokerPlatformsList()
 
-  platformsFullList.value = removeUnderlines(Object.values(data))
+  platformsList.value = Object.keys(platformsListRequest).map(key => ({
+    id: Number(key),
+    text: removeUnderlines(platformsListRequest[key]),
+  }))
+
+  platformsNames.value = platformsList.value.map(deposit => deposit?.text)
 
   await getPlatformList()
 })
@@ -53,7 +66,7 @@ onMounted(async () => {
     <TheAccordion class="platforms__accordion" title="Platforms">
       <TagsInput
         id="platforms"
-        :dropdown-list="platformsFullList"
+        :dropdown-list="platformsNames"
         :badges-list="filteredPlatformsList"
         badge-variant="fill"
         @select="selectPlatform"
@@ -62,4 +75,3 @@ onMounted(async () => {
     </TheAccordion>
   </div>
 </template>
-~/assets/api/brokers/brokerPlatformsList~/utils/api/brokers/brokerPlatformsList

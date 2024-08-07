@@ -1,14 +1,10 @@
 <script setup lang="ts">
+import type { iTagsInput } from '~/types'
+
 interface iProps {
   id: string
   dropdownList: string[]
-  badgesList?: {
-    text: string
-    icon?: {
-      url: string
-      alt?: string
-    }
-  }[]
+  badgesList?: iTagsInput[]
   badgeVariant: 'fill' | 'outlined'
 }
 
@@ -59,8 +55,8 @@ const selectDropdownItem = (item: string) => {
   inputValue.value = ''
 }
 
-const removeBadge = (idx: number) => {
-  emit('remove', idx)
+const removeBadge = (badge: iTagsInput) => {
+  emit('remove', badge)
 }
 
 const outsideClick = (event: Event) => {
@@ -93,9 +89,13 @@ onBeforeUnmount(() => {
 })
 
 const onBackSpace = () => {
-  if (inputValue.value.length || !props.badgesList.length) return
+  if (inputValue.value.length || !props.badgesList?.length) return
 
-  removeBadge(props.badgesList.length - 1)
+  const lastBadge = props.badgesList[props.badgesList.length - 1]
+
+  if (lastBadge) {
+    removeBadge(lastBadge)
+  }
 }
 </script>
 
@@ -112,7 +112,7 @@ const onBackSpace = () => {
               :variant="badgeVariant"
               :is-button="true"
               :text="badge?.text"
-              @click="removeBadge(idx)"
+              @click="removeBadge(badge)"
             >
               <template #icon>
                 <img

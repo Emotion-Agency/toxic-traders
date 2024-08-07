@@ -5,4 +5,5 @@ export interface iCountries {
     url: string
     alt: string
   }
+  id?: number
 }

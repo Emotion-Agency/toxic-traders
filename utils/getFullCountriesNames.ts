@@ -4,20 +4,15 @@ const getCountriesFullNames = (
   shortCountriesNames: string[],
   countries: iCountries[]
 ) => {
-  const matchingCountries = countries.filter(country =>
-    shortCountriesNames.includes(country.countryShortName)
+  const countryMap = new Map(
+    countries.map(country => [country.countryShortName, country])
   )
 
-  return matchingCountries.map(country => {
-    return {
-      countryFullName: country.countryFullName,
-      countryShortName: country.countryShortName,
-      countryFlag: {
-        url: country.countryFlag.url,
-        alt: country.countryFlag.alt,
-      },
-    }
-  })
+  const matchingCountries = shortCountriesNames
+    .map(shortName => countryMap.get(shortName))
+    .filter(Boolean) as iCountries[]
+
+  return matchingCountries
 }
 
 export default getCountriesFullNames
