@@ -255,6 +255,18 @@ const getSelectedItem = (_, opts: iSelectInput) => {
   })
 }
 
+const resetSelectedItem = (input: iSearchInput) => {
+  searchItems.value = searchItems.value.map(item => {
+    if (item.id === input.id) {
+      item = {
+        ...item,
+        value: '',
+      }
+    }
+    return item
+  })
+}
+
 const resetSearch = () => {
   searchItems.value = initialSearchItems
 }
@@ -388,7 +400,9 @@ onMounted(async () => {
               :title="input.title"
               :placeholder="input.placeholder"
               :value="input.value"
+              :is-reset="!!input.value.length"
               @select="getSelectedItem"
+              @reset="resetSelectedItem(input)"
             />
             <TheInput
               v-else

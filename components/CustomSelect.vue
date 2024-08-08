@@ -9,6 +9,7 @@ interface iProps {
   id?: string
   name?: string
   value?: string
+  isReset?: boolean
 }
 
 const props = defineProps<iProps>()
@@ -24,7 +25,7 @@ watch(
   }
 )
 
-const emit = defineEmits(['select', 'search'])
+const emit = defineEmits(['select', 'search', 'reset'])
 
 const toggleList = () => {
   isOpened.value = !isOpened.value
@@ -34,6 +35,10 @@ const closeList = (option = '') => {
   isOpened.value = false
   selectedItem.value = option
   emit('select', option, { id: props.id, value: option })
+}
+
+const reset = () => {
+  emit('reset')
 }
 
 const outsideClick = event => {
@@ -70,6 +75,9 @@ onUnmounted(() => {
       </p>
 
       <div class="custom-select-icon">
+        <button v-if="isReset" class="custom-select__reset" @click.stop="reset">
+          <IconsClose />
+        </button>
         <slot name="select-icon" />
         <IconsSelectionArrowDown class="custom-select__arrow" />
       </div>

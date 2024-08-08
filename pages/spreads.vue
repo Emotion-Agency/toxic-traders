@@ -223,19 +223,11 @@ onMounted(async () => {
                   :placeholder="symbolSelect.placeholder"
                   :title="symbolSelect.title"
                   :value="selectedSymbol"
+                  :is-reset="!!selectedSymbol"
                   @search="searchSymbolsName"
                   @select="selectSymbolsName"
-                >
-                  <template #select-icon>
-                    <button
-                      v-if="selectedSymbol"
-                      class="spreads__select-item-btn"
-                      @click.stop="resetSelectedSymbol"
-                    >
-                      <IconsClose />
-                    </button>
-                  </template>
-                </CustomSelect>
+                  @reset="resetSelectedSymbol"
+                />
               </li>
               <li class="spreads__select-item">
                 <TheInput
