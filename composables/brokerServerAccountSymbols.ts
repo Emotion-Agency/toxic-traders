@@ -8,6 +8,7 @@ import {
   getBrokerServerAccountSymbolsSpreadsSchedule,
 } from '~/utils/api/brokers/brokerServerAccountSymbols'
 import type {
+  iBrokerServerAccountSymbolsParams,
   iBrokerServerAccountSymbolsSpreadsAllParams,
   iBrokerServerAccountSymbolsSpreadsCurrent,
   iBrokerServerAccountSymbolsSpreadsParams,
@@ -99,11 +100,17 @@ export const useBrokerServerAccountSymbols = () => {
     }
   }
 
-  const getServerAccountSymbolsMT4 = async (brokerServerAccountId: number) => {
+  const getServerAccountSymbolsMT4 = async (
+    params: iBrokerServerAccountSymbolsParams
+  ) => {
     try {
-      const data = await getBrokerServerAccountSymbolsMT4(brokerServerAccountId)
+      const { brokerServerAccountSymbolMt4, totalCount } =
+        await getBrokerServerAccountSymbolsMT4(params)
 
-      return data
+      return {
+        brokerServerAccountSymbolMt4,
+        totalCount,
+      }
     } catch (error) {
       console.error('Error fetching server account symbols MT4:', error)
       addToast({
@@ -113,11 +120,17 @@ export const useBrokerServerAccountSymbols = () => {
     }
   }
 
-  const getServerAccountSymbolsMT5 = async (brokerServerAccountId: number) => {
+  const getServerAccountSymbolsMT5 = async (
+    params: iBrokerServerAccountSymbolsParams
+  ) => {
     try {
-      const data = await getBrokerServerAccountSymbolsMT5(brokerServerAccountId)
+      const { brokerServerAccountSymbolMt5, totalCount } =
+        await getBrokerServerAccountSymbolsMT5(params)
 
-      return data
+      return {
+        brokerServerAccountSymbolMt5,
+        totalCount,
+      }
     } catch (error) {
       console.error('Error fetching server account symbols MT5:', error)
       addToast({

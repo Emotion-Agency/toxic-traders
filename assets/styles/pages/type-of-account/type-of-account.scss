@@ -66,3 +66,14 @@
 .type-of-account__pagination {
   margin-top: 46px;
 }
+
+.type-of-account__loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.type-of-account__error {
+  @include text-big;
+}

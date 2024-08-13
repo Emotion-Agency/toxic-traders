@@ -1,4 +1,5 @@
 export interface iBrokerServerAccountSymbolMT5CommissionsInfoCommission {
+  id: number
   unitType: number
   unitMode: number
   unitValue: number
@@ -10,6 +11,7 @@ export interface iBrokerServerAccountSymbolMT5CommissionsInfoCommission {
 }
 
 export interface iBrokerServerAccountSymbolMT5CommissionsInfo {
+  id: number
   instantCommissionType: number
   commissionPeriod: number
   commissionType: number
@@ -142,12 +144,26 @@ export interface iBrokerServerAccountSymbolsSpreadsCurrent {
   sortOrder: number
 }
 
+export interface iBrokerServerAccountSymbolsParams {
+  brokerServerAccountId: number
+  page: number
+  pageSize: number
+  sortBy: string
+  sortOrder: number
+}
+
 export interface iBrokerServerAccountSymbolsMT5Data {
-  data: iBrokerServerAccountSymbolsMT5[]
+  data: {
+    brokerServerAccountSymbolMt5: iBrokerServerAccountSymbolsMT5[]
+    totalCount: number
+  }
 }
 
 export interface iBrokerServerAccountSymbolsMT4Data {
-  data: iBrokerServerAccountSymbolsMT4[]
+  data: {
+    brokerServerAccountSymbolMt4: iBrokerServerAccountSymbolsMT4[]
+    totalCount: number
+  }
 }
 
 export interface iBrokerServerAccountSymbolsSpreadsData {

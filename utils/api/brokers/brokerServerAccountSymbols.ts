@@ -3,6 +3,7 @@ import type {
   iBrokerServerAccountSymbolsMT4Data,
   iBrokerServerAccountSymbolsMT5Data,
   iBrokerServerAccountSymbolsNamesData,
+  iBrokerServerAccountSymbolsParams,
   iBrokerServerAccountSymbolsSpreadsAllParams,
   iBrokerServerAccountSymbolsSpreadsCurrent,
   iBrokerServerAccountSymbolsSpreadsData,
@@ -89,13 +90,17 @@ export const getBrokerServerAccountSymbolsSpreadsCurrent = async (
 }
 
 export const getBrokerServerAccountSymbolsMT4 = async (
-  brokerServerAccountId: number
+  params: iBrokerServerAccountSymbolsParams
 ) => {
   try {
     const { data }: iBrokerServerAccountSymbolsMT4Data =
       await axiosInstance.get(`BrokerServerAccountSymbols/symbols/mt4`, {
         params: {
-          BrokerServerAccountId: brokerServerAccountId,
+          BrokerServerAccountId: params?.brokerServerAccountId,
+          page: params?.page,
+          pageSize: params?.pageSize,
+          sortBy: params?.sortBy,
+          sortOrder: params?.sortOrder,
         },
       })
 
@@ -109,13 +114,17 @@ export const getBrokerServerAccountSymbolsMT4 = async (
 }
 
 export const getBrokerServerAccountSymbolsMT5 = async (
-  brokerServerAccountId: number
+  params: iBrokerServerAccountSymbolsParams
 ) => {
   try {
     const { data }: iBrokerServerAccountSymbolsMT5Data =
       await axiosInstance.get(`BrokerServerAccountSymbols/symbols/mt5`, {
         params: {
-          BrokerServerAccountId: brokerServerAccountId,
+          BrokerServerAccountId: params?.brokerServerAccountId,
+          page: params?.page,
+          pageSize: params?.pageSize,
+          sortBy: params?.sortBy,
+          sortOrder: params?.sortOrder,
         },
       })
 

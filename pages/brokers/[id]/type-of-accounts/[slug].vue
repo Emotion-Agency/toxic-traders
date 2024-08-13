@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { iInput } from '~/types'
 import type { iBrokerServerAccount } from '~/types/broker/brokerServer'
+import type { iBrokerServerAccountOrder } from '~/types/broker/brokerServerAccountOrders'
 import type {
   iBrokerServerAccountSymbolsMT4,
   iBrokerServerAccountSymbolsMT5,
@@ -16,6 +17,7 @@ const {
   updateBrokerAccountNotes,
   deleteBrokerAccountNotes,
 } = useBrokerServerAccountNotes()
+const { getServerAccountOrders } = useBrokerServerAccountOrders()
 
 const {
   currentPage,
@@ -41,11 +43,13 @@ const notesInput = reactive({
 const isSettingsOpened = ref(false)
 const isOrderIdListOpened = ref(false)
 const serverType = ref<number>(null)
-
+const accountOrders = ref<iBrokerServerAccountOrder[]>([])
 const serverAccountSymbolsMT4 = ref<iBrokerServerAccountSymbolsMT4[]>([])
 const serverAccountSymbolsMT5 = ref<iBrokerServerAccountSymbolsMT5[]>([])
-const isTableLoading = ref(true)
+const isLoading = ref(true)
 const filteredTableItems = ref([])
+const sortBy = ref('currency')
+const sortOrder = ref<1 | 2>(1)
 
 const [serverId, accountId] = (route.params.slug as string).split('-')
 const currentAccount = ref<iBrokerServerAccount>(null)
@@ -87,9 +91,12 @@ const tableItems = computed(() => {
         spread: item?.spread,
         newsSpread: item?.newsSpread,
         tickSize: item?.tickSize,
-        commision:
-          item?.brokerServerAccountSymbolMT5CommissionsInfo[0]
-            ?.commissionPeriod,
+        commision: Array.isArray(
+          item?.brokerServerAccountSymbolMT5CommissionsInfo
+        )
+          ? item?.brokerServerAccountSymbolMT5CommissionsInfo[0]
+              ?.commissionPeriod
+          : 'N/A',
         id: item?.id,
         lotsStep: item?.lotsStep,
         tradeMode: item?.tradeMode,
@@ -157,42 +164,60 @@ const changeTableColumns = (properties: string[]) => {
   })
 }
 
-const onSorted = (sortState: ISortState) => {
-  filteredTableItems.value = filteredTableItems.value?.sort((a, b) => {
-    if (sortState.sortOrder === 1) {
-      return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
-    } else {
-      return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
-    }
-  })
+const onSorted = async (sortState: ISortState) => {
+  sortBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
+  sortOrder.value = sortState.sortOrder
+
+  await fetchServerAccountSymbols()
+}
+
+const fetchServerAccountSymbols = async () => {
+  if (serverType.value === 0) {
+    const { brokerServerAccountSymbolMt4, totalCount } =
+      await getServerAccountSymbolsMT4({
+        brokerServerAccountId: +accountId,
+        page: currentPage.value - 1,
+        pageSize: itemsCount.value,
+        sortBy: sortBy.value,
+        sortOrder: sortOrder.value || 0,
+      })
+
+    serverAccountSymbolsMT4.value = brokerServerAccountSymbolMt4
+    totalCountPages.value = totalCount
+  }
+
+  if (serverType.value === 1) {
+    const { brokerServerAccountSymbolMt5, totalCount } =
+      await getServerAccountSymbolsMT5({
+        brokerServerAccountId: 1,
+        page: currentPage.value - 1,
+        pageSize: itemsCount.value,
+        sortBy: sortBy.value,
+        sortOrder: sortOrder.value || 0,
+      })
+
+    serverAccountSymbolsMT5.value = brokerServerAccountSymbolMt5
+    totalCountPages.value = totalCount
+  }
 }
 
 watch(
-  () => serverType.value,
+  () => [serverType.value, currentPage.value, itemsCount.value],
   async () => {
     try {
-      isTableLoading.value = true
+      isLoading.value = true
 
-      if (serverType.value === 0) {
-        serverAccountSymbolsMT4.value =
-          await getServerAccountSymbolsMT4(+accountId)
-      }
-
-      if (serverType.value === 1) {
-        serverAccountSymbolsMT5.value =
-          await getServerAccountSymbolsMT5(+accountId)
-      }
+      await fetchServerAccountSymbols()
     } finally {
-      isTableLoading.value = false
+      isLoading.value = false
     }
-
-    totalCountPages.value = tableItems.value.length
   }
 )
 
 onMounted(async () => {
   const { brokerServers } = await getCurrentBrokerServer(+serverId)
   const notesRequestValue = await getBrokerAccountNotes(+accountId)
+  accountOrders.value = await getServerAccountOrders(+accountId)
 
   notesValue.value = notesRequestValue || ''
 
@@ -226,7 +251,9 @@ onMounted(async () => {
               </li>
               <li class="type-of-account__info-item">
                 <p class="type-of-account__info-title">OrderId Digits:</p>
-                <p class="type-of-account__info-text">8</p>
+                <p class="type-of-account__info-text">
+                  {{ accountOrders?.length || 'N/A' }}
+                </p>
               </li>
             </ul>
             <TheButton
@@ -276,7 +303,7 @@ onMounted(async () => {
         </div>
         <div class="type-of-account__bottom-block">
           <div
-            v-if="!isTableLoading"
+            v-if="tableItems.length"
             class="type-of-account__bottom-table-wrapper"
           >
             <BrokerTypeOfAccountsTable
@@ -284,9 +311,10 @@ onMounted(async () => {
               :table-items="filteredTableItems"
               :server-type="serverType"
               :timezone="getGMTOffset(currentAccount?.brokerServerTimeZone)"
+              :default-sort-by="sortBy"
               @sort="onSorted"
             />
-            <!-- <ThePagination
+            <ThePagination
               class="type-of-account__pagination"
               :total-pages="totalCountPages"
               :current-page="currentPage"
@@ -300,12 +328,15 @@ onMounted(async () => {
               @selected-item="onChangeCount"
               @on-blur-value="onInputBlur"
               @on-change-value="onInputChange"
-            /> -->
+            />
           </div>
-          <UiLoader v-else-if="isTableLoading" />
-          <p v-else class="type-of-account__error">
+          <p
+            v-if="!isLoading && !tableItems.length"
+            class="type-of-account__error"
+          >
             Type of account table data is not found
           </p>
+          <UiLoader v-if="isLoading" class="type-of-account__loader" />
         </div>
       </div>
     </section>
