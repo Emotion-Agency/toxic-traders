@@ -46,6 +46,7 @@ const notSortableFields = [
   'Broker Platforms',
   'Regulator Name',
   'Restricted Countries',
+  'Broker Company Name Statistic',
 ]
 
 const isSortable = (field: string) => {
