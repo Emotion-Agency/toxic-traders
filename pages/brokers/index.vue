@@ -126,6 +126,9 @@ const onSearch = async (data: iSearchInput[]) => {
 
 const onSort = async (sortState: ISortState) => {
   sortedBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
+
+  if (sortedBy.value === 'brokercategories') sortedBy.value = 'brokercategory'
+
   sortedOrder.value = sortState.sortOrder
 
   await getBrokersRequest()
