@@ -63,3 +63,18 @@ export const getEndDateTime = ({
   const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
   return endDate.toISOString()
 }
+
+export const minutesToGMT = (input: number | string): string => {
+  if (input === 'N/A') {
+    return 'N/A'
+  }
+
+  const minutes = typeof input === 'string' ? parseFloat(input) : input
+  const hours = minutes / 60
+
+  const sign = hours >= 0 ? '+' : '-'
+  const absHours = Math.abs(Math.floor(hours))
+  const offset = `GMT${sign}${absHours}`
+
+  return offset
+}

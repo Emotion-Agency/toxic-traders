@@ -30,6 +30,16 @@ const emit = defineEmits(['sort'])
 //   return props.brokers.map(broker => adapter(broker))
 // })
 
+const updatedBrokers = computed(() => {
+  return props.brokers.map(broker => {
+    return {
+      ...broker,
+      brokerLeverage: minutesToGMT(broker?.brokerLeverage),
+      brokerServerTimezone: minutesToGMT(broker?.brokerServerTimezone),
+    }
+  })
+})
+
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
 })
@@ -72,7 +82,7 @@ const isSortable = (field: string) => {
     </TableHead>
     <TableBody>
       <TableRow
-        v-for="(broker, idx) in brokers"
+        v-for="(broker, idx) in updatedBrokers"
         :key="idx"
         :link="{
           url: `/brokers/${broker.id}`,
