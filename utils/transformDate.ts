@@ -1,7 +1,7 @@
 interface iDateTimeParams {
   startDateTime: string
   seconds: number
-  timezone: string
+  timezone: string | number
 }
 
 export const formatDate = (input: string): string => {
@@ -59,22 +59,22 @@ export const getEndDateTime = ({
   timezone,
 }: iDateTimeParams): string => {
   const startDate = new Date(startDateTime)
-  const targetOffset = parseInt(timezone.split('GMT')[1]) * 60 * 60 * 1000
-  const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
-  return endDate.toISOString()
-}
 
-export const minutesToGMT = (input: number | string): string => {
-  if (input === 'N/A') {
-    return 'N/A'
+  let targetOffset: number
+
+  if (typeof timezone === 'string') {
+    const timezoneMatch = timezone.match(/GMT([+-]\d+)/)
+    if (timezoneMatch) {
+      targetOffset = parseInt(timezoneMatch[1]) * 60 * 60 * 1000
+    } else {
+      throw new Error('Invalid timezone format')
+    }
+  } else if (typeof timezone === 'number') {
+    targetOffset = timezone * 60 * 1000
+  } else {
+    throw new Error('Timezone must be a number or a string in GMT format')
   }
 
-  const minutes = typeof input === 'string' ? parseFloat(input) : input
-  const hours = minutes / 60
-
-  const sign = hours >= 0 ? '+' : '-'
-  const absHours = Math.abs(Math.floor(hours))
-  const offset = `GMT${sign}${absHours}`
-
-  return offset
+  const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
+  return endDate.toISOString()
 }

@@ -7,7 +7,7 @@ interface iProps {
   headerFields: string[]
   defaultSortBy?: string
   serverType?: number
-  timezone?: string
+  timezone?: string | number
 }
 
 const props = defineProps<iProps>()
