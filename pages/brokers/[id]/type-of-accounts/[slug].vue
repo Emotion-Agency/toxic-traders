@@ -252,7 +252,7 @@ onMounted(async () => {
               <li class="type-of-account__info-item">
                 <p class="type-of-account__info-title">OrderId Digits:</p>
                 <p class="type-of-account__info-text">
-                  {{ accountOrders?.length || 'N/A' }}
+                  {{ accountOrders[0]?.ticket?.toString().length || 'N/A' }}
                 </p>
               </li>
             </ul>
