@@ -34,7 +34,6 @@ const updatedBrokers = computed(() => {
   return props.brokers.map(broker => {
     return {
       ...broker,
-      brokerLeverage: minutesToGMT(broker?.brokerLeverage),
       brokerServerTimezone: minutesToGMT(broker?.brokerServerTimezone),
     }
   })
