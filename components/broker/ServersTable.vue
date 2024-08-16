@@ -14,11 +14,15 @@ const showState = ref<'more' | 'less'>('more')
 const filteredServersList = ref([])
 
 const serversConvertedList = computed(() => {
-  return serversList.value.map(item => {
-    const type0 = item.serverType === 0 ? item : null
-    const type1 = item.serverType === 1 ? item : null
-    return [type0, type1]
-  })
+  const mt4List = serversList.value.filter(item => item.serverType === 0)
+  const mt5List = serversList.value.filter(item => item.serverType === 1)
+
+  const maxLength = Math.max(mt4List.length, mt5List.length)
+
+  return Array.from({ length: maxLength }, (_, index) => [
+    mt4List[index] || null,
+    mt5List[index] || null,
+  ])
 })
 
 const serversModalOpen = (index: number) => {
@@ -60,23 +64,6 @@ onMounted(async () => {
 
   showLessServers()
 })
-
-const onSorted = () => {
-  serversList.value = serversList.value.sort((a, b) => {
-    if (sortState.value.sortOrder === 1) {
-      return a[sortState.value.sortBy] > b[sortState.value.sortBy] ? 1 : -1
-    } else {
-      return a[sortState.value.sortBy] < b[sortState.value.sortBy] ? 1 : -1
-    }
-  })
-}
-
-const { sortState, onSort } = useSort(
-  {
-    sortBy: 'Servers MT4',
-  },
-  onSorted
-)
 </script>
 
 <template>
@@ -89,10 +76,7 @@ const { sortState, onSort } = useSort(
             :key="idx"
             :item="headerItem"
             :class="`table-cell--${idx}`"
-            :is-sort="true"
-            :sort-order="sortState.sortOrder"
-            :is-active="sortState.sortBy === headerItem"
-            @sort="onSort"
+            :is-sort="false"
           />
         </TableRow>
       </TableHead>
@@ -101,7 +85,7 @@ const { sortState, onSort } = useSort(
           <TableCell
             v-for="(cell, i) in item"
             :key="i"
-            :item="cell?.serverName || 'N/A'"
+            :item="cell?.serverName || ''"
             :class="`table-cell--${i}`"
             :is-modal="!!cell?.serverName"
             @open="serversModalOpen(idx)"
