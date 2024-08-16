@@ -11,8 +11,18 @@ const props = defineProps<iProps>()
 const emit = defineEmits(['openMenu', 'edit', 'delete'])
 const $el = ref<HTMLElement | null>(null)
 
-const filledStars = computed(() => {
-  return props.rating > 0 ? props.rating : 0
+const filledStars = computed(() => props.rating ?? 0)
+
+const clipPaths = computed(() => {
+  const rating = filledStars.value
+  const fullStars = Math.floor(rating)
+  const partialStar = rating - fullStars
+
+  return Array.from({ length: 5 }, (_, idx) => {
+    if (idx < fullStars) return 'inset(0 0 0 0)'
+    if (idx === fullStars) return `inset(0 ${100 - partialStar * 100}% 0 0)`
+    return 'inset(0 100% 0 0)'
+  })
 })
 
 const menuOpened = ref(false)
@@ -53,8 +63,8 @@ onUnmounted(() => {
       </div>
       <ul class="reviews-item__list">
         <li v-for="(_, idx) in 5" :key="idx" class="reviews-item__star">
-          <IconsStar v-if="idx >= filledStars" />
-          <IconsFilledStar v-else />
+          <IconsStar />
+          <IconsFilledStar :style="{ clipPath: clipPaths[idx] }" />
         </li>
       </ul>
       <button
