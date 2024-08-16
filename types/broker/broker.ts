@@ -69,4 +69,6 @@ export interface iSearchBrokerParams {
   fillPolicy: number
   executionType: number
   execution: number
+  brokerServersMT4ServerNames: string
+  brokerServersMT5ServerNames: string
 }

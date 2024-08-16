@@ -227,6 +227,30 @@ const initialSearchItems: iSearchInput[] = [
     value: '',
     placeholder: 'Placeholder',
   },
+  {
+    title: 'MT4 ServerNames',
+    required: false,
+    id: 'mt4-servernames',
+    name: 'MT4 ServerNames',
+    type: 'text',
+    value: '',
+    placeholder: 'Placeholder',
+    disabled: false,
+    isLeftButton: false,
+    isRightButton: false,
+  },
+  {
+    title: 'MT5 ServerNames',
+    required: false,
+    id: 'mt5-servernames',
+    name: 'MT5 ServerNames',
+    type: 'text',
+    value: '',
+    placeholder: 'Placeholder',
+    disabled: false,
+    isLeftButton: false,
+    isRightButton: false,
+  },
 ]
 
 const searchItems = ref<iSearchInput[]>(deepClone(initialSearchItems))

@@ -45,6 +45,8 @@ export const brokerSearchAdapter = (
     fillPolicy: Number(getParameter('fillpolicy') || -1),
     execution: Number(getParameter('executiontype-mt4') || -1),
     executionType: Number(getParameter('executiontype-mt5') || -1),
+    brokerServersMT4ServerNames: getParameter('mt4-servernames'),
+    brokerServersMT5ServerNames: getParameter('mt5-servernames'),
   }
 
   return deleteFalseProperties(obj) as unknown as iSearchBrokerParams
