@@ -7,10 +7,12 @@ export interface iBrokerReviewsItem {
 }
 
 export interface iBrokerReviewsData {
-  data: {
-    forexpeacearmy: iBrokerReviewsItem
-    forexratings: iBrokerReviewsItem
-    trustpilot: iBrokerReviewsItem
-    wikifx: iBrokerReviewsItem
-  }
+  forexpeacearmy: iBrokerReviewsItem
+  forexratings: iBrokerReviewsItem
+  trustpilot: iBrokerReviewsItem
+  wikifx: iBrokerReviewsItem
+}
+
+export interface iBrokerReviewsResponse {
+  data: iBrokerReviewsData
 }

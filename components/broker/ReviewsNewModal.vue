@@ -51,6 +51,8 @@ const reviewsInputs = ref<iReviewsInput[]>([
     type: 'number',
     value: '',
     placeholder: 'Reviews count',
+    min: 0,
+    max: Infinity,
   },
   {
     required: false,

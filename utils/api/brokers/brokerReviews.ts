@@ -1,9 +1,14 @@
 import axiosInstance from '../axiosInstance'
-import type { iBrokerReviewsData } from '~/types/broker/brokerReviews'
+import type {
+  iBrokerReviewsData,
+  iBrokerReviewsResponse,
+} from '~/types/broker/brokerReviews'
 
-export const getBrokerReviews = async (brokerId: number) => {
+export const getBrokerReviews = async (
+  brokerId: number
+): Promise<Partial<iBrokerReviewsData>> => {
   try {
-    const { data }: iBrokerReviewsData = await axiosInstance.get(
+    const { data }: iBrokerReviewsResponse = await axiosInstance.get(
       'Broker/Reviews',
       {
         params: {
@@ -11,6 +16,8 @@ export const getBrokerReviews = async (brokerId: number) => {
         },
       }
     )
+
+    console.log({ mainRequest: data })
 
     return data
   } catch (e) {
@@ -28,9 +35,9 @@ export const updateBrokerReview = async (
   url: string,
   rating: number,
   numberReviews: number
-) => {
+): Promise<Partial<iBrokerReviewsData>> => {
   try {
-    const { data }: iBrokerReviewsData = await axiosInstance.put(
+    const { data }: iBrokerReviewsResponse = await axiosInstance.put(
       `Broker/Reviews`,
       null,
       {
@@ -57,9 +64,9 @@ export const createBrokerReview = async (
   rating: number,
   numberReviews: number,
   serviceName: string
-) => {
+): Promise<Partial<iBrokerReviewsData>> => {
   try {
-    const { data }: iBrokerReviewsData = await axiosInstance.post(
+    const { data }: iBrokerReviewsResponse = await axiosInstance.post(
       `Broker/Reviews`,
       null,
       {

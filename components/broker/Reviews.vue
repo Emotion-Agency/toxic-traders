@@ -76,6 +76,7 @@ const onDeleteReview = async () => {
 
 onMounted(async () => {
   await fetchReviews()
+  console.log(reviewsList.value)
 })
 </script>
 
