@@ -111,7 +111,7 @@ const tableItems = computed(() => {
 
 const orderDigits = computed(() => {
   if (accountOrders.value?.length) {
-    return accountOrders[0]?.ticket?.toString().length || 'N/A'
+    return accountOrders.value[0]?.ticket?.toString()?.length || 'N/A'
   }
 
   return 'N/A'
