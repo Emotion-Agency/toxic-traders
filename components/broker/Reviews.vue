@@ -75,6 +75,7 @@ const onDeleteReview = async () => {
 
 onMounted(async () => {
   await fetchReviews()
+  console.log(reviewsList.value)
 })
 </script>
 
@@ -106,7 +107,7 @@ onMounted(async () => {
             v-if="item?.serviceName.toLowerCase() === 'wikifx'"
           />
           <IconsReviewsFx123
-            v-if="item?.serviceName.toLowerCase() === 'forexratings'"
+            v-if="item?.serviceName.toLowerCase() === 'fx123'"
           />
         </BrokerReviewsItem>
       </div>
