@@ -15,6 +15,10 @@ const getServerType = (serverType: string) => {
   return -1
 }
 
+// const getTimezone = (id: string) => {
+//   return params.data.find(item => item.id === id)?.value ?? ''
+// }
+
 export const brokerSearchAdapter = (
   params: IBrokerSearchParams
 ): iSearchBrokerParams => {
@@ -38,7 +42,7 @@ export const brokerSearchAdapter = (
     depositMethods: Number(getParameter('method-of-deposits') || -1),
     leverage: Number(getParameter('leverage') || -1),
     serverTimezone: Number(getParameter('server-timezone') || -1),
-    symbolName: getParameter('scurrency-symbol'),
+    symbolName: getParameter('currency-symbol'),
     description: getParameter('description'),
     digits: Number(getParameter('digits') || -1),
     contractSize: Number(getParameter('contract-size') || -1),
@@ -48,6 +52,8 @@ export const brokerSearchAdapter = (
     brokerServersMT4ServerNames: getParameter('mt4-servernames'),
     brokerServersMT5ServerNames: getParameter('mt5-servernames'),
   }
+
   console.log(obj)
+
   return deleteFalseProperties(obj) as unknown as iSearchBrokerParams
 }

@@ -13,6 +13,7 @@ defineProps<iProps>()
 const emit = defineEmits(['search'])
 
 const { getCategoriesList } = useBrokerCategories()
+const { getAllEnums } = useEnums()
 
 const categoriesList = await getCategoriesList()
 
@@ -75,7 +76,7 @@ const initialSearchItems: iSearchInput[] = [
   },
   {
     type: 'select',
-    id: 'servers',
+    id: 'server-type',
     name: 'Servers',
     title: 'Servers (MT4 or MT5)',
     placeholder: 'Placeholder',
@@ -255,6 +256,57 @@ const initialSearchItems: iSearchInput[] = [
 
 const searchItems = ref<iSearchInput[]>(deepClone(initialSearchItems))
 
+const getOptions = async () => {
+  const {
+    depositMethods,
+    executionMT4,
+    executionMT5,
+    fillPolicy,
+    platforms,
+    regulators,
+  } = await getAllEnums()
+
+  searchItems.value = searchItems.value.map(item => {
+    if (item.id === 'platforms') {
+      item = {
+        ...item,
+        options: Object.values(platforms),
+      }
+    }
+    if (item.id === 'method-of-deposits') {
+      item = {
+        ...item,
+        options: Object.values(depositMethods),
+      }
+    }
+    if (item.id === 'regulator') {
+      item = {
+        ...item,
+        options: Object.values(regulators),
+      }
+    }
+    if (item.id === 'fillpolicy') {
+      item = {
+        ...item,
+        options: Object.values(fillPolicy),
+      }
+    }
+    if (item.id === 'executiontype-mt4') {
+      item = {
+        ...item,
+        options: Object.values(executionMT4),
+      }
+    }
+    if (item.id === 'executiontype-mt5') {
+      item = {
+        ...item,
+        options: Object.values(executionMT5),
+      }
+    }
+    return item
+  })
+}
+
 const onChange = (val: iInput) => {
   searchItems.value = searchItems.value.map(item => {
     if (item.id === val.id) {
@@ -291,8 +343,10 @@ const resetSelectedItem = (input: iSearchInput) => {
   })
 }
 
-const resetSearch = () => {
-  searchItems.value = initialSearchItems
+const resetSearch = async () => {
+  searchItems.value = deepClone(initialSearchItems)
+
+  await getOptions()
 }
 
 const getEnumIdx = (item: iSearchInput) => {
@@ -346,57 +400,8 @@ watch(searchItems, () => {
   debounceSearch()
 })
 
-const { getAllEnums } = useEnums()
-
 onMounted(async () => {
-  const {
-    depositMethods,
-    platforms,
-    regulators,
-    fillPolicy,
-    executionMT4,
-    executionMT5,
-  } = await getAllEnums()
-
-  searchItems.value = searchItems.value.map(item => {
-    if (item.id === 'platforms') {
-      item = {
-        ...item,
-        options: Object.values(platforms),
-      }
-    }
-    if (item.id === 'method-of-deposits') {
-      item = {
-        ...item,
-        options: Object.values(depositMethods),
-      }
-    }
-    if (item.id === 'regulator') {
-      item = {
-        ...item,
-        options: Object.values(regulators),
-      }
-    }
-    if (item.id === 'fillpolicy') {
-      item = {
-        ...item,
-        options: Object.values(fillPolicy),
-      }
-    }
-    if (item.id === 'executiontype-mt4') {
-      item = {
-        ...item,
-        options: Object.values(executionMT4),
-      }
-    }
-    if (item.id === 'executiontype-mt5') {
-      item = {
-        ...item,
-        options: Object.values(executionMT5),
-      }
-    }
-    return item
-  })
+  await getOptions()
 })
 </script>
 

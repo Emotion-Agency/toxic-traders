@@ -109,6 +109,14 @@ const tableItems = computed(() => {
   return []
 })
 
+const orderDigits = computed(() => {
+  if (accountOrders.value?.length) {
+    return accountOrders[0]?.ticket?.toString().length || 'N/A'
+  }
+
+  return 'N/A'
+})
+
 const headerFields = computed(() => {
   return Object.keys(tableItems.value[0] ?? {})
 })
@@ -252,7 +260,7 @@ onMounted(async () => {
               <li class="type-of-account__info-item">
                 <p class="type-of-account__info-title">OrderId Digits:</p>
                 <p class="type-of-account__info-text">
-                  {{ accountOrders[0]?.ticket?.toString().length || 'N/A' }}
+                  {{ orderDigits }}
                 </p>
               </li>
             </ul>
