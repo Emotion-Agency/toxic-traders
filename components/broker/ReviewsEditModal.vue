@@ -32,7 +32,6 @@ const reviewsInputs = ref<iReviewsInput[]>([])
 watch(
   () => props.review,
   () => {
-    console.log(props.review)
     reviewsInputs.value = [
       // {
       //   type: 'select',
@@ -57,8 +56,6 @@ watch(
         type: 'number',
         value: props.review?.numberOfReviews?.toString(),
         placeholder: 'Reviews count',
-        min: 0,
-        max: Infinity,
       },
       {
         required: false,

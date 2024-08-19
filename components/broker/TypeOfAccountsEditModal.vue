@@ -61,8 +61,6 @@ const onEditedChange = (e: iInputData) => {
 
     return item
   })
-
-  console.log(editedAccountItems.value)
 }
 
 const showPassword = () => {

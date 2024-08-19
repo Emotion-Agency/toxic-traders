@@ -66,8 +66,6 @@ const onChange = (e: iInputData) => {
 
     return item
   })
-
-  console.log(createdAccountItems.value)
 }
 
 const getSelectedItem = (item: string) => {
@@ -76,8 +74,6 @@ const getSelectedItem = (item: string) => {
       selectedServer.value = server.id
     }
   })
-
-  console.log(selectedServer.value)
 }
 
 const createAccount = async () => {

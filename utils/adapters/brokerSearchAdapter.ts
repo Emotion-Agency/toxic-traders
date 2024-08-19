@@ -48,6 +48,6 @@ export const brokerSearchAdapter = (
     brokerServersMT4ServerNames: getParameter('mt4-servernames'),
     brokerServersMT5ServerNames: getParameter('mt5-servernames'),
   }
-
+  console.log(obj)
   return deleteFalseProperties(obj) as unknown as iSearchBrokerParams
 }

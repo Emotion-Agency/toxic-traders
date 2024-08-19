@@ -33,7 +33,11 @@ export const useInput = (emit, props) => {
   )
 
   const onFocus = () => {
-    if (props.type === 'number') {
+    if (
+      props.type === 'number' &&
+      typeof props.min === 'number' &&
+      typeof props.max === 'number'
+    ) {
       numberInputSave.value = inputValue.value
       inputValue.value = ''
     }
@@ -46,13 +50,16 @@ export const useInput = (emit, props) => {
   }
 
   const onBlur = () => {
-    if (props.type === 'number') {
-      inputBlur.value = false
-
+    if (
+      props.type === 'number' &&
+      typeof props.min === 'number' &&
+      typeof props.max === 'number'
+    ) {
       if (!isInputChanged.value) {
         inputValue.value = numberInputSave.value
       }
       isInputChanged.value = false
+      numberInputSave.value = ''
 
       emit('inputBlur', {
         id: props.id,
@@ -62,13 +69,13 @@ export const useInput = (emit, props) => {
     }
 
     if (props.type !== 'number') {
-      inputBlur.value = false
       emit('inputBlur', {
         id: props.id,
         value: inputValue.value,
         error: error.value,
       })
     }
+    inputBlur.value = false
   }
 
   const updateFields = () => {

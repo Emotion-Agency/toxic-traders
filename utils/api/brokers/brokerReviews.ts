@@ -17,8 +17,6 @@ export const getBrokerReviews = async (
       }
     )
 
-    console.log({ mainRequest: data })
-
     return data
   } catch (e) {
     if (e.response.status === 400) {

@@ -29,7 +29,6 @@ const createModalClose = () => {
 
 const editModalOpen = (reviewId: number) => {
   reviewToUpdate.value = reviewsList.value.find(item => item.id === reviewId)
-  console.log(reviewToUpdate.value)
 
   editModalOpened.value = true
   document.body.classList.add('modal-open')
@@ -76,7 +75,6 @@ const onDeleteReview = async () => {
 
 onMounted(async () => {
   await fetchReviews()
-  console.log(reviewsList.value)
 })
 </script>
 
