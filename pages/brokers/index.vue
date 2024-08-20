@@ -88,7 +88,7 @@ const {
 const getBrokersRequest = async () => {
   isLoading.value = true
 
-  const { brokers, totalCount } = await getAllBrokersBySearch({
+  const { updatedBrokers, totalCount } = await getAllBrokersBySearch({
     offset: currentPage.value - 1,
     count: itemsCount.value,
     sortBy: sortedBy.value || 'companynames',
@@ -97,7 +97,7 @@ const getBrokersRequest = async () => {
   })
 
   isLoading.value = false
-  brokersList.value = brokers
+  brokersList.value = updatedBrokers
   filteredBrokers.value = brokersList.value
   totalCountPages.value = totalCount
 }

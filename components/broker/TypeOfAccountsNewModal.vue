@@ -18,6 +18,7 @@ const isPassword = ref(false)
 const serversList = ref<iBrokerServer[]>([])
 const serversNames = ref<string[]>([])
 const selectedServer = ref<number>(null)
+
 const createdAccountItems = ref<iAccountModalItem[]>([
   {
     required: false,
@@ -45,6 +46,11 @@ const createdAccountItems = ref<iAccountModalItem[]>([
     isRightButton: true,
   },
   {
+    required: false,
+    type: 'select',
+    id: `account-server`,
+    name: 'Account server',
+    value: '',
     placeholder: 'Server',
     options: serversNames,
   },
@@ -68,26 +74,34 @@ const onChange = (e: iInputData) => {
   })
 }
 
-const getSelectedItem = (item: string) => {
+const getSelectedItem = (item: string, id) => {
   serversList.value.forEach(server => {
     if (server.serverName === item) {
       selectedServer.value = server.id
     }
+    console.log(id)
   })
 }
 
 const createAccount = async () => {
+  console.log({
+    accountName: createdAccountItems.value[0]?.value,
+    login: createdAccountItems.value[1]?.value,
+    password: createdAccountItems.value[2]?.value,
+    server: selectedServer.value,
+  })
+
   const { id } = await createBrokerAccount(
-    createdAccountItems.value[0].value,
-    createdAccountItems.value[1].value,
-    createdAccountItems.value[2].value,
+    createdAccountItems.value[0]?.value,
+    createdAccountItems.value[1]?.value,
+    createdAccountItems.value[2]?.value,
     selectedServer.value
   )
 
   const newAccount = {
-    accountType: createdAccountItems.value[0].value,
-    login: createdAccountItems.value[1].value,
-    password: createdAccountItems.value[2].value,
+    accountType: createdAccountItems.value[0]?.value,
+    login: createdAccountItems.value[1]?.value,
+    password: createdAccountItems.value[2]?.value,
     brokerServerId: selectedServer.value,
     id,
   }
@@ -98,9 +112,13 @@ const createAccount = async () => {
 
 onMounted(async () => {
   const { brokerServers } = await getAllBrokerServers(props.brokerId)
-
   serversList.value = brokerServers
   serversNames.value = serversList.value.map(item => item.serverName)
+  console.log({
+    brokerServers,
+    createdAccountItems: createdAccountItems.value,
+    serversNames: serversNames.value,
+  })
 })
 </script>
 
@@ -118,8 +136,15 @@ onMounted(async () => {
       >
         <CustomSelect
           v-if="input.options"
-          :options="input.options"
-          :placeholder="input.placeholder"
+          :id="input?.id"
+          :name="input?.name"
+          :options="
+            Array.isArray(input?.options)
+              ? input?.options
+              : input?.options.value
+          "
+          :value="input?.value"
+          :placeholder="input?.placeholder"
           @select="getSelectedItem"
         />
         <TheInput

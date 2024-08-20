@@ -1,6 +1,9 @@
 import { getBrokerById } from '~/utils/api/brokers/getBrokerById'
 import { getBroker, getSearchBroker } from '~/utils/api/brokers/getBroker'
-import type { IBrokerSearchParams } from '~/types/broker/broker'
+import type {
+  IBrokerSearchParams,
+  iBrokerWithStatistic,
+} from '~/types/broker/broker'
 import { brokerSearchAdapter } from '~/utils/adapters/brokerSearchAdapter'
 
 export const useBrokers = () => {
@@ -12,7 +15,33 @@ export const useBrokers = () => {
 
       const { brokers, totalCount } = await getSearchBroker(transformedParams)
 
-      return { brokers, totalCount }
+      const updatedBrokers = brokers.map(broker => {
+        const statistics =
+          (broker as iBrokerWithStatistic).brokerCompanyNameStatistic || {}
+
+        const {
+          semrush_OrganicSearchTraffic = 'N/A',
+          ahrefs_TrafficMonthlyAvg = 'N/A',
+          similarWeb_EstimatedMonthlyVisits = 'N/A',
+        } = statistics
+
+        const obj = {
+          ...broker,
+          semrushOrganicSearchTraffic: semrush_OrganicSearchTraffic,
+          ahrefsTrafficMonthlyAvg: ahrefs_TrafficMonthlyAvg,
+          similarWebEstimatedMonthlyVisits: similarWeb_EstimatedMonthlyVisits,
+        }
+
+        const { brokerCompanyNameStatistic, ...rest } = Object.fromEntries(
+          Object.entries(obj).filter(
+            ([key]) => key !== 'brokerCompanyNameStatistic'
+          )
+        )
+
+        return rest
+      })
+
+      return { updatedBrokers, totalCount }
     } catch (error) {
       console.error('Error fetching brokers:', error)
       addToast({

@@ -15,10 +15,6 @@ const getServerType = (serverType: string) => {
   return -1
 }
 
-// const getTimezone = (id: string) => {
-//   return params.data.find(item => item.id === id)?.value ?? ''
-// }
-
 export const brokerSearchAdapter = (
   params: IBrokerSearchParams
 ): iSearchBrokerParams => {
