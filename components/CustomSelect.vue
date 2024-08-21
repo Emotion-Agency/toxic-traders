@@ -31,10 +31,14 @@ const toggleList = () => {
   isOpened.value = !isOpened.value
 }
 
-const closeList = (option = '') => {
+const closeList = () => {
   isOpened.value = false
+}
+
+const selectItem = (option = '') => {
   selectedItem.value = option
   emit('select', option, { id: props.id, value: option })
+  closeList()
 }
 
 const reset = () => {
@@ -117,7 +121,7 @@ onUnmounted(() => {
           v-else
           :key="idx"
           class="custom-select__item"
-          @click="closeList(option)"
+          @click="selectItem(option)"
         >
           <p class="custom-select__item-text">
             {{ option }}
