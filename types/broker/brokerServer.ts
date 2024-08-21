@@ -106,6 +106,7 @@ export interface iBrokerServer {
   serverType: number
   brokerServerAccounts: iBrokerServerAccount[]
   brokerServerIPAddresses: iBrokerServerIPAddress[]
+  text?: string
 }
 
 export interface iBrokerServerData {

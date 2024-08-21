@@ -16,7 +16,7 @@ const { getAllBrokerServers } = useBrokerServer()
 
 const isPassword = ref(false)
 const serversList = ref<iBrokerServer[]>([])
-const serversNames = ref<string[]>([])
+const updatedServersList = ref<iBrokerServer[]>([])
 const selectedServer = ref<number>(null)
 
 const createdAccountItems = ref<iAccountModalItem[]>([
@@ -52,7 +52,7 @@ const createdAccountItems = ref<iAccountModalItem[]>([
     name: 'Account server',
     value: '',
     placeholder: 'Server',
-    options: serversNames,
+    options: updatedServersList,
   },
 ])
 
@@ -74,12 +74,11 @@ const onChange = (e: iInputData) => {
   })
 }
 
-const getSelectedItem = (item: string, id) => {
+const getSelectedItem = (item: iBrokerServer) => {
   serversList.value.forEach(server => {
-    if (server.serverName === item) {
+    if (server?.id === item?.id) {
       selectedServer.value = server.id
     }
-    console.log(id)
   })
 }
 
@@ -110,14 +109,32 @@ const createAccount = async () => {
   emit('close')
 }
 
+const getServerType = (serverType: number) => {
+  if (serverType === 0) {
+    return 'MT4'
+  }
+
+  if (serverType === 1) {
+    return 'MT5'
+  }
+}
+
 onMounted(async () => {
   const { brokerServers } = await getAllBrokerServers(props.brokerId)
   serversList.value = brokerServers
-  serversNames.value = serversList.value.map(item => item.serverName)
+  updatedServersList.value = serversList.value.map(item => {
+    const obj = {
+      ...item,
+      text: item?.serverName + ' ' + getServerType(item?.serverType),
+    }
+    delete obj?.serverName
+
+    return obj
+  })
   console.log({
-    brokerServers,
+    serversList: serversList.value,
+    updatedServersList: updatedServersList.value,
     createdAccountItems: createdAccountItems.value,
-    serversNames: serversNames.value,
   })
 })
 </script>
@@ -138,11 +155,7 @@ onMounted(async () => {
           v-if="input.options"
           :id="input?.id"
           :name="input?.name"
-          :options="
-            Array.isArray(input?.options)
-              ? input?.options
-              : input?.options.value
-          "
+          :options="input.options"
           :value="input?.value"
           :placeholder="input?.placeholder"
           @select="getSelectedItem"

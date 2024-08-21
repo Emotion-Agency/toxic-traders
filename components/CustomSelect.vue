@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import type { iInput, iSearchInput } from '~/types'
 
+interface OptionItem {
+  id?: string | number
+  text: string
+  [key: string]: any
+}
+
 interface iProps {
-  options: string[]
+  options: (string | OptionItem)[]
   placeholder: string
   title?: string
   searchInput?: iSearchInput
@@ -16,12 +22,23 @@ const props = defineProps<iProps>()
 
 const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
-const selectedItem = ref(props.value ?? '')
+const selectedItem = ref<string | OptionItem | null>(null)
 
 watch(
   () => props.value,
   () => {
-    selectedItem.value = props.value
+    if (props.value) {
+      if (typeof props.value === 'string') {
+        selectedItem.value = props.value
+      } else {
+        selectedItem.value =
+          props.options.find(
+            option => typeof option !== 'string' && option.text === props.value
+          ) || null
+      }
+    } else {
+      selectedItem.value = null
+    }
   }
 )
 
@@ -35,9 +52,15 @@ const closeList = () => {
   isOpened.value = false
 }
 
-const selectItem = (option = '') => {
-  selectedItem.value = option
-  emit('select', option, { id: props.id, value: option })
+const selectItem = (option: string | OptionItem) => {
+  if (typeof option === 'string') {
+    selectedItem.value = option
+    emit('select', option, { id: props.id, value: option })
+  } else {
+    selectedItem.value = option.text
+    emit('select', option, { id: props.id, value: option.text })
+  }
+
   closeList()
 }
 
@@ -46,7 +69,7 @@ const reset = () => {
 }
 
 const outsideClick = event => {
-  if (!$el.value.contains(event.target)) {
+  if (!$el.value?.contains(event.target)) {
     isOpened.value = false
   }
 }
@@ -75,7 +98,13 @@ onUnmounted(() => {
     <p v-if="title" class="custom-select__title">{{ title }}</p>
     <div class="custom-select__selected" @click="toggleList">
       <p class="custom-select__text">
-        {{ selectedItem || placeholder }}
+        {{
+          selectedItem
+            ? typeof selectedItem === 'string'
+              ? selectedItem
+              : selectedItem?.text
+            : placeholder
+        }}
       </p>
 
       <div class="custom-select-icon">
@@ -93,12 +122,12 @@ onUnmounted(() => {
     >
       <div v-if="searchInput" class="custom-select__input-wrapper">
         <TheInput
-          :id="searchInput.id"
-          :required="searchInput.required"
-          :name="searchInput.name"
-          :type="searchInput.type"
-          :placeholder="searchInput.placeholder"
-          :is-right-button="searchInput.isRightButton"
+          :id="searchInput?.id"
+          :required="searchInput?.required"
+          :name="searchInput?.name"
+          :type="searchInput?.type"
+          :placeholder="searchInput?.placeholder"
+          :is-right-button="searchInput?.isRightButton"
           class="custom-select__input"
           @input-value="onSearch"
         >
@@ -117,14 +146,14 @@ onUnmounted(() => {
           <p class="custom-select__item-text">Options not found</p>
         </li>
         <li
-          v-for="(option, idx) of options"
+          v-for="option in options"
           v-else
-          :key="idx"
+          :key="typeof option === 'string' ? option : option?.id"
           class="custom-select__item"
           @click="selectItem(option)"
         >
           <p class="custom-select__item-text">
-            {{ option }}
+            {{ typeof option === 'string' ? option : option?.text }}
           </p>
         </li>
       </ul>
