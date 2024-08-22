@@ -15,6 +15,14 @@ const getServerType = (serverType: string) => {
   return -1
 }
 
+const getServerTimezone = (timezone: string): number => {
+  // if (!timezone.includes()) {
+  //   return -1
+  // }
+  // return 'number'
+  return -1
+}
+
 export const brokerSearchAdapter = (
   params: IBrokerSearchParams
 ): iSearchBrokerParams => {
@@ -37,7 +45,7 @@ export const brokerSearchAdapter = (
     platforms: Number(getParameter('platforms') || -1),
     depositMethods: Number(getParameter('method-of-deposits') || -1),
     leverage: Number(getParameter('leverage') || -1),
-    serverTimezone: Number(getParameter('server-timezone') || -1),
+    serverTimezone: getServerTimezone(getParameter('server-timezone')),
     symbolName: getParameter('currency-symbol'),
     description: getParameter('description'),
     digits: Number(getParameter('digits') || -1),

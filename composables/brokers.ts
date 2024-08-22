@@ -1,6 +1,7 @@
 import { getBrokerById } from '~/utils/api/brokers/getBrokerById'
 import { getBroker, getSearchBroker } from '~/utils/api/brokers/getBroker'
 import type {
+  iBroker,
   IBrokerSearchParams,
   iBrokerWithStatistic,
 } from '~/types/broker/broker'
@@ -27,18 +28,14 @@ export const useBrokers = () => {
 
         const obj = {
           ...broker,
-          semrushOrganicSearchTraffic: semrush_OrganicSearchTraffic,
-          ahrefsTrafficMonthlyAvg: ahrefs_TrafficMonthlyAvg,
-          similarWebEstimatedMonthlyVisits: similarWeb_EstimatedMonthlyVisits,
+          semrush_OrganicSearchTraffic,
+          ahrefs_TrafficMonthlyAvg,
+          similarWeb_EstimatedMonthlyVisits,
         }
 
-        const { brokerCompanyNameStatistic, ...rest } = Object.fromEntries(
-          Object.entries(obj).filter(
-            ([key]) => key !== 'brokerCompanyNameStatistic'
-          )
-        )
+        delete (obj as iBrokerWithStatistic)?.brokerCompanyNameStatistic
 
-        return rest
+        return obj
       })
 
       return { updatedBrokers, totalCount }

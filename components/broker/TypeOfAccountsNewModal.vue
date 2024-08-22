@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iAccountModalItem } from '~/types'
+import type { iAccountModalItem, iOptionItem } from '~/types'
 import type { iBrokerServer } from '~/types/broker/brokerServer'
 
 interface iProps {
@@ -16,7 +16,7 @@ const { getAllBrokerServers } = useBrokerServer()
 
 const isPassword = ref(false)
 const serversList = ref<iBrokerServer[]>([])
-const updatedServersList = ref<iBrokerServer[]>([])
+const updatedServersList = ref<iOptionItem[]>([])
 const selectedServer = ref<number>(null)
 
 const createdAccountItems = ref<iAccountModalItem[]>([
@@ -155,7 +155,7 @@ onMounted(async () => {
           v-if="input.options"
           :id="input?.id"
           :name="input?.name"
-          :options="input.options"
+          :options="input?.options || []"
           :value="input?.value"
           :placeholder="input?.placeholder"
           @select="getSelectedItem"

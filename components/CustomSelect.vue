@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import type { iInput, iSearchInput } from '~/types'
-
-interface OptionItem {
-  id?: string | number
-  text: string
-  [key: string]: any
-}
+import type { iInput, iOptionItem, iSearchInput } from '~/types'
 
 interface iProps {
-  options: (string | OptionItem)[]
+  options: (string | iOptionItem)[]
   placeholder: string
   title?: string
   searchInput?: iSearchInput
@@ -22,7 +16,7 @@ const props = defineProps<iProps>()
 
 const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
-const selectedItem = ref<string | OptionItem | null>(null)
+const selectedItem = ref<string | iOptionItem | null>(null)
 
 watch(
   () => props.value,
@@ -52,7 +46,7 @@ const closeList = () => {
   isOpened.value = false
 }
 
-const selectItem = (option: string | OptionItem) => {
+const selectItem = (option: string | iOptionItem) => {
   if (typeof option === 'string') {
     selectedItem.value = option
     emit('select', option, { id: props.id, value: option })

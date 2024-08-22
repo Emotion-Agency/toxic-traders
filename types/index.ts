@@ -30,6 +30,12 @@ export interface iSelectInput {
   value: string
 }
 
+export interface iOptionItem {
+  id?: string | number
+  text: string
+  [key: string]: any
+}
+
 export interface iTagsInput {
   text: string
   icon?: {
@@ -49,7 +55,7 @@ export interface iAccountModalItem {
   disabled?: boolean
   isLeftButton?: boolean
   isRightButton?: boolean
-  options?: string[] | Ref<string[]>
+  options?: string[] | iOptionItem[]
   isPassword?: boolean
 }
 
