@@ -16,11 +16,33 @@ const getServerType = (serverType: string) => {
 }
 
 const getServerTimezone = (timezone: string): number => {
-  // if (!timezone.includes()) {
-  //   return -1
-  // }
-  // return 'number'
-  return -1
+  const parsedMinutes = parseInt(timezone)
+  if (!isNaN(parsedMinutes)) {
+    return parsedMinutes
+  }
+
+  if (!timezone.startsWith('GMT')) {
+    return -1
+  }
+
+  const offset = timezone.slice(3).trim()
+
+  const match = offset.match(/^([+-])(\d{1,2})$/)
+
+  if (!match) {
+    return -1
+  }
+
+  const sign = match[1]
+  const hours = parseInt(match[2])
+
+  if (hours < 0 || hours > 12) {
+    return -1
+  }
+
+  const minutes = hours * 60
+
+  return sign === '+' ? minutes : -minutes
 }
 
 export const brokerSearchAdapter = (
@@ -56,8 +78,6 @@ export const brokerSearchAdapter = (
     brokerServersMT4ServerNames: getParameter('mt4-servernames'),
     brokerServersMT5ServerNames: getParameter('mt5-servernames'),
   }
-
-  console.log(obj)
 
   return deleteFalseProperties(obj) as unknown as iSearchBrokerParams
 }
