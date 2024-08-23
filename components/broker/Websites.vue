@@ -29,6 +29,8 @@ onMounted(async () => {
 
   filteredCompanyNamesList.value = companyNamesList.value
 
+  console.log(filteredCompanyNamesList.value)
+
   showLessServerAddresses()
 })
 </script>
@@ -44,7 +46,12 @@ onMounted(async () => {
         <div class="websites__info-item">
           <IconsInfoCircle />
           <div class="websites__info-modal">
-            <p class="websites__info-text">Website created date</p>
+            <p class="websites__info-text">
+              {{
+                formatDateWithTime(item?.domainCreateDateTime) ||
+                'Created date not found'
+              }}
+            </p>
           </div>
         </div>
         <div class="websites__text-wrapper">
