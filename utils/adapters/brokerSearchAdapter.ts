@@ -16,33 +16,19 @@ const getServerType = (serverType: string) => {
 }
 
 const getServerTimezone = (timezone: string): number => {
-  const parsedMinutes = parseInt(timezone)
-  if (!isNaN(parsedMinutes)) {
-    return parsedMinutes
+  if (timezone.startsWith('GMT')) {
+    if (timezone === 'GMT') return -1
+    const offset = parseInt(timezone.slice(3))
+    return offset * 60
   }
 
-  if (!timezone.startsWith('GMT')) {
-    return -1
+  const offset = parseInt(timezone)
+
+  if (!isNaN(offset) && Math.abs(offset) < 13) {
+    return offset * 60
   }
 
-  const offset = timezone.slice(3).trim()
-
-  const match = offset.match(/^([+-])(\d{1,2})$/)
-
-  if (!match) {
-    return -1
-  }
-
-  const sign = match[1]
-  const hours = parseInt(match[2])
-
-  if (hours < 0 || hours > 12) {
-    return -1
-  }
-
-  const minutes = hours * 60
-
-  return sign === '+' ? minutes : -minutes
+  return offset
 }
 
 export const brokerSearchAdapter = (
