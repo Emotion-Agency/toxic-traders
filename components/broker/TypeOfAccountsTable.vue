@@ -50,8 +50,8 @@ const dateSpreadParams = computed(() => {
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: spreadSeconds,
-    // startDateTime: formatDateWithTime(spreadStartDate.value),
-    startDateTime: spreadStartDate.value,
+    startDateTime: formatDateWithTime(spreadStartDate.value),
+    // startDateTime: spreadStartDate.value,
     SpreadOrNewsSpread: 0,
   }
 })
@@ -66,8 +66,8 @@ const dateNewsSpreadParams = computed(() => {
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: newsSpreadSeconds,
-    // startDateTime: formatDateWithTime(newsSpreadStartDate.value),
-    startDateTime: spreadStartDate.value,
+    startDateTime: formatDateWithTime(newsSpreadStartDate.value),
+    // startDateTime: spreadStartDate.value,
     SpreadOrNewsSpread: 1,
   }
 })
@@ -91,9 +91,16 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
     scheduleParams.value
   )
 
+  console.log(spreadDate)
+
   spreadDate?.forEach(date => {
     if (date?.spreadType === 'MeasureSpread') {
-      spreadStartDate.value = date?.scheduledAt || ''
+      console.log({
+        getDate: date,
+        startResultDate: getStartDateTime(date?.scheduledAt),
+        endResultDate: 0,
+      })
+      spreadStartDate.value = getStartDateTime(date?.scheduledAt) || ''
       spreadEndDate.value = getEndDateTime({
         startDateTime: date?.scheduledAt,
         seconds: date?.length,
@@ -110,8 +117,6 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
       })
     }
   })
-
-  console.log(spreadDate)
 }
 
 const onSpreadScheduleSave = () => {
@@ -124,7 +129,10 @@ const onNewsSpreadScheduleSave = () => {
 
 const onScheduleClose = () => {
   isOpenedScheduleModal.value = false
-  console.log(dateSpreadParams.value, dateNewsSpreadParams.value)
+  console.log({
+    dateSpreadParams: dateSpreadParams.value,
+    dateNewsSpreadParams: dateNewsSpreadParams.value,
+  })
 }
 
 const notSortableFields = ['schedule']

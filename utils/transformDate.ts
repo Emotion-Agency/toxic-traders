@@ -53,6 +53,59 @@ export const formatDateToSeconds = (dateStr: string): number => {
   return Math.floor(date.getTime() / 1000)
 }
 
+export const getStartDateTime = (startDateTime: string): string => {
+  const [dateTime, timeZone] = startDateTime.split(/([+-]\d{2}:\d{2})$/)
+
+  const utcDate = new Date(`${dateTime}Z`)
+
+  const offsetSign = timeZone[0]
+  const offsetHours = parseInt(timeZone.slice(1, 3), 10)
+  const offsetMinutes = parseInt(timeZone.slice(4, 6), 10)
+
+  const offsetTotalMinutes = offsetHours * 60 + offsetMinutes
+  const offsetMilliseconds = offsetTotalMinutes * 60 * 1000
+
+  const adjustedTime = new Date(
+    utcDate.getTime() +
+      (offsetSign === '+' ? offsetMilliseconds : -offsetMilliseconds)
+  )
+
+  const year = adjustedTime.getUTCFullYear()
+  const month = String(adjustedTime.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(adjustedTime.getUTCDate()).padStart(2, '0')
+  const hours = String(adjustedTime.getUTCHours()).padStart(2, '0')
+  const minutes = String(adjustedTime.getUTCMinutes()).padStart(2, '0')
+  const seconds = String(adjustedTime.getUTCSeconds()).padStart(2, '0')
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+// export const getStartDateTime = (startDateTime: string): string => {
+//   const [dateTime, timeZone] = startDateTime.split(/([+-]\d{2}:\d{2})$/)
+
+//   const utcDate = new Date(`${dateTime}Z`)
+
+//   const offsetSign = timeZone[0]
+//   const offsetHours = parseInt(timeZone.substr(1, 2), 10)
+//   const offsetMinutes = parseInt(timeZone.substr(4, 2), 10)
+
+//   const offsetTotalMinutes = offsetHours * 60 + offsetMinutes
+//   const offsetMilliseconds = offsetTotalMinutes * 60 * 1000
+
+//   const adjustedTime = new Date(
+//     utcDate.getTime() +
+//       (offsetSign === '+' ? offsetMilliseconds : -offsetMilliseconds)
+//   )
+
+//   const year = adjustedTime.getUTCFullYear()
+//   const month = String(adjustedTime.getUTCMonth() + 1).padStart(2, '0')
+//   const day = String(adjustedTime.getUTCDate()).padStart(2, '0')
+//   const hours = String(adjustedTime.getUTCHours()).padStart(2, '0')
+//   const minutes = String(adjustedTime.getUTCMinutes()).padStart(2, '0')
+//   const seconds = String(adjustedTime.getUTCSeconds()).padStart(2, '0')
+
+//   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+// }
 export const getEndDateTime = ({
   startDateTime,
   seconds,

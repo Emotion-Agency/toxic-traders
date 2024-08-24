@@ -230,9 +230,9 @@ onMounted(async () => {
   notesValue.value = notesRequestValue || ''
 
   currentAccount.value = brokerServers
-    .map(server => server.brokerServerAccounts)
+    .map(server => server?.brokerServerAccounts)
     .flat()
-    .find(account => account.id === +accountId)
+    .find(account => account?.id === +accountId)
 
   serverType.value = brokerServers[0]?.serverType
 })
