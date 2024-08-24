@@ -102,18 +102,16 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
       })
       spreadStartDate.value = getStartDateTime(date?.scheduledAt) || ''
       spreadEndDate.value = getEndDateTime({
-        startDateTime: date?.scheduledAt,
+        startDateTime: getStartDateTime(date?.scheduledAt),
         seconds: date?.length,
-        timezone: props.timezone,
       })
     }
 
     if (date?.spreadType === 'MeasureNewsSpread') {
       newsSpreadStartDate.value = date?.scheduledAt || ''
       newsSpreadEndDate.value = getEndDateTime({
-        startDateTime: date?.scheduledAt,
+        startDateTime: getStartDateTime(date?.scheduledAt),
         seconds: date?.length,
-        timezone: props.timezone,
       })
     }
   })

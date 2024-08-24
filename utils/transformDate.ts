@@ -106,31 +106,38 @@ export const getStartDateTime = (startDateTime: string): string => {
 
 //   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 // }
-export const getEndDateTime = ({
-  startDateTime,
-  seconds,
-  timezone,
-}: iDateTimeParams): string => {
+
+export const getEndDateTime = ({ seconds, startDateTime }) => {
   const startDate = new Date(startDateTime)
-
-  let targetOffset: number
-
-  if (typeof timezone === 'string') {
-    const timezoneMatch = timezone.match(/GMT([+-]\d+)/)
-    if (timezoneMatch) {
-      targetOffset = parseInt(timezoneMatch[1]) * 60 * 60 * 1000
-    } else {
-      throw new Error('Invalid timezone format')
-    }
-  } else if (typeof timezone === 'number') {
-    targetOffset = timezone * 60 * 1000
-  } else {
-    throw new Error('Timezone must be a number or a string in GMT format')
-  }
-
-  const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
-  return endDate.toISOString()
+  startDate.setSeconds(startDate.getSeconds() + seconds)
+  return startDate.toISOString().replace('T', ' ').split('.')[0]
 }
+
+// export const getEndDateTime = ({
+//   startDateTime,
+//   seconds,
+//   timezone,
+// }: iDateTimeParams): string => {
+//   const startDate = new Date(startDateTime)
+
+//   let targetOffset: number
+
+//   if (typeof timezone === 'string') {
+//     const timezoneMatch = timezone.match(/GMT([+-]\d+)/)
+//     if (timezoneMatch) {
+//       targetOffset = parseInt(timezoneMatch[1]) * 60 * 60 * 1000
+//     } else {
+//       throw new Error('Invalid timezone format')
+//     }
+//   } else if (typeof timezone === 'number') {
+//     targetOffset = timezone * 60 * 1000
+//   } else {
+//     throw new Error('Timezone must be a number or a string in GMT format')
+//   }
+
+//   const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
+//   return endDate.toISOString()
+// }
 
 export const minutesToGMT = (input: number | string): string => {
   if (input === 'N/A') {
