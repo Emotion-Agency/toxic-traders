@@ -56,7 +56,7 @@ export const brokerSearchAdapter = (
     serverTimezone: getServerTimezone(getParameter('server-timezone')),
     symbolName: getParameter('currency-symbol'),
     description: getParameter('description'),
-    digits: Number(getParameter('order-id-digits') || -1),
+    digits: Number(getParameter('digits') || -1),
     contractSize: Number(getParameter('contract-size') || -1),
     fillPolicy: Number(getParameter('fillpolicy') || -1),
     execution: Number(getParameter('executiontype-mt4') || -1),
