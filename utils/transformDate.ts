@@ -107,10 +107,28 @@ export const getStartDateTime = (startDateTime: string): string => {
 //   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 // }
 
-export const getEndDateTime = ({ seconds, startDateTime }) => {
-  const startDate = new Date(startDateTime)
-  startDate.setSeconds(startDate.getSeconds() + seconds)
-  return startDate.toISOString().replace('T', ' ').split('.')[0]
+export const getEndDateTime = ({
+  seconds,
+  startDateTime,
+}: {
+  seconds: number
+  startDateTime: string
+}) => {
+  const [datePart, timePart] = startDateTime.split(' ')
+  const [year, month, day] = datePart.split('-').map(Number)
+  const [hour, minute, second] = timePart.split(':').map(Number)
+
+  const totalSeconds = hour * 3600 + minute * 60 + second + seconds
+  const newHour = Math.floor(totalSeconds / 3600) % 24
+  const newMinute = Math.floor((totalSeconds % 3600) / 60)
+  const newSecond = totalSeconds % 60
+
+  const newDate = new Date(year, month - 1, day, newHour, newMinute, newSecond)
+
+  const formattedDate = `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')}`
+  const formattedTime = `${String(newHour).padStart(2, '0')}:${String(newMinute).padStart(2, '0')}:${String(newSecond).padStart(2, '0')}`
+
+  return `${formattedDate} ${formattedTime}`
 }
 
 // export const getEndDateTime = ({

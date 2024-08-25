@@ -91,27 +91,38 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
     scheduleParams.value
   )
 
-  console.log(spreadDate)
-
   spreadDate?.forEach(date => {
     if (date?.spreadType === 'MeasureSpread') {
-      console.log({
-        getDate: date,
-        startResultDate: getStartDateTime(date?.scheduledAt),
-        endResultDate: 0,
-      })
-      spreadStartDate.value = getStartDateTime(date?.scheduledAt) || ''
-      spreadEndDate.value = getEndDateTime({
-        startDateTime: getStartDateTime(date?.scheduledAt),
+      const startDate = getStartDateTime(date?.scheduledAt)
+      const endDate = getEndDateTime({
+        startDateTime: startDate,
         seconds: date?.length,
+      })
+
+      spreadStartDate.value = startDate || ''
+      spreadEndDate.value = endDate || ''
+
+      console.log({
+        getSpreadDate: date,
+        startSpreadResultDate: startDate,
+        endResultDate: endDate,
       })
     }
 
     if (date?.spreadType === 'MeasureNewsSpread') {
-      newsSpreadStartDate.value = date?.scheduledAt || ''
-      newsSpreadEndDate.value = getEndDateTime({
-        startDateTime: getStartDateTime(date?.scheduledAt),
+      const startDate = getStartDateTime(date?.scheduledAt)
+      const endDate = getEndDateTime({
+        startDateTime: startDate,
         seconds: date?.length,
+      })
+
+      newsSpreadStartDate.value = startDate || ''
+      newsSpreadEndDate.value = endDate || ''
+
+      console.log({
+        getNewsSpreadDate: date,
+        startNewsSpreadResultDate: startDate,
+        endResultDate: endDate,
       })
     }
   })
@@ -119,18 +130,22 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
 
 const onSpreadScheduleSave = () => {
   createRunSpreadMeasurements(dateSpreadParams.value)
+
+  console.log({
+    postSpreadData: dateSpreadParams.value,
+  })
 }
 
 const onNewsSpreadScheduleSave = () => {
   createRunSpreadMeasurements(dateNewsSpreadParams.value)
+
+  console.log({
+    postNewsSpreadData: dateNewsSpreadParams.value,
+  })
 }
 
 const onScheduleClose = () => {
   isOpenedScheduleModal.value = false
-  console.log({
-    dateSpreadParams: dateSpreadParams.value,
-    dateNewsSpreadParams: dateNewsSpreadParams.value,
-  })
 }
 
 const notSortableFields = ['schedule']
