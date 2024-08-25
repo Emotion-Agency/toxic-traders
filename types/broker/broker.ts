@@ -87,7 +87,7 @@ export interface iSearchBrokerParams {
   execution: number
   brokerServersMT4ServerNames: string
   brokerServersMT5ServerNames: string
-
+  orderIDDigits: number
   semrushOrganicSearchTraffic: string
   ahrefsTrafficMonthlyAvg: string
   similarWeb_EstimatedMonthlyVisits: string

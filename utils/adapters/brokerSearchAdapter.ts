@@ -54,6 +54,7 @@ export const brokerSearchAdapter = (
     depositMethods: Number(getParameter('method-of-deposits') || -1),
     leverage: Number(getParameter('leverage') || -1),
     serverTimezone: getServerTimezone(getParameter('server-timezone')),
+    orderIDDigits: Number(getParameter('order-id-digits') || -1),
     symbolName: getParameter('currency-symbol'),
     description: getParameter('description'),
     digits: Number(getParameter('digits') || -1),
