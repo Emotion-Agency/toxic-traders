@@ -119,6 +119,12 @@
         background-color: var(--white);
       }
     }
+
+    .reviews-item__menu-btn {
+      &:first-child {
+        color: var(--secondary-dark);
+      }
+    }
   }
 
   .custom-select__selected {
@@ -139,6 +145,10 @@
 
   .tags-input__dropdown-item {
     background-color: var(--gray-700);
+    color: var(--white);
+  }
+
+  .spreads__title {
     color: var(--white);
   }
 }
