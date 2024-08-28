@@ -197,7 +197,7 @@ const fetchServerAccountSymbols = async () => {
   if (serverType.value === 1) {
     const { brokerServerAccountSymbolMt5, totalCount } =
       await getServerAccountSymbolsMT5({
-        brokerServerAccountId: 1,
+        brokerServerAccountId: +accountId,
         page: currentPage.value - 1,
         pageSize: itemsCount.value,
         sortBy: sortBy.value,
