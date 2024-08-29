@@ -6,6 +6,8 @@ import type {
 } from '~/types/broker/brokerServerAccountSymbols'
 
 const router = useRouter()
+const route = useRoute()
+
 const symbolsNames = ref([])
 const filteredSymbolsNames = ref([])
 const spreads = ref<iBrokerServerAccountSymbolsSpread[]>([])
@@ -27,7 +29,10 @@ const {
   onInputBlur,
   onInputChange,
   onChangeCount,
-} = usePagination()
+} = usePagination(
+  route.query.page && Number(route.query.page),
+  route.query.count && Number(route.query.count)
+)
 
 const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsCurrent } =
   useBrokerServerAccountSymbols()
