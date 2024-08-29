@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 interface iProps {
   properties: string[]
 }
@@ -18,82 +21,82 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
-const checkboxList = ref([])
+const checkboxList = computed(() =>
+  props.properties.map(property => ({
+    value: formatNameToNormalCase(property),
+    id: property,
+    name: 'settings-checkboxes',
+    type: 'checkbox',
+    disabled: false,
+  }))
+)
 
 const selectedCheckboxItems = ref<string[]>([])
 
+
+const isInited = ref(false)
+
 watch(
-  () => props.properties,
+  () => checkboxList,
   () => {
-    checkboxList.value = props.properties.map(property => ({
-      value: formatNameToNormalCase(property),
-      id: property,
-      name: 'settings-checkboxes',
-      type: 'checkbox',
-      disabled: false,
-      checked: true,
-      isShow: true,
-    }))
-  }
+    if (isInited.value) {
+      return
+    }
+
+    selectedCheckboxItems.value = checkboxList.value.map(item => item.id)
+
+    isInited.value = true
+
+  },
+  {deep: true}
 )
 
-const onChange = (inputData: iInputData) => {
-  checkboxList.value = checkboxList.value.map(item => {
-    if (item.value.toLowerCase().includes(inputData.value.toLowerCase())) {
-      return {
-        ...item,
-        isShow: true,
-      }
-    }
 
-    return {
-      ...item,
-      isShow: false,
-    }
-  })
+const hiddenItems = ref<string[]>([])
+
+const onChange = (inputData: iInputData) => {
+  searchInput.value = inputData.value
+  const searchValue = inputData.value.toLowerCase()
+
+  const filteredItems = checkboxList.value.filter(item =>
+    item.value.toLowerCase().includes(searchValue)
+  )
+
+
+
+  hiddenItems.value = checkboxList.value
+    .map(item => item.id)
+    .filter(item => !filteredItems.map(item => item.id).includes(item))
+
+  if (searchValue === '') {
+    return
+  }
 }
 
 const selectAllItems = () => {
-  checkboxList.value = checkboxList.value.map(item => {
-    return {
-      ...item,
-      checked: true,
-    }
-  })
+  selectedCheckboxItems.value = checkboxList.value.map(item => item.id)
 }
 
 const resetAllItems = () => {
-  checkboxList.value = checkboxList.value.map(item => {
-    return {
-      ...item,
-      checked: false,
-    }
-  })
+  selectedCheckboxItems.value = []
 }
 
 const onChangeCheckbox = (val: string, checked: boolean) => {
-  checkboxList.value = checkboxList.value.map(item => {
-    if (item.value === val) {
-      return {
-        ...item,
-        checked,
-      }
-    }
+  if (checked) {
+    selectedCheckboxItems.value = [...selectedCheckboxItems.value, val]
+  } else {
+    selectedCheckboxItems.value = selectedCheckboxItems.value.filter(
+      item => item !== val
+    )
+  }
 
-    return item
-  })
 }
 
 watch(
-  () => checkboxList.value,
+  () => selectedCheckboxItems.value,
   () => {
-    selectedCheckboxItems.value = checkboxList.value
-      .filter(item => item.checked)
-      .map(item => item.id)
-
     emit('change', selectedCheckboxItems.value)
-  },
-  { deep: true }
+  }
 )
 </script>
 
@@ -140,15 +143,15 @@ watch(
     <div class="settings__content">
       <CheckboxInput
         v-for="(item, idx) in checkboxList"
-        v-show="item.isShow"
+        v-show="!hiddenItems.includes(item.id)"
         :id="item.id"
         :key="idx"
         :value="item.value"
         :name="item.name"
         :type="item.type"
         :disabled="item.disabled"
-        :checked="item.checked"
-        @input-value="onChangeCheckbox"
+        :checked="selectedCheckboxItems.includes(item.id)"
+        @input-value="(_, checked) => onChangeCheckbox(item.id, checked)"
       />
     </div>
     <div class="settings__info">

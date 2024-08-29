@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import debounce from 'debounce'
 
 import { deepClone } from '~/utils/deepClone'
@@ -11,6 +14,8 @@ interface iProps {
 defineProps<iProps>()
 
 const emit = defineEmits(['search'])
+
+const isInited = ref(false)
 
 const { getCategoriesList } = useBrokerCategories()
 const { getAllEnums } = useEnums()
@@ -354,6 +359,11 @@ const getEnumIdx = (item: iSearchInput) => {
 }
 
 const debounceSearch = debounce(() => {
+  if (!isInited.value) {
+    isInited.value = true
+    return
+  }
+
   const searchItemsWithEnums = searchItems.value.map(item => {
     if (item.id === 'platforms') {
       item = {
@@ -398,6 +408,7 @@ const debounceSearch = debounce(() => {
 
 watch(searchItems, () => {
   debounceSearch()
+
 })
 
 onMounted(async () => {
@@ -406,12 +417,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="brokers-search" :class="isOpened && 'brokers-search--opened'">
+  <div
+    class="brokers-search"
+    :class="isOpened && 'brokers-search--opened'"
+  >
     <div class="broker__search-clip">
       <div class="brokers-search__wrapper">
         <div class="brokers-search__header">
           <h5 class="brokers-search__title">Search</h5>
-          <button class="brokers-search__reset" @click="resetSearch">
+          <button
+            class="brokers-search__reset"
+            @click="resetSearch"
+          >
             Reset
           </button>
         </div>

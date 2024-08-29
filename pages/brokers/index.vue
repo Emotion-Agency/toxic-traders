@@ -9,7 +9,8 @@ const router = useRouter()
 const route = useRoute()
 
 const brokersList = ref<iBroker[]>([])
-const filteredBrokers = ref<iBroker[]>([])
+
+const settingsItems = ref<string[]>([])
 
 const isLoading = ref(true)
 const isSearchOpened = ref(false)
@@ -43,32 +44,13 @@ const closeHistory = () => {
   isHistoryOpened.value = false
 }
 
-const changeTableColumns = (properties: string[]) => {
-  filteredBrokers.value = brokersList.value.map(broker => {
-    const formattedColumnsName = Object.keys(broker)
-
-    let newObj = {}
-
-    formattedColumnsName.forEach(column => {
-      if (properties.includes(column)) {
-        newObj = {
-          ...newObj,
-          [column]: broker[column],
-        }
-      }
-    })
-
-    return newObj
-  })
-}
-
 const brokersHeadings = computed(() => {
   return getBrokerHeadings(brokersList.value[0] ?? {})
 })
 
-const filteredBrokerHeading = computed(() => {
-  return getBrokerHeadings(filteredBrokers.value[0] ?? {})
-})
+const changeTableColumns = (properties: string[]) => {
+  settingsItems.value = properties
+}
 
 const {
   currentPage,
@@ -97,8 +79,13 @@ const getBrokersRequest = async () => {
   })
 
   isLoading.value = false
-  brokersList.value = updatedBrokers
-  filteredBrokers.value = brokersList.value
+  brokersList.value = updatedBrokers.map(broker => {
+    return {
+      ...broker,
+      brokerServerTimezone: minutesToGMT(broker?.brokerServerTimezone),
+    }
+  })
+
   totalCountPages.value = totalCount
 }
 
@@ -133,6 +120,31 @@ const onSort = async (sortState: ISortState) => {
 
   await getBrokersRequest()
 }
+
+const showedBrokers = computed(() => {
+  return brokersList.value.map(broker => {
+    const formattedColumnsName = Object.keys(broker)
+
+    let newObj = {}
+
+    formattedColumnsName.forEach(column => {
+      if (settingsItems.value.includes(column)) {
+        newObj = {
+          ...newObj,
+          [column]: broker[column],
+        }
+      }
+    })
+
+    return newObj
+  })
+})
+
+const showedHeadings = computed(() => {
+  return brokersHeadings.value.filter(item =>
+    settingsItems.value.includes(item)
+  )
+})
 </script>
 
 <template>
@@ -184,8 +196,8 @@ const onSort = async (sortState: ISortState) => {
         <div v-if="brokersList.length" class="brokers__table-wrapper">
           <BrokersTable
             :is-search-opened="isSearchOpened"
-            :brokers="filteredBrokers"
-            :heading-fields="filteredBrokerHeading"
+            :brokers="showedBrokers"
+            :heading-fields="showedHeadings"
             :default-sort-by="sortedBy"
             class="brokers__table"
             @sort="onSort"

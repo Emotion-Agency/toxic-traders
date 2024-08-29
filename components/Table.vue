@@ -1,55 +1,45 @@
 <script lang="ts" setup>
-import { resize } from '~/utils/ea'
+import { raf } from '~/utils/ea'
 
 interface iProps {
   withLog?: boolean
 }
 
-const props = defineProps<iProps>()
+defineProps<iProps>()
 
 const $table = ref<HTMLElement | null>(null)
-const isFullWidth = ref(false)
-const observer = ref<MutationObserver>(null)
+const columnsCount = ref(0)
 
 const detectTableWidth = () => {
-  const $tableWrapper = $table.value.querySelector(
-    '.table__wrapper'
-  ) as HTMLElement
+  const $rows = $table.value?.querySelectorAll('.table-row')
 
-  const containerWidth = $table.value.offsetWidth
-  const bodyWidth = $tableWrapper.scrollWidth
+  if (!$rows) return
 
-  isFullWidth.value = bodyWidth <= containerWidth
+  const $firstRow = $rows[0]
 
-  // if (props.withLog) {
-  //   console.log('containerWidth:', containerWidth, 'bodyWidth:', bodyWidth)
-  // }
+  if (!$firstRow) return
+
+  const $cells = $firstRow.querySelectorAll('.table-cell')
+
+  if (!$cells) return
+
+  if (columnsCount.value === $cells.length) return
+
+  columnsCount.value = $cells.length
 }
 
 onMounted(() => {
-  const config = {
-    attributes: true,
-    childList: true,
-    subtree: true,
-  }
-
-  resize.on(detectTableWidth)
-
-  observer.value = new MutationObserver(detectTableWidth)
-
-  observer.value.observe($table.value, config)
+  raf.on(detectTableWidth)
 })
 
 onBeforeUnmount(() => {
-  observer.value?.disconnect()
-
-  resize.off(detectTableWidth)
+  raf.off(detectTableWidth)
 })
 </script>
 
 <template>
-  <div ref="$table" class="table" :class="isFullWidth && 'table--full-width'">
-    <div class="table__wrapper">
+  <div ref="$table" class="table" :style="{ '--columns-count': columnsCount }">
+    <div ref="$tableWrapper" class="table__wrapper">
       <slot />
     </div>
     <CustomScrollbar axis="y" />

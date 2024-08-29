@@ -1,18 +1,10 @@
 .table {
+  --columns-count: 1;
   transition: width 0.3s ease;
   width: 100%;
   overflow: hidden;
   border-radius: 10px;
   height: fit-content;
-
-  &--full-width {
-    .table-cell {
-      width: 100% !important;
-    }
-    .table-row {
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    }
-  }
 }
 
 .table-cell {
@@ -66,7 +58,7 @@
 .table-row {
   display: grid;
   grid-auto-flow: column;
-  // grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(var(--columns-count), 1fr);
   min-width: fit-content;
   width: 100%;
   background-color: var(--white);

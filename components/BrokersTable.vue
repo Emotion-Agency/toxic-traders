@@ -4,7 +4,7 @@ import type { iBroker } from '~/types/broker/broker'
 interface iProps {
   brokers: iBroker[]
   isSearchOpened: boolean
-  headingFields: string[] | []
+  headingFields: string[]
   defaultSortBy?: string
 }
 
@@ -29,15 +29,6 @@ const emit = defineEmits(['sort'])
 // const updatedBrokers = computed(() => {
 //   return props.brokers.map(broker => adapter(broker))
 // })
-
-const updatedBrokers = computed(() => {
-  return props.brokers.map(broker => {
-    return {
-      ...broker,
-      brokerServerTimezone: minutesToGMT(broker?.brokerServerTimezone),
-    }
-  })
-})
 
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
@@ -81,7 +72,7 @@ const isSortable = (field: string) => {
     </TableHead>
     <TableBody>
       <TableRow
-        v-for="(broker, idx) in updatedBrokers"
+        v-for="(broker, idx) in brokers"
         :key="idx"
         :link="{
           url: `/brokers/${broker.id}`,
