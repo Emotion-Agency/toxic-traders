@@ -37,7 +37,9 @@ const { sortState, onSort } = useSort(
   {
     sortBy: props.defaultSortBy,
   },
-  () => emit('sort', sortState.value)
+  () => {
+    emit('sort', sortState.value)
+  }
 )
 
 const dateSpreadParams = computed(() => {
@@ -171,7 +173,9 @@ const isSortable = (field: string) => {
               ]"
               :is-sort="isSortable(headerItem)"
               :sort-order="sortState.sortOrder"
-              :is-active="sortState.sortBy === headerItem"
+              :is-active="
+                sortState.sortBy === formatNameToNormalCase(headerItem)
+              "
               @sort="onSort"
             />
           </TableRow>

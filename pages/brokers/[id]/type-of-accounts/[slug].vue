@@ -5,6 +5,7 @@ import type { iBrokerServerAccountOrder } from '~/types/broker/brokerServerAccou
 import type {
   iBrokerServerAccountSymbolsMT4,
   iBrokerServerAccountSymbolsMT5,
+  iBrokerServerAccountTable,
 } from '~/types/broker/brokerServerAccountSymbols'
 
 const route = useRoute()
@@ -47,9 +48,9 @@ const accountOrders = ref<iBrokerServerAccountOrder[]>([])
 const serverAccountSymbolsMT4 = ref<iBrokerServerAccountSymbolsMT4[]>([])
 const serverAccountSymbolsMT5 = ref<iBrokerServerAccountSymbolsMT5[]>([])
 const isLoading = ref(true)
-const filteredTableItems = ref([])
 const sortBy = ref('currency')
 const sortOrder = ref<1 | 2>(1)
+const settingsItems = ref<string[]>([])
 
 const [serverId, accountId] = (route.params.slug as string).split('-')
 const currentAccount = ref<iBrokerServerAccount>(null)
@@ -121,8 +122,23 @@ const headerFields = computed(() => {
   return Object.keys(tableItems.value[0] ?? {})
 })
 
-const filteredHeaderFields = computed(() => {
-  return getBrokerHeadings(filteredTableItems.value[0] ?? {})
+const showedHeadings = computed(() => {
+  return headerFields.value.filter(item => settingsItems.value.includes(item))
+})
+
+const showedTableItems = computed(() => {
+  return tableItems.value.map(item => {
+    let newObj = {} as iBrokerServerAccountTable
+
+    showedHeadings.value.forEach(column => {
+      newObj = {
+        ...newObj,
+        [column]: item[column],
+      }
+    })
+
+    return newObj
+  })
 })
 
 const notesOnChange = (val: iInput) => {
@@ -157,19 +173,7 @@ const closeOrderIdList = () => {
 }
 
 const changeTableColumns = (properties: string[]) => {
-  filteredTableItems.value = tableItems.value.map(item => {
-    const formattedColumnsName = Object.keys(item)
-    let newObj = {}
-    formattedColumnsName.forEach(column => {
-      if (properties.includes(column)) {
-        newObj = {
-          ...newObj,
-          [column]: item[column],
-        }
-      }
-    })
-    return newObj
-  })
+  settingsItems.value = properties
 }
 
 const onSorted = async (sortState: ISortState) => {
@@ -315,8 +319,8 @@ onMounted(async () => {
             class="type-of-account__bottom-table-wrapper"
           >
             <BrokerTypeOfAccountsTable
-              :header-fields="filteredHeaderFields"
-              :table-items="filteredTableItems"
+              :header-fields="showedHeadings"
+              :table-items="showedTableItems"
               :server-type="serverType"
               :timezone="getGMTOffset(currentAccount?.brokerServerTimeZone)"
               :default-sort-by="sortBy"
