@@ -261,8 +261,8 @@ onMounted(async () => {
               </li> -->
             </ul>
           </div>
-          <UiLoader v-if="isTableLoading && filteredSpreads.length" />
-          <div v-else class="spreads__table-wrapper">
+
+          <div v-if="filteredSpreads.length" class="spreads__table-wrapper">
             <div class="spreads__table-content">
               <SpreadsTable
                 :header-fields="headerFields"
@@ -288,6 +288,7 @@ onMounted(async () => {
               />
             </div>
           </div>
+          <UiLoader v-if="isTableLoading" />
         </div>
         <UiLoader v-if="isContentLoading" />
       </div>
