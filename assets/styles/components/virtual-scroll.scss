@@ -1,0 +1,10 @@
+.virtual-scroll {
+  overflow: auto;
+  width: 100%;
+  border: 2px solid black;
+  position: relative;
+}
+
+.virtual-scroll-item {
+  width: 100%;
+}

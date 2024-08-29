@@ -79,6 +79,12 @@ onMounted(() => {
 onUnmounted(() => {
   document.body.removeEventListener('click', outsideClick)
 })
+
+const renderedItems = ref([])
+
+const updateRenderedItems = (items: any[]) => {
+  renderedItems.value = items
+}
 </script>
 
 <template>
@@ -131,7 +137,7 @@ onUnmounted(() => {
         </TheInput>
       </div>
 
-      <ul class="custom-select__list">
+      <!-- <ul class="custom-select__list">
         <li
           v-if="!options.length"
           class="custom-select__item"
@@ -150,7 +156,34 @@ onUnmounted(() => {
             {{ typeof option === 'string' ? option : option?.text }}
           </p>
         </li>
-      </ul>
+      </ul> -->
+      <VirtualScroll
+        :items="options"
+        :item-height="35"
+        class="custom-select__list"
+        @update:activeItems="updateRenderedItems"
+      >
+        <li
+          v-if="!options.length"
+          class="custom-select__item"
+          @click="closeList()"
+        >
+          <p class="custom-select__item-text">Options not found</p>
+        </li>
+        <VirtualScrollItem
+          v-for="(option, index) in renderedItems"
+          v-else
+          :key="typeof option === 'string' ? option : option?.id"
+          class="custom-select__item"
+          :item-height="35"
+          :index="index"
+          @click="selectItem(option)"
+        >
+          <p class="custom-select__item-text">
+            {{ typeof option === 'string' ? option : option?.text }}
+          </p>
+        </VirtualScrollItem>
+      </VirtualScroll>
     </div>
   </div>
 </template>
