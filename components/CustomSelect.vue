@@ -137,26 +137,6 @@ const updateRenderedItems = (items: any[]) => {
         </TheInput>
       </div>
 
-      <!-- <ul class="custom-select__list">
-        <li
-          v-if="!options.length"
-          class="custom-select__item"
-          @click="closeList()"
-        >
-          <p class="custom-select__item-text">Options not found</p>
-        </li>
-        <li
-          v-for="option in options"
-          v-else
-          :key="typeof option === 'string' ? option : option?.id"
-          class="custom-select__item"
-          @click="selectItem(option)"
-        >
-          <p class="custom-select__item-text">
-            {{ typeof option === 'string' ? option : option?.text }}
-          </p>
-        </li>
-      </ul> -->
       <VirtualScroll
         :items="options"
         :item-height="35"

@@ -34,13 +34,6 @@ const renderedNodesCount = computed(() =>
 )
 
 const activeItems = computed(() => {
-  // let items: JSX.Element[] = [];
-  //   for (let i = 0; i < renderedNodesCount; i++) {
-  //     const index = i + startIndex;
-  //     items.push(<ListItem key={index} index={index} />);
-  //   }
-
-  //   return items;
   return props.items.slice(
     startIndex.value,
     startIndex.value + renderedNodesCount.value
