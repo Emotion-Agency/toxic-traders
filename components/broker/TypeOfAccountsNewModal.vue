@@ -52,7 +52,7 @@ const createdAccountItems = ref<iAccountModalItem[]>([
     name: 'Account server',
     value: '',
     placeholder: 'Server',
-    options: updatedServersList,
+    options: updatedServersList as unknown as iOptionItem[],
   },
 ])
 
