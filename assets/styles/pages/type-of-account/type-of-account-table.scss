@@ -1,3 +1,20 @@
+.type-of-account-table {
+  .table-cell--schedule,
+  .table-cell--digits,
+  .table-cell--minLots {
+    min-width: 130px;
+  }
+
+  .table-cell--minLots,
+  .table-cell--spread,
+  .table-cell--id,
+  .table-cell--lotsStep,
+  .table-cell--fillPolicy,
+  .table-cell--isin {
+    min-width: 150px;
+  }
+}
+
 .type-of-account-table__schedule {
   padding-top: 16px;
 }

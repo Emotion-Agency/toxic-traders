@@ -165,7 +165,10 @@ const isSortable = (field: string) => {
               v-for="(headerItem, idx) in headerFields"
               :key="idx"
               :item="formatNameToNormalCase(headerItem)"
-              :class="`table-cell--${idx}`"
+              :class="[
+                `table-cell--${idx}`,
+                `table-cell--${headerFields[idx]}`,
+              ]"
               :is-sort="isSortable(headerItem)"
               :sort-order="sortState.sortOrder"
               :is-active="sortState.sortBy === headerItem"
