@@ -60,13 +60,6 @@ const { sortState, onSort } = useSort(
     sortBy: props.defaultSortBy,
   },
   () => {
-    console.log(sortState.value, {
-      ...sortState.value,
-      sortBy:
-        formattedHeadingFields.value[
-          shorterHeadings.value.findIndex(el => el === sortState.value.sortBy)
-        ],
-    })
     emit('sort', {
       ...sortState.value,
       sortBy:
