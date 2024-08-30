@@ -34,19 +34,55 @@ const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
 })
 
+const shorterHeadings = computed(() => {
+  return formattedHeadingFields.value
+    .map(field => field.replace('Broker ', ''))
+    .map(field => field.replace(/^Reviews\s+/, ''))
+    .map(field => {
+      if (field === 'Servers MT4 Server Names') {
+        return 'MT4 Servers'
+      }
+
+      if (field === 'Servers MT5 Server Names') {
+        return 'MT5 Servers'
+      }
+
+      if (field === 'Base Server Location') {
+        return 'Server Location'
+      }
+
+      return field
+    })
+})
+
 const { sortState, onSort } = useSort(
   {
     sortBy: props.defaultSortBy,
   },
-  () => emit('sort', sortState.value)
+  () => {
+    console.log(sortState.value, {
+      ...sortState.value,
+      sortBy:
+        formattedHeadingFields.value[
+          shorterHeadings.value.findIndex(el => el === sortState.value.sortBy)
+        ],
+    })
+    emit('sort', {
+      ...sortState.value,
+      sortBy:
+        formattedHeadingFields.value[
+          shorterHeadings.value.findIndex(el => el === sortState.value.sortBy)
+        ],
+    })
+  }
 )
 
 const notSortableFields = [
   'Id',
-  'Broker Platforms',
+  'Platforms',
   'Regulator Name',
   'Restricted Countries',
-  'Broker Company Name Statistic',
+  'Company Name Statistic',
 ]
 
 const isSortable = (field: string) => {
@@ -59,7 +95,7 @@ const isSortable = (field: string) => {
     <TableHead>
       <TableRow>
         <TableCell
-          v-for="(headerItem, idx) in formattedHeadingFields"
+          v-for="(headerItem, idx) in shorterHeadings"
           :key="idx"
           :item="headerItem"
           :class="[`table-cell--${idx}`, `table-cell--${headingFields[idx]}`]"
