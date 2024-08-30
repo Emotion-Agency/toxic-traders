@@ -24,7 +24,7 @@ const onSort = () => {
 </script>
 
 <template>
-  <div class="table-cell">
+  <div class="table-cell" :title="item?.toString()">
     <NuxtLink
       v-if="link && link?.text?.length"
       :to="link!.url"

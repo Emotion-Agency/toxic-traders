@@ -20,6 +20,12 @@
   overflow-wrap: anywhere;
 }
 
+.table-cell__text {
+  max-height: 70px;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
 .table__wrapper {
   overflow: auto;
   position: relative;
