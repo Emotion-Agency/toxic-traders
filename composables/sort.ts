@@ -12,9 +12,17 @@ export const useSort = (defaultSortState?: ISortState, onSortCb?: TFunc) => {
   })
 
   const onSort = (item: string) => {
+    const isSameSortBy = sortState.value.sortBy === item
+
+    const sortOrder = isSameSortBy
+      ? sortState.value.sortOrder === 1
+        ? 2
+        : 1
+      : 1
+
     sortState.value = {
       sortBy: item,
-      sortOrder: sortState.value.sortOrder === 1 ? 2 : 1,
+      sortOrder,
     }
 
     if (typeof onSortCb !== 'function') return

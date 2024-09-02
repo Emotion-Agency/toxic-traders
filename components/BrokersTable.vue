@@ -13,24 +13,6 @@ const props = defineProps<iProps>()
 
 const emit = defineEmits(['sort'])
 
-// onMounted(() => {
-//   console.log(
-//     props.brokers.map(broker => {
-//       return {
-//         ...broker,
-//         companyNames: {
-//           text: broker.companyNames,
-//           url: `/brokers/${broker.companyNames}`,
-//         },
-//       }
-//     })
-//   )
-// })
-
-// const updatedBrokers = computed(() => {
-//   return props.brokers.map(broker => adapter(broker))
-// })
-
 const formattedHeadingFields = computed(() => {
   return props.headingFields.map(field => formatNameToNormalCase(field))
 })
@@ -88,6 +70,18 @@ const { sortState, onSort } = useSort(
   }
 )
 
+watch(
+  () => props.headingFields,
+  () => {
+    console.log(
+      props.defaultSortBy,
+      props.headingFields,
+      formattedHeadingFields.value,
+      shorterHeadings.value
+    )
+  }
+)
+
 const notSortableFields = [
   'Id',
   'Platforms',
@@ -112,7 +106,13 @@ const isSortable = (field: string) => {
           :class="[`table-cell--${idx}`, `table-cell--${headingFields[idx]}`]"
           :is-sort="isSortable(headerItem)"
           :sort-order="sortState.sortOrder"
-          :is-active="sortState.sortBy === headerItem"
+          :is-active="
+            sortState.sortBy?.toLowerCase() === headerItem?.toLowerCase() ||
+            sortState.sortBy?.toLowerCase() ===
+              headingFields[idx]?.toLowerCase() ||
+            sortState.sortBy?.toLowerCase() ===
+              formattedHeadingFields[idx]?.toLowerCase()
+          "
           @sort="onSort"
         />
       </TableRow>
