@@ -16,8 +16,8 @@ const isLoading = ref(true)
 const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
-const sortedBy = ref('companynames')
-const sortedOrder = ref<1 | 2>(1)
+const sortedBy = ref((route.query?.sortedBy as string) ?? 'companynames')
+const sortedOrder = ref<1 | 2>((+route.query?.sortedOrder as 1 | 2) ?? 1)
 const searchData = ref<iSearchInput[]>([])
 
 const { getAllBrokersBySearch } = useBrokers()
@@ -94,6 +94,8 @@ watch([currentPage, itemsCount], async () => {
 
   router.push({
     query: {
+      ...route.query,
+
       page: currentPage.value,
       count: itemsCount.value,
     },
@@ -107,6 +109,14 @@ onMounted(async () => {
 const onSearch = async (data: iSearchInput[]) => {
   searchData.value = data
 
+  console.log(data)
+
+  // router.push({
+  //   query: {
+
+  //   },
+  // })
+
   currentPage.value = 1
   await getBrokersRequest()
 }
@@ -117,6 +127,14 @@ const onSort = async (sortState: ISortState) => {
   if (sortedBy.value === 'brokercategories') sortedBy.value = 'brokercategory'
 
   sortedOrder.value = sortState.sortOrder
+
+  router.push({
+    query: {
+      ...route.query,
+      sortedBy: sortState.sortBy,
+      sortedOrder: sortedOrder.value,
+    },
+  })
 
   await getBrokersRequest()
 }
@@ -199,6 +217,7 @@ const showedHeadings = computed(() => {
             :brokers="showedBrokers"
             :heading-fields="showedHeadings"
             :default-sort-by="sortedBy"
+            :default-sort-order="sortedOrder"
             class="brokers__table"
             @sort="onSort"
           />

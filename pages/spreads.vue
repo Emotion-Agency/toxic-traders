@@ -191,6 +191,7 @@ watch([currentPage, itemsCount], async () => {
 
   router.push({
     query: {
+      ...route.query,
       page: currentPage.value,
       count: itemsCount.value,
     },

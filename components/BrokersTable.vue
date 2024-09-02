@@ -6,6 +6,7 @@ interface iProps {
   isSearchOpened: boolean
   headingFields: string[]
   defaultSortBy?: string
+  defaultSortOrder?: 1 | 2
 }
 
 const props = defineProps<iProps>()
@@ -51,6 +52,22 @@ const shorterHeadings = computed(() => {
         return 'Server Location'
       }
 
+      if (field === 'Server Timezone') {
+        return 'Timezone'
+      }
+
+      if (field === 'Semrush_Organic Search Traffic') {
+        return 'Semrush'
+      }
+
+      if (field === 'Ahrefs_Traffic Monthly Avg') {
+        return 'Ahrefs'
+      }
+
+      if (field === 'Similar Web_Estimated Monthly Visits') {
+        return 'Similar Web'
+      }
+
       return field
     })
 })
@@ -58,6 +75,7 @@ const shorterHeadings = computed(() => {
 const { sortState, onSort } = useSort(
   {
     sortBy: props.defaultSortBy,
+    sortOrder: props.defaultSortOrder,
   },
   () => {
     emit('sort', {
