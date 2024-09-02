@@ -74,7 +74,7 @@ const getBrokersRequest = async () => {
     offset: currentPage.value - 1,
     count: itemsCount.value,
     sortBy: sortedBy.value || 'companynames',
-    sortOrder: sortedOrder.value || 0,
+    sortOrder: sortedOrder.value || 1,
     data: searchData.value ?? [],
   })
 
@@ -131,7 +131,7 @@ const onSort = async (sortState: ISortState) => {
   router.push({
     query: {
       ...route.query,
-      sortedBy: sortState.sortBy,
+      sortedBy: sortedBy.value,
       sortedOrder: sortedOrder.value,
     },
   })
