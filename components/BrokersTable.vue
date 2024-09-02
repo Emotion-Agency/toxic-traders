@@ -70,18 +70,6 @@ const { sortState, onSort } = useSort(
   }
 )
 
-watch(
-  () => props.headingFields,
-  () => {
-    console.log(
-      props.defaultSortBy,
-      props.headingFields,
-      formattedHeadingFields.value,
-      shorterHeadings.value
-    )
-  }
-)
-
 const notSortableFields = [
   'Id',
   'Platforms',

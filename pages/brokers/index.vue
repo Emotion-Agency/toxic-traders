@@ -109,14 +109,6 @@ onMounted(async () => {
 const onSearch = async (data: iSearchInput[]) => {
   searchData.value = data
 
-  console.log(data)
-
-  // router.push({
-  //   query: {
-
-  //   },
-  // })
-
   currentPage.value = 1
   await getBrokersRequest()
 }
