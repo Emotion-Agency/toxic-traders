@@ -18,23 +18,22 @@ const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
 const selectedItem = ref<string | iOptionItem | null>(null)
 
-watch(
-  () => props.value,
-  () => {
-    if (props.value) {
-      if (typeof props.value === 'string') {
-        selectedItem.value = props.value
-      } else {
-        selectedItem.value =
-          props.options.find(
-            option => typeof option !== 'string' && option.text === props.value
-          ) || null
-      }
+const setupPropsValue = () => {
+  if (props.value) {
+    if (typeof props.value === 'string') {
+      selectedItem.value = props.value
     } else {
-      selectedItem.value = null
+      selectedItem.value =
+        props.options.find(
+          option => typeof option !== 'string' && option.text === props.value
+        ) || null
     }
+  } else {
+    selectedItem.value = null
   }
-)
+}
+
+watch(() => props.value, setupPropsValue)
 
 const emit = defineEmits(['select', 'search', 'reset'])
 
@@ -74,6 +73,8 @@ const onSearch = (input: iInput) => {
 
 onMounted(() => {
   document.body.addEventListener('click', outsideClick)
+
+  setupPropsValue()
 })
 
 onUnmounted(() => {
