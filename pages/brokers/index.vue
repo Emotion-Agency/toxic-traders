@@ -17,7 +17,9 @@ const isSearchOpened = ref(false)
 const isSettingsOpened = ref(false)
 const isHistoryOpened = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'companynames')
-const sortedOrder = ref<1 | 2>((+route.query?.sortedOrder as 1 | 2) ?? 1)
+const sortedOrder = ref<1 | 2>(
+  route.query?.sortedOrder ? (+route.query?.sortedOrder as 1 | 2) : 1
+)
 const searchData = ref<iSearchInput[]>([])
 
 const { getAllBrokersBySearch } = useBrokers()
@@ -102,7 +104,11 @@ watch([currentPage, itemsCount], async () => {
   })
 })
 
+const { search } = useBrokerSearch()
+
 onMounted(async () => {
+  const items = search()
+  searchData.value = items
   await getBrokersRequest()
 })
 
