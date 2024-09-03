@@ -1,4 +1,5 @@
 import {
+  getBrokerServerAccountSymbolsDescriptions,
   getBrokerServerAccountSymbolsMT4,
   getBrokerServerAccountSymbolsMT5,
   getBrokerServerAccountSymbolsNames,
@@ -100,6 +101,20 @@ export const useBrokerServerAccountSymbols = () => {
     }
   }
 
+  const getServerAccountSymbolsDescriptions = async () => {
+    try {
+      const data = await getBrokerServerAccountSymbolsDescriptions()
+
+      return data
+    } catch (error) {
+      console.error('Error fetching server account symbols names:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching server account symbols names. Please try again.',
+      })
+    }
+  }
+
   const getServerAccountSymbolsMT4 = async (
     params: iBrokerServerAccountSymbolsParams
   ) => {
@@ -146,6 +161,7 @@ export const useBrokerServerAccountSymbols = () => {
     getServerAccountSymbolsSpreads,
     getServerAccountSymbolsSpreadsAll,
     getServerAccountSymbolsNames,
+    getServerAccountSymbolsDescriptions,
     getServerAccountSymbolsSpreadsSchedule,
     getServerAccountSymbolsSpreadsCurrent,
   }

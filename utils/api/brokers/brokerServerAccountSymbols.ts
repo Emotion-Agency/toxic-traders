@@ -168,3 +168,17 @@ export const getBrokerServerAccountSymbolsNames = async () => {
     }
   }
 }
+
+export const getBrokerServerAccountSymbolsDescriptions = async () => {
+  try {
+    const { data }: iBrokerServerAccountSymbolsNamesData =
+      await axiosInstance.get(`BrokerServerAccountSymbols/symbols/descriptions`)
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}

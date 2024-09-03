@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import debounce from 'debounce'
 import type {
   iBrokerServerAccountSymbolsSpread,
   iBrokerUniqueServerAccountSymbolsSpread,
@@ -9,15 +8,17 @@ const router = useRouter()
 const route = useRoute()
 
 const symbolsNames = ref([])
+const symbolsDescriptions = ref([])
 const filteredSymbolsNames = ref([])
+const filteredSymbolsDescriptions = ref([])
 const spreads = ref<iBrokerServerAccountSymbolsSpread[]>([])
 const filteredSpreads = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
 const selectedSymbol = ref<string>(null)
+const selectedDescription = ref<string>(null)
 const isContentLoading = ref(true)
 const isTableLoading = ref(true)
 const sortBy = ref('BrokerCompanyNames')
 const sortOrder = ref<1 | 2>(1)
-const descriptionValue = ref('none')
 
 const {
   currentPage,
@@ -34,19 +35,11 @@ const {
   route.query.count && Number(route.query.count)
 )
 
-const { getServerAccountSymbolsNames, getServerAccountSymbolsSpreadsCurrent } =
-  useBrokerServerAccountSymbols()
-
-const descriptionInput = reactive({
-  title: 'Description',
-  required: false,
-  id: 'spreads-description',
-  name: 'Spreads description',
-  type: 'text',
-  value: '',
-  placeholder: 'Write your desription',
-  isRightButton: true,
-})
+const {
+  getServerAccountSymbolsNames,
+  getServerAccountSymbolsSpreadsCurrent,
+  getServerAccountSymbolsDescriptions,
+} = useBrokerServerAccountSymbols()
 
 const symbolSelect = computed(() => {
   return {
@@ -64,13 +57,29 @@ const symbolSelect = computed(() => {
   }
 })
 
+const descriptionSelect = computed(() => {
+  return {
+    options: filteredSymbolsDescriptions.value,
+    placeholder: 'Select description',
+    title: 'Description',
+    searchInput: {
+      id: 'spreads-search-description',
+      required: false,
+      name: 'Spreads search description',
+      type: 'text',
+      placeholder: 'Search description',
+      isRightButton: true,
+    },
+  }
+})
+
 const getCurrentSpreadRequest = async () => {
   isTableLoading.value = true
 
   const { brokerServerAccountSymbols, totalCount } =
     await getServerAccountSymbolsSpreadsCurrent({
       symbolName: selectedSymbol.value || '*',
-      description: descriptionValue.value,
+      description: selectedDescription.value || 'none',
       page: currentPage.value - 1,
       pageSize: itemsCount.value,
       sortBy: sortBy.value || 'BrokerCompanyNames',
@@ -92,45 +101,6 @@ const getCurrentSpreadRequest = async () => {
   totalCountPages.value = totalCount
 }
 
-const debounceDescription = debounce(async (val: string) => {
-  descriptionValue.value = val
-  await getCurrentSpreadRequest()
-}, 1000)
-
-// const platformsSelect = computed(() => {
-//   return {
-//     options: ['MT 4', 'MT 5'],
-//     placeholder: 'Select platform',
-//     title: 'Platforms',
-//   }
-// })
-
-// const getAllSpreadsRequest = async () => {
-//   isTableLoading.value = true
-
-//   const { brokerServerAccountSymbols, totalCount } =
-//     await getServerAccountSymbolsSpreadsAll({
-//       page: currentPage.value - 1,
-//       pageSize: itemsCount.value,
-//       sortBy: sortBy.value || 'BrokerCompanyNames',
-//       sortOrder: sortOrder.value || 1,
-//     })
-
-//   isTableLoading.value = false
-//   spreads.value = brokerServerAccountSymbols
-//   filteredSpreads.value = spreads.value.map(item => {
-//     return {
-//       broker: item?.brokerCompanyNames[0],
-//       accountType: item?.accountType,
-//       serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
-//       spread: item?.spread,
-//       newsSpread: item?.newsSpread,
-//     }
-//   })
-
-//   totalCountPages.value = totalCount
-// }
-
 const searchSymbolsName = (searchValue: string) => {
   filteredSymbolsNames.value = symbolsNames.value?.filter(
     item =>
@@ -139,9 +109,25 @@ const searchSymbolsName = (searchValue: string) => {
   )
 }
 
+const searchSymbolsDescription = (searchValue: string) => {
+  filteredSymbolsDescriptions.value = symbolsDescriptions.value?.filter(
+    item =>
+      item.toLowerCase().trim().includes(searchValue.toLowerCase().trim()) &&
+      item !== selectedDescription.value
+  )
+}
+
 const selectSymbolsName = async (item: string) => {
   selectedSymbol.value = item
   filteredSymbolsNames.value = symbolsNames.value?.filter(name => name !== item)
+  await getCurrentSpreadRequest()
+}
+
+const selectSymbolsDescription = async (item: string) => {
+  selectedDescription.value = item
+  filteredSymbolsDescriptions.value = symbolsDescriptions.value?.filter(
+    description => description !== item
+  )
   await getCurrentSpreadRequest()
 }
 
@@ -152,13 +138,16 @@ const resetSelectedSymbol = async () => {
   await getCurrentSpreadRequest()
 }
 
+const resetSelectedDescription = async () => {
+  selectedDescription.value = null
+  filteredSymbolsDescriptions.value = symbolsDescriptions.value
+
+  await getCurrentSpreadRequest()
+}
+
 // const selectPlatform = (item: string) => {
 //   console.log(item)
 // }
-
-const onChange = (inputData: iInputData) => {
-  debounceDescription(inputData.value)
-}
 
 const onSorted = async (sortState: ISortState) => {
   sortBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
@@ -198,15 +187,24 @@ watch([currentPage, itemsCount], async () => {
   })
 })
 
+watch([selectedSymbol, selectedDescription], async () => {
+  currentPage.value = 1
+})
+
 onMounted(async () => {
   try {
     isContentLoading.value = true
     symbolsNames.value = await getServerAccountSymbolsNames()
+    symbolsDescriptions.value = await getServerAccountSymbolsDescriptions()
 
     await getCurrentSpreadRequest()
 
     filteredSymbolsNames.value = symbolsNames.value?.filter(
       name => name !== selectedSymbol.value
+    )
+
+    filteredSymbolsDescriptions.value = symbolsDescriptions.value?.filter(
+      description => description !== selectedDescription.value
     )
   } finally {
     isContentLoading.value = false
@@ -236,22 +234,17 @@ onMounted(async () => {
                 />
               </li>
               <li class="spreads__select-item">
-                <TheInput
-                  :id="descriptionInput.id"
-                  :required="descriptionInput.required"
-                  :title="descriptionInput.title"
-                  :name="descriptionInput.name"
-                  :type="descriptionInput.type"
-                  :placeholder="descriptionInput.placeholder"
-                  :value="descriptionInput.value"
-                  :is-right-button="descriptionInput.isRightButton"
-                  class="spreads__description"
-                  @input-value="onChange"
-                >
-                  <template #right-icon>
-                    <IconsSearch />
-                  </template>
-                </TheInput>
+                <CustomSelect
+                  :options="descriptionSelect.options"
+                  :search-input="descriptionSelect.searchInput"
+                  :placeholder="descriptionSelect.placeholder"
+                  :title="descriptionSelect.title"
+                  :value="selectedDescription"
+                  :is-reset="!!selectedDescription"
+                  @search="searchSymbolsDescription"
+                  @select="selectSymbolsDescription"
+                  @reset="resetSelectedDescription"
+                />
               </li>
               <!-- <li class="spreads__select-item">
                 <CustomSelect
