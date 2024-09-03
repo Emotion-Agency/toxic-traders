@@ -46,7 +46,7 @@ const { sortState, onSort } = useSort(
             <TableCell
               v-for="(cell, i) in item"
               :key="i"
-              :item="cell || 'N/A'"
+              :item="cell ?? 'N/A'"
               :class="`table-cell--${i}`"
             />
           </TableRow>
