@@ -84,6 +84,7 @@ export const useBrokerServerAccountSymbols = () => {
         color: ToastColor.danger,
         text: 'An error occurred while fetching server account symbols spreads. Please try again.',
       })
+      throw error
     }
   }
 

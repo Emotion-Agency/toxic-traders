@@ -74,31 +74,36 @@ const descriptionSelect = computed(() => {
 })
 
 const getCurrentSpreadRequest = async () => {
-  isTableLoading.value = true
+  try {
+    isTableLoading.value = true
+    const { brokerServerAccountSymbols, totalCount } =
+      await getServerAccountSymbolsSpreadsCurrent({
+        symbolName: selectedSymbol.value || '*',
+        description: selectedDescription.value || 'none',
+        page: currentPage.value - 1,
+        pageSize: itemsCount.value,
+        sortBy: sortBy.value || 'BrokerCompanyNames',
+        sortOrder: sortOrder.value || 0,
+      })
 
-  const { brokerServerAccountSymbols, totalCount } =
-    await getServerAccountSymbolsSpreadsCurrent({
-      symbolName: selectedSymbol.value || '*',
-      description: selectedDescription.value || 'none',
-      page: currentPage.value - 1,
-      pageSize: itemsCount.value,
-      sortBy: sortBy.value || 'BrokerCompanyNames',
-      sortOrder: sortOrder.value || 0,
+    isTableLoading.value = false
+    spreads.value = brokerServerAccountSymbols
+    filteredSpreads.value = spreads.value.map(item => {
+      return {
+        broker: item?.brokerCompanyNames[0],
+        accountType: item?.accountType,
+        serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+        spread: item?.spread,
+        newsSpread: item?.newsSpread,
+      }
     })
 
-  isTableLoading.value = false
-  spreads.value = brokerServerAccountSymbols
-  filteredSpreads.value = spreads.value.map(item => {
-    return {
-      broker: item?.brokerCompanyNames[0],
-      accountType: item?.accountType,
-      serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
-      spread: item?.spread,
-      newsSpread: item?.newsSpread,
-    }
-  })
-
-  totalCountPages.value = totalCount
+    totalCountPages.value = totalCount
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isTableLoading.value = false
+  }
 }
 
 const searchSymbolsName = (searchValue: string) => {
