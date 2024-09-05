@@ -4,6 +4,7 @@ interface iProps {
 }
 
 const props = defineProps<iProps>()
+const route = useRoute()
 
 const emit = defineEmits(['change'])
 
@@ -39,7 +40,9 @@ watch(
       return
     }
 
-    const selectedItems = localStorage.getItem('selectedCheckboxItems')
+    const selectedItems = localStorage.getItem(
+      `${String(route.name)}:selectedCheckboxItems`
+    )
 
     if (selectedItems) {
       selectedCheckboxItems.value = JSON.parse(selectedItems)
@@ -95,7 +98,7 @@ watch(
     emit('change', selectedCheckboxItems.value)
 
     localStorage.setItem(
-      'selectedCheckboxItems',
+      `${String(route.name)}:selectedCheckboxItems`,
       JSON.stringify(selectedCheckboxItems.value)
     )
   }

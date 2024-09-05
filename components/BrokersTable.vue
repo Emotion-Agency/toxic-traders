@@ -92,13 +92,6 @@ const getFilteredBrokerColums = (broker: iBroker) => {
     return acc
   }, {} as iBroker)
 }
-
-watch(
-  () => props.headingFields,
-  () => {
-    console.log(props.brokers[0], getFilteredBrokerColums(props.brokers[0]))
-  }
-)
 </script>
 
 <template>
