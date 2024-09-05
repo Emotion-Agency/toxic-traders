@@ -83,10 +83,22 @@ const isSortable = (field: string) => {
 }
 
 const getFilteredBrokerColums = (broker: iBroker) => {
-  return Object.keys(broker)
-    ?.filter(key => props.headingFields.includes(key))
-    ?.map(key => broker[key])
+  const newBroker = { ...broker }
+
+  return Object.keys(newBroker)?.reduce((acc, key) => {
+    if (props.headingFields.includes(key)) {
+      acc[key] = newBroker[key]
+    }
+    return acc
+  }, {} as iBroker)
 }
+
+watch(
+  () => props.headingFields,
+  () => {
+    console.log(props.brokers[0], getFilteredBrokerColums(props.brokers[0]))
+  }
+)
 </script>
 
 <template>
