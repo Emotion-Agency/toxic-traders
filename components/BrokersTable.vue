@@ -81,6 +81,12 @@ const notSortableFields = [
 const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
+
+const getFilteredBrokerColums = (broker: iBroker) => {
+  return Object.keys(broker)
+    ?.filter(key => props.headingFields.includes(key))
+    ?.map(key => broker[key])
+}
 </script>
 
 <template>
@@ -114,7 +120,7 @@ const isSortable = (field: string) => {
         }"
       >
         <TableCell
-          v-for="(item, id, index) in broker"
+          v-for="(item, id, index) in getFilteredBrokerColums(broker)"
           :key="id"
           :item="item"
           :class="[

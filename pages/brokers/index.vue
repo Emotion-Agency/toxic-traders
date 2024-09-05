@@ -137,25 +137,6 @@ const onSort = async (sortState: ISortState) => {
   await getBrokersRequest()
 }
 
-const showedBrokers = computed(() => {
-  return brokersList.value.map(broker => {
-    const formattedColumnsName = Object.keys(broker)
-
-    let newObj = {}
-
-    formattedColumnsName.forEach(column => {
-      if (settingsItems.value.includes(column)) {
-        newObj = {
-          ...newObj,
-          [column]: broker[column],
-        }
-      }
-    })
-
-    return newObj
-  })
-})
-
 const showedHeadings = computed(() => {
   return brokersHeadings.value.filter(item =>
     settingsItems.value.includes(item)
@@ -212,7 +193,7 @@ const showedHeadings = computed(() => {
         <div v-if="brokersList.length" class="brokers__table-wrapper">
           <BrokersTable
             :is-search-opened="isSearchOpened"
-            :brokers="showedBrokers"
+            :brokers="brokersList"
             :heading-fields="showedHeadings"
             :default-sort-by="sortedBy"
             :default-sort-order="sortedOrder"

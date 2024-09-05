@@ -1,7 +1,4 @@
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 interface iProps {
   properties: string[]
 }
@@ -33,24 +30,27 @@ const checkboxList = computed(() =>
 
 const selectedCheckboxItems = ref<string[]>([])
 
-
 const isInited = ref(false)
 
 watch(
   () => checkboxList,
   () => {
-    if (isInited.value) {
+    if (isInited.value && selectedCheckboxItems.value?.length) {
       return
     }
 
-    selectedCheckboxItems.value = checkboxList.value.map(item => item.id)
+    const selectedItems = localStorage.getItem('selectedCheckboxItems')
+
+    if (selectedItems) {
+      selectedCheckboxItems.value = JSON.parse(selectedItems)
+    } else {
+      selectedCheckboxItems.value = checkboxList.value.map(item => item.id)
+    }
 
     isInited.value = true
-
   },
-  {deep: true}
+  { deep: true }
 )
-
 
 const hiddenItems = ref<string[]>([])
 
@@ -61,8 +61,6 @@ const onChange = (inputData: iInputData) => {
   const filteredItems = checkboxList.value.filter(item =>
     item.value.toLowerCase().includes(searchValue)
   )
-
-
 
   hiddenItems.value = checkboxList.value
     .map(item => item.id)
@@ -89,13 +87,17 @@ const onChangeCheckbox = (val: string, checked: boolean) => {
       item => item !== val
     )
   }
-
 }
 
 watch(
   () => selectedCheckboxItems.value,
   () => {
     emit('change', selectedCheckboxItems.value)
+
+    localStorage.setItem(
+      'selectedCheckboxItems',
+      JSON.stringify(selectedCheckboxItems.value)
+    )
   }
 )
 </script>
