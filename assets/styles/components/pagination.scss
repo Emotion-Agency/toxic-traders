@@ -18,13 +18,18 @@
   background-color: transparent;
   transition: color 0.3s ease;
 
+  &:disabled {
+    color: var(--gray-300);
+    cursor: not-allowed;
+  }
+
   &.next {
     svg {
       transform: rotate(180deg);
     }
   }
 
-  &:hover {
+  &:hover:not(&:disabled) {
     color: var(--primary-dark);
 
     svg {

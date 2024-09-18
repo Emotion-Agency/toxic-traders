@@ -53,7 +53,11 @@ const inputItem = computed(() => ({
 <template>
   <div class="pagination">
     <div class="pagination__wrapper">
-      <button class="prev pagination__btn" @click="emit('prevClick')">
+      <button
+        :disabled="currentPage === 1"
+        class="prev pagination__btn"
+        @click="emit('prevClick')"
+      >
         <span>
           <IconsNavigationArrow />
         </span>
@@ -83,7 +87,11 @@ const inputItem = computed(() => ({
           @select="selectItem"
         />
       </div>
-      <button class="next pagination__btn" @click="emit('nextClick')">
+      <button
+        :disabled="currentPage === computedTotalPages"
+        class="next pagination__btn"
+        @click="emit('nextClick')"
+      >
         Next
         <span>
           <IconsNavigationArrow />
