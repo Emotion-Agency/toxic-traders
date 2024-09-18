@@ -100,4 +100,11 @@
     visibility: visible;
     transform: scaleX(1);
   }
+
+  &.router-link-exact-active {
+    &:before {
+      visibility: visible;
+      transform: scaleX(1);
+    }
+  }
 }

@@ -70,6 +70,10 @@
     }
   }
 
+  .header__link:before {
+    background-color: var(--white);
+  }
+
   .accordion__main-btn {
     color: var(--white);
   }
