@@ -42,36 +42,31 @@ const { sortState, onSort } = useSort(
   }
 )
 
-const dateSpreadParams = computed(() => {
+const getDateParams = (SpreadOrNewsSpread: number) => {
+  const startDate =
+    SpreadOrNewsSpread === 0 ? spreadStartDate.value : newsSpreadStartDate.value
+  const endDate =
+    SpreadOrNewsSpread === 0 ? spreadEndDate.value : newsSpreadEndDate.value
+
   const spreadSeconds =
-    formatDateToSeconds(spreadEndDate.value) -
-    formatDateToSeconds(spreadStartDate.value)
+    formatDateToSeconds(endDate) - formatDateToSeconds(startDate)
 
   return {
     symbolId: activeScheduleItem.value?.id,
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: spreadSeconds,
-    startDateTime: formatDateWithTime(spreadStartDate.value),
-    // startDateTime: spreadStartDate.value,
-    SpreadOrNewsSpread: 0,
+    startDateTime: `${formatDateWithTime(startDate)}${props.timezone}`,
+    SpreadOrNewsSpread,
   }
+}
+
+const dateSpreadParams = computed(() => {
+  return getDateParams(0)
 })
 
 const dateNewsSpreadParams = computed(() => {
-  const newsSpreadSeconds =
-    formatDateToSeconds(newsSpreadEndDate.value) -
-    formatDateToSeconds(newsSpreadStartDate.value)
-
-  return {
-    symbolId: activeScheduleItem.value?.id,
-    serverType: props.serverType,
-    symbolName: activeScheduleItem.value?.currency,
-    timeLengthSec: newsSpreadSeconds,
-    startDateTime: formatDateWithTime(newsSpreadStartDate.value),
-    // startDateTime: spreadStartDate.value,
-    SpreadOrNewsSpread: 1,
-  }
+  return getDateParams(1)
 })
 
 const onModalOpen = (item: iBrokerServerAccountTable) => {

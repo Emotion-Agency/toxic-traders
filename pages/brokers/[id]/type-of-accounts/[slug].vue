@@ -234,11 +234,13 @@ onMounted(async () => {
   notesValue.value = notesRequestValue || ''
 
   currentAccount.value = brokerServers
-    .map(server => server?.brokerServerAccounts)
-    .flat()
-    .find(account => account?.id === +accountId)
+    ?.map(server => server?.brokerServerAccounts)
+    ?.flat()
+    ?.find(account => account?.id === +accountId)
 
-  serverType.value = brokerServers[0]?.serverType
+  if (brokerServers?.length) {
+    serverType.value = brokerServers[0]?.serverType
+  }
 })
 </script>
 
@@ -322,7 +324,7 @@ onMounted(async () => {
               :header-fields="showedHeadings"
               :table-items="showedTableItems"
               :server-type="serverType"
-              :timezone="getGMTOffset(currentAccount?.brokerServerTimeZone)"
+              :timezone="getGMTTime(currentAccount?.brokerServerTimeZone)"
               :default-sort-by="sortBy"
               @sort="onSorted"
             />
