@@ -143,6 +143,11 @@
     background-color: var(--gray-700);
   }
 
+  .custom-select__item {
+    &:hover {
+      background-color: var(--primary-dark);
+    }
+  }
   .custom-select__item-text {
     color: var(--white);
   }
