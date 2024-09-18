@@ -1,7 +1,6 @@
 .statistics-item {
   border-radius: 10px;
   padding: 20px;
-  background-color: var(--secondary-light2);
 }
 
 .statistics-item__title-wrapper {
@@ -19,12 +18,11 @@
 
 .statistics-item__title {
   @include heading-m-h5;
-  color: var(--black);
 }
 
 .statistics-item__text {
   @include text-body;
-  color: var(--black);
+
   margin-top: 10px;
   display: block;
 
