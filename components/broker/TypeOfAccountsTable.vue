@@ -51,12 +51,14 @@ const getDateParams = (SpreadOrNewsSpread: number) => {
   const spreadSeconds =
     formatDateToSeconds(endDate) - formatDateToSeconds(startDate)
 
+  const currentTimezone = props.timezone || '+3'
+
   return {
     symbolId: activeScheduleItem.value?.id,
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: spreadSeconds,
-    startDateTime: `${formatDateWithTime(startDate)}${props.timezone}`,
+    startDateTime: `${formatDateWithTime(startDate)}${currentTimezone}`,
     SpreadOrNewsSpread,
   }
 }

@@ -7,7 +7,7 @@ export const getGMTOffset = (minutes: number): string | number => {
 }
 
 export const getGMTTime = (minutes: number): string | number => {
-  if (!minutes) return 0
+  if (!minutes) return null
   const sign = minutes >= 0 ? '+' : '-'
   const hours = Math.abs(minutes) / 60
 
