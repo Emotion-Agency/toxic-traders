@@ -171,3 +171,11 @@ export const minutesToGMT = (input: number | string): string => {
 
   return offset
 }
+
+export const addSeconds = (date: Date, seconds: number): Date => {
+  if (date && seconds) {
+    return new Date(date.setSeconds(date.getSeconds() + seconds))
+  }
+
+  return new Date(Date.now())
+}
