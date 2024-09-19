@@ -324,7 +324,6 @@ onMounted(async () => {
               :header-fields="showedHeadings"
               :table-items="showedTableItems"
               :server-type="serverType"
-              :timezone="getGMTTime(currentAccount?.brokerServerTimeZone)"
               :default-sort-by="sortBy"
               @sort="onSorted"
             />

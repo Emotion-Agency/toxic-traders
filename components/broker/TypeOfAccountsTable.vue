@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import Clock from '~/components/icons/Clock.vue'
-import type { iBrokerServerAccountTable } from '~/types/broker/brokerServerAccountSymbols'
+import type {
+  iBrokerServerAccountSymbolsSpreadsSchedule,
+  iBrokerServerAccountTable,
+} from '~/types/broker/brokerServerAccountSymbols'
 
 interface iProps {
   tableItems: iBrokerServerAccountTable[]
   headerFields: string[]
   defaultSortBy?: string
   serverType?: number
-  timezone?: string | number
 }
 
 const props = defineProps<iProps>()
@@ -20,6 +22,7 @@ const spreadStartDate = ref('')
 const spreadEndDate = ref('')
 const newsSpreadStartDate = ref('')
 const newsSpreadEndDate = ref('')
+
 const scheduleParams = computed(() => {
   return {
     symbolId: activeScheduleItem.value?.id,
@@ -51,14 +54,14 @@ const getDateParams = (SpreadOrNewsSpread: number) => {
   const spreadSeconds =
     formatDateToSeconds(endDate) - formatDateToSeconds(startDate)
 
-  const currentTimezone = props.timezone || '+3'
+  const userTimeZone = getGMTTime(-new Date().getTimezoneOffset())
 
   return {
     symbolId: activeScheduleItem.value?.id,
     serverType: props.serverType,
     symbolName: activeScheduleItem.value?.currency,
     timeLengthSec: spreadSeconds,
-    startDateTime: `${formatDateWithTime(startDate)}${currentTimezone}`,
+    startDateTime: `${formatDateWithTime(startDate)}${userTimeZone.toString()}`,
     SpreadOrNewsSpread,
   }
 }
@@ -81,6 +84,25 @@ const onModalClose = () => {
   isOpenedModal.value = false
 }
 
+const getSpreadSavedDate = (
+  schedule: iBrokerServerAccountSymbolsSpreadsSchedule
+) => {
+  const startDate = schedule?.scheduledAt
+  const endDate = addSeconds(new Date(startDate), schedule?.length)
+
+  if (schedule?.spreadType === 'MeasureSpread') {
+    spreadStartDate.value = startDate || ''
+    spreadEndDate.value = endDate?.toString() || ''
+
+    return
+  }
+
+  if (schedule?.spreadType === 'MeasureNewsSpread') {
+    newsSpreadStartDate.value = startDate || ''
+    newsSpreadEndDate.value = endDate?.toString() || ''
+  }
+}
+
 const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
   activeScheduleItem.value = item
   isOpenedScheduleModal.value = true
@@ -90,40 +112,10 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
     scheduleParams.value
   )
 
+  console.log(spreadDate)
+
   spreadDate?.forEach(date => {
-    if (date?.spreadType === 'MeasureSpread') {
-      const startDate = getStartDateTime(date?.scheduledAt)
-      const endDate = getEndDateTime({
-        startDateTime: startDate,
-        seconds: date?.length,
-      })
-
-      spreadStartDate.value = startDate || ''
-      spreadEndDate.value = endDate || ''
-
-      console.log({
-        getSpreadDate: date,
-        startSpreadResultDate: startDate,
-        endResultDate: endDate,
-      })
-    }
-
-    if (date?.spreadType === 'MeasureNewsSpread') {
-      const startDate = getStartDateTime(date?.scheduledAt)
-      const endDate = getEndDateTime({
-        startDateTime: startDate,
-        seconds: date?.length,
-      })
-
-      newsSpreadStartDate.value = startDate || ''
-      newsSpreadEndDate.value = endDate || ''
-
-      console.log({
-        getNewsSpreadDate: date,
-        startNewsSpreadResultDate: startDate,
-        endResultDate: endDate,
-      })
-    }
+    getSpreadSavedDate(date)
   })
 }
 
