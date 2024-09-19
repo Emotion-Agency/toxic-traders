@@ -108,35 +108,37 @@ const onScheduleOpen = async (item: iBrokerServerAccountTable) => {
   isOpenedScheduleModal.value = true
   document.body.classList.add('modal-open')
 
-  const spreadDate = await getServerAccountSymbolsSpreadsSchedule(
-    scheduleParams.value
-  )
+  try {
+    const spreadDate = await getServerAccountSymbolsSpreadsSchedule(
+      scheduleParams.value
+    )
 
-  console.log(spreadDate)
-
-  spreadDate?.forEach(date => {
-    getSpreadSavedDate(date)
-  })
+    spreadDate?.forEach(date => {
+      getSpreadSavedDate(date)
+    })
+  } catch (error) {
+    spreadStartDate.value = ''
+    spreadEndDate.value = ''
+    newsSpreadStartDate.value = ''
+    newsSpreadEndDate.value = ''
+  }
 }
 
 const onSpreadScheduleSave = () => {
   createRunSpreadMeasurements(dateSpreadParams.value)
-
-  console.log({
-    postSpreadData: dateSpreadParams.value,
-  })
 }
 
 const onNewsSpreadScheduleSave = () => {
   createRunSpreadMeasurements(dateNewsSpreadParams.value)
-
-  console.log({
-    postNewsSpreadData: dateNewsSpreadParams.value,
-  })
 }
 
 const onScheduleClose = () => {
   isOpenedScheduleModal.value = false
+
+  spreadStartDate.value = ''
+  spreadEndDate.value = ''
+  newsSpreadStartDate.value = ''
+  newsSpreadEndDate.value = ''
 }
 
 const notSortableFields = ['schedule']
