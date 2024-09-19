@@ -32,5 +32,8 @@ useHead({
     <TheHeader />
     <slot />
     <AppToast />
+    <Teleport to="body">
+      <CustomScrollbar position="fixed" :body="true" />
+    </Teleport>
   </div>
 </template>

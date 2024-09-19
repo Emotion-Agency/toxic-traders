@@ -8,6 +8,8 @@ interface iProps {
 defineProps<iProps>()
 
 const $table = ref<HTMLElement | null>(null)
+const $tableWrapper = ref<HTMLElement | null>(null)
+
 const columnsCount = ref(0)
 
 const detectTableWidth = () => {
@@ -42,7 +44,7 @@ onBeforeUnmount(() => {
     <div ref="$tableWrapper" class="table__wrapper">
       <slot />
     </div>
-    <CustomScrollbar axis="y" />
-    <CustomScrollbar axis="x" />
+    <CustomScrollbar :parent="$tableWrapper" axis="y" />
+    <CustomScrollbar :parent="$tableWrapper" axis="x" />
   </div>
 </template>
