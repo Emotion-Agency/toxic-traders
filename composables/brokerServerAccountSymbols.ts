@@ -1,4 +1,6 @@
 import {
+  getBrokerServerAccountSymbolsBySymbolIdMT4,
+  getBrokerServerAccountSymbolsBySymbolIdMT5,
   getBrokerServerAccountSymbolsDescriptions,
   getBrokerServerAccountSymbolsMT4,
   getBrokerServerAccountSymbolsMT5,
@@ -156,9 +158,39 @@ export const useBrokerServerAccountSymbols = () => {
     }
   }
 
+  const getServerAccountSymbolMT4 = async (symbolId: string) => {
+    try {
+      const data = await getBrokerServerAccountSymbolsBySymbolIdMT4(symbolId)
+
+      return data
+    } catch (error) {
+      console.error('Error fetching server account symbol MT4:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching server account symbol MT4. Please try again.',
+      })
+    }
+  }
+
+  const getServerAccountSymbolMT5 = async (symbolId: string) => {
+    try {
+      const data = await getBrokerServerAccountSymbolsBySymbolIdMT5(symbolId)
+
+      return data
+    } catch (error) {
+      console.error('Error fetching server account symbol MT4:', error)
+      addToast({
+        color: ToastColor.danger,
+        text: 'An error occurred while fetching server account symbol MT4. Please try again.',
+      })
+    }
+  }
+
   return {
     getServerAccountSymbolsMT4,
     getServerAccountSymbolsMT5,
+    getServerAccountSymbolMT4,
+    getServerAccountSymbolMT5,
     getServerAccountSymbolsSpreads,
     getServerAccountSymbolsSpreadsAll,
     getServerAccountSymbolsNames,

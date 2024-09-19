@@ -113,6 +113,40 @@ export const getBrokerServerAccountSymbolsMT4 = async (
   }
 }
 
+export const getBrokerServerAccountSymbolsBySymbolIdMT4 = async (
+  id: string
+) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `BrokerServerAccountSymbols/symbols/mt4/${id}`
+    )
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
+
+export const getBrokerServerAccountSymbolsBySymbolIdMT5 = async (
+  id: string
+) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `BrokerServerAccountSymbols/symbols/mt5/${id}`
+    )
+
+    return data
+  } catch (e) {
+    if (e.response.status !== 400) {
+      console.error(e.message)
+      throw e
+    }
+  }
+}
+
 export const getBrokerServerAccountSymbolsMT5 = async (
   params: iBrokerServerAccountSymbolsParams
 ) => {
