@@ -18,7 +18,6 @@ export class Inactivity {
   }
 
   detect(): void {
-    console.log(this.compare)
     this.cb(this.compare)
   }
 

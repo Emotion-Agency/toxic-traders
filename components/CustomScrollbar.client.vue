@@ -49,8 +49,6 @@ const setHeight = () => {
 
   max = size - wh
 
-  if (size === wh) thumbHeight = 0
-
   isHidden.value = size <= wh
 
   $thumb.value.style.height = `${thumbHeight}px`
@@ -66,10 +64,7 @@ const setWidth = () => {
 
   max = size - ww
 
-  if (size === ww) thumbWidth = 0
-
   isHidden.value = size <= ww
-
   $thumb.value.style.width = `${thumbWidth}px`
 }
 
