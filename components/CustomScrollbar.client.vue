@@ -123,7 +123,10 @@ const onScroll = () => {
 
   const position = props.axis === 'y' ? $parent.scrollTop : $parent.scrollLeft
 
-  if (position === scrollPos && $parent.scrollTop === position) {
+  if (
+    position === scrollPos &&
+    ($parent.scrollTop === position || $parent.scrollLeft === position)
+  ) {
     return
   }
 
