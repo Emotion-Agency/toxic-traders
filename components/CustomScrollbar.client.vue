@@ -43,13 +43,13 @@ const setHeight = () => {
 
   size = $parent.scrollHeight
 
-  const wh = window.innerHeight
+  const ph = props.body ? window.innerHeight : $parent.offsetHeight
 
-  let thumbHeight = wh * (wh / size)
+  let thumbHeight = ph * (ph / size)
 
-  max = size - wh
+  max = size - ph
 
-  isHidden.value = size <= wh
+  isHidden.value = size <= ph
 
   $thumb.value.style.height = `${thumbHeight}px`
 }
@@ -58,13 +58,13 @@ const setWidth = () => {
   const $parent = getParent()
 
   size = $parent.scrollWidth
-  const ww = window.innerWidth
+  const pw = props.body ? window.innerWidth : $parent.offsetWidth
 
-  let thumbWidth = ww * (ww / size)
+  let thumbWidth = pw * (pw / size)
 
-  max = size - ww
+  max = size - pw
 
-  isHidden.value = size <= ww
+  isHidden.value = size <= pw
   $thumb.value.style.width = `${thumbWidth}px`
 }
 
@@ -91,8 +91,11 @@ const update = e => {
   const ch = $parent.clientHeight
   const cw = $parent.clientWidth
 
-  const percentY = (100 * oY) / ch
-  const percentX = (100 * oX) / cw
+  const offsetParentY = $scrollbar.value.getBoundingClientRect().top
+  const offsetParentX = $scrollbar.value.getBoundingClientRect().left
+
+  const percentY = (100 * (oY - offsetParentY)) / ch
+  const percentX = (100 * (oX - offsetParentX)) / cw
 
   if (props.axis === 'y') {
     $parent.scrollTop = (max * percentY) / 100

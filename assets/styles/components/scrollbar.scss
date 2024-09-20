@@ -1,3 +1,18 @@
+* {
+  &::-webkit-scrollbar {
+    width: 5px;
+    display: block;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--white);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #6b6b6b;
+    border-radius: 10px;
+    opacity: 0.7;
+  }
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 *:not(.virtual-scroll)::-webkit-scrollbar {
   display: none;
@@ -25,7 +40,7 @@
   padding: 2px;
   padding-left: 0px;
   display: flex;
-  display: none !important;
+  // display: none !important;
 
   width: var(--w);
   height: var(--h);

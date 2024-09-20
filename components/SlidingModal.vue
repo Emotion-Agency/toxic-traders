@@ -13,6 +13,8 @@ const onClose = () => {
   emit('close')
   document.body.classList.remove('modal-open')
 }
+
+const $container = ref<HTMLElement | null>(null)
 </script>
 
 <template>
@@ -32,9 +34,10 @@ const onClose = () => {
             <span class="sliding-modal__close-line" />
           </button>
         </div>
-        <div class="sliding-modal__container">
+        <div ref="$container" class="sliding-modal__container">
           <slot />
         </div>
+        <CustomScrollbar :parent="$container" />
       </div>
     </div>
   </Teleport>
