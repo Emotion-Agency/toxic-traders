@@ -3,7 +3,7 @@
   color: var(--white);
 
   .modal__content {
-    background: var(--gray-700);
+    background: var(--gray-800);
 
     .modal__title {
       color: var(--white);
@@ -32,7 +32,7 @@
   }
 
   .table-row {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
   }
 
   .table-head .table-row {
@@ -52,7 +52,7 @@
   }
 
   .brokers-search {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
 
     .brokers-search__title {
       color: var(--white);
@@ -80,7 +80,7 @@
 
   .input__type,
   input {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
     color: var(--white);
     &::placeholder {
       color: var(--gray-500);
@@ -88,10 +88,10 @@
   }
 
   .accordion__content {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
 
     .company-name__item {
-      background-color: var(--gray-700);
+      background-color: var(--gray-800);
     }
 
     .company-name__text {
@@ -99,7 +99,7 @@
     }
 
     .server-addresses__item {
-      background-color: var(--gray-700);
+      background-color: var(--gray-800);
     }
 
     .server-addresses__text {
@@ -132,7 +132,7 @@
   }
 
   .custom-select__selected {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
   }
 
   .custom-select__text {
@@ -140,7 +140,7 @@
   }
 
   .custom-select__list {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
   }
 
   .custom-select__item {
@@ -153,7 +153,7 @@
   }
 
   .tags-input__dropdown-item {
-    background-color: var(--gray-700);
+    background-color: var(--gray-800);
     color: var(--white);
   }
 
@@ -178,6 +178,10 @@
   }
 
   .statistics-items {
+    background-color: var(--gray-800);
+  }
+
+  .broker-type-accounts-item--new {
     background-color: var(--gray-800);
   }
 }

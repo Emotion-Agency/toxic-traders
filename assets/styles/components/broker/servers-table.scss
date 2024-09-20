@@ -34,10 +34,8 @@
 
 .servers-table__modal-numbers {
   @include heading-m-h6;
-  color: var(--secondary-dark);
 }
 
 .servers-table__modal-text {
   @include input-default;
-  color: var(--secondary-dark);
 }
