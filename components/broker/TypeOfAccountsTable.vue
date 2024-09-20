@@ -178,7 +178,6 @@ const isSortable = (field: string) => {
               :key="i"
               :item="cell || 'N/A'"
               :class="`table-cell--${i}`"
-              :is-modal="cell === item?.currency"
               :custom-component="cell === item?.schedule ? Clock : null"
               @open="onModalOpen(item)"
               @click-custom-component="onScheduleOpen(item)"
