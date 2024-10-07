@@ -2,20 +2,22 @@
 const isPassword = ref(false)
 const inputsData = [
   {
+    title: 'Email',
     required: true,
     id: 'auth-email',
     name: 'Email',
     type: 'text',
     value: '',
-    placeholder: 'Email',
+    placeholder: 'Your email',
   },
   {
+    title: 'Password',
     required: true,
     id: 'auth-password',
     name: 'Password',
     type: 'password',
     value: '',
-    placeholder: 'Password',
+    placeholder: 'Your password',
     isRightButton: true,
   },
 ]
@@ -52,6 +54,7 @@ const showPassword = () => {
             >
               <TheInput
                 :id="input?.id"
+                :title="input?.title"
                 :required="input?.required"
                 :name="input?.name"
                 :type="input?.type"
