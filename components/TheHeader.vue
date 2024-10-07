@@ -80,14 +80,14 @@ useOnBeforeUnmountDelay(() => {
             <IconsTheme />
           </span>
         </button>
-        <a href="/auth/login" class="header__account">
+        <NuxtLink to="/auth/login" class="header__account">
           <p class="header__account-name">lkosteckiy5@gmail.com</p>
           <img
             src="/images/avatars/1.jpg"
             alt="Avatar"
             class="header__account-img"
           />
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </header>

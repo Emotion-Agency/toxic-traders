@@ -40,9 +40,9 @@ const onChange = (e: iInputData) => {
               :key="idx"
               class="password-reset__item"
             >
-              <h3 class="password-reset__input-title">{{ input.title }}</h3>
               <TheInput
                 class="password-reset__input"
+                :title="input?.title"
                 :id="input?.id"
                 :required="input?.required"
                 :name="input?.name"
@@ -57,7 +57,7 @@ const onChange = (e: iInputData) => {
             <TheButton
               class="password-reset__btn"
               tag="nuxt-link"
-              to="/"
+              to="/auth/password-new"
               variant="fill"
               button-size="large"
               type="submit"
