@@ -5,6 +5,7 @@ interface iProps {
   tag: 'button' | 'a' | 'nuxt-link'
   disabled?: boolean
   href?: string
+  type?: 'button' | 'submit'
 }
 
 const props = defineProps<iProps>()
@@ -29,6 +30,7 @@ const href = props.tag === 'a' ? props.href : undefined
     :target="props.tag === 'a' ? '_blank' : undefined"
     :rel="props.tag === 'a' ? 'noreferer noopener' : undefined"
     :disabled="props.tag === 'button' ? disabled : undefined"
+    :type="props.tag === 'button' ? (props.type ?? 'button') : undefined"
   >
     <slot name="start-icon" />
     <slot />
