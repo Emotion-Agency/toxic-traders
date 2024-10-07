@@ -80,7 +80,7 @@ useOnBeforeUnmountDelay(() => {
             <IconsTheme />
           </span>
         </button>
-        <a href="/login" class="header__account">
+        <a href="/auth/login" class="header__account">
           <p class="header__account-name">lkosteckiy5@gmail.com</p>
           <img
             src="/images/avatars/1.jpg"

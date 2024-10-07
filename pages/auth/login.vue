@@ -67,7 +67,9 @@ const showPassword = () => {
               </TheInput>
             </li>
           </ul>
-          <a href="/" class="login__forgot-pass-link"> Forgot password? </a>
+          <NuxtLink to="/auth/password-reset" class="login__forgot-pass-link">
+            Forgot password?
+          </NuxtLink>
           <TheButton
             class="login__login-btn"
             tag="button"
@@ -79,15 +81,7 @@ const showPassword = () => {
           </TheButton>
         </form>
 
-        <div class="login__support">
-          <p class="login__support-text">
-            Is something not working correctly?<br />
-            Please, contact the support:
-            <a class="login__support-link" href="/">
-              support@toxictraders.com
-            </a>
-          </p>
-        </div>
+        <TheSupport />
       </div>
     </div>
   </main>
