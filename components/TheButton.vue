@@ -1,8 +1,8 @@
 <script setup lang="ts">
 interface iProps {
-  buttonSize: 'large' | 'medium' | 'small'
-  variant: 'fill' | 'outlined' | 'soft' | 'danger' | 'close'
-  tag: 'button' | 'a' | 'nuxt-link'
+  buttonSize?: 'large' | 'medium' | 'small'
+  variant?: 'fill' | 'outlined' | 'soft' | 'danger' | 'close'
+  tag?: 'button' | 'a' | 'nuxt-link'
   disabled?: boolean
   href?: string
   type?: 'button' | 'submit'

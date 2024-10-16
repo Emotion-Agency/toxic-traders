@@ -58,6 +58,7 @@ export const useAuth = () => {
     const lsToken = localStorage.getItem('token')
 
     if (!lsTokenExpiring || !lsToken) {
+      logout()
       return
     }
 
