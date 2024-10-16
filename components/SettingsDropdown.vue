@@ -5,11 +5,11 @@ interface iProps {
 
 defineProps<iProps>()
 
-const { logout } = useAuth()
+const isLogoutModalOpened = ref(false)
 
 const onSettings = () => {}
 const onLogout = () => {
-  logout()
+  isLogoutModalOpened.value = true
 }
 </script>
 
@@ -34,5 +34,10 @@ const onLogout = () => {
         </li>
       </ul>
     </div>
+    <LogoutModal
+      :modalOpened="isLogoutModalOpened"
+      title="Logout"
+      @close="() => (isLogoutModalOpened = false)"
+    />
   </div>
 </template>

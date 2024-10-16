@@ -8,7 +8,11 @@ interface iProps {
   type?: 'button' | 'submit'
 }
 
-const props = defineProps<iProps>()
+const props = withDefaults(defineProps<iProps>(), {
+  buttonSize: 'medium',
+  variant: 'fill',
+  tag: 'button',
+})
 
 const tag = computed(() => {
   if (props.tag === 'nuxt-link') {
