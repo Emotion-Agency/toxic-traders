@@ -2,7 +2,11 @@ import axios from 'axios'
 
 const axiosInstance = axios.create({
   baseURL: 'https://toxictraders.com:5001/api',
-  // timeout: 1000,
+  timeout: 20000,
+  headers: {
+    'Content-Type': 'application/json',
+    accept: '*/*',
+  },
 })
 
 axiosInstance.interceptors.response.use(
@@ -18,5 +22,16 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+axiosInstance.interceptors.request.use(config => {
+  if (!import.meta.client) {
+    return config
+  }
+  const token = localStorage?.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
 
 export default axiosInstance

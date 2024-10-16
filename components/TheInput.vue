@@ -134,6 +134,7 @@ const onLeftClick = () => {
       <button
         v-if="isLeftButton && type !== 'textarea'"
         class="left-button input__btn"
+        type="button"
         @click="onLeftClick"
       >
         <slot name="left-icon" />
@@ -141,6 +142,7 @@ const onLeftClick = () => {
       <button
         v-if="isRightButton && type !== 'textarea'"
         class="right-button input__btn"
+        type="button"
         @click="onRightClick"
       >
         <slot name="right-icon" />

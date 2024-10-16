@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const isPassword = ref(false)
-const inputsData = [
+const inputsData = ref([
   {
     title: 'Email',
     required: true,
@@ -8,6 +8,8 @@ const inputsData = [
     name: 'Email',
     type: 'text',
     value: '',
+    validation: 'email',
+    validationText: 'Please enter a valid email',
     placeholder: 'Your email',
   },
   {
@@ -17,17 +19,35 @@ const inputsData = [
     name: 'Password',
     type: 'password',
     value: '',
+
     placeholder: 'Your password',
     isRightButton: true,
   },
-]
+])
 
-const handleSubmit = () => {
-  console.log('submitted')
+const { login } = useAuth()
+
+const router = useRouter()
+
+const handleSubmit = async () => {
+  const email = inputsData.value[0].value
+  const password = inputsData.value[1].value
+
+  if (!email || !password) {
+    return
+  }
+
+  await login(email, password)
+  router.push('/')
 }
 
 const onChange = (e: iInputData) => {
-  console.log(e)
+  inputsData.value = inputsData.value.map(input => {
+    if (input.id === e.id) {
+      return { ...input, value: e.value, error: e.error }
+    }
+    return input
+  })
 }
 
 const showPassword = () => {
@@ -59,8 +79,10 @@ const showPassword = () => {
                 :name="input?.name"
                 :type="input?.type"
                 :placeholder="input?.placeholder"
-                :is-right-button="input?.isRightButton"
+                :is-right-button="!!input?.isRightButton"
                 :value="input?.value"
+                :validation="input?.validation"
+                :validation-text="input?.validationText"
                 @input-value="onChange"
                 @right-click="showPassword"
               >

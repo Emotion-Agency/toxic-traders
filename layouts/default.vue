@@ -3,6 +3,10 @@ import { useFonts } from '~/composables/fonts'
 
 useFonts()
 
+const { isAuthenticated, user } = useAuth()
+
+console.log(user.value)
+
 onMounted(async () => {
   const { hello } = await import('~/utils/hello')
 
@@ -29,7 +33,9 @@ useHead({
     </Head>
     <AppGrid />
     <!-- <Landscape /> -->
-    <TheHeader />
+    <ClientOnly>
+      <TheHeader v-if="isAuthenticated" />
+    </ClientOnly>
     <slot />
     <AppToast />
     <Teleport to="body">
