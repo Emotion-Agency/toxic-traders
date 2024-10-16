@@ -52,6 +52,12 @@ useOnBeforeUnmountDelay(() => {
   // navbarPos && navbarPos.destroy()
   resize.off(calcHeight)
 })
+
+const isAccountDropdownOpen = ref(false)
+
+const onAccountClick = () => {
+  isAccountDropdownOpen.value = !isAccountDropdownOpen.value
+}
 </script>
 
 <template>
@@ -82,14 +88,15 @@ useOnBeforeUnmountDelay(() => {
             <IconsTheme />
           </span>
         </button>
-        <NuxtLink to="/auth/login" class="header__account">
-          <p class="header__account-name">{{ user?.email }}</p>
+        <button class="header__account" @click="onAccountClick">
+          <span class="header__account-name">{{ user?.email }}</span>
           <img
             src="/images/avatars/1.jpg"
             alt="Avatar"
             class="header__account-img"
           />
-        </NuxtLink>
+        </button>
+        <SettingsDropdown :is-open="isAccountDropdownOpen" />
       </div>
     </div>
   </header>
