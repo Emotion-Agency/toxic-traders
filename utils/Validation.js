@@ -4,78 +4,81 @@ const emailTester =
 const phoneTester = /\+?([\d|\(][\h|\(\d{3}\)|\.|\-|\d]{4,}\d)/
 
 class Validation {
-  required(str) {
-    return !!str.trim()
-  }
-
-  minLength(str, value) {
-    if (str.trim().length < value) {
+  required(validationText) {
+    return str => {
+      if (!str.trim()) {
+        return validationText
+      }
       return false
     }
-    return true
   }
 
-  email(email) {
-    if (!email) return false
-
-    const emailParts = email.split('@')
-
-    if (emailParts.length !== 2) return false
-
-    const account = emailParts[0]
-    const address = emailParts[1]
-
-    if (account.length > 64) return false
-    else if (address.length > 255) return false
-
-    const domainParts = address.split('.')
-    if (
-      domainParts.some(function (part) {
-        return part.length > 63
-      })
-    )
-      return false
-
-    if (!emailTester.test(email)) return false
-
-    return true
-  }
-
-  phone(phone) {
-    if (!phoneTester.test(phone)) return false
-
-    return true
-  }
-
-  name(name) {
-    if (!name) return false
-
-    if (name.length <= 2) return false
-
-    return true
-  }
-
-  subject(subject) {
-    if (!subject) return false
-
-    if (subject.length <= 2) return false
-
-    return true
-  }
-
-  maxlength(str, value) {
-    const l = str.trim().length
-    if (l > value) {
+  // Minimum length validation
+  min(min, validationText) {
+    return str => {
+      if (str.trim().length < min) {
+        return validationText
+      }
       return false
     }
-    return true
   }
 
-  isEqual(str, value) {
-    if (str.trim() !== value.trim()) {
+  // Maximum length validation
+  max(max, validationText) {
+    return str => {
+      const length = str.trim().length
+      if (length > max) {
+        return validationText
+      }
       return false
     }
-    return true
+  }
+
+  // Email validation
+  email(validationText) {
+    return email => {
+      if (!email) return validationText
+
+      const emailParts = email.split('@')
+
+      if (emailParts.length !== 2) return validationText
+      const account = emailParts[0]
+      const address = emailParts[1]
+
+      if (account.length > 64) return validationText
+      if (address.length > 255) return validationText
+
+      const domainParts = address.split('.')
+      if (domainParts.some(part => part.length > 63)) {
+        return validationText
+      }
+
+      if (!emailTester.test(email)) {
+        return validationText
+      }
+
+      return false
+    }
+  }
+
+  // Phone validation
+  phone(validationText) {
+    return phone => {
+      if (!phoneTester.test(phone)) {
+        return validationText
+      }
+      return true
+    }
+  }
+
+  // Equality check
+  isEqual(value, validationText) {
+    return str => {
+      if (str.trim() !== value.trim()) {
+        return validationText
+      }
+      return false
+    }
   }
 }
 

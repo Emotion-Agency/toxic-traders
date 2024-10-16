@@ -108,25 +108,22 @@ export const useInput = (emit, props) => {
     isPasswordVisible.value = !isPasswordVisible.value
   }
 
-  const validationResult = () => {
-    if (!props.validation) {
-      return [false]
+  const validate = () => {
+    if (props.validators) {
+      const falsyValidator = props.validators.find(validator =>
+        validator(inputValue.value)
+      )
+
+      if (falsyValidator) {
+        error.value = falsyValidator(inputValue.value)
+      } else {
+        error.value = false
+      }
     }
-    const options = props.validation.split(' ')
-
-    const validators = options.map(option => {
-      const method = option.replace(/[\d(].{0,}/gm, '')
-      const param = option.replace(/.{0,}\(|\)/gm, '')
-      return { method, param }
-    })
-
-    return validators.map(
-      v => !validator[v.method](inputValue.value, v.param && v.param)
-    )
   }
 
   const onInput = () => {
-    error.value = validationResult().includes(true)
+    validate()
 
     if (
       props.type === 'number' &&
@@ -145,7 +142,8 @@ export const useInput = (emit, props) => {
   }
 
   const throwError = () => {
-    if (validationResult().includes(true)) {
+    validate()
+    if (error.value) {
       inputBlur.value = true
       error.value = true
       $input.value.focus()

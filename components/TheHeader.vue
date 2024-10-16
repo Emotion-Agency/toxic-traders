@@ -5,6 +5,8 @@ import { resize } from '~/utils/ea'
 const isDarkMode = ref(false)
 const $el = ref<HTMLElement | null>(null)
 
+const { user } = useAuth()
+
 const navigationList = [
   {
     text: 'Calendar',
@@ -81,7 +83,7 @@ useOnBeforeUnmountDelay(() => {
           </span>
         </button>
         <NuxtLink to="/auth/login" class="header__account">
-          <p class="header__account-name">lkosteckiy5@gmail.com</p>
+          <p class="header__account-name">{{ user?.email }}</p>
           <img
             src="/images/avatars/1.jpg"
             alt="Avatar"

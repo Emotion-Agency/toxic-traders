@@ -7,9 +7,13 @@ const inputsData = ref([
     id: 'auth-email',
     name: 'Email',
     type: 'text',
+    error: true,
     value: '',
-    validation: 'email',
-    validationText: 'Please enter a valid email',
+    validators: [
+      Validation.required('Email is required'),
+      Validation.email('Please enter a valid email address'),
+    ],
+
     placeholder: 'Your email',
   },
   {
@@ -18,8 +22,12 @@ const inputsData = ref([
     id: 'auth-password',
     name: 'Password',
     type: 'password',
+    error: true,
     value: '',
-
+    validators: [
+      Validation.required('Password is required'),
+      Validation.min(6, 'Password must be at least 6 characters'),
+    ],
     placeholder: 'Your password',
     isRightButton: true,
   },
@@ -29,6 +37,8 @@ const { login } = useAuth()
 
 const router = useRouter()
 
+const isLoading = ref(false)
+
 const handleSubmit = async () => {
   const email = inputsData.value[0].value
   const password = inputsData.value[1].value
@@ -37,8 +47,19 @@ const handleSubmit = async () => {
     return
   }
 
-  await login(email, password)
-  router.push('/')
+  if (inputsData.value.some(input => input.error)) {
+    return
+  }
+
+  try {
+    isLoading.value = true
+    await login(email, password)
+    router.push('/')
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const onChange = (e: iInputData) => {
@@ -81,8 +102,7 @@ const showPassword = () => {
                 :placeholder="input?.placeholder"
                 :is-right-button="!!input?.isRightButton"
                 :value="input?.value"
-                :validation="input?.validation"
-                :validation-text="input?.validationText"
+                :validators="input?.validators"
                 @input-value="onChange"
                 @right-click="showPassword"
               >

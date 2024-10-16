@@ -5,8 +5,6 @@ useFonts()
 
 const { isAuthenticated, user } = useAuth()
 
-console.log(user.value)
-
 onMounted(async () => {
   const { hello } = await import('~/utils/hello')
 

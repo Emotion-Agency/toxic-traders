@@ -5,14 +5,13 @@ interface iProps {
   title?: string
   name: string
   type?: string
-  validation?: string
-  validationText?: string
   error?: boolean
   placeholder?: string
   disabled?: boolean
   isLeftButton?: boolean
   isRightButton?: boolean
   value?: string
+  validators?: Function[]
   min?: number
   max?: number
 }
@@ -149,7 +148,7 @@ const onLeftClick = () => {
       </button>
     </div>
     <small v-if="error" class="input__error">
-      {{ validationText }}
+      {{ error }}
     </small>
   </label>
 </template>
