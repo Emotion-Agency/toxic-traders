@@ -184,4 +184,18 @@
   .broker-type-accounts-item--new {
     background-color: var(--gray-800);
   }
+
+  .e-loader {
+    background-color: var(--gray-800);
+  }
+
+  .settings-dropdown__window {
+    background: var(--gray-800);
+  }
+
+  .settings-dropdown__item {
+    &:hover {
+      background-color: var(--gray-700);
+    }
+  }
 }
