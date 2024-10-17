@@ -43,6 +43,7 @@ const {
 defineExpose({
   throwError,
   reset,
+  $input,
 })
 
 const onRightClick = () => {

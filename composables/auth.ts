@@ -40,6 +40,7 @@ export const useAuth = () => {
         text: error.message,
         color: ToastColor.danger,
       })
+      throw error
     }
   }
 
@@ -50,7 +51,9 @@ export const useAuth = () => {
     token.value = null
     user.value = null
 
-    router.push('/auth/login')
+    if (!route.path.startsWith('/auth')) {
+      router.push('/auth/login')
+    }
   }
 
   const checkAuth = () => {

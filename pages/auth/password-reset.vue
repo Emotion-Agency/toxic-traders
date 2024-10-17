@@ -1,22 +1,55 @@
 <script setup lang="ts">
-const inputsData = [
-  {
-    title: 'Email',
-    required: true,
-    id: 'reset-email',
-    name: 'Email',
-    type: 'text',
-    value: '',
-    placeholder: 'Your email',
-  },
-]
+import { forgotPasswordRequest } from '~/utils/api/auth/reset'
 
-const handleSubmit = () => {
-  console.log('submitted')
+const emailInput = ref({
+  title: 'Email',
+  required: true,
+  id: 'reset-email',
+  name: 'Email',
+  type: 'text',
+  value: '',
+  error: true,
+  placeholder: 'Your email',
+  validators: [
+    Validation.required('Email is required'),
+    Validation.email('Please enter a valid email address'),
+  ],
+})
+
+const isLoading = ref(false)
+
+const { addToast } = useToasts()
+
+const handleSubmit = async () => {
+  const email = emailInput.value.value
+  if (!email) {
+    return
+  }
+
+  if (emailInput.value.error) {
+    return
+  }
+
+  try {
+    isLoading.value = true
+    await forgotPasswordRequest(email)
+    addToast({
+      color: ToastColor.success,
+      text: 'We have sent you an email with a link to reset your password.',
+    })
+  } catch (error) {
+    console.log(error)
+    addToast({
+      color: ToastColor.danger,
+      text: 'Something went wrong. Please try again later.',
+    })
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const onChange = (e: iInputData) => {
-  console.log(e)
+  emailInput.value = { ...emailInput.value, ...e }
 }
 </script>
 
@@ -35,20 +68,17 @@ const onChange = (e: iInputData) => {
             We will send you a link to reset your password via email.
           </p>
           <ul class="password-reset__items-list">
-            <li
-              v-for="(input, idx) in inputsData"
-              :key="idx"
-              class="password-reset__item"
-            >
+            <li class="password-reset__item">
               <TheInput
                 class="password-reset__input"
-                :title="input?.title"
-                :id="input?.id"
-                :required="input?.required"
-                :name="input?.name"
-                :type="input?.type"
-                :placeholder="input?.placeholder"
-                :value="input?.value"
+                :title="emailInput?.title"
+                :id="emailInput?.id"
+                :required="emailInput?.required"
+                :name="emailInput?.name"
+                :type="emailInput?.type"
+                :placeholder="emailInput?.placeholder"
+                :value="emailInput?.value"
+                :validators="emailInput?.validators"
                 @input-value="onChange"
               />
             </li>
@@ -56,8 +86,6 @@ const onChange = (e: iInputData) => {
           <div class="password-reset__btn-wrapper">
             <TheButton
               class="password-reset__btn"
-              tag="nuxt-link"
-              to="/auth/password-new"
               variant="fill"
               button-size="large"
               type="submit"
