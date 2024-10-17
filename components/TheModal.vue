@@ -5,7 +5,7 @@ interface IProps {
   className?: string
 }
 
-defineProps<IProps>()
+const props = defineProps<IProps>()
 
 const $modal = ref<HTMLElement | null>(null)
 const $modalContainer = ref<HTMLElement | null>(null)
@@ -24,7 +24,11 @@ const onClose = () => {
       ref="$modal"
       class="modal"
       :class="[modalOpened && 'modal--opened', className]"
+      tabindex="-1"
+      aria-modal="true"
+      role="dialog"
     >
+      <button class="modal-focus-guard"></button>
       <div class="modal__backdrop" @click="onClose" />
       <div class="modal__content">
         <div class="modal__header">

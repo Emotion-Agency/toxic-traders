@@ -22,6 +22,9 @@ const $container = ref<HTMLElement | null>(null)
     <div
       class="sliding-modal"
       :class="[modalOpened && 'sliding-modal--opened', className]"
+      tabindex="-1"
+      aria-modal="true"
+      role="dialog"
     >
       <div class="sliding-modal__backdrop" @click="onClose" />
       <div class="sliding-modal__content">
