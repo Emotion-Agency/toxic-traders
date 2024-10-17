@@ -91,9 +91,27 @@ const onLeftClick = () => {
         @input="onInput"
       />
 
-      <component
+      <textarea
+        v-else-if="type === 'textarea'"
+        :id="id"
+        ref="$input"
+        v-model="inputValue"
+        class="input__type"
+        :class="[
+          error && 'input__type--error',
+          isLeftButton && 'input__type--left-btn',
+          isRightButton && 'input__type--right-btn',
+        ]"
+        :type="inputType"
+        :name="name"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+      />
+      <input
         v-else
-        :is="type === 'textarea' ? 'textarea' : 'input'"
         :id="id"
         ref="$input"
         v-model="inputValue"
