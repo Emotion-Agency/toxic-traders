@@ -6,7 +6,7 @@ import {
 import { getBrokerCategoriesList } from '~/utils/api/brokers/brokerCategoriesList'
 
 export const useBrokerCategories = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getCategoriesList = async () => {
     try {
@@ -14,10 +14,9 @@ export const useBrokerCategories = () => {
       return data
     } catch (error) {
       console.error('Error fetching categories:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching categories. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching categories. Please try again.'
+      )
     }
   }
 
@@ -41,10 +40,9 @@ export const useBrokerCategories = () => {
       return brokerCategories
     } catch (error) {
       console.error('Error creating categories:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating categories. Please try again.',
-      })
+      toast.error(
+        'An error occurred while creating categories. Please try again.'
+      )
     }
   }
 
@@ -52,18 +50,14 @@ export const useBrokerCategories = () => {
     try {
       const data = await deleteBrokerCategories(brokerId)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Category successfully deleted.',
-      })
+      toast.success('Category successfully deleted.')
 
       return data
     } catch (error) {
       console.error('Error deleting categories:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting categories. Please try again.',
-      })
+      toast.error(
+        'An error occurred while deleting categories. Please try again.'
+      )
     }
   }
 

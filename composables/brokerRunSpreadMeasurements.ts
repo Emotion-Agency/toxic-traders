@@ -2,7 +2,7 @@ import { createBrokerRunSpreadMeasurements } from '~/utils/api/brokers/brokerRun
 import type { iBrokerRunSpreadMeasurements } from '~/types/broker/brokerRunSpreadMeasurements'
 
 export const useBrokerRunSpreadMeasurements = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const createRunSpreadMeasurements = async (
     params: iBrokerRunSpreadMeasurements
@@ -10,18 +10,14 @@ export const useBrokerRunSpreadMeasurements = () => {
     try {
       const data = await createBrokerRunSpreadMeasurements(params)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Run spread measurement successfully created.',
-      })
+      toast.success('Run spread measurement successfully created.')
 
       return data
     } catch (error) {
       console.error('Error creating run spread measurement:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating run spread measurement. Please try again.',
-      })
+      toast.error(
+        'An error occurred while creating run spread measurement. Please try again.'
+      )
     }
   }
 

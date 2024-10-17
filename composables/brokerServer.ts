@@ -4,7 +4,7 @@ import {
 } from '~/utils/api/brokers/brokerServer'
 
 export const useBrokerServer = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getAllBrokerServers = async (brokerId: number) => {
     try {
@@ -18,10 +18,9 @@ export const useBrokerServer = () => {
       return { brokerServers, brokerServerAccounts }
     } catch (error) {
       console.error('Error fetching broker servers:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching broker servers. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching broker servers. Please try again.'
+      )
     }
   }
 
@@ -32,10 +31,9 @@ export const useBrokerServer = () => {
       return data
     } catch (error) {
       console.error('Error fetching current broker server:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching current broker server. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching current broker server. Please try again.'
+      )
     }
   }
 

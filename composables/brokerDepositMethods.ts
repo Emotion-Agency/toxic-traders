@@ -6,7 +6,7 @@ import {
 } from '~/utils/api/brokers/brokerDepositMethods'
 
 export const useBrokerDepositMethods = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getDepositMethods = async (brokerId: number) => {
     try {
@@ -15,10 +15,9 @@ export const useBrokerDepositMethods = () => {
       return data
     } catch (error) {
       console.error('Error fetching deposit methods:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching deposit methods. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching deposit methods. Please try again.'
+      )
     }
   }
 
@@ -32,10 +31,9 @@ export const useBrokerDepositMethods = () => {
       return data
     } catch (error) {
       console.error('Error updating deposit methods:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while updating deposit methods. Please try again.',
-      })
+      toast.error(
+        'An error occurred while updating deposit methods. Please try again.'
+      )
     }
   }
 
@@ -52,10 +50,9 @@ export const useBrokerDepositMethods = () => {
       return depositMethods
     } catch (error) {
       console.error('Error creating deposit methods:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating deposit methods. Please try again.',
-      })
+      toast.error(
+        'An error occurred while creating deposit methods. Please try again.'
+      )
     }
   }
 
@@ -66,10 +63,9 @@ export const useBrokerDepositMethods = () => {
       return data
     } catch (error) {
       console.error('Error deleting deposit methods:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting deposit methods. Please try again.',
-      })
+      toast.error(
+        'An error occurred while deleting deposit methods. Please try again.'
+      )
     }
   }
 

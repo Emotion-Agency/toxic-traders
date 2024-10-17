@@ -6,7 +6,7 @@ import {
 } from '~/utils/api/brokers/brokerPlatforms'
 
 export const useBrokerPlatforms = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getPlatform = async (brokerId: number) => {
     try {
@@ -15,10 +15,9 @@ export const useBrokerPlatforms = () => {
       return data
     } catch (error) {
       console.error('Error fetching platform:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching platform. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching platform. Please try again.'
+      )
     }
   }
 
@@ -29,10 +28,9 @@ export const useBrokerPlatforms = () => {
       return data
     } catch (error) {
       console.error('Error updating platform:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while updating platform. Please try again.',
-      })
+      toast.error(
+        'An error occurred while updating platform. Please try again.'
+      )
     }
   }
 
@@ -43,10 +41,10 @@ export const useBrokerPlatforms = () => {
       return platforms
     } catch (error) {
       console.error('Error creating platform:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating platform. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while creating platform. Please try again.'
+      )
     }
   }
 
@@ -57,10 +55,9 @@ export const useBrokerPlatforms = () => {
       return data
     } catch (error) {
       console.error('Error deleting platform:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting platform. Please try again.',
-      })
+      toast.error(
+        'An error occurred while deleting platform. Please try again.'
+      )
     }
   }
 

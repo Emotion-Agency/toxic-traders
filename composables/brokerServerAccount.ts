@@ -5,7 +5,7 @@ import {
 } from '~/utils/api/brokers/brokerServerAccount'
 
 export const useBrokerServerAccount = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const createBrokerAccount = async (
     accountType: string,
@@ -21,18 +21,15 @@ export const useBrokerServerAccount = () => {
         brokerServerId
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Account successfully created.',
-      })
+      toast.success('Account successfully created.')
 
       return data
     } catch (error) {
       console.error('Error creating broker server account:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating broker server account. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while creating server account. Please try again.'
+      )
     }
   }
 
@@ -50,18 +47,14 @@ export const useBrokerServerAccount = () => {
         password
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Account successfully updated.',
-      })
+      toast.success('Account successfully updated.')
 
       return data
     } catch (error) {
       console.error('Error updating broker server account:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while updating server account. Please try again.',
-      })
+      toast.error(
+        'An error occurred while updating server account. Please try again.'
+      )
     }
   }
 
@@ -69,18 +62,14 @@ export const useBrokerServerAccount = () => {
     try {
       const data = await deleteBrokerServerAccount(brokerServerId)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Account successfully deleted.',
-      })
+      toast.success('Account successfully deleted.')
 
       return data
     } catch (error) {
       console.error('Error deleting broker server account:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting broker server account. Please try again.',
-      })
+      toast.error(
+        'An error occurred while deleting server account. Please try again.'
+      )
     }
   }
 

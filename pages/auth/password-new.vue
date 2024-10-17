@@ -47,7 +47,7 @@ const route = useRoute()
 
 const isLoading = ref(false)
 const router = useRouter()
-const { addToast } = useToasts()
+const { toast } = useToasts()
 
 const handleSubmit = async () => {
   const { token, email } = route.query
@@ -66,16 +66,12 @@ const handleSubmit = async () => {
   try {
     isLoading.value = true
     await resetPasswordRequest(email as string, password, token as string)
-    addToast({
-      color: ToastColor.success,
-      text: 'Password has been successfully changed.',
-    })
+    toast.success('Password has been successfully changed.')
+
     router.push('/auth/login')
   } catch (error) {
-    addToast({
-      color: ToastColor.danger,
-      text: 'Something went wrong. Please try again later.',
-    })
+    toast.error('Something went wrong. Please try again later.')
+
     console.error(error)
   } finally {
     isLoading.value = false

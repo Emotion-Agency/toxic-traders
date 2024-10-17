@@ -6,7 +6,7 @@ import {
 } from '~/utils/api/brokers/brokerReviews'
 
 export const useBrokerReviews = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getReviews = async (brokerId: number) => {
     try {
@@ -17,10 +17,7 @@ export const useBrokerReviews = () => {
       )
     } catch (error) {
       console.error('Error fetching reviews:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching reviews. Please try again.',
-      })
+      toast.error('An error occurred while fetching reviews. Please try again.')
     }
   }
 
@@ -40,18 +37,12 @@ export const useBrokerReviews = () => {
         numberReviews
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Review successfully updated.',
-      })
+      toast.success('Review successfully updated.')
 
       return data
     } catch (error) {
       console.error('Error updating review:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while updating review. Please try again.',
-      })
+      toast.error('An error occurred while updating review. Please try again.')
     }
   }
 
@@ -71,18 +62,12 @@ export const useBrokerReviews = () => {
         serviceName
       )
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Review successfully created.',
-      })
+      toast.success('Review successfully created.')
 
       return data
     } catch (error) {
       console.error('Error creating review:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating review. Please try again.',
-      })
+      toast.error('An error occurred while creating review. Please try again.')
     }
   }
 
@@ -90,18 +75,12 @@ export const useBrokerReviews = () => {
     try {
       const data = await deleteBrokerReview(brokerReviewId)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Review successfully deleted.',
-      })
+      toast.success('Review successfully deleted.')
 
       return data
     } catch (error) {
       console.error('Error deleting review:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting review. Please try again.',
-      })
+      toast.error('An error occurred while deleting review. Please try again.')
     }
   }
 

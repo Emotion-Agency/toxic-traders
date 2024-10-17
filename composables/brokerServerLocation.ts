@@ -5,7 +5,7 @@ import {
 } from '~/utils/api/brokers/brokerServerLocation'
 
 export const useBrokerServerLocation = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getServerLocation = async (brokerId: number) => {
     try {
@@ -14,10 +14,9 @@ export const useBrokerServerLocation = () => {
       return data
     } catch (error) {
       console.error('Error fetching server location:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server location. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server location. Please try again.'
+      )
     }
   }
 
@@ -31,10 +30,10 @@ export const useBrokerServerLocation = () => {
       return data
     } catch (error) {
       console.error('Error creating server location:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating server location. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while creating server location. Please try again.'
+      )
     }
   }
 
@@ -45,10 +44,9 @@ export const useBrokerServerLocation = () => {
       return data
     } catch (error) {
       console.error('Error deleting server location:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting server location. Please try again.',
-      })
+      toast.error(
+        'An error occurred while deleting server location. Please try again.'
+      )
     }
   }
 

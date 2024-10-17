@@ -29,15 +29,12 @@ const categoryOnChange = (input: iInput) => {
   categoryValue.value = input.value
 }
 
-const { addToast } = useToasts()
+const { toast } = useToasts()
 
 const onAddCategory = async () => {
   await createCategories(props.brokerId, categoryValue.value)
 
-  addToast({
-    color: ToastColor.success,
-    text: 'Category successfully created.',
-  })
+  toast.success('Category successfully created.')
 
   categoriesData.value = [categoryValue.value, ...categoriesData.value]
 

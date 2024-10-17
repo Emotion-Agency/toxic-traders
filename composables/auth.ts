@@ -11,7 +11,7 @@ export const useAuth = () => {
   const user = useState<TUser>('user', () => null)
   const token = useState('token', () => null)
 
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const router = useRouter()
   const route = useRoute()
@@ -36,10 +36,11 @@ export const useAuth = () => {
 
       user.value = decoded as TUser
     } catch (error) {
-      addToast({
-        text: error.message,
-        color: ToastColor.danger,
-      })
+      toast.error(
+        error?.message ||
+          'An error occurred while logging in. Please try again.'
+      )
+
       throw error
     }
   }

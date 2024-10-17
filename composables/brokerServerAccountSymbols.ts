@@ -19,7 +19,7 @@ import type {
 } from '~/types/broker/brokerServerAccountSymbols'
 
 export const useBrokerServerAccountSymbols = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getServerAccountSymbolsSpreads = async (
     params: iBrokerServerAccountSymbolsSpreadsParams
@@ -31,10 +31,10 @@ export const useBrokerServerAccountSymbols = () => {
       return brokerServerAccountSymbols
     } catch (error) {
       console.error('Error fetching server account symbols spreads:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols spreads. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while fetching server account symbols spreads. Please try again.'
+      )
     }
   }
 
@@ -50,10 +50,10 @@ export const useBrokerServerAccountSymbols = () => {
         'Error fetching server account symbols spreads schedule:',
         error
       )
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols spreads schedule. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while fetching server account symbols spreads schedule. Please try again.'
+      )
     }
   }
 
@@ -66,10 +66,9 @@ export const useBrokerServerAccountSymbols = () => {
       return data
     } catch (error) {
       console.error('Error fetching server account symbols spreads:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols spreads. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbols spreads. Please try again.'
+      )
     }
   }
 
@@ -82,10 +81,9 @@ export const useBrokerServerAccountSymbols = () => {
       return data
     } catch (error) {
       console.error('Error fetching server account symbols spreads:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols spreads. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbols spreads. Please try again.'
+      )
       throw error
     }
   }
@@ -97,10 +95,9 @@ export const useBrokerServerAccountSymbols = () => {
       return data
     } catch (error) {
       console.error('Error fetching server account symbols names:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols names. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbols names. Please try again.'
+      )
     }
   }
 
@@ -111,10 +108,10 @@ export const useBrokerServerAccountSymbols = () => {
       return data
     } catch (error) {
       console.error('Error fetching server account symbols names:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols names. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while fetching server account symbols names. Please try again.'
+      )
     }
   }
 
@@ -131,10 +128,9 @@ export const useBrokerServerAccountSymbols = () => {
       }
     } catch (error) {
       console.error('Error fetching server account symbols MT4:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols MT4. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbols MT4. Please try again.'
+      )
     }
   }
 
@@ -151,10 +147,9 @@ export const useBrokerServerAccountSymbols = () => {
       }
     } catch (error) {
       console.error('Error fetching server account symbols MT5:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbols MT5. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbols MT5. Please try again.'
+      )
     }
   }
 
@@ -165,10 +160,9 @@ export const useBrokerServerAccountSymbols = () => {
       return data
     } catch (error) {
       console.error('Error fetching server account symbol MT4:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbol MT4. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbol MT4. Please try again.'
+      )
     }
   }
 
@@ -179,10 +173,9 @@ export const useBrokerServerAccountSymbols = () => {
       return data
     } catch (error) {
       console.error('Error fetching server account symbol MT4:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching server account symbol MT4. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching server account symbol MT4. Please try again.'
+      )
     }
   }
 

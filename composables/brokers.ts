@@ -8,7 +8,7 @@ import type {
 import { brokerSearchAdapter } from '~/utils/adapters/brokerSearchAdapter'
 
 export const useBrokers = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getAllBrokersBySearch = async (params: IBrokerSearchParams) => {
     try {
@@ -41,10 +41,7 @@ export const useBrokers = () => {
       return { updatedBrokers, totalCount }
     } catch (error) {
       console.error('Error fetching brokers:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching brokers. Please try again.',
-      })
+      toast.error('An error occurred while fetching brokers. Please try again.')
     }
   }
 
@@ -55,10 +52,8 @@ export const useBrokers = () => {
       return { brokers, totalCount }
     } catch (error) {
       console.error('Error fetching brokers:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching brokers. Please try again.',
-      })
+
+      toast.error('An error occurred while fetching brokers. Please try again.')
     }
   }
 
@@ -69,10 +64,10 @@ export const useBrokers = () => {
       return data
     } catch (error) {
       console.error('Error fetching current broker:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching current broker. Please try again.',
-      })
+
+      toast.error(
+        'An error occurred while fetching current broker. Please try again.'
+      )
     }
   }
 

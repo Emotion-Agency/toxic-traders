@@ -19,9 +19,16 @@ export const useToasts = () => {
     toasts.value = [updatedValue, ...toasts.value]
   }
 
+  const toast = {
+    success: (text: string) => addToast({ text, color: ToastColor.success }),
+    error: (text: string) => addToast({ text, color: ToastColor.danger }),
+    info: (text: string) => addToast({ text, color: ToastColor.info }),
+    warning: (text: string) => addToast({ text, color: ToastColor.warning }),
+  }
+
   const updateToasts = (value: iToast[]) => {
     toasts.value = value
   }
 
-  return { toasts, addToast, updateToasts }
+  return { toasts, addToast, updateToasts, toast }
 }

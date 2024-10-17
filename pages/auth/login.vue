@@ -38,6 +38,8 @@ const router = useRouter()
 
 const isLoading = ref(false)
 
+const { toast } = useToasts()
+
 const handleSubmit = async () => {
   const email = inputsData.value[0].value
   const password = inputsData.value[1].value

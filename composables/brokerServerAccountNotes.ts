@@ -5,7 +5,7 @@ import {
 } from '~/utils/api/brokers/brokerServerAccountNotes'
 
 export const useBrokerServerAccountNotes = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getBrokerAccountNotes = async (serverAccountId: number) => {
     try {
@@ -14,10 +14,9 @@ export const useBrokerServerAccountNotes = () => {
       return data
     } catch (error) {
       console.error('Error fetching broker server account notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching broker server account notes. Please try again.',
-      })
+      toast.error(
+        'An error occurred while fetching broker server account notes. Please try again.'
+      )
     }
   }
 
@@ -28,18 +27,14 @@ export const useBrokerServerAccountNotes = () => {
     try {
       const data = await updateBrokerServerAccountNotes(serverAccountId, notes)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Account notes successfully updated.',
-      })
+      toast.success('Account notes successfully updated.')
 
       return data
     } catch (error) {
       console.error('Error updating broker server account notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while updating broker server account notes. Please try again.',
-      })
+      toast.error(
+        'An error occurred while updating broker server account notes. Please try again'
+      )
     }
   }
 
@@ -47,18 +42,14 @@ export const useBrokerServerAccountNotes = () => {
     try {
       const data = await deleteBrokerServerAccountNotes(serverAccountId)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Account notes successfully deleted.',
-      })
+      toast.success('Account notes successfully deleted.')
 
       return data
     } catch (error) {
       console.error('Error deleting broker server account notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting broker server account notes. Please try again.',
-      })
+      toast.error(
+        'An error occurred while deleting broker server account notes. Please try again.'
+      )
     }
   }
 

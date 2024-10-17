@@ -6,7 +6,7 @@ import {
 } from '~/utils/api/brokers/brokerNotes'
 
 export const useBrokerNotes = () => {
-  const { addToast } = useToasts()
+  const { toast } = useToasts()
 
   const getNotes = async (brokerId: number) => {
     try {
@@ -15,29 +15,19 @@ export const useBrokerNotes = () => {
       return data
     } catch (error) {
       console.error('Error fetching notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while fetching notes. Please try again.',
-      })
+      toast.error('An error occurred while fetching notes. Please try again.')
     }
   }
 
   const updateNotes = async (brokerId: number, notes: string) => {
     try {
       const data = await updateBrokerNotes(brokerId, notes)
-
-      addToast({
-        color: ToastColor.success,
-        text: 'Notes successfully updated.',
-      })
+      toast.success('Notes successfully updated.')
 
       return data
     } catch (error) {
       console.error('Error updating notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while updating notes. Please try again.',
-      })
+      toast.error('An error occurred while updating notes. Please try again.')
     }
   }
 
@@ -45,18 +35,12 @@ export const useBrokerNotes = () => {
     try {
       const data = await createBrokerNotes(brokerId, notes)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Notes successfully created.',
-      })
+      toast.success('Notes successfully created.')
 
       return data
     } catch (error) {
       console.error('Error creating notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while creating notes. Please try again.',
-      })
+      toast.error('An error occurred while creating notes. Please try again.')
     }
   }
 
@@ -64,18 +48,12 @@ export const useBrokerNotes = () => {
     try {
       const data = await deleteBrokerNotes(brokerId)
 
-      addToast({
-        color: ToastColor.success,
-        text: 'Notes successfully deleted.',
-      })
+      toast.success('Notes successfully deleted.')
 
       return data
     } catch (error) {
       console.error('Error deleting notes:', error)
-      addToast({
-        color: ToastColor.danger,
-        text: 'An error occurred while deleting notes. Please try again.',
-      })
+      toast.error('An error occurred while deleting notes. Please try again.')
     }
   }
 

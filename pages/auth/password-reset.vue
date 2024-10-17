@@ -18,7 +18,7 @@ const emailInput = ref({
 
 const isLoading = ref(false)
 
-const { addToast } = useToasts()
+const { toast } = useToasts()
 
 const handleSubmit = async () => {
   const email = emailInput.value.value
@@ -33,16 +33,12 @@ const handleSubmit = async () => {
   try {
     isLoading.value = true
     await forgotPasswordRequest(email)
-    addToast({
-      color: ToastColor.success,
-      text: 'We have sent you an email with a link to reset your password.',
-    })
+    toast.success(
+      'We have sent you an email with a link to reset your password.'
+    )
   } catch (error) {
     console.log(error)
-    addToast({
-      color: ToastColor.danger,
-      text: 'Something went wrong. Please try again later.',
-    })
+    toast.error('Something went wrong. Please try again later.')
   } finally {
     isLoading.value = false
   }
