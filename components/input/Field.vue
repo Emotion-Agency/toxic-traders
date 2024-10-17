@@ -70,7 +70,7 @@ const onLeftClick = () => {
     :for="id"
   >
     <span v-if="title" class="input__title"
-      >{{ title }} <span v-if="required === true">*</span>
+      >{{ title }} <abbr v-if="required === true">*</abbr>
     </span>
     <div class="input__wrapper">
       <input
