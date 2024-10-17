@@ -9,6 +9,7 @@ const props = defineProps<IProps>()
 
 const $modal = ref<HTMLElement | null>(null)
 const $modalContainer = ref<HTMLElement | null>(null)
+const $modalFocusGuard = ref<HTMLElement | null>(null)
 
 const emit = defineEmits(['close'])
 
@@ -16,6 +17,28 @@ const onClose = () => {
   emit('close')
   document.body.classList.remove('modal-open')
 }
+
+watch(
+  () => props.modalOpened,
+  value => {
+    if (!import.meta.client) {
+      return
+    }
+    const lastActiveElement = document?.activeElement as HTMLElement
+    if (value) {
+      setTimeout(() => {
+        $modalFocusGuard.value?.focus()
+
+        document.querySelector('#__nuxt')?.setAttribute('aria-hidden', 'true')
+      }, 300)
+    } else {
+      document.querySelector('#__nuxt')?.removeAttribute('aria-hidden')
+      setTimeout(() => {
+        lastActiveElement?.focus()
+      }, 300)
+    }
+  }
+)
 </script>
 
 <template>
@@ -28,7 +51,18 @@ const onClose = () => {
       aria-modal="true"
       role="dialog"
     >
-      <button class="modal-focus-guard"></button>
+      <button
+        ref="$modalFocusGuard"
+        class="modal-focus-guard"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 1px;
+          opacity: 0;
+        "
+      ></button>
       <div class="modal__backdrop" @click="onClose" />
       <div class="modal__content">
         <div class="modal__header">

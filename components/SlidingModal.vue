@@ -5,9 +5,11 @@ interface IProps {
   className?: string
 }
 
-defineProps<IProps>()
+const props = defineProps<IProps>()
 
 const emit = defineEmits(['close'])
+
+const $modalFocusGuard = ref<HTMLElement | null>(null)
 
 const onClose = () => {
   emit('close')
@@ -15,6 +17,28 @@ const onClose = () => {
 }
 
 const $container = ref<HTMLElement | null>(null)
+
+watch(
+  () => props.modalOpened,
+  value => {
+    if (!import.meta.client) {
+      return
+    }
+    const lastActiveElement = document?.activeElement as HTMLElement
+    if (value) {
+      setTimeout(() => {
+        $modalFocusGuard.value?.focus()
+
+        document.querySelector('#__nuxt')?.setAttribute('aria-hidden', 'true')
+      }, 300)
+    } else {
+      document.querySelector('#__nuxt')?.removeAttribute('aria-hidden')
+      setTimeout(() => {
+        lastActiveElement?.focus()
+      }, 300)
+    }
+  }
+)
 </script>
 
 <template>
@@ -26,6 +50,18 @@ const $container = ref<HTMLElement | null>(null)
       aria-modal="true"
       role="dialog"
     >
+      <button
+        ref="$modalFocusGuard"
+        class="modal-focus-guard"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 1px;
+          opacity: 0;
+        "
+      ></button>
       <div class="sliding-modal__backdrop" @click="onClose" />
       <div class="sliding-modal__content">
         <div class="sliding-modal__header">
