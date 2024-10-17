@@ -6,6 +6,7 @@
   border-radius: 60px;
   width: fit-content;
   height: fit-content;
+  border: 1px solid transparent;
   transition:
     background-color 0.3s ease,
     opacity 0.3s ease,
@@ -19,6 +20,19 @@
     path {
       transition: fill 0.3s ease;
     }
+  }
+
+  &--large {
+    padding: 16px 24px;
+  }
+
+  &--medium {
+    padding: 10px 16px;
+  }
+
+  &--small {
+    @include button-small;
+    padding: 8px 12px;
   }
 
   &--fill {
@@ -38,19 +52,6 @@
     &:disabled {
       opacity: 0.55;
     }
-  }
-
-  &--fill-large {
-    padding: 16px 24px;
-  }
-
-  &--fill-medium {
-    padding: 10px 16px;
-  }
-
-  &--fill-small {
-    @include button-small;
-    padding: 8px 12px;
   }
 
   &--outlined {
@@ -80,19 +81,6 @@
     }
   }
 
-  &--outlined-large {
-    padding: 16px 24px;
-  }
-
-  &--outlined-medium {
-    padding: 10px 16px;
-  }
-
-  &--outlined-small {
-    @include button-small;
-    padding: 8px 12px;
-  }
-
   &--soft {
     color: var(--secondary-default);
     background-color: var(--primary-light2);
@@ -119,19 +107,6 @@
     }
   }
 
-  &--soft-large {
-    padding: 16px 24px;
-  }
-
-  &--soft-medium {
-    padding: 10px 16px;
-  }
-
-  &--soft-small {
-    @include button-small;
-    padding: 8px 12px;
-  }
-
   &--danger {
     color: var(--white);
     background-color: var(--status-danger);
@@ -154,19 +129,6 @@
     }
   }
 
-  &--danger-large {
-    padding: 16px 24px;
-  }
-
-  &--danger-medium {
-    padding: 10px 16px;
-  }
-
-  &--danger-small {
-    @include button-small;
-    padding: 8px 12px;
-  }
-
   &--close {
     color: var(--white);
     background-color: var(--secondary-default);
@@ -187,18 +149,5 @@
         }
       }
     }
-  }
-
-  &--close-large {
-    padding: 16px 24px;
-  }
-
-  &--close-medium {
-    padding: 10px 16px;
-  }
-
-  &--close-small {
-    @include button-small;
-    padding: 8px 12px;
   }
 }

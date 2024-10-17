@@ -28,7 +28,7 @@ const href = props.tag === 'a' ? props.href : undefined
   <component
     :is="tag"
     class="button"
-    :class="[`button--${variant}`, `button--${variant}-${buttonSize}`]"
+    :class="[`button--${variant}`, `button--${buttonSize}`]"
     :to="to"
     :href="href"
     :target="props.tag === 'a' ? '_blank' : undefined"
