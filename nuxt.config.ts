@@ -1,5 +1,3 @@
-import { pageTransition } from './transitions/base'
-
 export default defineNuxtConfig({
   css: ['@/assets/styles/index.scss'],
 
@@ -8,10 +6,6 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: false,
-  },
-
-  app: {
-    pageTransition,
   },
 
   plugins: ['~/plugins/vue-datepicker.ts'],

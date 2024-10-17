@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { iTagsInput } from '~/types'
+import type { iInputMultiselect } from '~/types'
 
 interface iProps {
   id: string
   dropdownList: string[]
-  badgesList?: iTagsInput[]
+  badgesList?: iInputMultiselect[]
   badgeVariant: 'fill' | 'outlined'
 }
 
@@ -55,7 +55,7 @@ const selectDropdownItem = (item: string) => {
   inputValue.value = ''
 }
 
-const removeBadge = (badge: iTagsInput) => {
+const removeBadge = (badge: iInputMultiselect) => {
   emit('remove', badge)
 }
 

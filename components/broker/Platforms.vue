@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iTagsInput } from '~/types'
+import type { iInputMultiselect } from '~/types'
 import { getBrokerPlatformsList } from '~/utils/api/brokers/brokerPlatformsList'
 
 interface iProps {
@@ -38,7 +38,7 @@ const selectPlatform = async (platform: string) => {
   await getPlatformList()
 }
 
-const removePlatform = async (item: iTagsInput) => {
+const removePlatform = async (item: iInputMultiselect) => {
   selectedPlatforms.value = selectedPlatforms.value.filter(
     platformId => platformId !== item?.id
   )
@@ -64,7 +64,7 @@ onMounted(async () => {
 <template>
   <div class="platforms">
     <TheAccordion class="platforms__accordion" title="Platforms">
-      <TagsInput
+      <InputMultiselect
         id="platforms"
         :dropdown-list="platformsNames"
         :badges-list="filteredPlatformsList"

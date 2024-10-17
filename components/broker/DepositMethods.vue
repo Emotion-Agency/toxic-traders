@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iTagsInput } from '~/types'
+import type { iInputMultiselect } from '~/types'
 import { getBrokerDepositMethodsList } from '~/utils/api/brokers/brokerDepositMethodsList'
 
 interface iProps {
@@ -42,7 +42,7 @@ const selectDeposit = async (deposit: string) => {
   await getDepositList()
 }
 
-const removeDeposit = async (item: iTagsInput) => {
+const removeDeposit = async (item: iInputMultiselect) => {
   selectedDepositList.value = selectedDepositList.value.filter(
     depositId => depositId !== item?.id
   )
@@ -68,7 +68,7 @@ onMounted(async () => {
 <template>
   <div class="deposit-methods">
     <TheAccordion class="deposit-methods__accordion" title="Method of deposit">
-      <TagsInput
+      <InputMultiselect
         id="deposit-methods"
         :dropdown-list="depositNames"
         :badges-list="filteredDepositList"

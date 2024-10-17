@@ -2,7 +2,7 @@
 import { getBrokerRestrictedCountriesList } from '~/utils/api/brokers/brokerRestrictedCountriesList'
 import { getCountriesFlag } from '~/utils/api/countries/getCountries'
 import type { iCountries } from '~/types/countries/countries'
-import type { iTagsInput } from '~/types'
+import type { iInputMultiselect } from '~/types'
 
 interface iProps {
   brokerId: number
@@ -54,7 +54,7 @@ const selectCountries = async (country: string) => {
   await getCountriesList()
 }
 
-const removeCountries = async (item: iTagsInput) => {
+const removeCountries = async (item: iInputMultiselect) => {
   selectedCountries.value = selectedCountries.value.filter(
     countryId => countryId !== item?.id
   )
@@ -99,7 +99,7 @@ onMounted(async () => {
       class="restricted-countries__accordion"
       title="Restricted countries"
     >
-      <TagsInput
+      <InputMultiselect
         id="restricted-countries"
         :dropdown-list="countriesFullNames"
         :badges-list="filteredSelectedCountries"

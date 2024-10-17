@@ -36,7 +36,7 @@ export interface iOptionItem {
   [key: string]: any
 }
 
-export interface iTagsInput {
+export interface iInputMultiselect {
   text: string
   icon?: {
     url: string

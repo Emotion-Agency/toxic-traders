@@ -146,7 +146,7 @@ watch(
       </div>
     </div>
     <div class="settings__content">
-      <CheckboxInput
+      <InputCheckbox
         v-for="(item, idx) in checkboxList"
         v-show="!hiddenItems.includes(item.id)"
         :id="item.id"
