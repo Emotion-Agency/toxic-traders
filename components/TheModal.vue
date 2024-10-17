@@ -18,14 +18,17 @@ const onClose = () => {
   document.body.classList.remove('modal-open')
 }
 
+let lastActiveElement
+
 watch(
   () => props.modalOpened,
   value => {
     if (!import.meta.client) {
       return
     }
-    const lastActiveElement = document?.activeElement as HTMLElement
+
     if (value) {
+      lastActiveElement = document?.activeElement as HTMLElement
       setTimeout(() => {
         $modalFocusGuard.value?.focus()
 
