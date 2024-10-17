@@ -87,7 +87,7 @@ onMounted(async () => {
       :is-inputs="true"
       @open="categoryModalOpen"
     >
-      <CustomSelect
+      <InputSelect
         :options="categoryOptions"
         placeholder="Choose category"
         :value="activeCategory"
@@ -99,7 +99,7 @@ onMounted(async () => {
       title="Add new category"
       @close="categoryModalClose"
     >
-      <TheInput
+      <InputField
         :id="categoryInputData.id"
         :required="categoryInputData.required"
         :name="categoryInputData.name"

@@ -101,7 +101,7 @@ const updateAccount = async () => {
           :key="idx"
           class="type-accounts__modal-item"
         >
-          <TheInput
+          <InputField
             :id="input?.id"
             :required="input?.required"
             :name="input?.name"
@@ -115,7 +115,7 @@ const updateAccount = async () => {
             <template #right-icon>
               <IconsPasswordEye :is-visible="isPassword" />
             </template>
-          </TheInput>
+          </InputField>
         </div>
       </div>
 

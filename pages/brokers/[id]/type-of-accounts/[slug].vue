@@ -285,7 +285,7 @@ onMounted(async () => {
           </div>
           <div class="type-of-account__notes">
             <p class="type-of-account__notes-title">Notes</p>
-            <TheInput
+            <InputField
               :id="notesInput?.id"
               :required="notesInput?.required"
               :name="notesInput?.name"

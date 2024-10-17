@@ -108,7 +108,7 @@ watch(
 <template>
   <div class="settings">
     <div class="settings__menu">
-      <TheInput
+      <InputField
         :id="searchInput.id"
         :required="searchInput.required"
         :name="searchInput.name"
@@ -122,7 +122,7 @@ watch(
         <template #right-icon>
           <IconsSearch />
         </template>
-      </TheInput>
+      </InputField>
       <div class="settings__btns">
         <TheButton
           tag="button"

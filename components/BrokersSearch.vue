@@ -87,7 +87,7 @@ onMounted(async () => {
             :key="idx"
             class="brokers-search__item"
           >
-            <CustomSelect
+            <InputSelect
               v-if="input.options"
               :id="input.id"
               :name="input.name"
@@ -99,7 +99,7 @@ onMounted(async () => {
               @select="getSelectedItem"
               @reset="resetSelectedItem(input)"
             />
-            <TheInput
+            <InputField
               v-else
               :id="input.id"
               :required="input.required"

@@ -69,7 +69,7 @@ const onChange = (e: iInputData) => {
           </p>
           <ul class="password-reset__items-list">
             <li class="password-reset__item">
-              <TheInput
+              <InputField
                 class="password-reset__input"
                 :title="emailInput?.title"
                 :id="emailInput?.id"
@@ -90,7 +90,8 @@ const onChange = (e: iInputData) => {
               button-size="large"
               type="submit"
             >
-              Reset
+              <Spinner v-if="isLoading" />
+              <span v-else>Reset</span>
             </TheButton>
             <TheButton
               class="password-reset__btn"

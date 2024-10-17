@@ -122,7 +122,7 @@ const updateRenderedItems = (items: any[]) => {
       @click.stop
     >
       <div v-if="searchInput" class="custom-select__input-wrapper">
-        <TheInput
+        <InputField
           :id="searchInput?.id"
           :required="searchInput?.required"
           :name="searchInput?.name"
@@ -135,7 +135,7 @@ const updateRenderedItems = (items: any[]) => {
           <template #right-icon>
             <IconsSearch />
           </template>
-        </TheInput>
+        </InputField>
       </div>
 
       <VirtualScroll

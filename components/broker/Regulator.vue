@@ -147,12 +147,12 @@ onMounted(async () => {
           class="regulator__accordion"
           @action-click="regulatorRemoveItem(idx)"
         >
-          <CustomSelect
+          <InputSelect
             :options="regulatorNames"
             :placeholder="regulatorNames[item.name]"
             @select="val => getSelectedRegulator(val, idx)"
           />
-          <TheInput
+          <InputField
             :id="'license-number-' + idx"
             name="License number"
             type="text"
@@ -160,7 +160,7 @@ onMounted(async () => {
             :value="item.licenseNumber?.toString()"
             @input-value="val => onLicenseChange(val, idx)"
           />
-          <TheInput
+          <InputField
             :id="'regulator-link-' + idx"
             name="Regulator link"
             type="text"

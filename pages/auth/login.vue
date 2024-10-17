@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const isPassword = ref(false)
 const inputsData = ref([
   {
     title: 'Email',
@@ -70,10 +69,6 @@ const onChange = (e: iInputData) => {
     return input
   })
 }
-
-const showPassword = () => {
-  isPassword.value = !isPassword.value
-}
 </script>
 
 <template>
@@ -93,7 +88,8 @@ const showPassword = () => {
               :key="idx"
               class="login__item"
             >
-              <TheInput
+              <InputField
+                v-if="input?.type !== 'password'"
                 :id="input?.id"
                 :title="input?.title"
                 :required="input?.required"
@@ -104,12 +100,20 @@ const showPassword = () => {
                 :value="input?.value"
                 :validators="input?.validators"
                 @input-value="onChange"
-                @right-click="showPassword"
-              >
-                <template #right-icon>
-                  <IconsPasswordEye :is-visible="isPassword" />
-                </template>
-              </TheInput>
+              />
+              <InputPassword
+                v-else
+                :id="input?.id"
+                :title="input?.title"
+                :required="input?.required"
+                :name="input?.name"
+                :type="input?.type"
+                :placeholder="input?.placeholder"
+                :is-right-button="!!input?.isRightButton"
+                :value="input?.value"
+                :validators="input?.validators"
+                @input-value="onChange"
+              ></InputPassword>
             </li>
           </ul>
           <NuxtLink to="/auth/password-reset" class="login__forgot-pass-link">
@@ -122,7 +126,8 @@ const showPassword = () => {
             button-size="large"
             type="submit"
           >
-            Log In
+            <Spinner v-if="isLoading" />
+            <span v-else>Log In</span>
           </TheButton>
         </form>
 

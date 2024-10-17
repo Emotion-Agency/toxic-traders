@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { resetPasswordRequest } from '~/utils/api/auth/reset'
 
-const isPassword1 = ref(false)
-const isPassword2 = ref(false)
-
 const passwordInput = ref({
   title: 'Password',
   required: true,
@@ -48,7 +45,6 @@ watch(passwordInput, () => {
 
 const route = useRoute()
 
-// ?token=CfDJ8Jn46ZI3MJRPu7jgggTbNnJOPD7QQhV8DkygVYQYzH3nBJogOkiiV6ErvCRN27lfuzOP5vyabwHr5ALzd4dNZ5UgVEotEQUMFLiITdQLo7FSGKJf6GWkYVasg0hnpb7%2FLJKNYi7ghqPYWWm2keHdaf%2FIxhSGTP%2BAuRfzAnsuWHvq%2Fsh6LVQsZEoMqR3vGBS5Sg%3D%3D&email=lkosteckiy5@gmail.com
 const isLoading = ref(false)
 const router = useRouter()
 const { addToast } = useToasts()
@@ -103,15 +99,6 @@ const onChange = (e: iInputData) => {
     }
   }
 }
-
-const showPassword = (type: 1 | 2) => {
-  if (type === 1) {
-    isPassword1.value = !isPassword1.value
-    return
-  }
-
-  isPassword2.value = !isPassword2.value
-}
 </script>
 
 <template>
@@ -127,7 +114,7 @@ const showPassword = (type: 1 | 2) => {
           <h1 class="password-new__title">Write new password</h1>
           <ul class="password-new__items-list">
             <li class="password-new__item">
-              <TheInput
+              <InputPassword
                 :title="passwordInput?.title"
                 :id="passwordInput?.id"
                 :required="passwordInput?.required"
@@ -138,15 +125,10 @@ const showPassword = (type: 1 | 2) => {
                 :value="passwordInput?.value"
                 :validators="passwordInput?.validators"
                 @input-value="onChange"
-                @right-click="showPassword(1)"
-              >
-                <template #right-icon>
-                  <IconsPasswordEye :is-visible="isPassword1" />
-                </template>
-              </TheInput>
+              />
             </li>
             <li class="password-new__item">
-              <TheInput
+              <InputPassword
                 :title="cPasswordInput?.title"
                 :id="cPasswordInput?.id"
                 :required="cPasswordInput?.required"
@@ -157,12 +139,7 @@ const showPassword = (type: 1 | 2) => {
                 :value="cPasswordInput?.value"
                 :validators="cPasswordInput?.validators"
                 @input-value="onChange"
-                @right-click="showPassword(2)"
-              >
-                <template #right-icon>
-                  <IconsPasswordEye :is-visible="isPassword2" />
-                </template>
-              </TheInput>
+              />
             </li>
           </ul>
           <TheButton
@@ -171,7 +148,8 @@ const showPassword = (type: 1 | 2) => {
             button-size="large"
             type="submit"
           >
-            Update
+            <Spinner v-if="isLoading" />
+            <span v-else>Update</span>
           </TheButton>
         </form>
 

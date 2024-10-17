@@ -98,7 +98,7 @@ onMounted(async () => {
 <template>
   <div class="statistics">
     <div v-if="websites?.length" class="statistics-data">
-      <CustomSelect
+      <InputSelect
         :options="websites"
         :placeholder="websites[0] || 'Choose website'"
         class="statistics__select"
@@ -129,7 +129,7 @@ onMounted(async () => {
         @close="statisticsModalClose"
       >
         <div class="statistics__modal-wrapper">
-          <CustomSelect
+          <InputSelect
             :options="timeArr"
             :placeholder="timeArr[0] || 'Choose item'"
             class="statistics__modal-select"

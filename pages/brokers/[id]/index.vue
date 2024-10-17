@@ -112,7 +112,7 @@ const historyModalClose = () => {
       <div class="main-broker__settings">
         <div class="main-broker__settings-item">
           <p class="main-broker__settings-title">Transfer</p>
-          <CustomSelect
+          <InputSelect
             :options="['Broker 1', 'Broker 2', 'Broker 3']"
             :search-input="settingsSearch"
             placeholder="Select existing broker"

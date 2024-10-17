@@ -56,7 +56,7 @@ onMounted(async () => {
   >
     <div class="server-location__wrapper">
       <TheAccordion title="Location Servers" :is-inputs="true">
-        <TheInput
+        <InputField
           :id="locationInputData?.id"
           :required="locationInputData?.required"
           :name="locationInputData?.name"

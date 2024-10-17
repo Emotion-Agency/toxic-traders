@@ -151,7 +151,7 @@ onMounted(async () => {
         :key="idx"
         class="broker-type-accounts__modal-item"
       >
-        <CustomSelect
+        <InputSelect
           v-if="input.options"
           :id="input?.id"
           :name="input?.name"
@@ -160,7 +160,7 @@ onMounted(async () => {
           :placeholder="input?.placeholder"
           @select="getSelectedItem"
         />
-        <TheInput
+        <InputField
           v-else
           :id="input.id"
           :required="input.required"
@@ -174,7 +174,7 @@ onMounted(async () => {
           <template #right-icon>
             <IconsPasswordEye :is-visible="isPassword" />
           </template>
-        </TheInput>
+        </InputField>
       </div>
     </div>
     <div class="broker-type-accounts__buttons">

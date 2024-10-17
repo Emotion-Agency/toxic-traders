@@ -65,7 +65,7 @@ const inputItem = computed(() => ({
       </button>
       <div class="pagination__content">
         <p class="pagination__text">Page</p>
-        <TheInput
+        <InputField
           :id="inputItem.id"
           :name="inputItem.name"
           :type="inputItem.type"
@@ -81,7 +81,7 @@ const inputItem = computed(() => ({
           @input-blur="onBlur"
         />
         <p class="pagination__text">of {{ computedTotalPages }}</p>
-        <CustomSelect
+        <InputSelect
           :options="options"
           :placeholder="itemsCount + ' rows'"
           @select="selectItem"

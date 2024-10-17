@@ -41,7 +41,7 @@ onMounted(async () => {
 
 <template>
   <TheAccordion title="Notes" :is-inputs="true">
-    <TheInput
+    <InputField
       :id="notesInput?.id"
       :required="notesInput?.required"
       :name="notesInput?.name"

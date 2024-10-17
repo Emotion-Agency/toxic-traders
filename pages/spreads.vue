@@ -226,7 +226,7 @@ onMounted(async () => {
           <div class="spreads__content">
             <ul class="spreads__select-list">
               <li class="spreads__select-item">
-                <CustomSelect
+                <InputSelect
                   :options="symbolSelect.options"
                   :search-input="symbolSelect.searchInput"
                   :placeholder="symbolSelect.placeholder"
@@ -239,7 +239,7 @@ onMounted(async () => {
                 />
               </li>
               <li class="spreads__select-item">
-                <CustomSelect
+                <InputSelect
                   :options="descriptionSelect.options"
                   :search-input="descriptionSelect.searchInput"
                   :placeholder="descriptionSelect.placeholder"
@@ -252,7 +252,7 @@ onMounted(async () => {
                 />
               </li>
               <!-- <li class="spreads__select-item">
-                <CustomSelect
+                <InputSelect
                   :options="platformsSelect.options"
                   :placeholder="platformsSelect.placeholder"
                   :title="platformsSelect.title"
@@ -261,7 +261,7 @@ onMounted(async () => {
                   <template #right-icon>
                     <IconsSearch />
                   </template>
-                </CustomSelect>
+                </InputSelect>
               </li> -->
             </ul>
           </div>

@@ -136,7 +136,7 @@ const availableServices = computed(() => {
       :key="index"
       class="review__input-item"
     >
-      <CustomSelect
+      <InputSelect
         v-if="input.type === 'select'"
         :id="input.id"
         :name="input.name"
@@ -145,7 +145,7 @@ const availableServices = computed(() => {
         :value="input.value"
         @select="onSelectChange"
       />
-      <TheInput
+      <InputField
         v-else
         :id="input.id"
         :key="index"
