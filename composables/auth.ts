@@ -45,15 +45,19 @@ export const useAuth = () => {
     }
   }
 
-  const logout = () => {
+  const logout = (redirect = true) => {
     localStorage.removeItem('token_expiring')
     localStorage.removeItem('token')
 
     token.value = null
     user.value = null
 
-    if (!route.path.startsWith('/auth')) {
-      router.push('/auth/login')
+    toast.info('You have been logged out.')
+
+    if (redirect) {
+      if (!route.path.startsWith('/auth')) {
+        router.push('/auth/login')
+      }
     }
   }
 
@@ -62,14 +66,14 @@ export const useAuth = () => {
     const lsToken = localStorage.getItem('token')
 
     if (!lsTokenExpiring || !lsToken) {
-      logout()
+      isAuthenticated.value && logout(false)
       return
     }
 
     const now = new Date().getTime()
 
     if (now > parseInt(lsTokenExpiring)) {
-      logout()
+      logout(false)
     } else {
       const decoded = jwtDecode(lsToken)
 

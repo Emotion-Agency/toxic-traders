@@ -3,25 +3,10 @@ import { useFonts } from '~/composables/fonts'
 
 useFonts()
 
-const { isAuthenticated, checkAuth } = useAuth()
+const { isAuthenticated } = useAuth()
 const { isLoaded } = useAppState()
 
-const route = useRoute()
-const router = useRouter()
-
-const onChangeRoute = () => {
-  checkAuth()
-  if (route.path.startsWith('/auth') && isAuthenticated.value) {
-    router.push('/')
-  }
-
-  if (!route.path.startsWith('/auth') && !isAuthenticated.value) {
-    router.push('/auth/login')
-  }
-}
-
 onMounted(async () => {
-  onChangeRoute()
   isLoaded.value = true
   const { hello } = await import('~/utils/hello')
 
@@ -34,8 +19,6 @@ useHead({
     id: 'scroll-container',
   },
 })
-
-watch(() => route.path, onChangeRoute)
 </script>
 
 <template>

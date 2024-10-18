@@ -24,6 +24,7 @@ defineExpose({
     ref="$el"
     class="settings-dropdown"
     :class="[isOpen && 'settings-dropdown--visible']"
+    aria-menu="true"
   >
     <div class="settings-dropdown__window">
       <ul class="settings-dropdown__items">
