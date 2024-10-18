@@ -5,8 +5,6 @@ import { resize } from '~/utils/ea'
 const isDarkMode = ref(false)
 const $el = ref<HTMLElement | null>(null)
 
-const { user } = useAuth()
-
 const navigationList = [
   {
     text: 'Calendar',
@@ -52,12 +50,6 @@ useOnBeforeUnmountDelay(() => {
   // navbarPos && navbarPos.destroy()
   resize.off(calcHeight)
 })
-
-const isAccountDropdownOpen = ref(false)
-
-const onAccountClick = () => {
-  isAccountDropdownOpen.value = !isAccountDropdownOpen.value
-}
 </script>
 
 <template>
@@ -88,15 +80,7 @@ const onAccountClick = () => {
             <IconsTheme />
           </span>
         </button>
-        <button class="header__account" @click="onAccountClick">
-          <span class="header__account-name">{{ user?.email }}</span>
-          <img
-            src="/images/avatars/1.jpg"
-            alt="Avatar"
-            class="header__account-img"
-          />
-        </button>
-        <SettingsDropdown :is-open="isAccountDropdownOpen" />
+        <Account />
       </div>
     </div>
   </header>

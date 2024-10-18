@@ -11,10 +11,17 @@ const onSettings = () => {}
 const onLogout = () => {
   isLogoutModalOpened.value = true
 }
+
+const $el = ref<HTMLElement | null>(null)
+
+defineExpose({
+  $el,
+})
 </script>
 
 <template>
   <div
+    ref="$el"
     class="settings-dropdown"
     :class="[isOpen && 'settings-dropdown--visible']"
   >
