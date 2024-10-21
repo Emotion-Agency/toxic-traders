@@ -168,7 +168,9 @@ const isSortable = (field: string) => {
                 sortState.sortBy === formatNameToNormalCase(headerItem)
               "
               @sort="onSort"
-            />
+            >
+              {{ formatNameToNormalCase(headerItem) }}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -178,10 +180,15 @@ const isSortable = (field: string) => {
               :key="i"
               :item="cell || 'N/A'"
               :class="`table-cell--${i}`"
-              :custom-component="cell === item?.schedule ? Clock : null"
-              @open="onModalOpen(item)"
-              @click-custom-component="onScheduleOpen(item)"
-            />
+            >
+              <button
+                v-if="cell === item?.schedule"
+                @click="onScheduleOpen(item)"
+              >
+                <Clock />
+              </button>
+              <div v-else>{{ cell || 'N/A' }}</div>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

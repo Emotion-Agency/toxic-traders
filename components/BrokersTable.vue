@@ -113,7 +113,8 @@ const getFilteredBrokerColums = (broker: iBroker) => {
               formattedHeadingFields[idx]?.toLowerCase()
           "
           @sort="onSort"
-        />
+          >{{ headerItem }}</TableCell
+        >
       </TableRow>
     </TableHead>
     <TableBody>
@@ -132,15 +133,9 @@ const getFilteredBrokerColums = (broker: iBroker) => {
             `table-cell--${index}`,
             `table-cell--${headingFields[index]}`,
           ]"
-          :link="
-            broker.companyNames === item
-              ? {
-                  url: `/brokers/${broker.id}`,
-                  text: broker.companyNames,
-                }
-              : null
-          "
-        />
+        >
+          {{ item }}
+        </TableCell>
       </TableRow>
     </TableBody>
   </Table>

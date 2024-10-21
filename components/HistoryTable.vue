@@ -32,7 +32,9 @@ const { sortState, onSort } = useSort(
           :sort-order="sortState.sortOrder"
           :is-active="sortState.sortBy === headerItem"
           @sort="onSort"
-        />
+        >
+          {{ headerItem }}
+        </TableCell>
       </TableRow>
     </TableHead>
     <TableHead :header-fields="headerFields" />
@@ -43,7 +45,9 @@ const { sortState, onSort } = useSort(
           :key="id"
           :item="item"
           :class="`table-cell--${index}`"
-        />
+        >
+          {{ item }}
+        </TableCell>
       </TableRow>
     </TableBody>
   </Table>

@@ -71,14 +71,22 @@ onMounted(async () => {
             :key="idx"
             :item="headerItem"
             :class="`table-cell--${idx}`"
-          />
+          >
+            {{ headerItem }}
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         <TableRow>
-          <TableCell :item="formatNumber(ahrefsTraffic)" />
-          <TableCell :item="formatNumber(semrushTraffic)" />
-          <TableCell :item="formatNumber(similarWebTraffic)" />
+          <TableCell :item="formatNumber(ahrefsTraffic)">
+            <span>{{ formatNumber(ahrefsTraffic) }}</span>
+          </TableCell>
+          <TableCell :item="formatNumber(semrushTraffic)">
+            <span>{{ formatNumber(semrushTraffic) }}</span>
+          </TableCell>
+          <TableCell :item="formatNumber(similarWebTraffic)">
+            <span>{{ formatNumber(similarWebTraffic) }}</span>
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>

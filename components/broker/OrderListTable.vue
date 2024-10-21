@@ -30,7 +30,9 @@ onMounted(async () => {
             :key="idx"
             :item="formatNameToNormalCase(headerItem)"
             :class="`table-cell--${idx}`"
-          />
+          >
+            {{ formatNameToNormalCase(headerItem) }}
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -42,7 +44,9 @@ onMounted(async () => {
               id === 'openTime' ? formatDateWithTime(item.toString()) : item
             "
             :class="[`table-cell--${index}`]"
-          />
+          >
+            {{ id === 'openTime' ? formatDateWithTime(item.toString()) : item }}
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>

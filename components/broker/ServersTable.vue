@@ -77,7 +77,9 @@ onMounted(async () => {
             :item="headerItem"
             :class="`table-cell--${idx}`"
             :is-sort="false"
-          />
+          >
+            {{ headerItem }}
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -89,7 +91,15 @@ onMounted(async () => {
             :class="`table-cell--${i}`"
             :is-modal="!!cell?.serverName"
             @open="serversModalOpen(idx)"
-          />
+          >
+            <button
+              class="table-cell__modal-btn"
+              @click="serversModalOpen(idx)"
+            >
+              {{ cell?.serverName || 'N/A' }}
+              <IconsLinkArrow />
+            </button>
+          </TableCell>
           <TheModal
             :modal-opened="isOpenedServersModal[idx]"
             title="Server info"

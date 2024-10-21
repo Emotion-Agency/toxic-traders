@@ -51,7 +51,9 @@ const { sortState, onSort } = useSort(
           :sort-order="sortState.sortOrder"
           :is-active="sortState.sortBy === headerItem"
           @sort="onSort"
-        />
+        >
+          {{ headerItem }}
+        </TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
@@ -61,9 +63,10 @@ const { sortState, onSort } = useSort(
           :key="id"
           :item="item"
           :class="`table-cell--${index}`"
-        />
+        >
+          {{ item }}
+        </TableCell>
       </TableRow>
     </TableBody>
   </Table>
 </template>
-~/assets/api/brokers/getBrokerLogs~/utils/api/brokers/getBrokerLogs
