@@ -24,8 +24,8 @@ const onSort = () => {
       <IconsDownUpArrow v-else />
     </button>
 
-    <p v-else class="table-cell__text">
+    <div v-else class="table-cell__content">
       <slot />
-    </p>
+    </div>
   </div>
 </template>
