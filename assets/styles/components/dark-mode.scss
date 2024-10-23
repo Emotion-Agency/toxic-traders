@@ -205,7 +205,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
+  body:not(.light-mode) {
     @include dark-mode-mixin;
   }
 }

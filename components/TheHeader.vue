@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { resize } from '~/utils/ea'
+import ThemeSwitcher from './ThemeSwitcher.vue'
 
 // let navbarPos
-const isDarkMode = ref(false)
 const $el = ref<HTMLElement | null>(null)
 
 const navigationList = [
@@ -25,25 +25,12 @@ const calcHeight = () => {
   document.documentElement.style.setProperty('--h', `${height}px`)
 }
 
-const toggleTheme = () => {
-  isDarkMode.value = !isDarkMode.value
-
-  document.body.classList.toggle('dark-mode', isDarkMode.value)
-  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
-}
-
 onMounted(() => {
   // const { default: NavbarPos } = await import('~/utils/navbarPos')
-  const savedTheme = localStorage.getItem('theme')
 
   // navbarPos = new NavbarPos()
   // navbarPos.init()
   resize.on(calcHeight)
-
-  if (savedTheme) {
-    isDarkMode.value = savedTheme === 'dark'
-    document.body.classList.toggle('dark-mode', isDarkMode.value)
-  }
 })
 
 useOnBeforeUnmountDelay(() => {
@@ -71,15 +58,7 @@ useOnBeforeUnmountDelay(() => {
         </NuxtLink>
       </nav>
       <div class="header__right-menu">
-        <button
-          class="header__theme-btn"
-          aria-label="Theme changer"
-          @click="toggleTheme"
-        >
-          <span>
-            <IconsTheme />
-          </span>
-        </button>
+        <ThemeSwitcher />
         <Account />
       </div>
     </div>
