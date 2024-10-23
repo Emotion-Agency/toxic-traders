@@ -1,4 +1,4 @@
-.dark-mode {
+@mixin dark-mode-mixin {
   background-color: var(--secondary-dark);
   color: var(--white);
 
@@ -197,5 +197,15 @@
     &:hover {
       background-color: var(--gray-700);
     }
+  }
+}
+
+.dark-mode {
+  @include dark-mode-mixin;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @include dark-mode-mixin;
   }
 }
