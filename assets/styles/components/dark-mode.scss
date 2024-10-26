@@ -218,6 +218,22 @@
       color: var(--white);
     }
   }
+
+  .settings__title {
+    color: var(--white);
+  }
+
+  .settings__nav-item {
+    &:hover {
+      .settings__nav-link {
+        color: var(--secondary-dark);
+      }
+    }
+  }
+
+  .settings__nav-link {
+    color: var(--white);
+  }
 }
 
 .dark-mode {
