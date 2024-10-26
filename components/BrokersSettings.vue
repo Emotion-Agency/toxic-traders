@@ -106,8 +106,8 @@ watch(
 </script>
 
 <template>
-  <div class="settings">
-    <div class="settings__menu">
+  <div class="brokers-settings">
+    <div class="brokers-settings__menu">
       <InputField
         :id="searchInput.id"
         :required="searchInput.required"
@@ -116,14 +116,14 @@ watch(
         :placeholder="searchInput.placeholder"
         :disabled="searchInput.disabled"
         :is-right-button="searchInput.isRightButton"
-        class="settings__search-input"
+        class="brokers-settings__search-input"
         @input-value="onChange"
       >
         <template #right-icon>
           <IconsSearch />
         </template>
       </InputField>
-      <div class="settings__btns">
+      <div class="brokers-settings__btns">
         <TheButton
           tag="button"
           button-size="small"
@@ -145,7 +145,7 @@ watch(
         </TheButton>
       </div>
     </div>
-    <div class="settings__content">
+    <div class="brokers-settings__content">
       <InputCheckbox
         v-for="(item, idx) in checkboxList"
         v-show="!hiddenItems.includes(item.id)"
@@ -159,11 +159,11 @@ watch(
         @input-value="(_, checked) => onChangeCheckbox(item.id, checked)"
       />
     </div>
-    <div class="settings__info">
-      <p class="settings__info-text">
+    <div class="brokers-settings__info">
+      <p class="brokers-settings__info-text">
         Showed properties: {{ selectedCheckboxItems.length }}
       </p>
-      <p class="settings__info-text">
+      <p class="brokers-settings__info-text">
         Hidden properties:
         {{ checkboxList.length - selectedCheckboxItems.length }}
       </p>

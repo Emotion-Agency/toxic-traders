@@ -233,7 +233,10 @@ const showedHeadings = computed(() => {
       class-name="brokers__modal"
       @close="closeSettings"
     >
-      <TheSettings :properties="brokersHeadings" @change="changeTableColumns" />
+      <BrokersSettings
+        :properties="brokersHeadings"
+        @change="changeTableColumns"
+      />
     </TheModal>
     <SlidingModal
       :modal-opened="isHistoryOpened"

@@ -1,16 +1,16 @@
-.settings__menu {
+.brokers-settings__menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.settings__btns {
+.brokers-settings__btns {
   display: flex;
   align-items: center;
   column-gap: 10px;
 }
 
-.settings__search-input {
+.brokers-settings__search-input {
   max-width: 240px;
 
   path {
@@ -18,7 +18,7 @@
   }
 }
 
-.settings__content {
+.brokers-settings__content {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -30,7 +30,7 @@
   }
 }
 
-.settings__info {
+.brokers-settings__info {
   @include button-small;
   color: var(--secondary-light);
   display: flex;

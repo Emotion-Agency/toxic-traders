@@ -359,7 +359,10 @@ onMounted(async () => {
       class-name="brokers__modal"
       @close="closeSettings"
     >
-      <TheSettings :properties="headerFields" @change="changeTableColumns" />
+      <BrokersSettings
+        :properties="headerFields"
+        @change="changeTableColumns"
+      />
     </TheModal>
     <SlidingModal
       :modal-opened="isOrderIdListOpened"
