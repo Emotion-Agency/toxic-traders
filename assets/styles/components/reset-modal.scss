@@ -1,0 +1,19 @@
+.reset-modal__wrapper {
+  padding-top: 16px;
+}
+
+.reset-modal__text {
+  @include text-body;
+}
+
+.reset-modal__input {
+  margin-top: 20px;
+}
+
+.reset-modal__btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 8px;
+  margin-top: 32px;
+}

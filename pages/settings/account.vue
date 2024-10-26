@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const isLoading = ref(false)
 const deleteModalOpened = ref(false)
+const resetModalOpened = ref(false)
 
 const oPasswordInput = ref({
   title: 'Old password',
@@ -90,14 +91,23 @@ const onChange = (e: iInputData) => {
   }
 }
 
-const deleteModalOpen = (reviewId: number) => {
+const deleteModalOpen = () => {
   deleteModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const resetModalOpen = () => {
+  resetModalOpened.value = true
   document.body.classList.add('modal-open')
 }
 
 const deleteModalClose = () => {
   deleteModalOpened.value = false
+  document.body.classList.remove('modal-open')
+}
 
+const resetModalClose = () => {
+  resetModalOpened.value = false
   document.body.classList.remove('modal-open')
 }
 </script>
@@ -155,7 +165,13 @@ const deleteModalClose = () => {
           />
         </li>
       </ul>
-      <button class="settings-account__forgot-btn">Forgot password?</button>
+      <button
+        class="settings-account__forgot-btn"
+        type="button"
+        @click="resetModalOpen"
+      >
+        Forgot password?
+      </button>
       <TheButton
         class="settings-account__btn"
         tag="button"
@@ -189,6 +205,7 @@ const deleteModalClose = () => {
         text="Are you sure you want to delete your account? This action cannot be prevented"
         @close="deleteModalClose"
       />
+      <ResetModal :modal-opened="resetModalOpened" @close="resetModalClose" />
     </div>
   </div>
 </template>
