@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const isLoading = ref(false)
+const deleteModalOpened = ref(false)
 
 const oPasswordInput = ref({
   title: 'Old password',
@@ -88,6 +89,17 @@ const onChange = (e: iInputData) => {
     }
   }
 }
+
+const deleteModalOpen = (reviewId: number) => {
+  deleteModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const deleteModalClose = () => {
+  deleteModalOpened.value = false
+
+  document.body.classList.remove('modal-open')
+}
 </script>
 
 <template>
@@ -168,9 +180,15 @@ const onChange = (e: iInputData) => {
         variant="danger"
         button-size="large"
         type="button"
+        @click="deleteModalOpen"
       >
         <span>Delete Account</span>
       </TheButton>
+      <DeleteModal
+        :modal-opened="deleteModalOpened"
+        text="Are you sure you want to delete your account? This action cannot be prevented"
+        @close="deleteModalClose"
+      />
     </div>
   </div>
 </template>

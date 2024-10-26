@@ -27,6 +27,12 @@
     }
   }
 
+  .delete-modal {
+    .delete-modal__delete-text {
+      color: var(--white);
+    }
+  }
+
   .checkbox-input__text {
     color: var(--white);
   }
