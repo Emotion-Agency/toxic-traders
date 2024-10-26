@@ -25,27 +25,32 @@ const navigationList = [
 
 <template>
   <NuxtLayout name="default">
-    <div class="container settings" style="padding-top: 120px">
-      <h1 class="settings__title">Settings</h1>
-      <div class="settings__divider" />
-      <div class="settings__wrapper">
-        <nav class="settings__nav">
-          <ul class="settings__nav-list">
-            <li
-              v-for="(item, idx) in navigationList"
-              :key="idx"
-              class="settings__nav-item"
-            >
-              <NuxtLink :to="item.link" class="settings__nav-link">
-                {{ item.text }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </nav>
-        <div class="settings__content-wrapper">
-          <slot />
+    <main>
+      <div
+        class="container settings"
+        style="padding-top: 120px; min-height: 100vh"
+      >
+        <h1 class="settings__title">Settings</h1>
+        <div class="settings__divider" />
+        <div class="settings__wrapper">
+          <nav class="settings__nav">
+            <ul class="settings__nav-list">
+              <li
+                v-for="(item, idx) in navigationList"
+                :key="idx"
+                class="settings__nav-item"
+              >
+                <NuxtLink :to="item.link" class="settings__nav-link">
+                  {{ item.text }}
+                </NuxtLink>
+              </li>
+            </ul>
+          </nav>
+          <div class="settings__content-wrapper">
+            <slot />
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   </NuxtLayout>
 </template>

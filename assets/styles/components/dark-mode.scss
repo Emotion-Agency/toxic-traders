@@ -234,6 +234,18 @@
   .settings__nav-link {
     color: var(--white);
   }
+
+  .settings-account__title {
+    color: var(--white);
+  }
+
+  .settings-account__form {
+    background-color: var(--gray-800);
+  }
+
+  .settings-account__delete {
+    background-color: var(--gray-800);
+  }
 }
 
 .dark-mode {
