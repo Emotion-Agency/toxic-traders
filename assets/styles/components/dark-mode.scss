@@ -198,6 +198,26 @@
       background-color: var(--gray-700);
     }
   }
+
+  .login__form {
+    background-color: var(--gray-800);
+
+    .login__title {
+      color: var(--white);
+    }
+  }
+
+  .password-reset__form {
+    background-color: var(--gray-800);
+
+    .password-reset__title {
+      color: var(--white);
+    }
+
+    .password-reset__description {
+      color: var(--white);
+    }
+  }
 }
 
 .dark-mode {
