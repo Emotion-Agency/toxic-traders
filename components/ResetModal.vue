@@ -24,7 +24,7 @@ const resetInput = ref({
 })
 
 const handleSubmit = () => {
-  console.log('submitted')
+  emit('reset', { value: resetInput.value })
 }
 
 const onChange = (e: iInputData) => {
@@ -77,7 +77,8 @@ const onChange = (e: iInputData) => {
           variant="fill"
           button-size="medium"
           type="submit"
-          @click="emit('reset')"
+          :disabled="!!resetInput?.error"
+          @click="handleSubmit"
         >
           Reset
         </TheButton>

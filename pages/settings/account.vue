@@ -178,6 +178,11 @@ const resetModalClose = () => {
         variant="fill"
         button-size="large"
         type="submit"
+        :disabled="
+          !!oPasswordInput?.error ||
+          !!nPasswordInput?.error ||
+          !!cnPasswordInput?.error
+        "
       >
         <Spinner v-if="isLoading" />
         <span v-else>Update</span>

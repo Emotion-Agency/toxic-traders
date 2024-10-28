@@ -92,6 +92,11 @@
       color: var(--gray-500);
     }
   }
+  .input__btn {
+    path {
+      fill: var(--white);
+    }
+  }
 
   .accordion__content {
     background-color: var(--gray-800);
