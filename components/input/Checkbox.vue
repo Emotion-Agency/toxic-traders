@@ -6,6 +6,7 @@ interface iProps {
   type?: string
   disabled?: boolean
   checked?: boolean
+  isRight?: boolean
 }
 
 const props = defineProps<iProps>()
@@ -28,7 +29,7 @@ watch(
     class="checkbox-input"
     :class="disabled && 'checkbox-input--disabled'"
   >
-    <span class="checkbox-input__text">
+    <span v-if="!isRight" class="checkbox-input__text">
       {{ value }}
     </span>
     <input
@@ -44,6 +45,9 @@ watch(
     />
     <span class="checkbox-input__checkmark">
       <IconsCheck />
+    </span>
+    <span v-if="isRight" class="checkbox-input__text">
+      {{ value }}
     </span>
   </label>
 </template>

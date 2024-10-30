@@ -28,7 +28,7 @@ const navigationList = [
     <main>
       <div
         class="container settings"
-        style="padding-top: 120px; min-height: 100vh"
+        style="padding-top: 120px; padding-bottom: 120px; min-height: 100vh"
       >
         <h1 class="settings__title">Settings</h1>
         <div class="settings__divider" />

@@ -17,6 +17,8 @@
 }
 
 .settings__nav {
+  position: sticky;
+  top: 120px;
   flex: 0 0 212px;
 }
 
@@ -24,6 +26,13 @@
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+}
+
+.settings__nav-item {
+  .router-link-active {
+    font-weight: 600;
+    background-color: var(--gray-300);
+  }
 }
 
 .settings__nav-link {

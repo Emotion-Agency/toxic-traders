@@ -28,8 +28,13 @@
 
 .custom-select__title {
   @include text-body;
+  display: inline-block;
   line-height: 1.25em;
   margin-bottom: 6px;
+
+  abbr {
+    color: var(--status-danger);
+  }
 }
 
 .custom-select__selected {

@@ -23,12 +23,12 @@ const onChange = (inputData: iInputData) => {
   }
 }
 
-const newUserModalClose = () => {
+const createUserModalClose = () => {
   newUserModalOpened.value = false
   document.body.classList.remove('modal-open')
 }
 
-const newUserModalOpen = () => {
+const createUserModalOpen = () => {
   newUserModalOpened.value = true
   document.body.classList.add('modal-open')
 }
@@ -65,7 +65,7 @@ const { sortState, onSort } = useSort(
         variant="fill"
         button-size="medium"
         type="button"
-        @click="newUserModalOpen"
+        @click="createUserModalOpen"
       >
         <template #start-icon>
           <IconsPlus />
@@ -76,5 +76,9 @@ const { sortState, onSort } = useSort(
     <div class="settings-users__table-wrapper">
       <!-- <UsersTable /> -->
     </div>
+    <NewUserModal
+      :modal-opened="newUserModalOpened"
+      @close="createUserModalClose"
+    />
   </div>
 </template>

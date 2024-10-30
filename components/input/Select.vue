@@ -10,6 +10,8 @@ interface iProps {
   name?: string
   value?: string
   isReset?: boolean
+  required?: boolean
+  validators?: Function[]
 }
 
 const props = defineProps<iProps>()
@@ -96,7 +98,9 @@ const updateRenderedItems = (items: any[]) => {
     class="custom-select"
     :class="isOpened && 'custom-select--opened'"
   >
-    <p v-if="title" class="custom-select__title">{{ title }}</p>
+    <span v-if="title" class="custom-select__title"
+      >{{ title }} <abbr v-if="required === true">*</abbr>
+    </span>
     <div class="custom-select__selected" @click="toggleList">
       <p class="custom-select__text">
         {{

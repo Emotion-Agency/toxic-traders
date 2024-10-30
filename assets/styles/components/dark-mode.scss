@@ -240,6 +240,10 @@
         color: var(--secondary-dark);
       }
     }
+
+    .router-link-active {
+      color: var(--secondary-dark);
+    }
   }
 
   .settings__nav-link {
