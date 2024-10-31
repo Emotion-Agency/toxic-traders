@@ -140,7 +140,6 @@ const onCheck = (_, checked: boolean) => {
             :placeholder="nameInput?.placeholder"
             :value="nameInput?.value"
             :validators="nameInput?.validators"
-            :error="nameInput?.error"
             class="user-modal__item"
             @input-value="onChange"
           />
@@ -153,7 +152,6 @@ const onCheck = (_, checked: boolean) => {
             :placeholder="emailInput?.placeholder"
             :value="emailInput?.value"
             :validators="emailInput?.validators"
-            :error="emailInput?.error"
             class="user-modal__item"
             @input-value="onChange"
           />

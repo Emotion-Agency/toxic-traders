@@ -5,7 +5,6 @@ interface iProps {
   title?: string
   name: string
   type?: string
-  error?: boolean
   placeholder?: string
   disabled?: boolean
   isLeftButton?: boolean

@@ -54,8 +54,10 @@ const closeList = () => {
 const selectItem = (option: string | iOptionItem) => {
   if (typeof option === 'string') {
     selectedItem.value = option
-  } else {
+  } else if (option?.text) {
     selectedItem.value = option.text
+  } else {
+    selectedItem.value = ''
   }
 
   validate()
@@ -100,13 +102,19 @@ const updateRenderedItems = (items: any[]) => {
 }
 
 const validate = () => {
-  if (props.validators && props.validators.length > 0) {
-    error.value = props.validators.some(validator => {
-      const value = selectedItem.value || ''
-      return validator(value)
-    })
-  } else {
-    error.value = false
+  if (props.validators) {
+    const value =
+      typeof selectedItem.value === 'string'
+        ? selectedItem.value
+        : selectedItem.value?.text
+
+    const falsyValidator = props.validators.find(validator => validator(value))
+
+    if (falsyValidator) {
+      error.value = falsyValidator(value)
+    } else {
+      error.value = false
+    }
   }
 }
 </script>
@@ -142,7 +150,7 @@ const validate = () => {
       </div>
     </div>
     <small v-if="error" class="input__error">
-      Select the required option
+      {{ error }}
     </small>
     <div
       class="custom-select__content"

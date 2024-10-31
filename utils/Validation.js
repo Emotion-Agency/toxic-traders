@@ -6,6 +6,9 @@ const phoneTester = /\+?([\d|\(][\h|\(\d{3}\)|\.|\-|\d]{4,}\d)/
 class Validation {
   required(validationText) {
     return str => {
+      if (!str) {
+        return validationText
+      }
       if (!str.trim()) {
         return validationText
       }
