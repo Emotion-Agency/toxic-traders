@@ -19,6 +19,7 @@ const props = defineProps<iProps>()
 const $el = ref<HTMLElement | null>(null)
 const isOpened = ref(false)
 const selectedItem = ref<string | iOptionItem | null>(null)
+const error = ref(false)
 
 const setupPropsValue = () => {
   if (props.value) {
@@ -40,6 +41,9 @@ watch(() => props.value, setupPropsValue)
 const emit = defineEmits(['select', 'search', 'reset'])
 
 const toggleList = () => {
+  if (isOpened.value) {
+    validate()
+  }
   isOpened.value = !isOpened.value
 }
 
@@ -50,11 +54,17 @@ const closeList = () => {
 const selectItem = (option: string | iOptionItem) => {
   if (typeof option === 'string') {
     selectedItem.value = option
-    emit('select', option, { id: props.id, value: option })
   } else {
     selectedItem.value = option.text
-    emit('select', option, { id: props.id, value: option.text })
   }
+
+  validate()
+
+  emit('select', selectedItem.value, {
+    id: props.id,
+    value: selectedItem.value,
+    error: error.value,
+  })
 
   closeList()
 }
@@ -88,6 +98,17 @@ const renderedItems = ref([])
 const updateRenderedItems = (items: any[]) => {
   renderedItems.value = items
 }
+
+const validate = () => {
+  if (props.validators && props.validators.length > 0) {
+    error.value = props.validators.some(validator => {
+      const value = selectedItem.value || ''
+      return validator(value)
+    })
+  } else {
+    error.value = false
+  }
+}
 </script>
 
 <template>
@@ -120,6 +141,9 @@ const updateRenderedItems = (items: any[]) => {
         <IconsSelectionArrowDown class="custom-select__arrow" />
       </div>
     </div>
+    <small v-if="error" class="input__error">
+      Select the required option
+    </small>
     <div
       class="custom-select__content"
       :class="title && 'custom-select__content--with-title'"

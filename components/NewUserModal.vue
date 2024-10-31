@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { iSelectInput } from '~/types'
+import type { iInput, iSelectInput } from '~/types'
 
 interface iProps {
   modalOpened: boolean
@@ -20,7 +20,7 @@ const nameInput = ref({
   value: '',
   validators: [
     Validation.required('Full name is required'),
-    Validation.min(6, 'Full name must be at least 2 characters'),
+    Validation.min(2, 'Full name must be at least 2 characters'),
   ],
   placeholder: 'John Doe',
 })
@@ -48,6 +48,8 @@ const levelSelect = ref({
   placeholder: 'Choose option',
   value: '',
   options: ['Trader', 'Investor', 'Admin'],
+  error: true,
+  validators: [Validation.required('Email is required')],
 })
 
 const attachSelect = ref({
@@ -58,6 +60,8 @@ const attachSelect = ref({
   placeholder: 'Choose option',
   value: '',
   options: ['Attach', 'To', 'Trader'],
+  error: true,
+  validators: [Validation.required('Email is required')],
 })
 
 const accessCheckbox = ref({
@@ -74,7 +78,7 @@ const handleSubmit = () => {
   emit('create')
 }
 
-const onChange = (e: iInputData) => {
+const onChange = (e: iInput) => {
   if (nameInput.value.id === e.id) {
     nameInput.value = {
       ...nameInput.value,
@@ -97,13 +101,15 @@ const onSelect = (_: string, e: iSelectInput) => {
     attachSelect.value = {
       ...attachSelect.value,
       value: e.value,
+      error: e.error,
     }
   }
 
-  if (accessCheckbox.value.id === e.id) {
-    accessCheckbox.value = {
-      ...accessCheckbox.value,
+  if (levelSelect.value.id === e.id) {
+    levelSelect.value = {
+      ...levelSelect.value,
       value: e.value,
+      error: e.error,
     }
   }
 }
@@ -134,6 +140,7 @@ const onCheck = (_, checked: boolean) => {
             :placeholder="nameInput?.placeholder"
             :value="nameInput?.value"
             :validators="nameInput?.validators"
+            :error="nameInput?.error"
             class="user-modal__item"
             @input-value="onChange"
           />
@@ -146,6 +153,7 @@ const onCheck = (_, checked: boolean) => {
             :placeholder="emailInput?.placeholder"
             :value="emailInput?.value"
             :validators="emailInput?.validators"
+            :error="emailInput?.error"
             class="user-modal__item"
             @input-value="onChange"
           />
@@ -157,6 +165,7 @@ const onCheck = (_, checked: boolean) => {
             :placeholder="levelSelect?.placeholder"
             :value="levelSelect?.value"
             :options="levelSelect?.options"
+            :validators="levelSelect?.validators"
             class="user-modal__item"
             @select="onSelect"
           />
@@ -168,6 +177,7 @@ const onCheck = (_, checked: boolean) => {
             :placeholder="attachSelect?.placeholder"
             :value="attachSelect?.value"
             :options="attachSelect?.options"
+            :validators="attachSelect?.validators"
             class="user-modal__item"
             @select="onSelect"
           />
@@ -199,6 +209,7 @@ const onCheck = (_, checked: boolean) => {
             type="submit"
             variant="fill"
             button-size="medium"
+            :disabled="!!nameInput?.error || !!emailInput?.error"
             @click="emit('create')"
           >
             Create

@@ -28,6 +28,7 @@ export interface iInput {
 export interface iSelectInput {
   id: string
   value: string
+  error: boolean
 }
 
 export interface iOptionItem {
