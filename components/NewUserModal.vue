@@ -10,6 +10,10 @@ defineProps<iProps>()
 
 const emit = defineEmits(['close', 'create'])
 
+const { user } = useAuth()
+
+const userRole = ref(null)
+
 const nameInput = ref({
   title: 'Full name',
   required: true,
@@ -47,7 +51,7 @@ const levelSelect = ref({
   name: 'Levels',
   placeholder: 'Choose option',
   value: '',
-  options: ['Trader', 'Investor', 'Admin'],
+  options: ['Trader', 'Investor'],
   error: true,
   validators: [Validation.required('Select the required option')],
   isReset: true,
@@ -99,19 +103,33 @@ const onChange = (e: iInput) => {
 }
 
 const onSelect = (_: string, e: iSelectInput) => {
-  if (attachSelect.value.id === e.id) {
-    attachSelect.value = {
-      ...attachSelect.value,
-      value: e.value,
-      error: e.error,
-    }
-  }
-
   if (levelSelect.value.id === e.id) {
     levelSelect.value = {
       ...levelSelect.value,
       value: e.value,
-      error: e.error,
+      error: false,
+    }
+
+    if (levelSelect.value.value === 'Investor') {
+      attachSelect.value = {
+        ...attachSelect.value,
+        value: '',
+        error: true,
+      }
+    } else if (levelSelect.value.value === 'Trader') {
+      attachSelect.value = {
+        ...attachSelect.value,
+        value: '',
+        error: false,
+      }
+    }
+  }
+
+  if (attachSelect.value.id === e.id) {
+    attachSelect.value = {
+      ...attachSelect.value,
+      value: e.value,
+      error: false,
     }
   }
 }
@@ -132,6 +150,13 @@ const onReset = (_: string, e: iSelectInput) => {
       error: true,
     }
   }
+
+  if (levelSelect.value.value !== 'Investor') {
+    attachSelect.value = {
+      ...attachSelect.value,
+      value: '',
+    }
+  }
 }
 
 const onCheck = (_, checked: boolean) => {
@@ -140,6 +165,10 @@ const onCheck = (_, checked: boolean) => {
     checked,
   }
 }
+
+onMounted(() => {
+  userRole.value = user.value?.role
+})
 </script>
 
 <template>
@@ -176,6 +205,7 @@ const onCheck = (_, checked: boolean) => {
             @input-value="onChange"
           />
           <InputSelect
+            v-if="userRole === 'admin'"
             :id="levelSelect?.id"
             :title="levelSelect?.title"
             :required="levelSelect?.required"
@@ -190,6 +220,7 @@ const onCheck = (_, checked: boolean) => {
             @reset="onReset"
           />
           <InputSelect
+            v-if="levelSelect.value === 'Investor'"
             :id="attachSelect?.id"
             :title="attachSelect?.title"
             :required="attachSelect?.required"
@@ -204,6 +235,7 @@ const onCheck = (_, checked: boolean) => {
             @reset="onReset"
           />
           <InputCheckbox
+            v-if="userRole === 'admin'"
             :id="accessCheckbox.id"
             :value="accessCheckbox.value"
             :name="accessCheckbox.name"
