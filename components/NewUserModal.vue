@@ -49,7 +49,8 @@ const levelSelect = ref({
   value: '',
   options: ['Trader', 'Investor', 'Admin'],
   error: true,
-  validators: [Validation.required('Email is required')],
+  validators: [Validation.required('Select the required option')],
+  isReset: true,
 })
 
 const attachSelect = ref({
@@ -61,7 +62,8 @@ const attachSelect = ref({
   value: '',
   options: ['Attach', 'To', 'Trader'],
   error: true,
-  validators: [Validation.required('Email is required')],
+  validators: [Validation.required('Select the required option')],
+  isReset: true,
 })
 
 const accessCheckbox = ref({
@@ -110,6 +112,24 @@ const onSelect = (_: string, e: iSelectInput) => {
       ...levelSelect.value,
       value: e.value,
       error: e.error,
+    }
+  }
+}
+
+const onReset = (_: string, e: iSelectInput) => {
+  if (attachSelect.value.id === e.id) {
+    attachSelect.value = {
+      ...attachSelect.value,
+      value: null,
+      error: true,
+    }
+  }
+
+  if (levelSelect.value.id === e.id) {
+    levelSelect.value = {
+      ...levelSelect.value,
+      value: null,
+      error: true,
     }
   }
 }
@@ -164,8 +184,10 @@ const onCheck = (_, checked: boolean) => {
             :value="levelSelect?.value"
             :options="levelSelect?.options"
             :validators="levelSelect?.validators"
+            :is-reset="levelSelect?.isReset"
             class="user-modal__item"
             @select="onSelect"
+            @reset="onReset"
           />
           <InputSelect
             :id="attachSelect?.id"
@@ -176,8 +198,10 @@ const onCheck = (_, checked: boolean) => {
             :value="attachSelect?.value"
             :options="attachSelect?.options"
             :validators="attachSelect?.validators"
+            :is-reset="attachSelect?.isReset"
             class="user-modal__item"
             @select="onSelect"
+            @reset="onReset"
           />
           <InputCheckbox
             :id="accessCheckbox.id"
@@ -207,7 +231,12 @@ const onCheck = (_, checked: boolean) => {
             type="submit"
             variant="fill"
             button-size="medium"
-            :disabled="!!nameInput?.error || !!emailInput?.error"
+            :disabled="
+              !!nameInput?.error ||
+              !!emailInput?.error ||
+              !!attachSelect?.error ||
+              !!levelSelect?.error
+            "
             @click="emit('create')"
           >
             Create

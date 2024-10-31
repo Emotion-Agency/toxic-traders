@@ -72,7 +72,12 @@ const selectItem = (option: string | iOptionItem) => {
 }
 
 const reset = () => {
-  emit('reset')
+  validate()
+  emit('reset', selectedItem.value, {
+    id: props.id,
+    value: selectedItem.value,
+    error: error.value,
+  })
 }
 
 const outsideClick = event => {
