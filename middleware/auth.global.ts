@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return
   }
 
-  const { checkAuth, isAuthenticated } = useAuth()
+  const { checkAuth, isAuthenticated, user } = useAuth()
 
   checkAuth()
 
@@ -22,5 +22,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return navigateTo('/auth/login', {
       external: isExternal,
     })
+  }
+
+  if (to.path === '/settings/users' && user.value?.role === 'investor') {
+    return navigateTo('/')
   }
 })

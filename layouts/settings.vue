@@ -1,26 +1,24 @@
 <script setup lang="ts">
-const navigationList = [
-  {
-    text: 'Account',
-    link: '/settings/account',
-  },
-  {
-    text: 'Calendar',
-    link: '/settings/calendar',
-  },
-  {
-    text: 'Schedule news',
-    link: '/settings/schedule-news',
-  },
-  {
-    text: 'Users',
-    link: '/settings/users',
-  },
-  {
-    text: 'Servers',
-    link: '/settings/servers',
-  },
-]
+const { user } = useAuth()
+
+const navigationList = ref([
+  { text: 'Account', link: '/settings/account' },
+  { text: 'Calendar', link: '/settings/calendar' },
+  { text: 'Schedule news', link: '/settings/schedule-news' },
+  { text: 'Users', link: '/settings/users' },
+  { text: 'Servers', link: '/settings/servers' },
+])
+
+onMounted(() => {
+  const role = user.value?.role || 'investor'
+  const canViewUsers = ['admin', 'trader'].includes(role)
+
+  navigationList.value = navigationList.value.filter(item => {
+    if (item.text === 'Users') return canViewUsers
+
+    return true
+  })
+})
 </script>
 
 <template>
