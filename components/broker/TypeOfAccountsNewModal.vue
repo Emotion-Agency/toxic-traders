@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iAccountModalItem, iOptionItem } from '~/types'
+import type { iAccountModalItem, iOptionItem, iSelectInput } from '~/types'
 import type { iBrokerServer } from '~/types/broker/brokerServer'
 
 interface iProps {
@@ -74,9 +74,9 @@ const onChange = (e: iInputData) => {
   })
 }
 
-const getSelectedItem = (item: iBrokerServer) => {
+const getSelectedItem = (_: iSelectInput, id: string | number) => {
   serversList.value.forEach(server => {
-    if (server?.id === item?.id) {
+    if (server?.id === id) {
       selectedServer.value = server.id
     }
   })
@@ -152,14 +152,24 @@ onMounted(async () => {
         class="broker-type-accounts__modal-item"
       >
         <InputSelect
-          v-if="input.options"
+          v-slot="{ renderedItems }"
+          v-if="input.options && input.options.length"
           :id="input?.id"
           :name="input?.name"
-          :options="input?.options || []"
+          :options="input?.options?.map(item => item.text)"
           :value="input?.value"
           :placeholder="input?.placeholder"
-          @select="getSelectedItem"
-        />
+        >
+          <InputSelectOption
+            v-for="(option, idx) in input.options.filter(item =>
+              renderedItems?.includes(item.text)
+            )"
+            :key="option.id"
+            :index="idx"
+            :option="option.text"
+            @select="getSelectedItem($event, option.id)"
+          />
+        </InputSelect>
         <InputField
           v-else
           :id="input.id"

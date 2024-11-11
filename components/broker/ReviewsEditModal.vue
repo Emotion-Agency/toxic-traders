@@ -80,7 +80,7 @@ const onInputChange = (e: iInput) => {
   })
 }
 
-const onSelectChange = (_: string, e: iSelectInput) => {
+const onSelectChange = (e: iSelectInput) => {
   reviewsInputs.value = reviewsInputs.value.map(item => {
     if (item.id === e.id) {
       item.value = e.value
@@ -134,6 +134,7 @@ const reviewsModalClose = () => {
       class="review__input-item"
     >
       <InputSelect
+        v-slot="{ renderedItems }"
         v-if="input.type === 'select'"
         :id="input.id"
         :name="input.name"
@@ -141,7 +142,14 @@ const reviewsModalClose = () => {
         :placeholder="input.placeholder"
         :value="input.value"
         @select="onSelectChange"
-      />
+      >
+        <InputSelectOption
+          v-for="(option, idx) in renderedItems"
+          :key="option"
+          :index="idx"
+          :option="option"
+        />
+      </InputSelect>
       <InputField
         v-else
         :id="input.id"

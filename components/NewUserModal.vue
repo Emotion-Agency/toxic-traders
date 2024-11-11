@@ -102,7 +102,7 @@ const onChange = (e: iInput) => {
   }
 }
 
-const onSelect = (_: string, e: iSelectInput) => {
+const onSelect = (e: iSelectInput) => {
   if (levelSelect.value.id === e.id) {
     levelSelect.value = {
       ...levelSelect.value,
@@ -205,6 +205,7 @@ onMounted(() => {
             @input-value="onChange"
           />
           <InputSelect
+            v-slot="{ renderedItems }"
             v-if="userRole === 'admin'"
             :id="levelSelect?.id"
             :title="levelSelect?.title"
@@ -218,8 +219,16 @@ onMounted(() => {
             class="user-modal__item"
             @select="onSelect"
             @reset="onReset"
-          />
+          >
+            <InputSelectOption
+              v-for="(option, idx) in renderedItems"
+              :key="option"
+              :index="idx"
+              :option="option"
+            />
+          </InputSelect>
           <InputSelect
+            v-slot="{ renderedItems }"
             v-if="levelSelect.value === 'Investor'"
             :id="attachSelect?.id"
             :title="attachSelect?.title"
@@ -233,7 +242,14 @@ onMounted(() => {
             class="user-modal__item"
             @select="onSelect"
             @reset="onReset"
-          />
+          >
+            <InputSelectOption
+              v-for="(option, idx) in renderedItems"
+              :key="option"
+              :index="idx"
+              :option="option"
+            />
+          </InputSelect>
           <InputCheckbox
             v-if="userRole === 'admin'"
             :id="accessCheckbox.id"

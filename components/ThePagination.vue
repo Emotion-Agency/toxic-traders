@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { iInput } from '~/types'
+import type { iInput, iSelectInput } from '~/types'
 
 interface iProps {
   inputId: string
@@ -25,8 +25,8 @@ const onChange = (input: iInput) => {
   emit('onChangeValue', input)
 }
 
-const selectItem = (val: string) => {
-  emit('selectedItem', val)
+const selectItem = (e: iSelectInput) => {
+  emit('selectedItem', e.value)
 }
 
 const onBlur = (input: iInput) => {
@@ -82,10 +82,18 @@ const inputItem = computed(() => ({
         />
         <p class="pagination__text">of {{ computedTotalPages }}</p>
         <InputSelect
+          v-slot="{ renderedItems }"
           :options="options"
           :placeholder="itemsCount + ' rows'"
           @select="selectItem"
-        />
+        >
+          <InputSelectOption
+            v-for="(option, idx) in renderedItems"
+            :key="option"
+            :index="idx"
+            :option="option"
+          />
+        </InputSelect>
       </div>
       <button
         :disabled="currentPage === computedTotalPages"

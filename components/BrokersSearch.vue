@@ -27,7 +27,7 @@ const onChange = (val: iInput) => {
   })
 }
 
-const getSelectedItem = (_, opts: iSelectInput) => {
+const getSelectedItem = (opts: iSelectInput) => {
   searchItems.value = searchItems.value.map(item => {
     if (item.id === opts.id) {
       item = {
@@ -88,6 +88,7 @@ onMounted(async () => {
             class="brokers-search__item"
           >
             <InputSelect
+              v-slot="{ renderedItems }"
               v-if="input.options"
               :id="input.id"
               :name="input.name"
@@ -98,7 +99,14 @@ onMounted(async () => {
               :is-reset="!!input.value.length"
               @select="getSelectedItem"
               @reset="resetSelectedItem(input)"
-            />
+            >
+              <InputSelectOption
+                v-for="(option, idx) in renderedItems"
+                :key="option"
+                :index="idx"
+                :option="option"
+              />
+            </InputSelect>
             <InputField
               v-else
               :id="input.id"

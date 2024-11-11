@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { iSelectInput } from '~/types'
 import type {
   iBrokerServerAccountSymbolsSpread,
   iBrokerUniqueServerAccountSymbolsSpread,
@@ -122,16 +123,18 @@ const searchSymbolsDescription = (searchValue: string) => {
   )
 }
 
-const selectSymbolsName = async (item: string) => {
-  selectedSymbol.value = item
-  filteredSymbolsNames.value = symbolsNames.value?.filter(name => name !== item)
+const selectSymbolsName = async (e: iSelectInput) => {
+  selectedSymbol.value = e.value
+  filteredSymbolsNames.value = symbolsNames.value?.filter(
+    name => name !== e.value
+  )
   await getCurrentSpreadRequest()
 }
 
-const selectSymbolsDescription = async (item: string) => {
-  selectedDescription.value = item
+const selectSymbolsDescription = async (e: iSelectInput) => {
+  selectedDescription.value = e.value
   filteredSymbolsDescriptions.value = symbolsDescriptions.value?.filter(
-    description => description !== item
+    description => description !== e.value
   )
   await getCurrentSpreadRequest()
 }
@@ -227,6 +230,7 @@ onMounted(async () => {
             <ul class="spreads__select-list">
               <li class="spreads__select-item">
                 <InputSelect
+                  v-slot="{ renderedItems }"
                   :options="symbolSelect.options"
                   :search-input="symbolSelect.searchInput"
                   :placeholder="symbolSelect.placeholder"
@@ -236,10 +240,18 @@ onMounted(async () => {
                   @search="searchSymbolsName"
                   @select="selectSymbolsName"
                   @reset="resetSelectedSymbol"
-                />
+                >
+                  <InputSelectOption
+                    v-for="(option, idx) in renderedItems"
+                    :key="option"
+                    :index="idx"
+                    :option="option"
+                  />
+                </InputSelect>
               </li>
               <li class="spreads__select-item">
                 <InputSelect
+                  v-slot="{ renderedItems }"
                   :options="descriptionSelect.options"
                   :search-input="descriptionSelect.searchInput"
                   :placeholder="descriptionSelect.placeholder"
@@ -249,7 +261,14 @@ onMounted(async () => {
                   @search="searchSymbolsDescription"
                   @select="selectSymbolsDescription"
                   @reset="resetSelectedDescription"
-                />
+                >
+                  <InputSelectOption
+                    v-for="(option, idx) in renderedItems"
+                    :key="option"
+                    :index="idx"
+                    :option="option"
+                  />
+                </InputSelect>
               </li>
               <!-- <li class="spreads__select-item">
                 <InputSelect

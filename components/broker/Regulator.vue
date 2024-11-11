@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getBrokerRegulatorNames } from '~/utils/api/brokers/brokerRegulatorNames'
-import type { iInput } from '~/types'
+import type { iInput, iSelectInput } from '~/types'
 import type { iRegulatorItem } from '~/types/broker/brokerRegulator'
 
 interface iProps {
@@ -63,8 +63,8 @@ const onLinkChange = (input: iInput, idx: number) => {
   })
 }
 
-const getSelectedRegulator = (value: string, idx: number) => {
-  const regulatorIdx = regulatorNames.value.findIndex(name => name === value)
+const getSelectedRegulator = (e: iSelectInput, idx: number) => {
+  const regulatorIdx = regulatorNames.value.findIndex(name => name === e.value)
 
   regulatorItems.value = regulatorItems.value.map((item, index) => {
     if (index === idx) {
@@ -148,10 +148,18 @@ onMounted(async () => {
           @action-click="regulatorRemoveItem(idx)"
         >
           <InputSelect
+            v-slot="{ renderedItems }"
             :options="regulatorNames"
             :placeholder="regulatorNames[item.name]"
             @select="val => getSelectedRegulator(val, idx)"
-          />
+          >
+            <InputSelectOption
+              v-for="(option, idx) in renderedItems"
+              :key="option"
+              :index="idx"
+              :option="option"
+            />
+          </InputSelect>
           <InputField
             :id="'license-number-' + idx"
             name="License number"

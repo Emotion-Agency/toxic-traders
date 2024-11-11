@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { iSelectInput } from '~/types'
 import type { iCompanyNamesItem } from '~/types/broker/brokerCompanyNames'
 import type {
   iBrokerCompanyNameStatisticAhrefs,
@@ -26,14 +27,14 @@ const similarWebStatistic = ref<iBrokerCompanyNameStatisticSimilarWeb[]>(null)
 const statisticsData = ref([])
 const activeStatisticItem = ref(null)
 
-const getSelectedItem = (website: string) => {
+const getSelectedItem = (e: iSelectInput) => {
   selectedWebsiteId.value = companyNamesList.value.find(
-    item => item.website === website
+    item => item.website === e.value
   )?.id
 }
 
-const getStatisticItem = (item: string) => {
-  const [provider, timestamp] = item.split(' - ')
+const getStatisticItem = (e: iSelectInput) => {
+  const [provider, timestamp] = e.value.split(' - ')
 
   activeStatisticItem.value = statisticsData.value.find(
     item =>
@@ -99,11 +100,19 @@ onMounted(async () => {
   <div class="statistics">
     <div v-if="websites?.length" class="statistics-data">
       <InputSelect
+        v-slot="{ renderedItems }"
         :options="websites"
         :placeholder="websites[0] || 'Choose website'"
         class="statistics__select"
         @select="getSelectedItem"
-      />
+      >
+        <InputSelectOption
+          v-for="(option, idx) in renderedItems"
+          :key="option"
+          :index="idx"
+          :option="option"
+        />
+      </InputSelect>
       <div class="statistics__table-wrapper">
         <div class="statistics__table">
           <BrokerStatisticsTable
@@ -130,11 +139,19 @@ onMounted(async () => {
       >
         <div class="statistics__modal-wrapper">
           <InputSelect
+            v-slot="{ renderedItems }"
             :options="timeArr"
             :placeholder="timeArr[0] || 'Choose item'"
             class="statistics__modal-select"
             @select="getStatisticItem"
-          />
+          >
+            <InputSelectOption
+              v-for="(option, idx) in renderedItems"
+              :key="option"
+              :index="idx"
+              :option="option"
+            />
+          </InputSelect>
           <div class="statistics__modal-content">
             <BrokerStatisticsOverview :active-item="activeStatisticItem" />
             <BrokerStatisticsEngagement :active-item="activeStatisticItem" />

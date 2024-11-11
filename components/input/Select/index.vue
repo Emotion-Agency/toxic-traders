@@ -2,7 +2,7 @@
 import type { iInput, iOptionItem, iSearchInput } from '~/types'
 
 interface iProps {
-  options: (string | iOptionItem)[]
+  options: string[]
   placeholder: string
   title?: string
   searchInput?: iSearchInput
@@ -23,14 +23,7 @@ const error = ref(false)
 
 const setupPropsValue = () => {
   if (props.value) {
-    if (typeof props.value === 'string') {
-      selectedItem.value = props.value
-    } else {
-      selectedItem.value =
-        props.options.find(
-          option => typeof option !== 'string' && option.text === props.value
-        ) || null
-    }
+    selectedItem.value = props.value
   } else {
     selectedItem.value = null
   }
@@ -52,17 +45,11 @@ const closeList = () => {
 }
 
 const selectItem = (option: string | iOptionItem) => {
-  if (typeof option === 'string') {
-    selectedItem.value = option
-  } else if (option?.text) {
-    selectedItem.value = option.text
-  } else {
-    selectedItem.value = ''
-  }
+  selectedItem.value = option
 
   validate()
 
-  emit('select', selectedItem.value, {
+  emit('select', {
     id: props.id,
     value: selectedItem.value,
     error: error.value,
@@ -70,6 +57,8 @@ const selectItem = (option: string | iOptionItem) => {
 
   closeList()
 }
+
+provide('selectItem', selectItem)
 
 const reset = () => {
   validate()
@@ -108,10 +97,7 @@ const updateRenderedItems = (items: any[]) => {
 
 const validate = () => {
   if (props.validators) {
-    const value =
-      typeof selectedItem.value === 'string'
-        ? selectedItem.value
-        : selectedItem.value?.text
+    const value = selectedItem.value
 
     const falsyValidator = props.validators.find(validator => validator(value))
 
@@ -137,13 +123,7 @@ const validate = () => {
     </span>
     <div class="custom-select__selected" @click="toggleList">
       <p class="custom-select__text">
-        {{
-          selectedItem
-            ? typeof selectedItem === 'string'
-              ? selectedItem
-              : selectedItem?.text
-            : placeholder
-        }}
+        {{ selectedItem ?? placeholder }}
       </p>
 
       <div class="custom-select-icon">
@@ -192,19 +172,7 @@ const validate = () => {
         >
           <p class="custom-select__item-text">Options not found</p>
         </li>
-        <VirtualScrollItem
-          v-for="(option, index) in renderedItems"
-          v-else
-          :key="typeof option === 'string' ? option : option?.id"
-          class="custom-select__item"
-          :item-height="35"
-          :index="index"
-          @click="selectItem(option)"
-        >
-          <p class="custom-select__item-text">
-            {{ typeof option === 'string' ? option : option?.text }}
-          </p>
-        </VirtualScrollItem>
+        <slot :rendered-items="renderedItems" />
       </VirtualScroll>
     </div>
   </div>

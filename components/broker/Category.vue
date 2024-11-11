@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getBrokerCategoriesList } from '~/utils/api/brokers/brokerCategoriesList'
-import type { iInput } from '~/types'
+import type { iInput, iSelectInput } from '~/types'
 
 interface iProps {
   brokerId: number
@@ -57,10 +57,10 @@ const categoryModalClose = () => {
   document.body.classList.remove('modal-open')
 }
 
-const onSelectCategory = async (value: string) => {
-  activeCategory.value = value
+const onSelectCategory = async (e: iSelectInput) => {
+  activeCategory.value = e.value
 
-  await createCategories(props.brokerId, value)
+  await createCategories(props.brokerId, e.value)
 }
 
 onMounted(async () => {
@@ -85,11 +85,19 @@ onMounted(async () => {
       @open="categoryModalOpen"
     >
       <InputSelect
+        v-slot="{ renderedItems }"
         :options="categoryOptions"
         placeholder="Choose category"
         :value="activeCategory"
         @select="onSelectCategory"
-      />
+      >
+        <InputSelectOption
+          v-for="(option, idx) in renderedItems"
+          :key="option"
+          :index="idx"
+          :option="option"
+        />
+      </InputSelect>
     </TheAccordion>
     <TheModal
       :modal-opened="categoryModalOpened"
