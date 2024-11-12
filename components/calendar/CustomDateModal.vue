@@ -1,0 +1,56 @@
+<script lang="ts" setup>
+interface IProps {
+  isOpen: boolean
+}
+
+defineProps<IProps>()
+
+const emit = defineEmits(['close', 'save'])
+
+const startDate = defineModel('startDate')
+const endDate = defineModel('endDate')
+
+const onSave = () => {
+  emit('save')
+}
+</script>
+
+<template>
+  <TheModal
+    :modal-opened="isOpen"
+    title="Select custom date for events"
+    class-name="calendar-date-modal"
+    @close="emit('close')"
+  >
+    <p class="calendar-date-modal__text">
+      You can select only the start date to show all events on that date, or
+      select both the start date and end date to get all events between those
+      dates.
+    </p>
+    <div class="calendar-date-modal__inputs">
+      <div class="calendar-date-modal__input">
+        <p class="calendar-date-modal__label">Start date</p>
+        <VueDatePicker
+          :teleport="true"
+          :enable-time-picker="false"
+          v-model="startDate"
+          placeholder="22.05.1998"
+        />
+      </div>
+      <div class="calendar-date-modal__input">
+        <p class="calendar-date-modal__label">End Date</p>
+        <VueDatePicker
+          :teleport="true"
+          :enable-time-picker="false"
+          v-model="endDate"
+          placeholder="22.05.1998"
+        />
+      </div>
+    </div>
+
+    <div class="custom-date-modal__footer">
+      <TheButton @click="onSave">Save Changes</TheButton>
+      <TheButton class="button--close" @click="emit('close')">Close</TheButton>
+    </div>
+  </TheModal>
+</template>

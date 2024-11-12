@@ -8,15 +8,15 @@ const $el = ref<HTMLElement | null>(null)
 const navigationList = [
   {
     text: 'Calendar',
-    link: '/',
+    link: '/calendar/',
   },
   {
     text: 'Brokers',
-    link: '/brokers',
+    link: '/brokers/',
   },
   {
     text: 'Spreads',
-    link: '/spreads',
+    link: '/spreads/',
   },
 ]
 

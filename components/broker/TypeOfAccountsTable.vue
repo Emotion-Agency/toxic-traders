@@ -208,6 +208,7 @@ const isSortable = (field: string) => {
                   </h4>
                   <div class="type-of-account-table__schedule-date">
                     <VueDatePicker
+                      :teleport="true"
                       v-model="spreadStartDate"
                       enable-seconds
                       placeholder="Select Date"
@@ -220,6 +221,7 @@ const isSortable = (field: string) => {
                   </h4>
                   <div class="type-of-account-table__schedule-date">
                     <VueDatePicker
+                      :teleport="true"
                       v-model="spreadEndDate"
                       enable-seconds
                       placeholder="Select Date"
@@ -251,6 +253,7 @@ const isSortable = (field: string) => {
                   </h4>
                   <div class="type-of-account-table__schedule-date">
                     <VueDatePicker
+                      :teleport="true"
                       v-model="newsSpreadStartDate"
                       enable-seconds
                       placeholder="Select Date"
@@ -263,6 +266,7 @@ const isSortable = (field: string) => {
                   </h4>
                   <div class="type-of-account-table__schedule-date">
                     <VueDatePicker
+                      :teleport="true"
                       v-model="newsSpreadEndDate"
                       enable-seconds
                       placeholder="Select Date"

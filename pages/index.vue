@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const router = useRouter()
+
+router.push('/calendar')
+</script>
 
 <template>
   <main>

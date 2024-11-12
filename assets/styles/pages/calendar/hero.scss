@@ -1,0 +1,19 @@
+.calendar {
+  padding-top: 142px;
+  padding-bottom: 116px;
+}
+
+.calendar__title {
+  @include heading-m-h1;
+}
+
+.calendar__menu {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.calendar__select {
+  width: 330px;
+}

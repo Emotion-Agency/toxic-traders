@@ -1,0 +1,15 @@
+.calendar-date-modal__text {
+  margin-top: 16px;
+}
+
+.calendar-date-modal__inputs {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.calendar-date-modal__label {
+  @include heading-m-h6;
+  margin-bottom: 6px;
+}

@@ -151,3 +151,13 @@
     }
   }
 }
+
+.custom-date-modal__footer {
+  margin-top: 32px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+}
+.button--close {
+}
