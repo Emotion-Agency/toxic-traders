@@ -15,11 +15,14 @@ const isNegative = computed(() => {
     class="calendar-table__number"
     :class="[
       isNegative && number && 'calendar-table__number--negative',
-      !isNegative && number && 'calendar-table__number--positive',
+      !isNegative &&
+        number &&
+        Number(number) > 0 &&
+        'calendar-table__number--positive',
     ]"
   >
     {{ number ? Number(number).toFixed(1) + '%' : '-' }}
-    <span v-if="number"
+    <span v-if="number && Number(number) !== 0"
       ><svg
         width="16"
         height="16"
