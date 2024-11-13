@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { get } from 'http'
 import type { iSelectInput } from '~/types'
 
 const dateOptions = ['Today', 'Tomorrow', 'This week', 'Next week']

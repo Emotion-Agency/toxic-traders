@@ -51,12 +51,6 @@
     }
   }
 
-  .table-cell {
-    path {
-      fill: var(--white);
-    }
-  }
-
   .brokers-search {
     background-color: var(--gray-800);
 
@@ -260,6 +254,10 @@
 
   .settings-account__delete {
     background-color: var(--gray-800);
+  }
+
+  .impact {
+    color: var(--gray-600);
   }
 }
 
