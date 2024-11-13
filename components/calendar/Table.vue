@@ -102,7 +102,7 @@ const getCountryFlag = (countryCode: string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--impact`]"
             >
-              {{ event.importance }}
+              <CalendarImpact :impact="Number(event.importance) as 1 | 2 | 3" />
             </TableCell>
             <TableCell
               :item="event.actual"

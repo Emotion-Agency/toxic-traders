@@ -61,3 +61,28 @@
 .calendar-table__pagination {
   margin-top: 24px;
 }
+
+.impact {
+  display: flex;
+  gap: 6px;
+  height: 14px;
+  color: var(--gray-300);
+}
+
+.impact--1 {
+  svg:nth-child(1) {
+    color: var(--status-success);
+  }
+}
+
+.impact--2 {
+  svg:nth-child(-n + 2) {
+    color: var(--status-warning);
+  }
+}
+
+.impact--3 {
+  svg {
+    color: var(--status-danger);
+  }
+}
