@@ -41,6 +41,7 @@
 .table-head {
   position: sticky;
   top: 0;
+  z-index: 2;
   .table-row {
     @include heading-b-h6;
   }
@@ -60,7 +61,7 @@
 
   .table-row {
     @include text-body;
-    margin-top: 20px;
+    margin-top: 8px;
   }
 
   .table-cell {

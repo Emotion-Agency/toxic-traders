@@ -1,15 +1,63 @@
 .calendar-table__cell {
-  min-width: 126px;
+  min-width: 136px;
 }
 
 .calendar-table__cell--event {
-  width: 273px;
+  min-width: 250px;
+  > .table-cell__content {
+    display: flex;
+    width: fit-content;
+    overflow: scroll;
+    align-items: center;
+    gap: 6px;
+    > * {
+      white-space: nowrap;
+      flex: 1;
+    }
+  }
 }
 
-.calendar-table__cell--reaction {
-  width: 146px;
+.calendar-table__cell--time {
+  min-width: 100px;
 }
 
 .calendar-table__cell--show-chart {
-  width: 220px;
+  min-width: 160px;
+}
+
+.calendar-table__date {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  color: var(--white);
+  background-color: var(--primary-dark);
+  @include heading-m-h6;
+  margin-top: 8px;
+}
+
+.calendar-table__number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-table__number--negative {
+  color: var(--status-danger);
+  > span {
+    transform: rotate(180deg);
+  }
+}
+
+.calendar-table__number--positive {
+  color: var(--status-success);
+}
+
+.calendar-table__flag {
+  max-width: 100%;
+  height: 1em;
+}
+
+.calendar-table__pagination {
+  margin-top: 24px;
 }

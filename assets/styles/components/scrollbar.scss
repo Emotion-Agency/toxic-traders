@@ -57,6 +57,9 @@
     --thumb-active-w: 10px;
     --thumb-active-h: var(--thumb-h);
     justify-content: center;
+    .scrollbar__thumb {
+      min-height: 20px;
+    }
   }
   &--x {
     --w: 100%;
@@ -68,6 +71,9 @@
     top: auto;
     bottom: 0;
     align-items: center;
+    .scrollbar__thumb {
+      min-width: 20px;
+    }
   }
 
   @media (min-width: $br2) {

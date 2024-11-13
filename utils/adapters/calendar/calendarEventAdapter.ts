@@ -5,18 +5,15 @@ export const calendarEventAdapter = (
   event: ICalendarEvent
 ): ITableCalendarEvent => {
   const getDeviation = () => {
-    console.log(event.actual, event.forecast)
+    if (event.actual && !event.forecast && event.previous) {
+      return parseFloat(event.actual) - parseFloat(event.previous)
+    }
 
-    if (!!event.actual || !!event.forecast) {
-      return 'N/A'
+    if ((!event.forecast && !event.previous) || !event.actual) {
+      return
     }
 
     return parseFloat(event.actual) - parseFloat(event.forecast)
-  }
-
-  const formatDate = (date: string) => {
-    const d = new Date(date)
-    return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`
   }
 
   return {

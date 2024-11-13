@@ -97,10 +97,8 @@ const isModalOpen = ref(false)
     </section>
 
     <section class="calendar-content">
-      <div class="container calendar-content__container">
-        <div class="calendar-table-wrapper">
-          <CalendarTable />
-        </div>
+      <div class="calendar-table-wrapper">
+        <CalendarTable />
       </div>
     </section>
   </main>

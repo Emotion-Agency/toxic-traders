@@ -15,7 +15,11 @@ export const useCalendarEvents = () => {
         throw new Error('No data returned from the API')
       }
 
-      events.value = data.map(event => calendarEventAdapter(event))
+      events.value = data
+        .map(event => calendarEventAdapter(event))
+        .sort(
+          (a, b) => new Date(b.time)?.getTime() - new Date(a.time)?.getTime()
+        )
     } catch (error) {
       console.error('Error fetching events:', error)
       toast.error('An error occurred while fetching events. Please try again.')
