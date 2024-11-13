@@ -6,8 +6,11 @@ const dateOptions = ['Today', 'Tomorrow', 'This week', 'Next week']
 
 const selectedDate = ref<string | null>(null)
 
-const startDate = ref<string>()
-const endDate = ref<string>()
+const router = useRouter()
+const route = useRoute()
+
+const startDate = ref<string>(route.query.startDate as string)
+const endDate = ref<string>(route.query.endDate as string)
 
 function formatDate(date: Date): string {
   return date.toISOString().split('T')[0]
@@ -47,7 +50,7 @@ const onSaveDate = async (reset?: boolean) => {
 }
 
 onMounted(async () => {
-  await getAllEvents()
+  onSaveDate()
 })
 
 const onSelect = (e: iSelectInput) => {
@@ -95,6 +98,27 @@ const onReset = () => {
   endDate.value = null
   getAllEvents()
 }
+
+const getPlaceholder = () => {
+  if (startDate.value && endDate.value) {
+    return `${getDateDay(startDate.value)} - ${getDateDay(endDate.value)}`
+  }
+  if (startDate.value) {
+    return getDateDay(startDate.value)
+  }
+
+  return 'Choose the date'
+}
+
+watch([startDate, endDate], () => {
+  router.push({
+    query: {
+      ...route.query,
+      startDate: startDate.value && getDateDay(startDate.value),
+      endDate: endDate.value && getDateDay(endDate.value),
+    },
+  })
+})
 </script>
 
 <template>
@@ -107,7 +131,7 @@ const onReset = () => {
           <div class="calendar__select">
             <InputSelect
               :options="dateOptions"
-              placeholder="Choose the date"
+              :placeholder="getPlaceholder()"
               id="calendar-date"
               name="Select date"
               title="Select date"
