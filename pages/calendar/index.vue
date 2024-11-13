@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { get } from 'http'
 import type { iSelectInput } from '~/types'
 
 const dateOptions = ['Today', 'Tomorrow', 'This week', 'Next week']
@@ -11,6 +12,43 @@ const endDate = ref<string>()
 function formatDate(date: Date): string {
   return date.toISOString().split('T')[0]
 }
+
+const isModalOpen = ref(false)
+
+const { events, getEvents, getEventsByDate } = useCalendarEvents()
+const isLoading = ref(false)
+
+const getAllEvents = async () => {
+  try {
+    isLoading.value = true
+    await getEvents()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const onSaveDate = async (reset?: boolean) => {
+  try {
+    isModalOpen.value = false
+    isLoading.value = true
+    if (!startDate.value) {
+      await getAllEvents()
+    } else {
+      await getEventsByDate(startDate.value, endDate.value)
+    }
+    reset && (selectedDate.value = null)
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(async () => {
+  await getAllEvents()
+})
 
 const onSelect = (e: iSelectInput) => {
   selectedDate.value = e.value
@@ -47,9 +85,16 @@ const onSelect = (e: iSelectInput) => {
       startDate.value = null
       endDate.value = null
   }
+
+  onSaveDate()
 }
 
-const isModalOpen = ref(false)
+const onReset = () => {
+  selectedDate.value = null
+  startDate.value = null
+  endDate.value = null
+  getAllEvents()
+}
 </script>
 
 <template>
@@ -69,7 +114,7 @@ const isModalOpen = ref(false)
               :is-reset="!!selectedDate"
               :value="selectedDate"
               @select="onSelect"
-              @reset="selectedDate = null"
+              @reset="onReset"
             >
               <InputSelectOption
                 v-for="(option, idx) in dateOptions"
@@ -87,19 +132,22 @@ const isModalOpen = ref(false)
           </TheButton>
 
           <CalendarCustomDateModal
-            v-model:startDate="startDate"
-            v-model:endDate="endDate"
             :is-open="isModalOpen"
             @close="isModalOpen = false"
+            v-model:startDate="startDate"
+            v-model:endDate="endDate"
+            @save="onSaveDate(true)"
           />
         </div>
       </div>
     </section>
 
-    <section class="calendar-content">
+    <div v-if="!events.length && !isLoading">No events found</div>
+    <section v-else-if="events.length && !isLoading" class="calendar-content">
       <div class="calendar-table-wrapper">
-        <CalendarTable />
+        <CalendarTable :events="events" />
       </div>
     </section>
+    <UiLoader v-else="isLoading" />
   </main>
 </template>

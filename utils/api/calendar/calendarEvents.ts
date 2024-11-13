@@ -30,3 +30,24 @@ export const getFourWeeksCalendarEvents = async () => {
     throw error
   }
 }
+
+export const getCalendarEvents = async (
+  startDate: string,
+  endDate?: string
+) => {
+  try {
+    const res = await axiosInstance.get<ICalendarEvent[]>(
+      '/Calendar/GetCalendarEvents',
+      {
+        params: {
+          startDate,
+          endDate: endDate || startDate,
+        },
+      }
+    )
+
+    return res
+  } catch (error) {
+    throw error
+  }
+}

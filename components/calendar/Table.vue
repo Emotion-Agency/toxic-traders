@@ -2,6 +2,13 @@
 import type { iSelectInput } from '~/types'
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import { getCountriesFlag } from '~/utils/api/countries/getCountries'
+import Table from '../Table.vue'
+
+interface IProps {
+  events: ITableCalendarEvent[]
+}
+
+const props = defineProps<IProps>()
 
 const headings = [
   'Time',
@@ -15,8 +22,6 @@ const headings = [
   'Show Chart',
 ]
 
-const { events, getEvents } = useCalendarEvents()
-const isLoading = ref(false)
 const countries = ref([])
 
 interface GroupedByDate {
@@ -35,11 +40,13 @@ const {
   onChangeCount,
 } = usePagination(1, 100)
 
+totalCountPages.value = props.events?.length
+
 const paginatedEvents = computed(() => {
   const start = (currentPage.value - 1) * itemsCount.value
   const end = start + itemsCount.value
 
-  return events.value.slice(start, end)
+  return props.events.slice(start, end)
 })
 
 const eventsGroupedByDate = computed<GroupedByDate>(() => {
@@ -54,16 +61,6 @@ const eventsGroupedByDate = computed<GroupedByDate>(() => {
 })
 
 onMounted(async () => {
-  try {
-    isLoading.value = true
-    await getEvents()
-    totalCountPages.value = events.value.length
-  } catch (error) {
-    console.error(error)
-  } finally {
-    isLoading.value = false
-  }
-
   countries.value = await getCountriesFlag()
 })
 
@@ -77,8 +74,7 @@ const getCountryFlag = (countryCode: string) => {
 
 <template>
   <div>
-    <UiLoader v-if="isLoading" />
-    <Table v-show="!isLoading && events?.length" class="calendar-table">
+    <Table class="calendar-table">
       <TableHead>
         <TableRow>
           <TableCell
@@ -206,7 +202,7 @@ const getCountryFlag = (countryCode: string) => {
       </TableBody>
     </Table>
     <ThePagination
-      v-if="!isLoading && events?.length"
+      v-if="totalCountPages > 1"
       class="calendar-table__pagination"
       input-id="calendar-table-pagination"
       input-name="calendar-table-pagination"

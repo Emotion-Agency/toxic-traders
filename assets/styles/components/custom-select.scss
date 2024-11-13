@@ -1,6 +1,7 @@
 .custom-select {
   --max-height: 204px;
   position: relative;
+  z-index: 2;
 
   &--opened {
     .custom-select__selected {
