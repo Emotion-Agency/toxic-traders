@@ -91,7 +91,7 @@ const inputItem = computed(() => ({
             v-for="(option, idx) in renderedItems"
             :key="option"
             :index="idx"
-            :option="option"
+            :option="option + ' rows'"
           />
         </InputSelect>
       </div>

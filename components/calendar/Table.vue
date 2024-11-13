@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { iSelectInput } from '~/types'
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import { getCountriesFlag } from '~/utils/api/countries/getCountries'
 
@@ -22,8 +23,27 @@ interface GroupedByDate {
   [key: string]: ITableCalendarEvent[]
 }
 
+const {
+  currentPage,
+  itemsCount,
+  searchValue,
+  totalCountPages,
+  nextPageClick,
+  prevPageClick,
+  onInputBlur,
+  onInputChange,
+  onChangeCount,
+} = usePagination(1, 100)
+
+const paginatedEvents = computed(() => {
+  const start = (currentPage.value - 1) * itemsCount.value
+  const end = start + itemsCount.value
+
+  return events.value.slice(start, end)
+})
+
 const eventsGroupedByDate = computed<GroupedByDate>(() => {
-  return events.value.reduce((acc, event) => {
+  return paginatedEvents.value.reduce((acc, event) => {
     const date = new Date(event.time).toDateString()
     if (!acc[date]) {
       acc[date] = []
@@ -37,6 +57,7 @@ onMounted(async () => {
   try {
     isLoading.value = true
     await getEvents()
+    totalCountPages.value = events.value.length
   } catch (error) {
     console.error(error)
   } finally {
@@ -185,15 +206,20 @@ const getCountryFlag = (countryCode: string) => {
       </TableBody>
     </Table>
     <ThePagination
-      class="calendar-table__pagination"
       v-if="!isLoading && events?.length"
+      class="calendar-table__pagination"
       input-id="calendar-table-pagination"
       input-name="calendar-table-pagination"
-      :total-pages="10"
-      :current-page="1"
-      :options="['10', '20', '50']"
-      :items-count="10"
-      input-value="1"
+      :total-pages="totalCountPages"
+      :current-page="currentPage"
+      :options="['25', '50', '100']"
+      :items-count="itemsCount"
+      :input-value="searchValue"
+      @next-click="nextPageClick"
+      @prev-click="prevPageClick"
+      @selected-item="onChangeCount"
+      @on-blur-value="onInputBlur"
+      @on-change-value="onInputChange"
     >
     </ThePagination>
   </div>
