@@ -1,3 +1,5 @@
+import { get } from 'http'
+
 interface iDateTimeParams {
   startDateTime: string
   seconds: number
@@ -13,18 +15,23 @@ export const formatDate = (input: string): string => {
   return `${year}-${month}-${day}`
 }
 
-export const formatDateWithTime = (dateStr: string): string => {
-  const date = new Date(dateStr)
+export const getDateDay = (input: string): string => {
+  return formatDate(input)
+}
+
+export const getDateTime = (input: string) => {
+  const date = new Date(input)
   const pad = (num: number) => num.toString().padStart(2, '0')
 
-  const year = date.getFullYear()
-  const month = pad(date.getMonth() + 1)
-  const day = pad(date.getDate())
   const hours = pad(date.getHours())
   const minutes = pad(date.getMinutes())
   const seconds = pad(date.getSeconds())
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+  return `${hours}:${minutes}:${seconds}`
+}
+
+export const formatDateWithTime = (dateStr: string): string => {
+  return `${getDateDay(dateStr)} ${getDateTime(dateStr)}`
 }
 
 export const formatDateAmpm = (input: string): string => {
