@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-
 const tooltipTrigger = ref<HTMLElement | null>(null)
 const tooltipContent = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
