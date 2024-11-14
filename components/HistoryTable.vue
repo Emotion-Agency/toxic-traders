@@ -46,7 +46,13 @@ const { sortState, onSort } = useSort(
           :item="item"
           :class="`table-cell--${index}`"
         >
-          {{ item }}
+          <span v-if="headerFields[index] === 'Timestamp'">
+            {{ formatDateWithTime(item as string) }}
+          </span>
+          <pre v-else-if="headerFields[index] === 'Message'"
+            >{{ typeof item === 'string' ? JSON.parse(item) : '' }}
+          </pre>
+          <span v-else>{{ item }}</span>
         </TableCell>
       </TableRow>
     </TableBody>
