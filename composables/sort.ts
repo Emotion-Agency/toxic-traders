@@ -25,6 +25,8 @@ export const useSort = (defaultSortState?: ISortState, onSortCb?: TFunc) => {
       sortOrder,
     }
 
+    console.log(sortState.value)
+
     if (typeof onSortCb !== 'function') return
     onSortCb()
   }

@@ -27,6 +27,23 @@ interface GroupedByDate {
   [key: string]: ITableCalendarEvent[]
 }
 
+const { onSort, sortState } = useSort({
+  sortBy: 'Time',
+  sortOrder: 1,
+})
+
+const sortedEvents = computed(() => {
+  return props.events.sort((a, b) => {
+    if (sortState.value.sortBy === 'Time') {
+      if (sortState.value.sortOrder === 1) {
+        return new Date(b.time).getTime() - new Date(a.time).getTime()
+      } else {
+        return new Date(a.time).getTime() - new Date(b.time).getTime()
+      }
+    }
+  })
+})
+
 const {
   currentPage,
   itemsCount,
@@ -45,7 +62,7 @@ const paginatedEvents = computed(() => {
   const start = (currentPage.value - 1) * itemsCount.value
   const end = start + itemsCount.value
 
-  return props.events.slice(start, end)
+  return sortedEvents.value.slice(start, end)
 })
 
 const eventsGroupedByDate = computed<GroupedByDate>(() => {
@@ -101,8 +118,11 @@ const getNumberVariant = (number: number | string) => {
             :key="heading"
             :item="heading"
             :is-sort="heading === 'Time'"
+            :sort-order="sortState.sortOrder"
+            :is-active="sortState.sortBy === heading"
             class="calendar-table__cell"
             :class="[`calendar-table__cell--${toDashCase(heading)}`]"
+            @sort="onSort"
           >
             {{ heading }}
           </TableCell>
