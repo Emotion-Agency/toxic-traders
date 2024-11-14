@@ -33,12 +33,17 @@ const onThemeChange = (newTheme: Theme) => {
 
 onMounted(() => {
   const savedTheme = localStorage.getItem('theme')
+  const preferDarkScheme = window.matchMedia('(prefers-color-scheme: dark)')
 
   if (savedTheme) {
     onThemeChange(savedTheme as Theme)
   } else {
     onThemeChange(theme.value)
   }
+
+  preferDarkScheme.addEventListener('change', e => {
+    setupClasses(e.matches ? 'dark' : 'light')
+  })
 })
 </script>
 
