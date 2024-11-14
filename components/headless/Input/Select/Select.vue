@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
 import { useInputContext } from '~/composables/headless/inputContext'
 import type {
   IOption,
@@ -83,11 +84,7 @@ function selectOption(option: IOption) {
   })
 }
 
-function handleOutsideClick(event: MouseEvent) {
-  if (!$selectContainer.value.contains(event.target)) {
-    isOpen.value = false
-  }
-}
+onClickOutside($selectContainer, () => (isOpen.value = false))
 
 function handleKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') {
@@ -134,14 +131,6 @@ function handleKeydown(event: KeyboardEvent) {
     isOpen.value = !isOpen.value
   }
 }
-
-onMounted(() => {
-  document.addEventListener('click', handleOutsideClick)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick)
-})
 
 defineExpose({
   toggleDropdown,

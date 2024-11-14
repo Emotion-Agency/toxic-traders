@@ -61,14 +61,6 @@
   }
 }
 
-.brokers__error-message {
-  @include text-big;
-  margin-top: 40px;
-  flex: 0 100%;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .brokers__table {
   .table-cell {
     min-width: 240px;

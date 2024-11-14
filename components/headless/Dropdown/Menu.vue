@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import {
+  onClickOutside,
+  type MaybeElement,
+  type MaybeElementRef,
+} from '@vueuse/core'
+
 const isOpen = ref(false)
 const activeIndex = ref(-1)
 const menuItems = ref<HTMLElement[]>([])
-const $menuRef = ref<HTMLElement | null>(null)
+const $menuRef: MaybeElementRef<MaybeElement> = ref(null)
 const $triggerRef = ref<HTMLElement | null>(null)
 
 function toggleDropdown() {
@@ -44,22 +50,7 @@ provide('registerItem', (item: HTMLElement) => {
 provide('triggerEl', $triggerRef)
 provide('registerTrigger', registerTrigger)
 
-const handleOutsideClick = (event: MouseEvent) => {
-  if (!isOpen.value) return
-
-  const menu = $menuRef.value as HTMLElement
-  if (!menu.contains(event.target as Node)) {
-    closeDropdown()
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('click', handleOutsideClick)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('click', handleOutsideClick)
-})
+onClickOutside($menuRef, closeDropdown)
 </script>
 
 <template>

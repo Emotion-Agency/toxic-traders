@@ -165,7 +165,11 @@ watch([startDate, endDate], () => {
       </div>
     </section>
 
-    <div v-if="!events.length && !isLoading">No events found</div>
+    <NotFound
+      v-if="!events.length && !isLoading"
+      message="Oops! No events found"
+    />
+
     <section v-else-if="events.length && !isLoading" class="calendar-content">
       <div class="calendar-table-wrapper">
         <CalendarTable :events="events" />

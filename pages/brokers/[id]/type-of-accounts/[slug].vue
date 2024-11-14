@@ -343,12 +343,8 @@ onMounted(async () => {
               @on-change-value="onInputChange"
             />
           </div>
-          <p
-            v-if="!isLoading && !tableItems.length"
-            class="type-of-account__error"
-          >
-            Type of account table data is not found
-          </p>
+          <NotFound v-if="!isLoading && !tableItems.length" />
+
           <UiLoader v-if="isLoading" class="type-of-account__loader" />
         </div>
       </div>

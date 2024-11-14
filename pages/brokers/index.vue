@@ -216,12 +216,7 @@ const showedHeadings = computed(() => {
             @on-change-value="onInputChange"
           />
         </div>
-        <p
-          v-if="!isLoading && !brokersList.length"
-          class="brokers__error-message"
-        >
-          No items found
-        </p>
+        <NotFound v-if="isLoading && brokersList.length" />
       </div>
       <div v-if="isLoading">
         <UiLoader class="brokers__loader" />

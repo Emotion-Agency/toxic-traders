@@ -9,4 +9,6 @@ export default defineNuxtConfig({
   },
 
   plugins: ['~/plugins/vue-datepicker.ts'],
+
+  modules: ['@vueuse/nuxt'],
 })
