@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { iSelectInput } from '~/types'
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import { getCountriesFlag } from '~/utils/api/countries/getCountries'
 import Table from '../Table.vue'
@@ -126,7 +125,7 @@ const getCountryFlag = (countryCode: string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--actual`]"
             >
-              <CalendarTableNumber :number="event.actual" />
+              <CalendarTableNumber :number="event.actual" :is-grow="true" />
             </TableCell>
             <TableCell
               :item="event.forecast"
@@ -147,7 +146,7 @@ const getCountryFlag = (countryCode: string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--dev+-`]"
             >
-              <CalendarTableNumber :number="event.dev" />
+              <CalendarTableNumber :is-grow="true" :number="event.dev" />
             </TableCell>
             <TableCell
               :item="null"

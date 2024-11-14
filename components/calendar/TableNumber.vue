@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 interface IProps {
   number: string | number | undefined
+  isGrow?: boolean
 }
 
 const props = defineProps<IProps>()
@@ -14,15 +15,16 @@ const isNegative = computed(() => {
   <span
     class="calendar-table__number"
     :class="[
-      isNegative && number && 'calendar-table__number--negative',
+      isNegative && number && isGrow && 'calendar-table__number--negative',
       !isNegative &&
         number &&
         Number(number) > 0 &&
+        isGrow &&
         'calendar-table__number--positive',
     ]"
   >
     {{ number ? Number(number).toFixed(1) + '%' : '-' }}
-    <span v-if="number && Number(number) !== 0"
+    <span v-if="number && Number(number) !== 0 && isGrow"
       ><svg
         width="16"
         height="16"
