@@ -64,7 +64,7 @@ onUnmounted(() => {
 
 <template>
   <div data-dropdown-menu ref="$menuRef" @keydown="handleKeydown">
-    <slot />
+    <slot :is-open="isOpen" />
   </div>
 </template>
 

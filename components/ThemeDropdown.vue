@@ -1,7 +1,11 @@
 <script lang="ts" setup>
+import { usePreferredDark } from '@vueuse/core'
+
 type Theme = 'dark' | 'light' | 'system'
 
 const theme = ref<Theme>('system')
+
+const isDark = usePreferredDark()
 
 const setupClasses = (variant: 'dark' | 'light') => {
   if (variant === 'dark') {
@@ -22,40 +26,46 @@ const onThemeChange = (newTheme: Theme) => {
   localStorage.setItem('theme', newTheme)
 
   if (theme.value === 'system') {
-    const preferDarkScheme = window.matchMedia('(prefers-color-scheme: dark)')
-
-    setupClasses(preferDarkScheme.matches ? 'dark' : 'light')
+    setupClasses(isDark.value ? 'dark' : 'light')
     return
   }
 
   setupClasses(theme.value)
 }
 
+watch(isDark, value => {
+  if (theme.value === 'system') {
+    setupClasses(value ? 'dark' : 'light')
+  }
+})
+
 onMounted(() => {
   const savedTheme = localStorage.getItem('theme')
-  const preferDarkScheme = window.matchMedia('(prefers-color-scheme: dark)')
 
   if (savedTheme) {
     onThemeChange(savedTheme as Theme)
   } else {
     onThemeChange(theme.value)
   }
-
-  preferDarkScheme.addEventListener('change', e => {
-    setupClasses(e.matches ? 'dark' : 'light')
-  })
 })
 </script>
 
 <template>
-  <HeadlessDropdownMenu class="dropdown theme">
-    <HeadlessDropdownTrigger class="theme-btn">
+  <HeadlessDropdownMenu class="dropdown theme" v-slot="{ isOpen }">
+    <HeadlessDropdownTrigger
+      class="theme-btn"
+      :class="{ 'theme-btn--active': isOpen }"
+    >
       <IconsTheme />
     </HeadlessDropdownTrigger>
 
     <Teleport to="#teleports">
       <Transition name="dropdown">
-        <HeadlessDropdownItems style="z-index: 1000" class="dropdown__items">
+        <HeadlessDropdownItems
+          position-x="center"
+          style="z-index: 1000"
+          class="dropdown__items"
+        >
           <HeadlessDropdownItem
             class="dropdown__item theme__item"
             :class="{ 'theme__item--active': theme === 'light' }"
