@@ -4,6 +4,7 @@ interface iProps {
   isSort?: boolean
   sortOrder?: 1 | 2
   isActive?: boolean
+  disableTooltip?: boolean
 }
 
 const props = defineProps<iProps>()
@@ -16,7 +17,7 @@ const onSort = () => {
 </script>
 
 <template>
-  <div class="table-cell" :title="item?.toString()">
+  <div class="table-cell">
     <button v-if="isSort" class="table-cell__btn" @click="onSort">
       <slot />
       <IconsDownArrow v-if="sortOrder === 1 && isActive" />
@@ -24,6 +25,15 @@ const onSort = () => {
       <IconsDownUpArrow v-else />
     </button>
 
+    <HeadlessTooltip v-else-if="!isSort && !disableTooltip">
+      <template #trigger>
+        <div class="table-cell__content">
+          <slot />
+        </div>
+      </template>
+
+      <slot />
+    </HeadlessTooltip>
     <div v-else class="table-cell__content">
       <slot />
     </div>

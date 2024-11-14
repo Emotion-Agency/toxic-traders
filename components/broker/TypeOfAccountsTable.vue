@@ -180,6 +180,7 @@ const isSortable = (field: string) => {
               :key="i"
               :item="cell || 'N/A'"
               :class="`table-cell--${i}`"
+              :disable-tooltip="cell === item?.schedule"
             >
               <button
                 v-if="cell === item?.schedule"

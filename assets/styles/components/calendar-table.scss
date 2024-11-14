@@ -4,16 +4,16 @@
 
 .calendar-table__cell--event {
   min-width: 250px;
-  > .table-cell__content {
-    display: flex;
-    width: fit-content;
-    overflow: scroll;
-    align-items: center;
-    gap: 6px;
-    > * {
-      white-space: nowrap;
-      flex: 1;
-    }
+
+  .table-cell__content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  [data-tooltip],
+  [data-tooltip-trigger] {
+    width: 100%;
   }
 }
 
@@ -84,5 +84,17 @@
 .impact--3 {
   svg {
     color: var(--status-danger);
+  }
+}
+
+.calendar-table__event {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 6px;
+  > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
   }
 }

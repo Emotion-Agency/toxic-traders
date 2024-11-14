@@ -124,14 +124,16 @@ const getNumberVariant = (number: number | string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--event`]"
             >
-              <img
-                v-if="getCountryFlag(event.country)?.url"
-                class="calendar-table__flag"
-                :src="getCountryFlag(event.country)?.url"
-                :alt="getCountryFlag(event.country).alt"
-              />
-              <b>{{ event.country }}</b>
-              <span>{{ event.event }}</span>
+              <div class="calendar-table__event">
+                <img
+                  v-if="getCountryFlag(event.country)?.url"
+                  class="calendar-table__flag"
+                  :src="getCountryFlag(event.country)?.url"
+                  :alt="getCountryFlag(event.country).alt"
+                />
+                <b>{{ event.country }}</b>
+                <span>{{ event.event }}</span>
+              </div>
             </TableCell>
             <TableCell
               :item="event.importance"
@@ -185,6 +187,7 @@ const getNumberVariant = (number: number | string) => {
               :item="null"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--show-chart`]"
+              :disable-tooltip="true"
             >
               <TheButton
                 :to="`/chart/${event.country}/${event.event}`"

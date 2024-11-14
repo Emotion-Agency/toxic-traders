@@ -1,0 +1,10 @@
+[data-tooltip-content] {
+  background-color: var(--gray-900);
+  color: var(--white);
+  padding: 0.5em;
+  border-radius: 4px;
+  font-size: 0.875em;
+  z-index: 1200;
+  max-width: 250px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
