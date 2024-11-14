@@ -69,6 +69,26 @@ const getCountryFlag = (countryCode: string) => {
   )
   return country?.countryFlag
 }
+
+const isNegative = (number: number | string) => {
+  return Number(number) < 0
+}
+
+const getNumberVariant = (number: number | string) => {
+  if (isNaN(Number(number))) {
+    return 'neutral'
+  }
+
+  if (Number(number) === 0) {
+    return 'neutral'
+  }
+
+  if (isNegative(number)) {
+    return 'negative'
+  }
+
+  return 'positive'
+}
 </script>
 
 <template>
@@ -105,7 +125,7 @@ const getCountryFlag = (countryCode: string) => {
               :class="[`calendar-table__cell--event`]"
             >
               <img
-                v-if="getCountryFlag(event.country)"
+                v-if="getCountryFlag(event.country)?.url"
                 class="calendar-table__flag"
                 :src="getCountryFlag(event.country)?.url"
                 :alt="getCountryFlag(event.country).alt"
@@ -125,7 +145,10 @@ const getCountryFlag = (countryCode: string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--actual`]"
             >
-              <CalendarTableNumber :number="event.actual" :is-grow="true" />
+              <CalendarTableNumber
+                :number="event.actual"
+                :variant="getNumberVariant(event.dev)"
+              />
             </TableCell>
             <TableCell
               :item="event.forecast"
@@ -146,7 +169,10 @@ const getCountryFlag = (countryCode: string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--dev+-`]"
             >
-              <CalendarTableNumber :is-grow="true" :number="event.dev" />
+              <CalendarTableNumber
+                :variant="getNumberVariant(event.dev)"
+                :number="event.dev"
+              />
             </TableCell>
             <TableCell
               :item="null"
