@@ -58,8 +58,8 @@ useOnBeforeUnmountDelay(() => {
         </NuxtLink>
       </nav>
       <div class="header__right-menu">
-        <ThemeSwitcher />
-        <Account />
+        <ThemeDropdown />
+        <SettingsDropdown />
       </div>
     </div>
   </header>

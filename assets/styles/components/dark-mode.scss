@@ -64,7 +64,7 @@
     border-bottom: 1px solid var(--gray-500);
   }
 
-  .header__theme-btn {
+  .theme-btn {
     path {
       fill: var(--white);
     }
@@ -194,11 +194,11 @@
     background-color: var(--gray-800);
   }
 
-  .settings-dropdown__window {
+  .dropdown__items {
     background: var(--gray-800);
   }
 
-  .settings-dropdown__item {
+  .dropdown__item {
     &:hover {
       background-color: var(--gray-700);
     }
@@ -258,6 +258,12 @@
 
   .impact {
     color: var(--gray-600);
+  }
+
+  .theme__item {
+    &--active {
+      background-color: var(--secondary-dark);
+    }
   }
 }
 
