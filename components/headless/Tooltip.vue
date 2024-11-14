@@ -6,13 +6,13 @@ const tooltipContent = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
 
 interface IProps {
-  position?: 'top' | 'bottom' | 'left' | 'right'
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'auto'
   transition?: string
   as?: string
 }
 
 const props = withDefaults(defineProps<IProps>(), {
-  position: 'top',
+  position: 'auto',
   transition: 'fade',
   as: 'div',
 })
@@ -56,6 +56,29 @@ const computedPosition = computed(() => {
         top: `${triggerRect.top + (triggerRect.height - tooltipRect.height) / 2}px`,
       }
     case 'right':
+      return {
+        left: `${triggerRect.right + offset}px`,
+        top: `${triggerRect.top + (triggerRect.height - tooltipRect.height) / 2}px`,
+      }
+    case 'auto':
+      if (triggerRect.top - tooltipRect.height > 0) {
+        return {
+          left: `${triggerRect.left + (triggerRect.width - tooltipRect.width) / 2}px`,
+          top: `${triggerRect.top - tooltipRect.height - offset}px`,
+        }
+      }
+      if (window.innerHeight - triggerRect.bottom - tooltipRect.height > 0) {
+        return {
+          left: `${triggerRect.left + (triggerRect.width - tooltipRect.width) / 2}px`,
+          top: `${triggerRect.bottom + offset}px`,
+        }
+      }
+      if (triggerRect.left - tooltipRect.width > 0) {
+        return {
+          left: `${triggerRect.left - tooltipRect.width - offset}px`,
+          top: `${triggerRect.top + (triggerRect.height - tooltipRect.height) / 2}px`,
+        }
+      }
       return {
         left: `${triggerRect.right + offset}px`,
         top: `${triggerRect.top + (triggerRect.height - tooltipRect.height) / 2}px`,
