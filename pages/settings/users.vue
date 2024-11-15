@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { keysGenerator } from '@emotionagency/utils'
+import type { iCreatedUser } from '~/types/settings/users'
+
 const newUserModalOpened = ref(false)
 const headerFields = ['ID', 'Message', 'Timestamp', 'Level']
 const emit = defineEmits(['sort'])
@@ -39,6 +42,31 @@ const { sortState, onSort } = useSort(
   },
   () => emit('sort', sortState.value)
 )
+
+const isLoading = ref(false)
+
+const { createUser, users } = useUsers()
+
+const onCreateUser = async (data: iCreatedUser) => {
+  try {
+    isLoading.value = true
+
+    const res = await createUser({
+      email: data.email,
+      password: `${keysGenerator(12)}*`,
+      role: data.level.toLowerCase(),
+      allowDBAccess: data.access,
+    })
+
+    console.log(res)
+    // await getUsers()
+    // createUserModalClose()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -75,10 +103,12 @@ const { sortState, onSort } = useSort(
     </div>
     <div class="settings-users__table-wrapper">
       <!-- <UsersTable /> -->
+      <pre>{{ users }}</pre>
     </div>
     <NewUserModal
       :modal-opened="newUserModalOpened"
       @close="createUserModalClose"
+      @create="onCreateUser"
     />
   </div>
 </template>

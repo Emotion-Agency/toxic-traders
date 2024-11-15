@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { user } = useAuth()
+const { userJWT } = useAuth()
 
 const navigationList = ref([
   { text: 'Account', link: '/settings/account' },
@@ -10,7 +10,7 @@ const navigationList = ref([
 ])
 
 onMounted(() => {
-  const role = user.value?.role || 'investor'
+  const role = userJWT.value?.role || 'investor'
   const canViewUsers = ['admin', 'trader'].includes(role)
 
   navigationList.value = navigationList.value.filter(item => {

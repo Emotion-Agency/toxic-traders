@@ -46,8 +46,38 @@ export interface iClient {
 }
 
 export interface iUser {
-  id: number
-  eventId: string
+  createdAt: string
+  events: any
   clients: iClient[]
-  eventStatus: number
+  tradingAccounts: iTradingAccount[]
+  orders: iOrder[]
+  createdUsers: iUser[]
+  id: number
+  userName: string
+  normalizedUserName: string
+  email: string
+  normalizedEmail: string
+  emailConfirmed: boolean
+  passwordHash: string
+  securityStamp: string
+  concurrencyStamp: string
+  phoneNumber: string
+  phoneNumberConfirmed: boolean
+  twoFactorEnabled: boolean
+  lockoutEnd: string
+  lockoutEnabled: boolean
+  accessFailedCount: number
+}
+
+export interface iCreatedUser {
+  name: string
+  email: string
+  level: string
+  attach: string
+  access: boolean
+}
+
+export type TNewUserModalEmit = {
+  (event: 'close'): void
+  (event: 'create', user: iCreatedUser): void
 }

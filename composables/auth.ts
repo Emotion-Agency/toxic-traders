@@ -8,13 +8,16 @@ type TUser = {
 }
 
 export const useAuth = () => {
-  const user = useState<TUser>('user', () => null)
+  const userJWT = useState('userJWT', () => null)
+
   const token = useState('token', () => null)
 
   const { toast } = useToasts()
 
   const router = useRouter()
   const route = useRoute()
+
+  const { fetchUser } = useUsers()
 
   const login = async (email: string, password: string) => {
     try {
@@ -34,7 +37,9 @@ export const useAuth = () => {
 
       token.value = data?.token
 
-      user.value = decoded as TUser
+      userJWT.value = decoded as TUser
+
+      fetchUser(userJWT.value.nameid)
     } catch (error) {
       toast.error(
         error?.message ||
@@ -50,7 +55,7 @@ export const useAuth = () => {
     localStorage.removeItem('token')
 
     token.value = null
-    user.value = null
+    userJWT.value = null
 
     toast.info('You have been logged out.')
 
@@ -77,8 +82,10 @@ export const useAuth = () => {
     } else {
       const decoded = jwtDecode(lsToken)
 
-      user.value = decoded as TUser
+      userJWT.value = decoded as TUser
       token.value = lsToken
+
+      fetchUser(userJWT.value.nameid)
     }
   }
 
@@ -86,5 +93,5 @@ export const useAuth = () => {
     return !!token.value
   })
 
-  return { login, logout, checkAuth, isAuthenticated, user, token }
+  return { login, logout, checkAuth, isAuthenticated, userJWT, token }
 }

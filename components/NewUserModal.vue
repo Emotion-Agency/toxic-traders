@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { iInput, iSelectInput } from '~/types'
+import type { TNewUserModalEmit } from '~/types/settings/users'
 
 interface iProps {
   modalOpened: boolean
@@ -8,11 +9,11 @@ interface iProps {
 
 defineProps<iProps>()
 
-const emit = defineEmits(['close', 'create'])
+const emit = defineEmits<TNewUserModalEmit>()
 
-const { user } = useAuth()
+const { userJWT } = useAuth()
 
-const userRole = ref(null)
+const userRole = computed(() => userJWT.value?.role)
 
 const nameInput = ref({
   title: 'Full name',
@@ -81,7 +82,22 @@ const accessCheckbox = ref({
 })
 
 const handleSubmit = () => {
-  emit('create')
+  if (
+    !!nameInput.value.error ||
+    !!emailInput.value.error ||
+    !!attachSelect.value.error ||
+    !!levelSelect.value.error
+  ) {
+    return
+  }
+
+  emit('create', {
+    name: nameInput.value.value,
+    email: emailInput.value.value,
+    level: levelSelect.value.value,
+    attach: attachSelect.value.value,
+    access: accessCheckbox.value.checked,
+  })
 }
 
 const onChange = (e: iInput) => {
@@ -165,132 +181,134 @@ const onCheck = (_, checked: boolean) => {
     checked,
   }
 }
-
-onMounted(() => {
-  userRole.value = user.value?.role
-})
 </script>
 
 <template>
-  <TheModal
-    :modal-opened="modalOpened"
-    title="Create new user"
-    @close="emit('close')"
-  >
-    <div class="user-modal">
-      <form novalidate @submit.prevent="handleSubmit" class="user-modal__form">
-        <div class="user-modal__list">
-          <InputField
-            :title="nameInput?.title"
-            :id="nameInput?.id"
-            :required="nameInput?.required"
-            :name="nameInput?.name"
-            :type="nameInput?.type"
-            :placeholder="nameInput?.placeholder"
-            :value="nameInput?.value"
-            :validators="nameInput?.validators"
-            class="user-modal__item"
-            @input-value="onChange"
-          />
-          <InputField
-            :title="emailInput?.title"
-            :id="emailInput?.id"
-            :required="emailInput?.required"
-            :name="emailInput?.name"
-            :type="emailInput?.type"
-            :placeholder="emailInput?.placeholder"
-            :value="emailInput?.value"
-            :validators="emailInput?.validators"
-            class="user-modal__item"
-            @input-value="onChange"
-          />
-          <InputSelect
-            v-slot="{ renderedItems }"
-            v-if="userRole === 'admin'"
-            :id="levelSelect?.id"
-            :title="levelSelect?.title"
-            :required="levelSelect?.required"
-            :name="levelSelect?.name"
-            :placeholder="levelSelect?.placeholder"
-            :value="levelSelect?.value"
-            :options="levelSelect?.options"
-            :validators="levelSelect?.validators"
-            :is-reset="levelSelect?.isReset"
-            class="user-modal__item"
-            @select="onSelect"
-            @reset="onReset"
-          >
-            <InputSelectOption
-              v-for="(option, idx) in renderedItems"
-              :key="option"
-              :index="idx"
-              :option="option"
+  <ClientOnly>
+    <TheModal
+      v-bind="$attrs"
+      :modal-opened="modalOpened"
+      title="Create new user"
+      @close="emit('close')"
+    >
+      <div class="user-modal">
+        <form
+          novalidate
+          @submit.prevent="handleSubmit"
+          class="user-modal__form"
+        >
+          <div class="user-modal__list">
+            <InputField
+              :title="nameInput?.title"
+              :id="nameInput?.id"
+              :required="nameInput?.required"
+              :name="nameInput?.name"
+              :type="nameInput?.type"
+              :placeholder="nameInput?.placeholder"
+              :value="nameInput?.value"
+              :validators="nameInput?.validators"
+              class="user-modal__item"
+              @input-value="onChange"
             />
-          </InputSelect>
-          <InputSelect
-            v-slot="{ renderedItems }"
-            v-if="levelSelect.value === 'Investor'"
-            :id="attachSelect?.id"
-            :title="attachSelect?.title"
-            :required="attachSelect?.required"
-            :name="attachSelect?.name"
-            :placeholder="attachSelect?.placeholder"
-            :value="attachSelect?.value"
-            :options="attachSelect?.options"
-            :validators="attachSelect?.validators"
-            :is-reset="attachSelect?.isReset"
-            class="user-modal__item"
-            @select="onSelect"
-            @reset="onReset"
-          >
-            <InputSelectOption
-              v-for="(option, idx) in renderedItems"
-              :key="option"
-              :index="idx"
-              :option="option"
+            <InputField
+              :title="emailInput?.title"
+              :id="emailInput?.id"
+              :required="emailInput?.required"
+              :name="emailInput?.name"
+              :type="emailInput?.type"
+              :placeholder="emailInput?.placeholder"
+              :value="emailInput?.value"
+              :validators="emailInput?.validators"
+              class="user-modal__item"
+              @input-value="onChange"
             />
-          </InputSelect>
-          <InputCheckbox
-            v-if="userRole === 'admin'"
-            :id="accessCheckbox.id"
-            :value="accessCheckbox.value"
-            :name="accessCheckbox.name"
-            :type="accessCheckbox.type"
-            :checked="accessCheckbox.checked"
-            :is-right="accessCheckbox.isRight"
-            class="user-modal__item"
-            @input-value="onCheck"
-          />
-        </div>
+            <InputSelect
+              v-slot="{ renderedItems }"
+              v-if="userRole === 'admin'"
+              :id="levelSelect?.id"
+              :title="levelSelect?.title"
+              :required="levelSelect?.required"
+              :name="levelSelect?.name"
+              :placeholder="levelSelect?.placeholder"
+              :value="levelSelect?.value"
+              :options="levelSelect?.options"
+              :validators="levelSelect?.validators"
+              :is-reset="levelSelect?.isReset"
+              class="user-modal__item"
+              @select="onSelect"
+              @reset="onReset"
+            >
+              <InputSelectOption
+                v-for="(option, idx) in renderedItems"
+                :key="option"
+                :index="idx"
+                :option="option"
+              />
+            </InputSelect>
+            <InputSelect
+              v-slot="{ renderedItems }"
+              v-if="levelSelect.value === 'Investor'"
+              :id="attachSelect?.id"
+              :title="attachSelect?.title"
+              :required="attachSelect?.required"
+              :name="attachSelect?.name"
+              :placeholder="attachSelect?.placeholder"
+              :value="attachSelect?.value"
+              :options="attachSelect?.options"
+              :validators="attachSelect?.validators"
+              :is-reset="attachSelect?.isReset"
+              class="user-modal__item"
+              @select="onSelect"
+              @reset="onReset"
+            >
+              <InputSelectOption
+                v-for="(option, idx) in renderedItems"
+                :key="option"
+                :index="idx"
+                :option="option"
+              />
+            </InputSelect>
+            <InputCheckbox
+              v-if="userRole === 'admin'"
+              :id="accessCheckbox.id"
+              :value="accessCheckbox.value"
+              :name="accessCheckbox.name"
+              :type="accessCheckbox.type"
+              :checked="accessCheckbox.checked"
+              :is-right="accessCheckbox.isRight"
+              class="user-modal__item"
+              @input-value="onCheck"
+            />
+          </div>
 
-        <div class="user-modal__btn-wrapper">
-          <TheButton
-            class="user-modal__btn"
-            tag="button"
-            variant="close"
-            button-size="medium"
-            @click="emit('close')"
-          >
-            Close
-          </TheButton>
-          <TheButton
-            class="user-modal__btn"
-            tag="button"
-            type="submit"
-            variant="fill"
-            button-size="medium"
-            :disabled="
-              !!nameInput?.error ||
-              !!emailInput?.error ||
-              !!attachSelect?.error ||
-              !!levelSelect?.error
-            "
-            @click="emit('create')"
-          >
-            Create
-          </TheButton>
-        </div>
-      </form>
-    </div>
-  </TheModal>
+          <div class="user-modal__btn-wrapper">
+            <TheButton
+              class="user-modal__btn"
+              tag="button"
+              variant="close"
+              button-size="medium"
+              @click="emit('close')"
+            >
+              Close
+            </TheButton>
+            <TheButton
+              class="user-modal__btn"
+              tag="button"
+              type="submit"
+              variant="fill"
+              button-size="medium"
+              :disabled="
+                !!nameInput?.error ||
+                !!emailInput?.error ||
+                !!attachSelect?.error ||
+                !!levelSelect?.error
+              "
+            >
+              Create
+            </TheButton>
+          </div>
+        </form>
+      </div>
+    </TheModal>
+  </ClientOnly>
 </template>
