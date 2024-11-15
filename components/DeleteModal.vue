@@ -2,6 +2,7 @@
 interface iProps {
   modalOpened: boolean
   text?: string
+  isLoading?: boolean
 }
 
 defineProps<iProps>()
@@ -40,7 +41,8 @@ const emit = defineEmits(['close', 'delete'])
           button-size="medium"
           @click="emit('delete')"
         >
-          Delete
+          <Spinner v-if="isLoading" />
+          <span v-else> Delete </span>
         </TheButton>
       </div>
     </div>

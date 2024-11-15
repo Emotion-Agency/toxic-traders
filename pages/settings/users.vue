@@ -44,7 +44,7 @@ const onCreateUser = async (data: iCreatedUser) => {
   try {
     isLoading.value = true
 
-    const res = await createUser({
+    await createUser({
       email: data.email,
       password: `${keysGenerator(12)}*`,
       role: data.level.toLowerCase(),

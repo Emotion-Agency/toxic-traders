@@ -26,3 +26,14 @@ export const getUserByEmailRequest = async (email: string) => {
     throw error
   }
 }
+
+export const deleteUserRequest = async (email: string) => {
+  try {
+    const response = await axiosInstance.delete(`/Auth/delete`, {
+      data: email,
+    })
+    return response?.data
+  } catch (error) {
+    throw error
+  }
+}
