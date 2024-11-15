@@ -1,0 +1,24 @@
+.users-table {
+}
+.users-table__buttons-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.table-cell--level {
+  min-width: 110px;
+}
+
+.table-cell--actions {
+  min-width: 260px;
+}
+
+.table-cell--access-to-brokers {
+  min-width: 202px;
+}
+
+.table-cell--email {
+  min-width: 260px;
+}

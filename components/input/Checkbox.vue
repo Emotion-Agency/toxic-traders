@@ -3,7 +3,6 @@ interface iProps {
   id: string
   value: string
   name: string
-  type?: string
   disabled?: boolean
   checked?: boolean
   isRight?: boolean
@@ -35,13 +34,13 @@ watch(
     <input
       :id="id"
       v-model="isChecked"
-      :type="type"
+      type="checkbox"
       :name="name"
       :value="value"
       :disabled="disabled"
       class="checkbox-input__type"
       :checked="isChecked"
-      @change="emit('inputValue', value, isChecked)"
+      @change="emit('inputValue', { value, isChecked })"
     />
     <span class="checkbox-input__checkmark">
       <IconsCheck />

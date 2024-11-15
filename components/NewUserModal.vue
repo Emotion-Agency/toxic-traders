@@ -175,7 +175,7 @@ const onReset = (_: string, e: iSelectInput) => {
   }
 }
 
-const onCheck = (_, checked: boolean) => {
+const onCheck = ({ checked }) => {
   accessCheckbox.value = {
     ...accessCheckbox.value,
     checked,

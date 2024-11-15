@@ -41,6 +41,7 @@ export const useUsers = () => {
   }
 
   return {
+    user,
     users,
     fetchUser,
     createUser,

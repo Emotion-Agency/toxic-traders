@@ -156,7 +156,7 @@ watch(
         :type="item.type"
         :disabled="item.disabled"
         :checked="selectedCheckboxItems.includes(item.id)"
-        @input-value="(_, checked) => onChangeCheckbox(item.id, checked)"
+        @input-value="({ checked }) => onChangeCheckbox(item.id, checked)"
       />
     </div>
     <div class="brokers-settings__info">

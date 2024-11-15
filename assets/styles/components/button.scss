@@ -150,6 +150,28 @@
       }
     }
   }
+
+  &--warning {
+    color: var(--white);
+    background-color: var(--status-warning);
+
+    svg {
+      path {
+        fill: var(--white);
+      }
+    }
+
+    &:hover:not([disabled]) {
+      color: var(--white);
+      background-color: #f5a623;
+
+      svg {
+        path {
+          fill: var(--white);
+        }
+      }
+    }
+  }
 }
 
 .custom-date-modal__footer {
@@ -158,6 +180,4 @@
   justify-content: flex-end;
   gap: 8px;
   align-items: center;
-}
-.button--close {
 }

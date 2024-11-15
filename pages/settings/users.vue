@@ -3,7 +3,7 @@ import { keysGenerator } from '@emotionagency/utils'
 import type { iCreatedUser } from '~/types/settings/users'
 
 const newUserModalOpened = ref(false)
-const headerFields = ['ID', 'Message', 'Timestamp', 'Level']
+
 const emit = defineEmits(['sort'])
 
 const searchInput = reactive({
@@ -36,16 +36,9 @@ const createUserModalOpen = () => {
   document.body.classList.add('modal-open')
 }
 
-const { sortState, onSort } = useSort(
-  {
-    sortBy: 'ID',
-  },
-  () => emit('sort', sortState.value)
-)
-
 const isLoading = ref(false)
 
-const { createUser, users } = useUsers()
+const { createUser, users, fetchUser, user } = useUsers()
 
 const onCreateUser = async (data: iCreatedUser) => {
   try {
@@ -58,15 +51,27 @@ const onCreateUser = async (data: iCreatedUser) => {
       allowDBAccess: data.access,
     })
 
-    console.log(res)
-    // await getUsers()
-    // createUserModalClose()
+    await fetchUser(user.value.id)
+    createUserModalClose()
   } catch (error) {
     console.error(error)
   } finally {
     isLoading.value = false
   }
 }
+
+const searchedUsers = computed(() => {
+  if (searchInput.value === '') {
+    return users.value
+  }
+
+  return users.value.filter(user => {
+    return (
+      user.userName.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchInput.value.toLowerCase())
+    )
+  })
+})
 </script>
 
 <template>
@@ -102,8 +107,8 @@ const onCreateUser = async (data: iCreatedUser) => {
       </TheButton>
     </div>
     <div class="settings-users__table-wrapper">
-      <!-- <UsersTable /> -->
-      <pre>{{ users }}</pre>
+      <UsersTable v-if="searchedUsers?.length" :accounts="searchedUsers" />
+      <NotFound v-else />
     </div>
     <NewUserModal
       :modal-opened="newUserModalOpened"
