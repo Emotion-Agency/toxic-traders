@@ -16,13 +16,18 @@ export const registerRequest = async ({
   traderIdAttachTo,
 }: IRegisterRequest) => {
   try {
-    const response = await axiosInstance.post('/Auth/register', {
+    const objToSend = {
       email,
       password,
       role,
-      allowDBAccess,
-      // traderIdAttachTo: traderIdAttachTo || 0,
-    })
+      allowDBAccess: allowDBAccess || false,
+    }
+
+    if (traderIdAttachTo) {
+      objToSend['traderIdAttachTo'] = traderIdAttachTo
+    }
+
+    const response = await axiosInstance.post('/Auth/register', objToSend)
     return response?.data
   } catch (error) {
     throw error
