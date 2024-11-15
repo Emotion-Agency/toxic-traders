@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { resize } from '~/utils/ea'
-import ThemeSwitcher from './ThemeSwitcher.vue'
 
 // let navbarPos
 const $el = ref<HTMLElement | null>(null)

@@ -5,13 +5,13 @@ const onLogout = () => {
   isLogoutModalOpened.value = true
 }
 
-const { user } = useAuth()
+const { userJWT } = useAuth()
 </script>
 
 <template>
   <HeadlessDropdownMenu class="dropdown settings-dropdown">
     <HeadlessDropdownTrigger class="header__account">
-      <span class="header__account-name">{{ user?.email }}</span>
+      <span class="header__account-name">{{ userJWT?.email }}</span>
       <img
         src="/images/avatars/1.jpg"
         alt="Avatar"
