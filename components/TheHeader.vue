@@ -41,22 +41,34 @@ useOnBeforeUnmountDelay(() => {
 <template>
   <header ref="$el" class="header">
     <div class="header__wrapper container">
-      <NuxtLink to="/" class="header__logo-wrapper">
-        <span>
-          <IconsLogo />
-        </span>
-      </NuxtLink>
-      <nav class="header__list">
-        <NuxtLink
-          v-for="(item, idx) in navigationList"
-          :key="idx"
-          :to="item.link"
-          class="header__link"
-        >
-          {{ item.text }}
+      <div class="header__side header__side--left">
+        <NuxtLink to="/" class="header__logo-wrapper">
+          <span>
+            <IconsLogo />
+          </span>
         </NuxtLink>
-      </nav>
-      <div class="header__right-menu">
+        <nav class="header__list">
+          <NuxtLink
+            v-for="(item, idx) in navigationList"
+            :key="idx"
+            :to="item.link"
+            class="header__link"
+          >
+            {{ item.text }}
+          </NuxtLink>
+        </nav>
+      </div>
+      <div class="header__side header__side--right">
+        <HeadlessTooltip>
+          <template #trigger>
+            <div class="header__timezone">
+              GMT{{ getGMTTime(-new Date().getTimezoneOffset()) }}
+            </div>
+          </template>
+
+          {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
+        </HeadlessTooltip>
+
         <ThemeDropdown />
         <SettingsDropdown />
       </div>

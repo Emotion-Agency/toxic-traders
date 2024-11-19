@@ -74,6 +74,13 @@
     background-color: var(--white);
   }
 
+  .header__timezone {
+    @include text-body;
+
+    border: 1px solid var(--gray-700);
+    color: var(--gray-600);
+  }
+
   .accordion__main-btn {
     color: var(--white);
   }
