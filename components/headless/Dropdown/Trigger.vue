@@ -1,9 +1,11 @@
 <script setup lang="ts">
-const toggleDropdown = inject('toggleDropdown') as () => void
+const toggleDropdown = inject('toggleDropdown') as (value?: boolean) => void
 
 const registerTrigger = inject('registerTrigger') as (
   trigger: HTMLElement
 ) => void
+
+const trigger = inject('trigger') as 'click' | 'hover'
 
 const $triggerRef = ref<HTMLElement | null>(null)
 
@@ -17,9 +19,9 @@ onMounted(() => {
 <template>
   <button
     ref="$triggerRef"
-    @click="toggleDropdown"
-    @keydown.space.prevent="toggleDropdown"
-    @keydown.enter.prevent="toggleDropdown"
+    @click="trigger === 'click' && toggleDropdown()"
+    @keydown.space.prevent="toggleDropdown()"
+    @keydown.enter.prevent="toggleDropdown()"
   >
     <slot />
   </button>

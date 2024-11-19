@@ -66,10 +66,13 @@ watch(
     }
   }
 )
+
+const closeDropdown = inject('closeDropdown') as () => void
+const trigger = inject('trigger') as 'click' | 'hover'
 </script>
 
 <template>
-  <ul ref="$el" v-show="isOpen" role="menu">
+  <ul ref="$el" data-dropdown-items v-show="isOpen" role="menu">
     <slot />
   </ul>
 </template>

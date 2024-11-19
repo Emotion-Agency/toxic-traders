@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import {
-  onClickOutside,
-  type MaybeElement,
-  type MaybeElementRef,
-} from '@vueuse/core'
+import type { MaybeElement, MaybeElementRef } from '@vueuse/core'
+
+interface IProps {
+  trigger?: 'click' | 'hover'
+  as?: string
+}
+
+const props = withDefaults(defineProps<IProps>(), {
+  trigger: 'click',
+  as: 'div',
+})
 
 const isOpen = ref(false)
 const activeIndex = ref(-1)
@@ -11,8 +17,12 @@ const menuItems = ref<HTMLElement[]>([])
 const $menuRef: MaybeElementRef<MaybeElement> = ref(null)
 const $triggerRef = ref<HTMLElement | null>(null)
 
-function toggleDropdown() {
-  isOpen.value = !isOpen.value
+function toggleDropdown(value?: boolean) {
+  if (value === undefined) {
+    isOpen.value = !isOpen.value
+  } else {
+    isOpen.value = value
+  }
 }
 
 function closeDropdown() {
@@ -43,20 +53,43 @@ const registerTrigger = (trigger: HTMLElement) => {
 provide('isOpen', isOpen)
 provide('toggleDropdown', toggleDropdown)
 provide('closeDropdown', closeDropdown)
+
 provide('registerItem', (item: HTMLElement) => {
   menuItems.value.push(item)
 })
 
+provide('trigger', props.trigger)
 provide('triggerEl', $triggerRef)
 provide('registerTrigger', registerTrigger)
 
 onClickOutside($menuRef, closeDropdown)
+
+const onMouseMove = e => {
+  if (props.trigger !== 'hover') return
+  const isShowDropdown =
+    e.target === $triggerRef.value || menuItems.value?.includes(e.target)
+
+  toggleDropdown(isShowDropdown)
+}
+
+onMounted(() => {
+  document.body.addEventListener('mousemove', onMouseMove)
+})
+
+onBeforeUnmount(() => {
+  document.body.removeEventListener('mousemove', onMouseMove)
+})
 </script>
 
 <template>
-  <div data-dropdown-menu ref="$menuRef" @keydown="handleKeydown">
+  <component
+    :is="as"
+    data-dropdown-menu
+    ref="$menuRef"
+    @keydown="handleKeydown"
+  >
     <slot :is-open="isOpen" />
-  </div>
+  </component>
 </template>
 
 <style scoped>
