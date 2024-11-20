@@ -22,13 +22,7 @@ const { toast } = useToasts()
 
 const { fetchUser, user } = useUsers()
 
-const headerFields = [
-  'Full name',
-  'Email',
-  'Level',
-  'Access to Brokers',
-  'Actions',
-]
+const headerFields = ['Email', 'Level', 'Access to Brokers', 'Actions']
 
 const { sortState, onSort } = useSort(
   {
@@ -114,9 +108,6 @@ const resetModalClose = () => {
     <TableHead :header-fields="headerFields" />
     <TableBody>
       <TableRow v-for="(user, idx) in accounts" :key="idx">
-        <TableCell :item="user.userName" :class="`table-cell--full-name`">{{
-          user.userName
-        }}</TableCell>
         <TableCell :item="user.email" :class="`table-cell--email`">{{
           user.email
         }}</TableCell>

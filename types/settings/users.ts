@@ -46,27 +46,30 @@ export interface iClient {
 }
 
 export interface iUser {
-  createdAt: string
-  events: any
-  clients: iClient[]
-  tradingAccounts: iTradingAccount[]
-  orders: iOrder[]
-  createdUsers: iUser[]
-  id: number
-  userName: string
-  normalizedUserName: string
-  email: string
-  normalizedEmail: string
-  emailConfirmed: boolean
-  passwordHash: string
-  securityStamp: string
-  concurrencyStamp: string
-  phoneNumber: string
-  phoneNumberConfirmed: boolean
-  twoFactorEnabled: boolean
-  lockoutEnd: string
-  lockoutEnabled: boolean
-  accessFailedCount: number
+  user: {
+    createdAt: string
+    events: any
+    clients: iClient[]
+    tradingAccounts: iTradingAccount[]
+    orders: iOrder[]
+    createdUsers: iUser[]
+    id: number
+    userName: string
+    normalizedUserName: string
+    email: string
+    normalizedEmail: string
+    emailConfirmed: boolean
+    passwordHash: string
+    securityStamp: string
+    concurrencyStamp: string
+    phoneNumber: string
+    phoneNumberConfirmed: boolean
+    twoFactorEnabled: boolean
+    lockoutEnd: string
+    lockoutEnabled: boolean
+    accessFailedCount: number
+  }
+  roles: string[]
 }
 
 export interface iCreatedUser {
