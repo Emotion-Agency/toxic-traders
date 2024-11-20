@@ -62,7 +62,7 @@ useOnBeforeUnmountDelay(() => {
         <HeadlessTooltip>
           <template #trigger>
             <div class="header__timezone">
-              GMT{{ getGMTTime(-new Date().getTimezoneOffset()) }}
+              UTC{{ getGMTTime(-new Date().getTimezoneOffset()) }}
             </div>
           </template>
 
