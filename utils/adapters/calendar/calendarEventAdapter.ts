@@ -17,7 +17,7 @@ export const calendarEventAdapter = (
   }
 
   return {
-    time: event.date,
+    time: `${event.date}+0`,
     event: event.title,
     country: event.country,
     importance: event.importance,

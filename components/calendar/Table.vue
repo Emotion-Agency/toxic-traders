@@ -136,6 +136,7 @@ const getNumberVariant = (number: number | string) => {
               :item="event.time"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--time`]"
+              tooltip-text="By your local time"
             >
               {{ getDateTime(event.time) }}
             </TableCell>

@@ -5,6 +5,7 @@ interface iProps {
   sortOrder?: 1 | 2
   isActive?: boolean
   disableTooltip?: boolean
+  tooltipText?: string
 }
 
 const props = defineProps<iProps>()
@@ -31,8 +32,8 @@ const onSort = () => {
           <slot />
         </div>
       </template>
-
-      <slot />
+      <span v-if="tooltipText">{{ tooltipText }}</span>
+      <slot v-else />
     </HeadlessTooltip>
     <div v-else class="table-cell__content">
       <slot />
