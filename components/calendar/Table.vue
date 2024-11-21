@@ -163,6 +163,7 @@ const getNumberVariant = (number: number | string) => {
               :item="event.importance"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--impact`]"
+              :tooltip-text="`Impact: ${event.importance}`"
             >
               <CalendarImpact :impact="Number(event.importance) as 1 | 2 | 3" />
             </TableCell>
@@ -170,6 +171,7 @@ const getNumberVariant = (number: number | string) => {
               :item="event.actual"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--actual`]"
+              :disable-tooltip="!event.actual"
             >
               <CalendarTableNumber
                 :number="event.actual"
@@ -182,6 +184,7 @@ const getNumberVariant = (number: number | string) => {
               :item="event.forecast"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--forecast`]"
+              :disable-tooltip="!event.forecast"
             >
               <CalendarTableNumber
                 :number="event.forecast"
@@ -193,6 +196,7 @@ const getNumberVariant = (number: number | string) => {
               :item="event.previous"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--previous`]"
+              :disable-tooltip="!event.previous"
             >
               <CalendarTableNumber
                 :number="event.previous"
@@ -204,6 +208,7 @@ const getNumberVariant = (number: number | string) => {
               :item="event.dev"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--dev+-`]"
+              :disable-tooltip="!event.dev"
             >
               <CalendarTableNumber
                 :variant="getNumberVariant(event.dev)"

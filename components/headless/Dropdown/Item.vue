@@ -16,10 +16,13 @@ onMounted(() => {
     registerItem(itemRef.value)
   }
 })
+
+const id = inject('id') as string
 </script>
 
 <template>
   <li
+    :data-dropdown-item="id"
     role="menuitem"
     tabindex="0"
     @click="handleClick"

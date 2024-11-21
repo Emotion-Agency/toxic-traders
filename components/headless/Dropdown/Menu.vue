@@ -17,6 +17,8 @@ const menuItems = ref<HTMLElement[]>([])
 const $menuRef: MaybeElementRef<MaybeElement> = ref(null)
 const $triggerRef = ref<HTMLElement | null>(null)
 
+const id = useId()
+
 function toggleDropdown(value?: boolean) {
   if (value === undefined) {
     isOpen.value = !isOpen.value
@@ -61,13 +63,18 @@ provide('registerItem', (item: HTMLElement) => {
 provide('trigger', props.trigger)
 provide('triggerEl', $triggerRef)
 provide('registerTrigger', registerTrigger)
+provide('id', id)
 
 onClickOutside($menuRef, closeDropdown)
 
 const onMouseMove = e => {
   if (props.trigger !== 'hover') return
+
   const isShowDropdown =
-    e.target === $triggerRef.value || menuItems.value?.includes(e.target)
+    e.target === $triggerRef.value ||
+    $triggerRef.value?.contains(e.target) ||
+    $menuRef.value?.contains(e.target) ||
+    menuItems.value.some(item => item.contains(e.target))
 
   toggleDropdown(isShowDropdown)
 }
@@ -84,7 +91,7 @@ onBeforeUnmount(() => {
 <template>
   <component
     :is="as"
-    data-dropdown-menu
+    :data-dropdown-menu="id"
     ref="$menuRef"
     @keydown="handleKeydown"
   >
