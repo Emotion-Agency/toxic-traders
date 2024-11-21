@@ -28,6 +28,10 @@
 .calendar-table__date {
   width: 100%;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   text-align: center;
   color: var(--white);
   background-color: var(--primary-dark);

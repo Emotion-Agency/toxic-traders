@@ -130,7 +130,10 @@ const getNumberVariant = (number: number | string) => {
       </TableHead>
       <TableBody>
         <div v-for="date of Object.keys(eventsGroupedByDate)">
-          <div class="calendar-table__date">{{ date }}</div>
+          <div class="calendar-table__date">
+            <IconsCalendar />
+            {{ date }}
+          </div>
           <TableRow v-for="event of eventsGroupedByDate[date]">
             <TableCell
               :item="event.time"
