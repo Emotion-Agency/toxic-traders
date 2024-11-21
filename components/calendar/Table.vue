@@ -171,6 +171,7 @@ const getNumberVariant = (number: number | string) => {
               <CalendarTableNumber
                 :number="event.actual"
                 :variant="getNumberVariant(event.dev)"
+                :unit="event.unit"
               />
             </TableCell>
             <TableCell
@@ -178,14 +179,20 @@ const getNumberVariant = (number: number | string) => {
               class="calendar-table__cell"
               :class="[`calendar-table__cell--forecast`]"
             >
-              <CalendarTableNumber :number="event.forecast" />
+              <CalendarTableNumber
+                :number="event.forecast"
+                :unit="event.unit"
+              />
             </TableCell>
             <TableCell
               :item="event.previous"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--previous`]"
             >
-              <CalendarTableNumber :number="event.previous" />
+              <CalendarTableNumber
+                :number="event.previous"
+                :unit="event.unit"
+              />
             </TableCell>
             <TableCell
               :item="event.dev"
@@ -195,6 +202,7 @@ const getNumberVariant = (number: number | string) => {
               <CalendarTableNumber
                 :variant="getNumberVariant(event.dev)"
                 :number="event.dev"
+                :unit="event.unit"
               />
             </TableCell>
             <TableCell

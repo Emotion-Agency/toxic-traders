@@ -7,4 +7,5 @@ export interface ITableCalendarEvent {
   forecast: string
   previous: string
   dev: string | number
+  unit: string
 }
