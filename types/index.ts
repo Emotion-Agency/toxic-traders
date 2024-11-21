@@ -65,3 +65,5 @@ export interface iData {
     [key: number]: string
   }
 }
+
+export type Theme = 'dark' | 'light' | 'system'

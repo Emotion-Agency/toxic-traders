@@ -13,6 +13,9 @@ const endDate = defineModel('endDate')
 const onSave = () => {
   emit('save')
 }
+
+const isDark = usePreferredDark()
+const { theme } = useAppState()
 </script>
 
 <template>
@@ -35,6 +38,7 @@ const onSave = () => {
           :enable-time-picker="false"
           v-model="startDate"
           placeholder="22.05.1998"
+          :dark="isDark || theme === 'dark'"
         />
       </div>
       <div class="calendar-date-modal__input">
@@ -44,6 +48,7 @@ const onSave = () => {
           :enable-time-picker="false"
           v-model="endDate"
           placeholder="22.05.1998"
+          :dark="isDark || theme === 'dark'"
         />
       </div>
     </div>

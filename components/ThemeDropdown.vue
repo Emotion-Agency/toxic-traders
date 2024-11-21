@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { usePreferredDark } from '@vueuse/core'
+import type { Theme } from '~/types'
 
-type Theme = 'dark' | 'light' | 'system'
-
-const theme = ref<Theme>('system')
-
+const { theme } = useAppState()
 const isDark = usePreferredDark()
 
 const setupClasses = (variant: 'dark' | 'light') => {

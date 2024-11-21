@@ -146,6 +146,9 @@ const notSortableFields = ['schedule']
 const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
+
+const isDark = usePreferredDark()
+const { theme } = useAppState()
 </script>
 
 <template>
@@ -213,6 +216,7 @@ const isSortable = (field: string) => {
                       v-model="spreadStartDate"
                       enable-seconds
                       placeholder="Select Date"
+                      :dark="isDark || theme === 'dark'"
                     />
                   </div>
                 </div>
@@ -226,6 +230,7 @@ const isSortable = (field: string) => {
                       v-model="spreadEndDate"
                       enable-seconds
                       placeholder="Select Date"
+                      :dark="isDark || theme === 'dark'"
                     />
                   </div>
                 </div>
@@ -258,6 +263,7 @@ const isSortable = (field: string) => {
                       v-model="newsSpreadStartDate"
                       enable-seconds
                       placeholder="Select Date"
+                      :dark="isDark || theme === 'dark'"
                     />
                   </div>
                 </div>
@@ -271,6 +277,7 @@ const isSortable = (field: string) => {
                       v-model="newsSpreadEndDate"
                       enable-seconds
                       placeholder="Select Date"
+                      :dark="isDark || theme === 'dark'"
                     />
                   </div>
                 </div>
