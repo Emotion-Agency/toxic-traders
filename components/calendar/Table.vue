@@ -172,6 +172,7 @@ const getNumberVariant = (number: number | string) => {
                 :number="event.actual"
                 :variant="getNumberVariant(event.dev)"
                 :unit="event.unit"
+                :scale="event.scale"
               />
             </TableCell>
             <TableCell
@@ -182,6 +183,7 @@ const getNumberVariant = (number: number | string) => {
               <CalendarTableNumber
                 :number="event.forecast"
                 :unit="event.unit"
+                :scale="event.scale"
               />
             </TableCell>
             <TableCell
@@ -192,6 +194,7 @@ const getNumberVariant = (number: number | string) => {
               <CalendarTableNumber
                 :number="event.previous"
                 :unit="event.unit"
+                :scale="event.scale"
               />
             </TableCell>
             <TableCell
@@ -203,6 +206,7 @@ const getNumberVariant = (number: number | string) => {
                 :variant="getNumberVariant(event.dev)"
                 :number="event.dev"
                 :unit="event.unit"
+                :scale="event.scale"
               />
             </TableCell>
             <TableCell

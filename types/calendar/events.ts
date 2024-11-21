@@ -8,4 +8,5 @@ export interface ITableCalendarEvent {
   previous: string
   dev: string | number
   unit: string
+  scale: string
 }

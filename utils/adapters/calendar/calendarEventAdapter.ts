@@ -25,6 +25,7 @@ export const calendarEventAdapter = (
     forecast: event.forecast,
     previous: event.previous,
     unit: event.unit,
+    scale: event.scale,
     dev: getDeviation(),
   }
 }

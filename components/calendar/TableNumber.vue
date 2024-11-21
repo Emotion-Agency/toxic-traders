@@ -2,12 +2,21 @@
 interface IProps {
   number: string | number | undefined
   unit?: string
+  scale?: string
   variant?: 'positive' | 'negative' | 'neutral'
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   variant: 'neutral',
   unit: '',
+  scale: '',
+})
+
+const styledNumber = computed(() => {
+  if (props.number) {
+    return Number(props.number).toFixed(1) + props.scale + ' ' + props.unit
+  }
+  return '-'
 })
 </script>
 
@@ -16,7 +25,7 @@ const props = withDefaults(defineProps<IProps>(), {
     class="calendar-table__number"
     :class="`calendar-table__number--${variant}`"
   >
-    {{ number ? Number(number).toFixed(1) + unit : '-' }}
+    {{ styledNumber }}
     <span v-if="number && variant !== 'neutral'">
       <svg
         width="16"
