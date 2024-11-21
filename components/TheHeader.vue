@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { resize } from '~/utils/ea'
 
-// let navbarPos
 const $el = ref<HTMLElement | null>(null)
 
 const navigationList = [
@@ -25,15 +24,10 @@ const calcHeight = () => {
 }
 
 onMounted(() => {
-  // const { default: NavbarPos } = await import('~/utils/navbarPos')
-
-  // navbarPos = new NavbarPos()
-  // navbarPos.init()
   resize.on(calcHeight)
 })
 
 useOnBeforeUnmountDelay(() => {
-  // navbarPos && navbarPos.destroy()
   resize.off(calcHeight)
 })
 </script>
