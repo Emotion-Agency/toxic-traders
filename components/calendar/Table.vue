@@ -5,7 +5,6 @@ import Table from '../Table.vue'
 
 interface IProps {
   events: ITableCalendarEvent[]
-  onSort: (sortBy: string, sortOrder: 1 | 2) => void
   sortState: {
     sortBy?: string
     sortOrder?: 1 | 2
@@ -13,6 +12,8 @@ interface IProps {
 }
 
 const props = defineProps<IProps>()
+
+const emit = defineEmits(['sort'])
 
 const headings = [
   'Time',
@@ -89,7 +90,7 @@ const getNumberVariant = (number: number | string) => {
             :is-active="sortState.sortBy === heading"
             class="calendar-table__cell"
             :class="[`calendar-table__cell--${toDashCase(heading)}`]"
-            @sort="onSort"
+            @sort="emit('sort', $event)"
           >
             {{ heading }}
           </TableCell>

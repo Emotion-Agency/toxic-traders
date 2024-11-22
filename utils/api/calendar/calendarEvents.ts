@@ -58,7 +58,7 @@ export const getCalendarEventsByTitleAndCountry = async (
 ) => {
   try {
     const res = await axiosInstance.get<ICalendarEvent[]>(
-      '/Calendar/GetCalendarEvents',
+      '/Calendar/GetCalendarEventsByTitleAndCountry',
       {
         params: {
           Title,

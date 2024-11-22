@@ -19,6 +19,14 @@ useHead({
     id: 'scroll-container',
   },
 })
+
+const router = useRouter()
+
+const { saveScrollPos } = useScrollPos()
+
+router.beforeEach(() => {
+  saveScrollPos()
+})
 </script>
 
 <template>
