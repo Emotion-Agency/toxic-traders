@@ -33,7 +33,7 @@ export const useCalendarTable = (events: Ref<ITableCalendarEvent[]>) => {
     onChangeCount,
   } = usePagination(
     route.query.page && Number(route.query.page),
-    route.query.count && Number(route.query.count)
+    route.query.count ? Number(route.query.count) : 100
   )
 
   watch(

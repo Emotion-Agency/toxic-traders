@@ -47,6 +47,7 @@ const {
       <div class="container calendar__wrapper">
         <h1 class="calendar__title">{{ country }} {{ title }}</h1>
       </div>
+      <div class="calendar__menu"></div>
     </section>
 
     <NotFound
@@ -62,7 +63,7 @@ const {
           @sort="onSort"
         />
         <ThePagination
-          v-if="totalCountPages / events?.length > 1"
+          v-if="totalCountPages / paginatedEvents?.length > 1"
           class="calendar-table__pagination"
           input-id="calendar-table-pagination"
           input-name="calendar-table-pagination"

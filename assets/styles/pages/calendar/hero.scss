@@ -5,6 +5,7 @@
 
 .calendar__title {
   @include heading-m-h1;
+  max-width: 500px;
 }
 
 .calendar__menu {
