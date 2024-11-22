@@ -22,3 +22,19 @@
 .calendar__setings-btn {
   margin-left: auto;
 }
+
+.calendar__custom-date-btn {
+  position: relative;
+  &--active {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+    }
+  }
+}

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { iSelectInput } from '~/types'
 
-const dateOptions = ['Today', 'Tomorrow', 'This week', 'Next week']
+const dateOptions = ref(['Today', 'Tomorrow', 'This week', 'Next week'])
 
 const selectedDate = ref<string | null>(null)
 
@@ -39,6 +39,7 @@ const onSaveDate = async (reset?: boolean) => {
       await getAllEvents()
     } else {
       await getEventsByDate(startDate.value, endDate.value)
+      addCustomSelectOption()
     }
     reset && (selectedDate.value = null)
   } catch (error) {
@@ -48,8 +49,19 @@ const onSaveDate = async (reset?: boolean) => {
   }
 }
 
+const addCustomSelectOption = () => {
+  if (startDate.value) {
+    selectedDate.value = getDateDay(startDate.value)
+  }
+
+  if (startDate.value && endDate.value) {
+    selectedDate.value = `${getDateDay(startDate.value)} - ${getDateDay(endDate.value)}`
+  }
+}
+
 onMounted(async () => {
   await onSaveDate()
+  addCustomSelectOption()
 })
 
 const onSelect = (e: iSelectInput) => {
@@ -98,17 +110,6 @@ const onReset = () => {
   getAllEvents()
 }
 
-const getPlaceholder = () => {
-  if (startDate.value && endDate.value) {
-    return `${getDateDay(startDate.value)} - ${getDateDay(endDate.value)}`
-  }
-  if (startDate.value) {
-    return getDateDay(startDate.value)
-  }
-
-  return 'Choose the date'
-}
-
 const {
   currentPage,
   itemsCount,
@@ -146,7 +147,7 @@ watch([startDate, endDate], () => {
           <div class="calendar__select">
             <InputSelect
               :options="dateOptions"
-              :placeholder="getPlaceholder()"
+              placeholder="Choose the date"
               id="calendar-date"
               name="Select date"
               title="Select date"
@@ -163,7 +164,13 @@ watch([startDate, endDate], () => {
               />
             </InputSelect>
           </div>
-          <TheButton @click="isModalOpen = true">
+          <TheButton
+            @click="isModalOpen = true"
+            class="calendar__custom-date-btn"
+            :class="{
+              'calendar__custom-date-btn--active': startDate || endDate,
+            }"
+          >
             <template #start-icon>
               <IconsCalendar />
             </template>
@@ -175,7 +182,7 @@ watch([startDate, endDate], () => {
             @close="isModalOpen = false"
             v-model:startDate="startDate"
             v-model:endDate="endDate"
-            @save="onSaveDate(true)"
+            @save="onSaveDate()"
           />
 
           <TheButton
