@@ -4,9 +4,9 @@ const { userJWT } = useAuth()
 const navigationList = ref([
   { text: 'Account', link: '/settings/account' },
   { text: 'Calendar', link: '/settings/calendar' },
-  { text: 'Schedule news', link: '/settings/schedule-news' },
+  { text: 'Schedule news', link: '/settings/schedule-news', disabled: true },
   { text: 'Users', link: '/settings/users' },
-  { text: 'Servers', link: '/settings/servers' },
+  { text: 'Servers', link: '/settings/servers', disabled: true },
 ])
 
 onMounted(() => {
@@ -38,7 +38,11 @@ onMounted(() => {
                 :key="idx"
                 class="settings__nav-item"
               >
-                <NuxtLink :to="item.link" class="settings__nav-link">
+                <NuxtLink
+                  :to="item.link"
+                  :disabled="item.disabled"
+                  class="settings__nav-link"
+                >
                   {{ item.text }}
                 </NuxtLink>
               </li>

@@ -15,7 +15,7 @@ export const useAuth = () => {
   const { toast } = useToasts()
 
   const router = useRouter()
-  const route = useRoute()
+  const route = useNuxtApp()._processingMiddleware ? null : useRoute()
 
   const { fetchUser } = useUsers()
 

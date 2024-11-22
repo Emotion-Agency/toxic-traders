@@ -53,6 +53,11 @@
     font-weight: 600;
     background-color: var(--gray-300);
   }
+
+  &:disabled {
+    color: var(--gray-400);
+    pointer-events: none !important;
+  }
 }
 
 .settings__content-wrapper {

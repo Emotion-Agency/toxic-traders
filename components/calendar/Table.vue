@@ -71,14 +71,6 @@ const paginatedEvents = computed(() => {
   return sortedEvents.value.slice(start, end)
 })
 
-watch(
-  () => props.events,
-  () => {
-    console.log(props.events)
-  },
-  { deep: true }
-)
-
 watch([currentPage, itemsCount], async () => {
   router.push({
     query: {
