@@ -1,0 +1,42 @@
+.settings-calendar__title {
+  @include heading-m-h5;
+  color: var(--secondary-dark);
+}
+.settings-calendar__content {
+  margin-top: 24px;
+}
+.settings-calendar__search {
+  max-width: 330px;
+}
+.settings-calendar__items {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.sci {
+  background-color: var(--white);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sci__title {
+  @include heading-b-h6;
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.sci__flag {
+  display: block;
+  max-height: 1em;
+}
+
+.sci__checkbox {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
