@@ -9,7 +9,12 @@ defineProps<iProps>()
 </script>
 
 <template>
-  <nuxt-link v-if="link" :to="link.url" class="table-row table-row--link">
+  <nuxt-link
+    v-if="link"
+    :to="link.url"
+    class="table-row table-row--link"
+    @click.stop
+  >
     <slot />
   </nuxt-link>
   <div v-else class="table-row">

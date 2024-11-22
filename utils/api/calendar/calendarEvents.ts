@@ -51,3 +51,24 @@ export const getCalendarEvents = async (
     throw error
   }
 }
+
+export const getCalendarEventsByTitleAndCountry = async (
+  Title: string,
+  Country: string
+) => {
+  try {
+    const res = await axiosInstance.get<ICalendarEvent[]>(
+      '/Calendar/GetCalendarEvents',
+      {
+        params: {
+          Title,
+          Country,
+        },
+      }
+    )
+
+    return res
+  } catch (error) {
+    throw error
+  }
+}

@@ -1,4 +1,5 @@
 export interface ITableCalendarEvent {
+  id: string
   time: string
   event: string
   country: string
@@ -9,4 +10,5 @@ export interface ITableCalendarEvent {
   dev: string | number
   unit: string
   scale: string
+  slug: string
 }

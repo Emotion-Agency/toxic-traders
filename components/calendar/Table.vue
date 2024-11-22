@@ -44,6 +44,9 @@ const sortedEvents = computed(() => {
   })
 })
 
+const router = useRouter()
+const route = useRoute()
+
 const {
   currentPage,
   itemsCount,
@@ -54,7 +57,10 @@ const {
   onInputBlur,
   onInputChange,
   onChangeCount,
-} = usePagination(1, 100)
+} = usePagination(
+  route.query.page && Number(route.query.page),
+  route.query.count && Number(route.query.count)
+)
 
 totalCountPages.value = props.events?.length
 
@@ -63,6 +69,25 @@ const paginatedEvents = computed(() => {
   const end = start + itemsCount.value
 
   return sortedEvents.value.slice(start, end)
+})
+
+watch(
+  () => props.events,
+  () => {
+    console.log(props.events)
+  },
+  { deep: true }
+)
+
+watch([currentPage, itemsCount], async () => {
+  router.push({
+    query: {
+      ...route.query,
+
+      page: currentPage.value,
+      count: itemsCount.value,
+    },
+  })
 })
 
 const eventsGroupedByDate = computed<GroupedByDate>(() => {
@@ -134,7 +159,12 @@ const getNumberVariant = (number: number | string) => {
             <IconsCalendar />
             {{ date }}
           </div>
-          <TableRow v-for="event of eventsGroupedByDate[date]">
+          <TableRow
+            :link="{
+              url: `/calendar/${event.id}?title=${event.event}&country=${event.country}`,
+            }"
+            v-for="event of eventsGroupedByDate[date]"
+          >
             <TableCell
               :item="event.time"
               class="calendar-table__cell"
@@ -234,6 +264,7 @@ const getNumberVariant = (number: number | string) => {
                 :to="`/chart/${event.country}/${event.event}`"
                 class="calendar-table__button"
                 size="small"
+                @click.stop
               >
                 <template #start-icon>
                   <svg

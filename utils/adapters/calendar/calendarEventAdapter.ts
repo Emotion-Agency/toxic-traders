@@ -17,6 +17,7 @@ export const calendarEventAdapter = (
   }
 
   return {
+    id: event.id,
     time: `${event.date}+0`,
     event: event.title,
     country: event.country,
@@ -27,5 +28,6 @@ export const calendarEventAdapter = (
     unit: event.unit,
     scale: event.scale,
     dev: getDeviation(),
+    slug: createSlugByTitleAndCountry(event.title, event.country),
   }
 }
