@@ -5,6 +5,11 @@ import Table from '../Table.vue'
 
 interface IProps {
   events: ITableCalendarEvent[]
+  onSort: (sortBy: string, sortOrder: 1 | 2) => void
+  sortState: {
+    sortBy?: string
+    sortOrder?: 1 | 2
+  }
 }
 
 const props = defineProps<IProps>()
@@ -27,63 +32,8 @@ interface GroupedByDate {
   [key: string]: ITableCalendarEvent[]
 }
 
-const { onSort, sortState } = useSort({
-  sortBy: 'Time',
-  sortOrder: 1,
-})
-
-const sortedEvents = computed(() => {
-  return props.events.sort((a, b) => {
-    if (sortState.value.sortBy === 'Time') {
-      if (sortState.value.sortOrder === 1) {
-        return new Date(b.time).getTime() - new Date(a.time).getTime()
-      } else {
-        return new Date(a.time).getTime() - new Date(b.time).getTime()
-      }
-    }
-  })
-})
-
-const router = useRouter()
-const route = useRoute()
-
-const {
-  currentPage,
-  itemsCount,
-  searchValue,
-  totalCountPages,
-  nextPageClick,
-  prevPageClick,
-  onInputBlur,
-  onInputChange,
-  onChangeCount,
-} = usePagination(
-  route.query.page && Number(route.query.page),
-  route.query.count && Number(route.query.count)
-)
-
-totalCountPages.value = props.events?.length
-
-const paginatedEvents = computed(() => {
-  const start = (currentPage.value - 1) * itemsCount.value
-  const end = start + itemsCount.value
-
-  return sortedEvents.value.slice(start, end)
-})
-
-watch([currentPage, itemsCount], async () => {
-  router.push({
-    query: {
-      ...route.query,
-
-      page: currentPage.value,
-      count: itemsCount.value,
-    },
-  })
-})
-
 const eventsGroupedByDate = computed<GroupedByDate>(() => {
-  return paginatedEvents.value.reduce((acc, event) => {
+  return props.events.reduce((acc, event) => {
     const date = new Date(event.time).toDateString()
     if (!acc[date]) {
       acc[date] = []
@@ -293,22 +243,5 @@ const getNumberVariant = (number: number | string) => {
         </div>
       </TableBody>
     </Table>
-    <ThePagination
-      v-if="totalCountPages > 1"
-      class="calendar-table__pagination"
-      input-id="calendar-table-pagination"
-      input-name="calendar-table-pagination"
-      :total-pages="totalCountPages"
-      :current-page="currentPage"
-      :options="['25', '50', '100']"
-      :items-count="itemsCount"
-      :input-value="searchValue"
-      @next-click="nextPageClick"
-      @prev-click="prevPageClick"
-      @selected-item="onChangeCount"
-      @on-blur-value="onInputBlur"
-      @on-change-value="onInputChange"
-    >
-    </ThePagination>
   </div>
 </template>

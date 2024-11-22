@@ -109,6 +109,21 @@ const getPlaceholder = () => {
   return 'Choose the date'
 }
 
+const {
+  currentPage,
+  itemsCount,
+  totalCountPages,
+  searchValue,
+  nextPageClick,
+  prevPageClick,
+  onChangeCount,
+  onInputBlur,
+  onInputChange,
+  onSort,
+  paginatedEvents,
+  sortState,
+} = useCalendarTable(events)
+
 watch([startDate, endDate], () => {
   router.push({
     query: {
@@ -117,6 +132,7 @@ watch([startDate, endDate], () => {
       endDate: endDate.value && getDateDay(endDate.value),
     },
   })
+  currentPage.value = 1
 })
 </script>
 
@@ -172,7 +188,28 @@ watch([startDate, endDate], () => {
 
     <section v-else-if="events.length && !isLoading" class="calendar-content">
       <div class="calendar-table-wrapper">
-        <CalendarTable :events="events" />
+        <CalendarTable
+          :on-sort="onSort"
+          :sort-state="sortState"
+          :events="paginatedEvents"
+        />
+        <ThePagination
+          v-if="totalCountPages > 1"
+          class="calendar-table__pagination"
+          input-id="calendar-table-pagination"
+          input-name="calendar-table-pagination"
+          :total-pages="totalCountPages"
+          :current-page="currentPage"
+          :options="['25', '50', '100']"
+          :items-count="itemsCount"
+          :input-value="searchValue"
+          @next-click="nextPageClick"
+          @prev-click="prevPageClick"
+          @selected-item="onChangeCount"
+          @on-blur-value="onInputBlur"
+          @on-change-value="onInputChange"
+        >
+        </ThePagination>
       </div>
     </section>
     <UiLoader v-else="isLoading" />
