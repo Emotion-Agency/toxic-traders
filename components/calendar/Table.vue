@@ -225,7 +225,7 @@ onMounted(() => {
                 :to="`/chart/${event.country}/${event.event}`"
                 class="calendar-table__button"
                 size="small"
-                @click.stop
+                @click.stop.prevent
               >
                 <template #start-icon>
                   <svg
