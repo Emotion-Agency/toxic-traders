@@ -17,14 +17,6 @@ const getEvents = async () => {
   }
 }
 
-onMounted(async () => {
-  await getEvents()
-
-  if (events.value.length) {
-    activeEvent.value = events.value.find(event => event.id === route.params.id)
-  }
-})
-
 const {
   currentPage,
   itemsCount,
@@ -39,6 +31,20 @@ const {
   paginatedEvents,
   sortState,
 } = useCalendarTable(events)
+
+onMounted(async () => {
+  await getEvents()
+
+  if (events.value.length) {
+    activeEvent.value = events.value.find(event => event.id === route.params.id)
+
+    const activeElementIdx = events.value.findIndex(
+      event => event.id === route.params.id
+    )
+
+    currentPage.value = Math.ceil((activeElementIdx + 1) / itemsCount.value)
+  }
+})
 </script>
 
 <template>

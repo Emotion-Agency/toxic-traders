@@ -23,8 +23,12 @@ useHead({
 const router = useRouter()
 
 const { saveScrollPos } = useScrollPos()
+const { activeEvent } = useCalendarEvents()
 
-router.beforeEach(() => {
+router.beforeEach(route => {
+  if (!(route.name as string).includes('calendar')) {
+    activeEvent.value = null
+  }
   saveScrollPos()
 })
 </script>
