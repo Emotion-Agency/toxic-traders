@@ -74,10 +74,25 @@ const getNumberVariant = (number: number | string) => {
 
   return 'positive'
 }
+
+const $el = ref<HTMLElement | null>(null)
+
+const { activeEvent } = useCalendarEvents()
+
+onMounted(() => {
+  setTimeout(() => {
+    if (activeEvent.value) {
+      const el = document.getElementById(activeEvent.value.id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }
+  }, 200)
+})
 </script>
 
 <template>
-  <div>
+  <div ref="$el">
     <Table class="calendar-table">
       <TableHead>
         <TableRow>
@@ -103,10 +118,13 @@ const getNumberVariant = (number: number | string) => {
             {{ date }}
           </div>
           <TableRow
+            v-for="event of eventsGroupedByDate[date]"
+            :key="event.id"
+            :id="event.id"
             :link="{
               url: `/calendar/${event.id}?title=${event.event}&country=${event.country}`,
             }"
-            v-for="event of eventsGroupedByDate[date]"
+            :class="[event.id === activeEvent?.id && 'table-row--active']"
           >
             <TableCell
               :item="event.time"

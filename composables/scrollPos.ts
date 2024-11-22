@@ -6,7 +6,6 @@ export const useScrollPos = () => {
   }
 
   const routeScrollPos = useState<IRouteScrollPos[]>('routeScrollPos', () => [])
-  const elScrollPos = useState<IRouteScrollPos[]>('elScrollPos', () => [])
 
   const route = useRoute()
 
@@ -20,17 +19,5 @@ export const useScrollPos = () => {
     }
   }
 
-  const saveElScrollPos = (el: HTMLElement, key: string) => {
-    const { x, y } = useScroll(el)
-
-    const pos = elScrollPos.value.find(item => item[key])
-
-    if (!pos) {
-      elScrollPos.value.push({ [key]: { x: x.value, y: y.value } })
-    } else {
-      pos[key] = { x: x.value, y: y.value }
-    }
-  }
-
-  return { routeScrollPos, saveScrollPos, elScrollPos, saveElScrollPos }
+  return { routeScrollPos, saveScrollPos }
 }

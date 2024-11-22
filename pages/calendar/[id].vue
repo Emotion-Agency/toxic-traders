@@ -3,7 +3,7 @@ const route = useRoute()
 
 const { country, title } = route.query
 
-const { events, getEventsByName } = useCalendarEvents()
+const { events, getEventsByName, activeEvent } = useCalendarEvents()
 const isLoading = ref(false)
 
 const getEvents = async () => {
@@ -19,6 +19,10 @@ const getEvents = async () => {
 
 onMounted(async () => {
   await getEvents()
+
+  if (events.value.length) {
+    activeEvent.value = events.value.find(event => event.id === route.params.id)
+  }
 })
 
 const {

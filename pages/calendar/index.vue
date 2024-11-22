@@ -48,40 +48,8 @@ const onSaveDate = async (reset?: boolean) => {
   }
 }
 
-const $el = ref<HTMLElement | null>(null)
-
-const { routeScrollPos, saveElScrollPos, elScrollPos } = useScrollPos()
-
 onMounted(async () => {
   await onSaveDate()
-
-  const savedScrollPos = routeScrollPos.value.find(el => el[route.fullPath])
-
-  if (savedScrollPos) {
-    window.scrollTo({
-      top: savedScrollPos[route.fullPath].y,
-      left: savedScrollPos[route.fullPath].x,
-    })
-  }
-
-  const $scrollableElement = $el.value.querySelector(
-    '.table__wrapper'
-  ) as HTMLElement
-
-  const savedElScrollPos = elScrollPos.value?.find(el => el['calendar-table'])
-
-  if (savedElScrollPos) {
-    $scrollableElement.scrollTop = savedElScrollPos['calendar-table']?.y
-    $scrollableElement.scrollLeft = savedElScrollPos['calendar-table']?.x
-  }
-})
-
-onBeforeRouteLeave(() => {
-  const $scrollableElement = $el.value.querySelector(
-    '.table__wrapper'
-  ) as HTMLElement
-
-  saveElScrollPos($scrollableElement, 'calendar-table')
 })
 
 const onSelect = (e: iSelectInput) => {
@@ -169,7 +137,7 @@ watch([startDate, endDate], () => {
 </script>
 
 <template>
-  <main ref="$el">
+  <main>
     <section class="calendar">
       <div class="container calendar__wrapper">
         <h1 class="calendar__title">Calendar</h1>

@@ -9,6 +9,7 @@ import {
 
 export const useCalendarEvents = () => {
   const events = ref<ITableCalendarEvent[]>([])
+  const activeEvent = useState<ITableCalendarEvent>('activeEvent', () => null)
 
   const { toast } = useToasts()
 
@@ -65,5 +66,5 @@ export const useCalendarEvents = () => {
     }
   }
 
-  return { events, getEvents, getEventsByDate, getEventsByName }
+  return { events, getEvents, getEventsByDate, getEventsByName, activeEvent }
 }

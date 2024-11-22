@@ -88,6 +88,10 @@
       background-color: var(--primary-light);
     }
   }
+
+  &--active {
+    background-color: var(--primary-light);
+  }
 }
 
 .table-cell__link {
