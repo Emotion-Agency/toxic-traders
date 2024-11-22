@@ -46,8 +46,19 @@ const {
     <section class="calendar">
       <div class="container calendar__wrapper">
         <h1 class="calendar__title">{{ country }} {{ title }}</h1>
+        <div class="calendar__menu">
+          <TheButton
+            tag="nuxt-link"
+            href="/settings/calendar"
+            class="calendar__setings-btn"
+          >
+            <template #start-icon>
+              <IconsSettings />
+            </template>
+            Calendar Settings
+          </TheButton>
+        </div>
       </div>
-      <div class="calendar__menu"></div>
     </section>
 
     <NotFound

@@ -177,6 +177,17 @@ watch([startDate, endDate], () => {
             v-model:endDate="endDate"
             @save="onSaveDate(true)"
           />
+
+          <TheButton
+            tag="nuxt-link"
+            href="/settings/calendar"
+            class="calendar__setings-btn"
+          >
+            <template #start-icon>
+              <IconsSettings />
+            </template>
+            Calendar Settings
+          </TheButton>
         </div>
       </div>
     </section>
