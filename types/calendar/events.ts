@@ -11,4 +11,6 @@ export interface ITableCalendarEvent {
   unit: string
   scale: string
   slug: string
+  symbols: string[]
+  disable: boolean
 }

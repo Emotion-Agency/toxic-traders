@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { iCheckboxData } from '~/types/headless/input'
+import { getBrokerServerAccountSymbolsNames } from '~/utils/api/brokers/brokerServerAccountSymbols'
 
 const searchInput = reactive({
   required: false,
@@ -7,7 +7,7 @@ const searchInput = reactive({
   name: 'Settings search',
   type: 'text',
   value: '',
-  placeholder: 'Search users',
+  placeholder: 'Search news',
   disabled: false,
   isRightButton: true,
 })
@@ -25,6 +25,36 @@ const onImportanceChange = (value: iInputData) => {
 const onSymbolChange = (value: iInputData) => {
   console.log(value)
 }
+
+const { events, getAllEventsByPage } = useCalendarEvents()
+
+const countries = ref([])
+const symbols = ref([])
+
+const getCountryFlag = (countryCode: string) => {
+  const country = countries.value.find(
+    country => country.countryShortName === countryCode
+  )
+  return country?.countryFlag
+}
+
+const isLoading = ref(false)
+
+const { getFlags } = useFlags()
+const { getSymbols } = useSymbols()
+
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    await getAllEventsByPage(1, 25)
+    countries.value = await getFlags()
+    symbols.value = await getSymbols()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+})
 </script>
 
 <template>
@@ -48,21 +78,29 @@ const onSymbolChange = (value: iInputData) => {
         </template>
       </InputField>
     </div>
-
-    <ul class="settings-calendar__items">
-      <li v-for="i in 50" :key="i" class="settings-calendar__item sci">
+    <UiLoader v-if="isLoading" />
+    <ul
+      v-else-if="!isLoading && events?.length"
+      class="settings-calendar__items"
+    >
+      <li
+        v-for="event of events"
+        :key="event.id"
+        class="settings-calendar__item sci"
+      >
         <h3 class="sci__title">
           <span>
             <img
+              v-if="getCountryFlag(event.country)?.url"
               class="sci__flag"
-              src="https://flagcdn.com/w320/th.png"
-              alt=""
+              :src="getCountryFlag(event.country)?.url"
+              :alt="getCountryFlag(event.country).alt"
             />
           </span>
-          KW Liberation Day
+          <b> {{ event.country }}</b> <span>{{ event.event }}</span>
         </h3>
         <InputCheckbox
-          :id="`sci--${i}`"
+          :id="`sci--${event.id}`"
           name="sci"
           title="sci"
           class="sci__checkbox"
@@ -87,13 +125,14 @@ const onSymbolChange = (value: iInputData) => {
         </InputSelect>
         <InputSelect
           placeholder="Choose symbol"
-          :options="['USD', 'ETH', 'BTC']"
+          :options="symbols"
           title="Main Symbol"
           class="sci__select sci__symbol"
           @select="onSymbolChange"
+          v-slot="{ renderedItems }"
         >
           <InputSelectOption
-            v-for="(option, idx) in ['USD', 'ETH', 'BTC']"
+            v-for="(option, idx) in renderedItems"
             :key="option"
             :option="option"
             :index="idx"
@@ -106,5 +145,6 @@ const onSymbolChange = (value: iInputData) => {
         </TheButton>
       </li>
     </ul>
+    <NotFound v-else />
   </section>
 </template>

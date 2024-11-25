@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ITableCalendarEvent } from '~/types/calendar/events'
-import { getCountriesFlag } from '~/utils/api/countries/getCountries'
+
 import Table from '../Table.vue'
 
 interface IProps {
@@ -44,8 +44,10 @@ const eventsGroupedByDate = computed<GroupedByDate>(() => {
   }, {})
 })
 
+const { getFlags } = useFlags()
+
 onMounted(async () => {
-  countries.value = await getCountriesFlag()
+  countries.value = await getFlags()
 })
 
 const getCountryFlag = (countryCode: string) => {

@@ -29,5 +29,7 @@ export const calendarEventAdapter = (
     scale: event.scale,
     dev: getDeviation(),
     slug: createSlugByTitleAndCountry(event.title, event.country),
+    symbols: event.symbols,
+    disable: event.disable,
   }
 }

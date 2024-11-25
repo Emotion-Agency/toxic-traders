@@ -1,6 +1,7 @@
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import { calendarEventAdapter } from '~/utils/adapters/calendar/calendarEventAdapter'
 import {
+  getAllCalendarEvents,
   getCalendarEvents,
   getCalendarEventsByTitleAndCountry,
   getFourWeeksCalendarEvents,
@@ -66,5 +67,27 @@ export const useCalendarEvents = () => {
     }
   }
 
-  return { events, getEvents, getEventsByDate, getEventsByName, activeEvent }
+  const getAllEventsByPage = async (page: number, count: number) => {
+    try {
+      const res = await getAllCalendarEvents(page, count)
+      const data = res?.data
+      if (!data) {
+        throw new Error('No data returned from the API')
+      }
+
+      prepareEvents(data)
+    } catch (error) {
+      console.error('Error fetching events:', error)
+      toast.error('An error occurred while fetching events. Please try again.')
+    }
+  }
+
+  return {
+    events,
+    getEvents,
+    getEventsByDate,
+    getEventsByName,
+    getAllEventsByPage,
+    activeEvent,
+  }
 }
