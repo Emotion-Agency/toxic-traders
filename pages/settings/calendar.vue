@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { getBrokerServerAccountSymbolsNames } from '~/utils/api/brokers/brokerServerAccountSymbols'
-
 const searchInput = reactive({
   required: false,
   id: 'settings-users-search',
@@ -12,24 +10,49 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
-const onSearch = () => {}
-
-const onDisable = value => {
-  console.log(value)
-}
-
-const onImportanceChange = (value: iInputData) => {
-  console.log(value)
-}
-
-const onSymbolChange = (value: iInputData) => {
-  console.log(value)
-}
-
 const { events, getAllEventsByPage } = useCalendarEvents()
 
 const countries = ref([])
 const symbols = ref([])
+const filteredSymbols = ref([])
+const selectedSymbol = ref<string>(null)
+
+const symbolsSelect = computed(() => {
+  return {
+    options: filteredSymbols.value,
+    placeholder: 'Choose symbol',
+    title: 'Main Symbol',
+    searchInput: {
+      required: false,
+      name: 'Spreads search symbol',
+      type: 'text',
+      placeholder: 'Search symbol',
+      isRightButton: true,
+    },
+  }
+})
+
+const onSymbolSearch = (searchValue: string) => {
+  filteredSymbols.value = symbols.value?.filter(
+    item =>
+      item.toLowerCase().trim().includes(searchValue.toLowerCase().trim()) &&
+      item !== selectedSymbol.value
+  )
+}
+
+const onSearch = () => {}
+
+const onDisable = (value, id: number) => {
+  console.log(value, id)
+}
+
+const onImportanceChange = (value: iInputData, id: number) => {
+  console.log(value, id)
+}
+
+const onSymbolChange = (value: iInputData, id: number) => {
+  console.log(value)
+}
 
 const getCountryFlag = (countryCode: string) => {
   const country = countries.value.find(
@@ -49,6 +72,7 @@ onMounted(async () => {
     await getAllEventsByPage(1, 25)
     countries.value = await getFlags()
     symbols.value = await getSymbols()
+    filteredSymbols.value = symbols.value
   } catch (error) {
     console.error(error)
   } finally {
@@ -105,14 +129,15 @@ onMounted(async () => {
           title="sci"
           class="sci__checkbox"
           value="Disable"
-          @input-value="onDisable"
+          @input-value="onDisable($event, event.id)"
         />
         <InputSelect
+          :id="`sci-imp--${event.id}`"
           placeholder="Choose importance"
           :options="['Low', 'Medium', 'High']"
           title="Importance"
           class="sci__select sci__importance"
-          @select="onImportanceChange"
+          @select="onImportanceChange($event, event.id)"
         >
           <InputSelectOption
             v-for="(option, idx) in ['Low', 'Medium', 'High']"
@@ -124,12 +149,18 @@ onMounted(async () => {
           </InputSelectOption>
         </InputSelect>
         <InputSelect
-          placeholder="Choose symbol"
-          :options="symbols"
-          title="Main Symbol"
+          :search-input="{
+            ...symbolsSelect.searchInput,
+            id: `sci-symbol-search--${event.id}`,
+          }"
+          :id="`sci-symbol--${event.id}`"
+          :placeholder="symbolsSelect.placeholder"
+          :options="symbolsSelect.options"
+          :title="symbolsSelect.title"
           class="sci__select sci__symbol"
-          @select="onSymbolChange"
           v-slot="{ renderedItems }"
+          @select="onSymbolChange($event, event.id)"
+          @search="onSymbolSearch"
         >
           <InputSelectOption
             v-for="(option, idx) in renderedItems"
