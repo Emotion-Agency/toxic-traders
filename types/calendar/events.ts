@@ -1,5 +1,5 @@
 export interface ITableCalendarEvent {
-  id: string
+  id: number
   time: string
   event: string
   country: string

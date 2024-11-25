@@ -82,7 +82,7 @@ const { activeEvent } = useCalendarEvents()
 onMounted(() => {
   setTimeout(() => {
     if (activeEvent.value) {
-      const el = document.getElementById(activeEvent.value.id)
+      const el = document.getElementById(activeEvent.value?.id?.toString())
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }

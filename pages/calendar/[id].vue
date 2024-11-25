@@ -36,11 +36,17 @@ onMounted(async () => {
   await getEvents()
 
   if (events.value.length) {
-    activeEvent.value = events.value.find(event => event.id === route.params.id)
+    activeEvent.value = events.value.find(
+      event => event.id?.toString() === route.params.id
+    )
 
     const activeElementIdx = events.value.findIndex(
-      event => event.id === route.params.id
+      event => event.id?.toString() === route.params.id
     )
+
+    if (!activeElementIdx) return
+
+    console.log(events.value, activeEvent.value)
 
     currentPage.value = Math.ceil((activeElementIdx + 1) / itemsCount.value)
   }
