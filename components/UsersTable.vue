@@ -112,11 +112,11 @@ const resetModalClose = () => {
           user.email
         }}</TableCell>
         <TableCell
-          item="level"
+          :item="user.roles[0]"
           :class="`table-cell--level`"
           :disable-tooltip="true"
         >
-          <TheBadge variant="outlined" text="level" />
+          <TheBadge variant="outlined" :text="user.roles[0]" />
         </TableCell>
         <TableCell
           item="access"

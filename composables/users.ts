@@ -7,7 +7,7 @@ import { getUserByIdRequest } from '~/utils/api/auth/user'
 
 export const useUsers = () => {
   const user = useState<iUser>('user', () => null)
-  const users = computed<iUser[]>(() => user.value?.user?.createdUsers || [])
+  const users = computed<iUser[]>(() => user.value?.createdUsers || [])
 
   const { toast } = useToasts()
 

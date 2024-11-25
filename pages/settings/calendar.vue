@@ -62,7 +62,7 @@ const onSymbolChange = (value: iInputData) => {
           KW Liberation Day
         </h3>
         <InputCheckbox
-          id="sci"
+          :id="`sci--${i}`"
           name="sci"
           title="sci"
           class="sci__checkbox"

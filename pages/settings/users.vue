@@ -51,7 +51,7 @@ const onCreateUser = async (data: iCreatedUser) => {
       allowDBAccess: data.access,
     })
 
-    await fetchUser(user.value.user.id)
+    await fetchUser(user.value.id)
     createUserModalClose()
   } catch (error) {
     console.error(error)
@@ -67,10 +67,8 @@ const searchedUsers = computed(() => {
 
   return users.value.filter(user => {
     return (
-      user.user.userName
-        .toLowerCase()
-        .includes(searchInput.value.toLowerCase()) ||
-      user.user.email.toLowerCase().includes(searchInput.value.toLowerCase())
+      user.userName.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchInput.value.toLowerCase())
     )
   })
 })

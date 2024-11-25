@@ -39,6 +39,15 @@
 
   .table-row {
     background-color: var(--gray-800);
+    &--link {
+      &:hover {
+        background-color: var(--secondary-dark) !important;
+      }
+    }
+
+    &--active {
+      background-color: var(--secondary-dark) !important;
+    }
   }
 
   .table-head .table-row {
