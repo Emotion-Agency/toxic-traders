@@ -22,12 +22,12 @@ const id = inject('id') as string
 
 <template>
   <li
+    ref="itemRef"
     :data-dropdown-item="id"
     role="menuitem"
     tabindex="0"
     @click="handleClick"
     @keydown.enter.prevent="handleClick"
-    ref="itemRef"
     @focus="setActive"
   >
     <slot />

@@ -15,6 +15,10 @@ const isOpen = inject('isOpen') as Ref<boolean>
 
 const $triggerEl = inject('triggerEl') as Ref<HTMLElement | null>
 
+const registerWrapper = inject('registerWrapper') as (
+  wrapper: HTMLElement
+) => void
+
 const $el = ref<HTMLElement | null>(null)
 
 const setupPosition = () => {
@@ -50,6 +54,8 @@ const setupPosition = () => {
 
 onMounted(() => {
   resize.on(setupPosition)
+
+  registerWrapper($el.value as HTMLElement)
 })
 
 onBeforeUnmount(() => {
@@ -71,7 +77,7 @@ const id = inject('id') as string
 </script>
 
 <template>
-  <ul ref="$el" :data-dropdown-items="id" v-show="isOpen" role="menu">
+  <ul v-show="isOpen" ref="$el" :data-dropdown-items="id" role="menu">
     <slot />
   </ul>
 </template>

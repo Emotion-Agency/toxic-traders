@@ -20,8 +20,8 @@ const id = inject('id') as string
 
 <template>
   <button
-    :data-dropdown-trigger="id"
     ref="$triggerRef"
+    :data-dropdown-trigger="id"
     @click="trigger === 'click' && toggleDropdown()"
     @keydown.space.prevent="toggleDropdown()"
     @keydown.enter.prevent="toggleDropdown()"
