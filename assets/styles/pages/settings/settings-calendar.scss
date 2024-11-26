@@ -26,17 +26,28 @@
 
 .sci__title {
   @include heading-b-h6;
-  display: flex;
-  gap: 6px;
+  vertical-align: middle;
   margin-top: 4px;
 }
 
 .sci__flag {
-  display: block;
+  display: inline-block;
   max-height: 1em;
+  margin-right: 6px;
+  vertical-align: bottom;
 }
 
 .sci__checkbox {
   flex-direction: row-reverse;
   justify-content: flex-end;
+}
+
+.sci__date {
+  @include text-small;
+}
+
+.settings-calendar__pagination {
+  width: 100%;
+  padding: 0;
+  margin-top: 24px;
 }

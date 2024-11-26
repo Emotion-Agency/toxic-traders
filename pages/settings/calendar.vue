@@ -160,6 +160,9 @@ watch([currentPage, itemsCount], async () => {
             </span>
             <b> {{ event.country }}</b> <span>{{ event.event }}</span>
           </h3>
+          <p class="sci__date">
+            {{ formatDateWithTime(event.time) }}
+          </p>
           <InputCheckbox
             :id="`sci--${event.id}`"
             name="sci"
@@ -214,6 +217,7 @@ watch([currentPage, itemsCount], async () => {
         </li>
       </ul>
       <ThePagination
+        class="settings-calendar__pagination"
         :currentPage="currentPage"
         :itemsCount="itemsCount"
         :total-pages="totalCountPages"
