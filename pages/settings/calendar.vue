@@ -169,6 +169,7 @@ watch([currentPage, itemsCount], async () => {
             title="sci"
             class="sci__checkbox"
             value="Disable"
+            :checked="event.isDisabled"
             @input-value="onDisable($event, event.id)"
           />
           <InputSelect
