@@ -10,6 +10,7 @@ import {
 
 export const useCalendarEvents = () => {
   const events = ref<ITableCalendarEvent[]>([])
+  const totalCount = ref<number>(0)
   const activeEvent = useState<ITableCalendarEvent>('activeEvent', () => null)
 
   const { toast } = useToasts()
@@ -75,7 +76,9 @@ export const useCalendarEvents = () => {
         throw new Error('No data returned from the API')
       }
 
-      prepareEvents(data)
+      prepareEvents(data.events)
+
+      totalCount.value = data.totalCount
     } catch (error) {
       console.error('Error fetching events:', error)
       toast.error('An error occurred while fetching events. Please try again.')
@@ -84,6 +87,7 @@ export const useCalendarEvents = () => {
 
   return {
     events,
+    totalCount,
     getEvents,
     getEventsByDate,
     getEventsByName,

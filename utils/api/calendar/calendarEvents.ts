@@ -21,6 +21,11 @@ export interface ICalendarEvent {
   symbols: string[]
 }
 
+export interface ICalendarEventData {
+  events: ICalendarEvent[]
+  totalCount: number
+}
+
 export const getFourWeeksCalendarEvents = async () => {
   try {
     const res = await axiosInstance.get<ICalendarEvent[]>(
@@ -77,7 +82,7 @@ export const getCalendarEventsByTitleAndCountry = async (
 
 export const getAllCalendarEvents = async (page: number, pageSize: number) => {
   try {
-    const res = await axiosInstance.get<ICalendarEvent[]>(
+    const res = await axiosInstance.get<ICalendarEventData>(
       '/Calendar/GetCalendarEvents',
       {
         params: {

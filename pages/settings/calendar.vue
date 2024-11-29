@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { IOHLCSymbol } from '~/types/ohlc/symbols'
+
 const searchInput = reactive({
   required: false,
   id: 'settings-users-search',
@@ -10,11 +12,11 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
-const { events, getAllEventsByPage } = useCalendarEvents()
+const { events, totalCount, getAllEventsByPage } = useCalendarEvents()
 
 const countries = ref([])
-const symbols = ref([])
-const filteredSymbols = ref([])
+const symbols = ref<IOHLCSymbol[]>([])
+const filteredSymbols = ref<IOHLCSymbol[]>([])
 const selectedSymbol = ref<string>(null)
 
 const route = useRoute()
@@ -37,7 +39,7 @@ const {
 
 const symbolsSelect = computed(() => {
   return {
-    options: filteredSymbols.value,
+    options: filteredSymbols.value.map(item => item.symbol),
     placeholder: 'Choose symbol',
     title: 'Main Symbol',
     searchInput: {
@@ -53,8 +55,11 @@ const symbolsSelect = computed(() => {
 const onSymbolSearch = (searchValue: string) => {
   filteredSymbols.value = symbols.value?.filter(
     item =>
-      item.toLowerCase().trim().includes(searchValue.toLowerCase().trim()) &&
-      item !== selectedSymbol.value
+      item.symbol
+        .toLowerCase()
+        .trim()
+        .includes(searchValue.toLowerCase().trim()) &&
+      item.symbol !== selectedSymbol.value
   )
 }
 
@@ -88,7 +93,7 @@ onMounted(async () => {
   try {
     isLoading.value = true
     await getAllEventsByPage(currentPage.value, itemsCount.value)
-    totalCountPages.value = 1000
+    totalCountPages.value = totalCount.value
     countries.value = await getFlags()
     symbols.value = await getSymbols()
     filteredSymbols.value = symbols.value
@@ -169,7 +174,7 @@ watch([currentPage, itemsCount], async () => {
             title="sci"
             class="sci__checkbox"
             value="Disable"
-            :checked="event.isDisabled"
+            :checked="event.disable"
             @input-value="onDisable($event, event.id)"
           />
           <InputSelect

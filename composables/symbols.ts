@@ -1,16 +1,18 @@
+import type { IOHLCSymbol } from '~/types/ohlc/symbols'
 import { getBrokerServerAccountSymbolsNames } from '~/utils/api/brokers/brokerServerAccountSymbols'
+import { getOHLCSymbols } from '~/utils/api/ohlc/symbols'
 
 export const useSymbols = () => {
-  const symbols = useState<string[]>('symbols', () => [])
+  const OHLCsymbols = useState<IOHLCSymbol[]>('OHLCsymbols', () => [])
 
-  const getSymbols = async (): Promise<string[]> => {
+  const getSymbols = async (): Promise<IOHLCSymbol[]> => {
     try {
-      if (symbols.value.length) return symbols.value
-      const data = await getBrokerServerAccountSymbolsNames()
+      if (OHLCsymbols.value.length) return OHLCsymbols.value
+      const data = await getOHLCSymbols()
 
-      symbols.value = data
+      OHLCsymbols.value = data
 
-      return symbols.value
+      return OHLCsymbols.value
     } catch (e) {
       console.error(e.message)
       throw e
