@@ -1,3 +1,5 @@
+import type { ICalendarEventSymbol } from '~/utils/api/calendar/calendarEvents'
+
 export interface ITableCalendarEvent {
   id: number
   time: string
@@ -11,6 +13,6 @@ export interface ITableCalendarEvent {
   unit: string
   scale: string
   slug: string
-  symbols: string[]
+  symbols: ICalendarEventSymbol[]
   disable: boolean
 }

@@ -1,10 +1,13 @@
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import { calendarEventAdapter } from '~/utils/adapters/calendar/calendarEventAdapter'
 import {
+  bindOHLCSymbolToEvent,
+  disableCalendarEvent,
   getAllCalendarEvents,
   getCalendarEvents,
   getCalendarEventsByTitleAndCountry,
   getFourWeeksCalendarEvents,
+  setImportanceToEvent,
   type ICalendarEvent,
 } from '~/utils/api/calendar/calendarEvents'
 
@@ -85,13 +88,60 @@ export const useCalendarEvents = () => {
     }
   }
 
+  const disableEvent = async (
+    title: string,
+    country: string,
+    value: boolean
+  ) => {
+    try {
+      await disableCalendarEvent(title, country, value)
+    } catch (error) {
+      console.error('Error disabling event:', error)
+      toast.error(
+        'An error occurred while disabling the event. Please try again.'
+      )
+    }
+  }
+
+  const bindSymbol = async (
+    title: string,
+    country: string,
+    symbolId: number,
+    order: number
+  ) => {
+    try {
+      await bindOHLCSymbolToEvent(title, country, symbolId, order)
+    } catch (error) {
+      console.error('Error binding symbols:', error)
+      toast.error('An error occurred while binding symbols. Please try again.')
+    }
+  }
+
+  const changeImportance = async (
+    title: string,
+    country: string,
+    value: 0 | 1 | 2
+  ) => {
+    try {
+      await setImportanceToEvent(title, country, value)
+    } catch (error) {
+      console.error('Error changing event importance:', error)
+      toast.error(
+        'An error occurred while changing event importance. Please try again.'
+      )
+    }
+  }
+
   return {
     events,
     totalCount,
+    activeEvent,
     getEvents,
     getEventsByDate,
     getEventsByName,
     getAllEventsByPage,
-    activeEvent,
+    disableEvent,
+    bindSymbol,
+    changeImportance,
   }
 }

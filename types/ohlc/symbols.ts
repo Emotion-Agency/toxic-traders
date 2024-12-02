@@ -10,7 +10,7 @@ export interface IOHLCRow {
 }
 
 export interface IOHLCSymbol {
-  id: string
+  id: number
   symbol: string
   serverName: string
   serverType: number

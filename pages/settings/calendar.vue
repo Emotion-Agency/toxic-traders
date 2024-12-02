@@ -14,10 +14,7 @@ const searchInput = reactive({
 
 const { events, totalCount, getAllEventsByPage } = useCalendarEvents()
 
-const countries = ref([])
 const symbols = ref<IOHLCSymbol[]>([])
-const filteredSymbols = ref<IOHLCSymbol[]>([])
-const selectedSymbol = ref<string>(null)
 
 const route = useRoute()
 const router = useRouter()
@@ -37,56 +34,10 @@ const {
   route.query.count ? Number(route.query.count) : 100
 )
 
-const symbolsSelect = computed(() => {
-  return {
-    options: filteredSymbols.value.map(item => item.symbol),
-    placeholder: 'Choose symbol',
-    title: 'Main Symbol',
-    searchInput: {
-      required: false,
-      name: 'Spreads search symbol',
-      type: 'text',
-      placeholder: 'Search symbol',
-      isRightButton: true,
-    },
-  }
-})
-
-const onSymbolSearch = (searchValue: string) => {
-  filteredSymbols.value = symbols.value?.filter(
-    item =>
-      item.symbol
-        .toLowerCase()
-        .trim()
-        .includes(searchValue.toLowerCase().trim()) &&
-      item.symbol !== selectedSymbol.value
-  )
-}
-
 const onSearch = () => {}
-
-const onDisable = (value, id: number) => {
-  console.log(value, id)
-}
-
-const onImportanceChange = (value: iInputData, id: number) => {
-  console.log(value, id)
-}
-
-const onSymbolChange = (value: iInputData, id: number) => {
-  console.log(value)
-}
-
-const getCountryFlag = (countryCode: string) => {
-  const country = countries.value.find(
-    country => country.countryShortName === countryCode
-  )
-  return country?.countryFlag
-}
 
 const isLoading = ref(false)
 
-const { getFlags } = useFlags()
 const { getSymbols } = useSymbols()
 
 onMounted(async () => {
@@ -94,9 +45,8 @@ onMounted(async () => {
     isLoading.value = true
     await getAllEventsByPage(currentPage.value, itemsCount.value)
     totalCountPages.value = totalCount.value
-    countries.value = await getFlags()
+
     symbols.value = await getSymbols()
-    filteredSymbols.value = symbols.value
   } catch (error) {
     console.error(error)
   } finally {
@@ -149,78 +99,12 @@ watch([currentPage, itemsCount], async () => {
     <UiLoader v-if="isLoading" />
     <div v-if="events?.length">
       <ul class="settings-calendar__items">
-        <li
+        <CalendarSettingsEvent
           v-for="event of events"
           :key="event.id"
-          class="settings-calendar__item sci"
-        >
-          <h3 class="sci__title">
-            <span>
-              <img
-                v-if="getCountryFlag(event.country)?.url"
-                class="sci__flag"
-                :src="getCountryFlag(event.country)?.url"
-                :alt="getCountryFlag(event.country).alt"
-              />
-            </span>
-            <b> {{ event.country }}</b> <span>{{ event.event }}</span>
-          </h3>
-          <p class="sci__date">
-            {{ formatDateWithTime(event.time) }}
-          </p>
-          <InputCheckbox
-            :id="`sci--${event.id}`"
-            name="sci"
-            title="sci"
-            class="sci__checkbox"
-            value="Disable"
-            :checked="event.disable"
-            @input-value="onDisable($event, event.id)"
-          />
-          <InputSelect
-            :id="`sci-imp--${event.id}`"
-            placeholder="Choose importance"
-            :options="['Low', 'Medium', 'High']"
-            title="Importance"
-            class="sci__select sci__importance"
-            @select="onImportanceChange($event, event.id)"
-          >
-            <InputSelectOption
-              v-for="(option, idx) in ['Low', 'Medium', 'High']"
-              :key="option"
-              :option="option"
-              :index="idx"
-            >
-              {{ option }}
-            </InputSelectOption>
-          </InputSelect>
-          <InputSelect
-            :search-input="{
-              ...symbolsSelect.searchInput,
-              id: `sci-symbol-search--${event.id}`,
-            }"
-            :id="`sci-symbol--${event.id}`"
-            :placeholder="symbolsSelect.placeholder"
-            :options="symbolsSelect.options"
-            :title="symbolsSelect.title"
-            class="sci__select sci__symbol"
-            v-slot="{ renderedItems }"
-            @select="onSymbolChange($event, event.id)"
-            @search="onSymbolSearch"
-          >
-            <InputSelectOption
-              v-for="(option, idx) in renderedItems"
-              :key="option"
-              :option="option"
-              :index="idx"
-            >
-              {{ option }}
-            </InputSelectOption>
-          </InputSelect>
-          <TheButton class="sci__button" button-size="small">
-            Reactions Settings
-          </TheButton>
-        </li>
+          :event="event"
+          :symbols="symbols"
+        />
       </ul>
       <ThePagination
         class="settings-calendar__pagination"
