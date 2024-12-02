@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ITableCalendarEvent } from '~/types/calendar/events'
+import type { IReactionItem } from '~/types/calendar/reactions'
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
 
 const searchInput = reactive({
@@ -76,6 +77,10 @@ watch([currentPage, itemsCount], async () => {
 })
 
 const reactionEvent = ref<ITableCalendarEvent>(null)
+
+const updateReactions = async (items: IReactionItem[]) => {
+  console.log(items)
+}
 </script>
 
 <template>
@@ -129,9 +134,10 @@ const reactionEvent = ref<ITableCalendarEvent>(null)
     <NotFound v-if="!events?.length && !isLoading" />
     <CalendarSettingsReactionModal
       :is-open="!!reactionEvent"
-      @close="reactionEvent = null"
       :event="reactionEvent"
       :symbols="symbols"
+      @close="reactionEvent = null"
+      @save="updateReactions"
     />
   </section>
 </template>

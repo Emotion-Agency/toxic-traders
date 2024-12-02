@@ -3,34 +3,28 @@ interface iProps {
   id: string
   option: string
   name: string
-  type?: string
   disabled?: boolean
 }
 
 defineProps<iProps>()
 
 const emit = defineEmits(['inputValue'])
-
-const isChecked = ref(false)
+const model = defineModel<string>()
 </script>
 
 <template>
-  <label
-    :for="option"
-    class="radio-input"
-    :class="disabled && 'radio-input--disabled'"
-  >
+  <label class="radio-input" :class="disabled && 'radio-input--disabled'">
     <span class="radio-input__text">
       {{ option }}
     </span>
     <input
       :id="id"
-      :type="type"
+      type="radio"
       :name="name"
       :value="option"
       :disabled="disabled"
-      v-model="isChecked"
       class="radio-input__type"
+      v-model="model"
       @change="emit('inputValue', option)"
     />
     <span class="radio-input__checkmark" />

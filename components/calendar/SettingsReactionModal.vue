@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+import { dir } from 'console'
+import type { iSelectInput } from '~/types'
 import type { ITableCalendarEvent } from '~/types/calendar/events'
+import type { IReactionItem } from '~/types/calendar/reactions'
+import type { iSelectData } from '~/types/headless/input'
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
+import type { ICalendarEventSymbol } from '~/utils/api/calendar/calendarEvents'
 
 interface IProps {
   isOpen: boolean
@@ -8,35 +13,59 @@ interface IProps {
   symbols?: IOHLCSymbol[]
 }
 
-defineProps<IProps>()
+const props = defineProps<IProps>()
 
 const emit = defineEmits(['close', 'save'])
 
-const items = ref([
-  {
-    title: 'Item 1',
-    options: ['Option 1', 'Option 2', 'Option 3'],
-  },
-  {
-    title: 'Item 2',
-    options: ['Option 1', 'Option 2', 'Option 3'],
-  },
-  {
-    title: 'Item 3',
-    options: ['Option 1', 'Option 2', 'Option 3'],
-  },
-])
-
-const addItem = () => {
-  items.value.push({
-    title: 'Item ' + (items.value.length + 1),
-    options: ['Option 1', 'Option 2', 'Option 3'],
-  })
+const itemsAdapter = (symbol: ICalendarEventSymbol): IReactionItem => {
+  return {
+    ohlcSymbol: symbol.ohlcSymbol.symbol,
+    direction: symbol.tradeDirection ? 'Buy' : 'Sell',
+    order: symbol.order,
+  }
 }
 
-const direction = ref<'Buy' | 'Sell'>('Buy')
+const items = ref<IReactionItem[]>(
+  props.event?.symbols?.map(symbol => itemsAdapter(symbol)) || []
+)
 
-const onSave = () => {}
+watchDeep(
+  () => props.event?.symbols,
+  () => {
+    items.value = props.event?.symbols?.map(symbol => itemsAdapter(symbol))
+  }
+)
+
+const addItem = () => {
+  items.value = [
+    ...items.value,
+    {
+      ohlcSymbol: '',
+      direction: 'Buy',
+      order: items.value.length + 1,
+    },
+  ]
+}
+
+const removeItem = (idx: number) => {
+  items.value = items.value.filter((_, i) => i !== idx)
+}
+
+const filteredOptions = computed(() => {
+  return props.symbols
+    ?.map(symbol => symbol.symbol)
+    ?.filter(symbol => {
+      return !items.value.some(item => item.ohlcSymbol === symbol)
+    })
+})
+
+const onSelect = (e: iSelectInput, idx: number) => {
+  items.value[idx].ohlcSymbol = e.value
+}
+
+const onSave = () => {
+  emit('save', items.value)
+}
 </script>
 
 <template>
@@ -48,17 +77,19 @@ const onSave = () => {}
   >
     <div v-if="symbols?.length" class="scrm__accordion-wrapper">
       <TheAccordion
-        v-for="(symbol, idx) in event?.symbols"
+        v-for="(symbol, idx) in items"
         :key="idx"
         :title="'#' + (idx + 1)"
         additional-button="Remove"
         class="scrm__accordion"
+        @action-click="removeItem(idx)"
       >
         <InputSelect
           v-slot="{ renderedItems }"
-          :options="symbols?.map(symbol => symbol.symbol)"
+          :options="filteredOptions"
           placeholder="Select Symbol"
-          :value="symbol.ohlcSymbol.symbol"
+          :value="symbol.ohlcSymbol"
+          @select="onSelect($event, idx)"
         >
           <InputSelectOption
             v-for="(option, idx) in renderedItems"
@@ -70,8 +101,18 @@ const onSave = () => {}
         <div class="scrm__dir">
           <h6 class="scrm__dir-title">Direction</h6>
           <div class="scrm__dir-opts">
-            <InputRadio option="Buy" id="" name="Direction" />
-            <InputRadio option="Sell" id="" name="Direction" />
+            <InputRadio
+              v-model="items[idx].direction"
+              option="Buy"
+              id=""
+              :name="`Direction-${idx}`"
+            />
+            <InputRadio
+              v-model="items[idx].direction"
+              option="Sell"
+              id=""
+              :name="`Direction-${idx}`"
+            />
           </div>
         </div>
       </TheAccordion>
