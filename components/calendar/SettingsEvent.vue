@@ -9,6 +9,8 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
+const emit = defineEmits(['openReactions'])
+
 const importance = ['Low', 'Medium', 'High']
 
 const filteredSymbols = ref<IOHLCSymbol[]>(props.symbols)
@@ -173,7 +175,11 @@ const onSymbolChange = async (
         {{ option }}
       </InputSelectOption>
     </InputSelect>
-    <TheButton class="sci__button" button-size="small">
+    <TheButton
+      class="sci__button"
+      button-size="small"
+      @click="emit('openReactions', event)"
+    >
       Reactions Settings
     </TheButton>
   </li>

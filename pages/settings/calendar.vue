@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { ITableCalendarEvent } from '~/types/calendar/events'
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
 
 const searchInput = reactive({
@@ -73,6 +74,8 @@ watch([currentPage, itemsCount], async () => {
     isLoading.value = false
   }
 })
+
+const reactionEvent = ref<ITableCalendarEvent>(null)
 </script>
 
 <template>
@@ -104,6 +107,7 @@ watch([currentPage, itemsCount], async () => {
           :key="event.id"
           :event="event"
           :symbols="symbols"
+          @open-reactions="reactionEvent = $event"
         />
       </ul>
       <ThePagination
@@ -123,5 +127,11 @@ watch([currentPage, itemsCount], async () => {
       />
     </div>
     <NotFound v-if="!events?.length && !isLoading" />
+    <CalendarSettingsReactionModal
+      :is-open="!!reactionEvent"
+      @close="reactionEvent = null"
+      :event="reactionEvent"
+      :symbols="symbols"
+    />
   </section>
 </template>

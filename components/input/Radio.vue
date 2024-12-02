@@ -10,6 +10,8 @@ interface iProps {
 defineProps<iProps>()
 
 const emit = defineEmits(['inputValue'])
+
+const isChecked = ref(false)
 </script>
 
 <template>
@@ -27,6 +29,7 @@ const emit = defineEmits(['inputValue'])
       :name="name"
       :value="option"
       :disabled="disabled"
+      v-model="isChecked"
       class="radio-input__type"
       @change="emit('inputValue', option)"
     />
