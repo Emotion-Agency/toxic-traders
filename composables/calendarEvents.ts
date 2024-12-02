@@ -6,7 +6,6 @@ import {
   getAllCalendarEvents,
   getCalendarEvents,
   getCalendarEventsByTitleAndCountry,
-  getFourWeeksCalendarEvents,
   setImportanceToEvent,
   type ICalendarEvent,
 } from '~/utils/api/calendar/calendarEvents'
@@ -26,15 +25,24 @@ export const useCalendarEvents = () => {
     return events.value
   }
 
-  const getEvents = async () => {
+  const getEvents = async (page: number, count: number) => {
     try {
-      const res = await getFourWeeksCalendarEvents()
+      const twoWeeks = 12096e5
+      const res = await getAllCalendarEvents({
+        page,
+        pageSize: count,
+
+        startDate: new Date(new Date().getTime() - twoWeeks).toISOString(),
+
+        endDate: new Date(new Date().getTime() + twoWeeks).toISOString(),
+      })
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')
       }
 
-      prepareEvents(data)
+      prepareEvents(data.events)
+      totalCount.value = data.totalCount
     } catch (error) {
       console.error('Error fetching events:', error)
       toast.error('An error occurred while fetching events. Please try again.')
@@ -73,7 +81,7 @@ export const useCalendarEvents = () => {
 
   const getAllEventsByPage = async (page: number, count: number) => {
     try {
-      const res = await getAllCalendarEvents(page, count)
+      const res = await getAllCalendarEvents({ page, pageSize: count })
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')

@@ -17,20 +17,7 @@ const getEvents = async () => {
   }
 }
 
-const {
-  currentPage,
-  itemsCount,
-  totalCountPages,
-  searchValue,
-  nextPageClick,
-  prevPageClick,
-  onChangeCount,
-  onInputBlur,
-  onInputChange,
-  onSort,
-  paginatedEvents,
-  sortState,
-} = useCalendarTable(events)
+const { onSort, sortState } = useCalendarTable(events)
 
 onMounted(async () => {
   await getEvents()
@@ -47,8 +34,6 @@ onMounted(async () => {
     if (!activeElementIdx) return
 
     console.log(events.value, activeEvent.value)
-
-    currentPage.value = Math.ceil((activeElementIdx + 1) / itemsCount.value)
   }
 })
 </script>
@@ -82,26 +67,9 @@ onMounted(async () => {
       <div class="calendar-table-wrapper">
         <CalendarTable
           :sort-state="sortState"
-          :events="paginatedEvents"
+          :events="events"
           @sort="onSort"
         />
-        <ThePagination
-          v-if="totalCountPages / paginatedEvents?.length > 1"
-          class="calendar-table__pagination"
-          input-id="calendar-table-pagination"
-          input-name="calendar-table-pagination"
-          :total-pages="totalCountPages"
-          :current-page="currentPage"
-          :options="['25', '50', '100']"
-          :items-count="itemsCount"
-          :input-value="searchValue"
-          @next-click="nextPageClick"
-          @prev-click="prevPageClick"
-          @selected-item="onChangeCount"
-          @on-blur-value="onInputBlur"
-          @on-change-value="onInputChange"
-        >
-        </ThePagination>
       </div>
     </section>
     <UiLoader v-else="isLoading" />

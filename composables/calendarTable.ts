@@ -36,21 +36,7 @@ export const useCalendarTable = (events: Ref<ITableCalendarEvent[]>) => {
     route.query.count ? Number(route.query.count) : 100
   )
 
-  watch(
-    () => events.value,
-    () => {
-      totalCountPages.value = events.value?.length
-    }
-  )
-
-  const paginatedEvents = computed(() => {
-    const start = (currentPage.value - 1) * itemsCount.value
-    const end = start + itemsCount.value
-
-    return sortedEvents.value.slice(start, end)
-  })
-
-  watch([currentPage, itemsCount], async () => {
+  watch([currentPage, itemsCount], () => {
     router.push({
       query: {
         ...route.query,
@@ -72,7 +58,6 @@ export const useCalendarTable = (events: Ref<ITableCalendarEvent[]>) => {
   })
 
   return {
-    paginatedEvents,
     onSort,
     sortState,
     currentPage,

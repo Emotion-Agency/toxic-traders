@@ -35,18 +35,6 @@ export interface ICalendarEventData {
   totalCount: number
 }
 
-export const getFourWeeksCalendarEvents = async () => {
-  try {
-    const res = await axiosInstance.get<ICalendarEvent[]>(
-      '/Calendar/GetFourWeeksCalendarEvents'
-    )
-
-    return res
-  } catch (error) {
-    throw error
-  }
-}
-
 export const getCalendarEvents = async (
   startDate: string,
   endDate?: string
@@ -89,7 +77,19 @@ export const getCalendarEventsByTitleAndCountry = async (
   }
 }
 
-export const getAllCalendarEvents = async (page: number, pageSize: number) => {
+interface IGetAllCalendarEvents {
+  page: number
+  pageSize: number
+  startDate?: Date | string
+  endDate?: Date | string
+}
+
+export const getAllCalendarEvents = async ({
+  page,
+  pageSize,
+  startDate,
+  endDate,
+}: IGetAllCalendarEvents) => {
   try {
     const res = await axiosInstance.get<ICalendarEventData>(
       '/Calendar/GetCalendarEvents',
@@ -97,8 +97,8 @@ export const getAllCalendarEvents = async (page: number, pageSize: number) => {
         params: {
           page,
           pageSize,
-          startDate: '2021-01-01 00:00:00',
-          endDate: new Date(Date.now()),
+          startDate: startDate ?? '2021-01-01 00:00:00',
+          endDate: endDate ?? new Date(Date.now()),
         },
       }
     )

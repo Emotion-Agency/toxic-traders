@@ -17,13 +17,29 @@ function formatDate(date: Date): string {
 
 const isModalOpen = ref(false)
 
-const { events, getEvents, getEventsByDate } = useCalendarEvents()
+const { events, getEvents, getEventsByDate, totalCount } = useCalendarEvents()
 const isLoading = ref(false)
+
+const {
+  currentPage,
+  itemsCount,
+  totalCountPages,
+  searchValue,
+  nextPageClick,
+  prevPageClick,
+  onChangeCount,
+  onInputBlur,
+  onInputChange,
+  onSort,
+  sortState,
+} = useCalendarTable(events)
 
 const getAllEvents = async () => {
   try {
     isLoading.value = true
-    await getEvents()
+    await getEvents(currentPage.value, itemsCount.value)
+
+    totalCountPages.value = totalCount.value
   } catch (error) {
     console.error(error)
   } finally {
@@ -110,21 +126,6 @@ const onReset = () => {
   getAllEvents()
 }
 
-const {
-  currentPage,
-  itemsCount,
-  totalCountPages,
-  searchValue,
-  nextPageClick,
-  prevPageClick,
-  onChangeCount,
-  onInputBlur,
-  onInputChange,
-  onSort,
-  paginatedEvents,
-  sortState,
-} = useCalendarTable(events)
-
 watch([startDate, endDate], () => {
   router.push({
     query: {
@@ -134,6 +135,10 @@ watch([startDate, endDate], () => {
     },
   })
   currentPage.value = 1
+})
+
+watch([currentPage, itemsCount], () => {
+  getAllEvents()
 })
 </script>
 
@@ -208,11 +213,11 @@ watch([startDate, endDate], () => {
       <div class="calendar-table-wrapper">
         <CalendarTable
           :sort-state="sortState"
-          :events="paginatedEvents"
+          :events="events"
           @sort="onSort"
         />
         <ThePagination
-          v-if="totalCountPages / paginatedEvents?.length > 1"
+          v-if="totalCountPages / events?.length > 1"
           class="calendar-table__pagination"
           input-id="calendar-table-pagination"
           input-name="calendar-table-pagination"
