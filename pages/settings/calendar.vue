@@ -42,6 +42,8 @@ const isLoading = ref(false)
 
 const { getSymbols } = useSymbols()
 
+const { bindSymbol, setSymbolDirection } = useCalendarEvents()
+
 onMounted(async () => {
   try {
     isLoading.value = true
@@ -78,8 +80,37 @@ watch([currentPage, itemsCount], async () => {
 
 const reactionEvent = ref<ITableCalendarEvent>(null)
 
-const updateReactions = async (items: IReactionItem[]) => {
+const { toast } = useToasts()
+
+const updateReactions = async (
+  items: IReactionItem[],
+  event: ITableCalendarEvent
+) => {
   console.log(items)
+  try {
+    const itemsRequests = items.map(item => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          await bindSymbol(event.event, event.country, item.id, item.order)
+
+          await setSymbolDirection(
+            event.event,
+            event.country,
+            item.id,
+            item.direction
+          )
+
+          resolve(true)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    })
+    await Promise.all(itemsRequests)
+    toast.success('Reactions updated')
+  } catch (error) {
+    toast.error('Error updating reactions')
+  }
 }
 </script>
 

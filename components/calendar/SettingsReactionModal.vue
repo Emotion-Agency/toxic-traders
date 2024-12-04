@@ -22,6 +22,7 @@ const itemsAdapter = (symbol: ICalendarEventSymbol): IReactionItem => {
     ohlcSymbol: symbol.ohlcSymbol.symbol,
     direction: symbol.tradeDirection ? 'Buy' : 'Sell',
     order: symbol.order,
+    id: symbol.ohlcSymbolId,
   }
 }
 
@@ -43,6 +44,7 @@ const addItem = () => {
       ohlcSymbol: '',
       direction: 'Buy',
       order: items.value.length + 1,
+      id: null,
     },
   ]
 }
@@ -59,12 +61,17 @@ const filteredOptions = computed(() => {
     })
 })
 
-const onSelect = (e: iSelectInput, idx: number) => {
-  items.value[idx].ohlcSymbol = e.value
+const onSelect = (value: string, itemsIdx: number, symbolsIdx: number) => {
+  items.value[itemsIdx].ohlcSymbol = value
+
+  const symbolId = props.symbols?.find((_, i) => i === symbolsIdx)?.id
+
+  items.value[itemsIdx].id = symbolId
 }
 
 const onSave = () => {
-  emit('save', items.value)
+  const onlyFilledItems = items.value.filter(item => item.ohlcSymbol && item.id)
+  emit('save', onlyFilledItems, props.event)
 }
 </script>
 
@@ -89,13 +96,13 @@ const onSave = () => {
           :options="filteredOptions"
           placeholder="Select Symbol"
           :value="symbol.ohlcSymbol"
-          @select="onSelect($event, idx)"
         >
           <InputSelectOption
-            v-for="(option, idx) in renderedItems"
+            v-for="(option, i) in renderedItems"
             :key="option"
-            :index="idx"
+            :index="i"
             :option="option"
+            @select="onSelect($event, idx, i)"
           />
         </InputSelect>
         <div class="scrm__dir">

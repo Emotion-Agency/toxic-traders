@@ -7,6 +7,7 @@ import {
   getCalendarEvents,
   getCalendarEventsByTitleAndCountry,
   setImportanceToEvent,
+  setOHLCSymbolTradeDirection,
   type ICalendarEvent,
 } from '~/utils/api/calendar/calendarEvents'
 
@@ -140,6 +141,33 @@ export const useCalendarEvents = () => {
     }
   }
 
+  const setSymbolDirection = async (
+    title: string,
+    country: string,
+    symbolId: number,
+    tradeDirection: 'Buy' | 'Sell'
+  ) => {
+    try {
+      const res = await setOHLCSymbolTradeDirection(
+        title,
+        country,
+        symbolId,
+        tradeDirection === 'Buy' ? 0 : 1
+      )
+      const data = res?.data
+      if (!data) {
+        throw new Error('No data returned from the API')
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error fetching symbol direction:', error)
+      toast.error(
+        'An error occurred while fetching symbol direction. Please try again.'
+      )
+    }
+  }
+
   return {
     events,
     totalCount,
@@ -151,5 +179,6 @@ export const useCalendarEvents = () => {
     disableEvent,
     bindSymbol,
     changeImportance,
+    setSymbolDirection,
   }
 }
