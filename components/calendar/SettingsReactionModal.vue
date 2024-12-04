@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { dir } from 'console'
-import type { iSelectInput } from '~/types'
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import type { IReactionItem } from '~/types/calendar/reactions'
-import type { iSelectData } from '~/types/headless/input'
+
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
+import { symbolDirAdapterFromNumberToString } from '~/utils/adapters/calendar/symbolDirAdapter'
 import type { ICalendarEventSymbol } from '~/utils/api/calendar/calendarEvents'
 
 interface IProps {
   isOpen: boolean
   event?: ITableCalendarEvent
   symbols?: IOHLCSymbol[]
+  isLoading?: boolean
 }
 
 const props = defineProps<IProps>()
@@ -20,20 +20,24 @@ const emit = defineEmits(['close', 'save'])
 const itemsAdapter = (symbol: ICalendarEventSymbol): IReactionItem => {
   return {
     ohlcSymbol: symbol.ohlcSymbol.symbol,
-    direction: symbol.tradeDirection ? 'Buy' : 'Sell',
+    direction: symbolDirAdapterFromNumberToString(symbol.tradeDirection),
     order: symbol.order,
     id: symbol.ohlcSymbolId,
   }
 }
 
-const items = ref<IReactionItem[]>(
-  props.event?.symbols?.map(symbol => itemsAdapter(symbol)) || []
-)
+const mapItems = () => {
+  return props.event?.symbols
+    ?.map(symbol => itemsAdapter(symbol))
+    .sort((a, b) => a.order - b.order)
+}
+
+const items = ref<IReactionItem[]>(mapItems() || [])
 
 watchDeep(
   () => props.event?.symbols,
   () => {
-    items.value = props.event?.symbols?.map(symbol => itemsAdapter(symbol))
+    items.value = mapItems()
   }
 )
 
@@ -143,7 +147,8 @@ const onSave = () => {
       class="scrm__btn"
       @click="onSave"
     >
-      Save
+      <Spinner v-if="isLoading" />
+      <span v-else>Save</span>
     </TheButton>
   </TheModal>
 </template>

@@ -191,7 +191,7 @@ export const setOHLCSymbolTradeDirection = async (
 ) => {
   try {
     const res = await axiosInstance.put(
-      '/Calendar/BindOHLCSymbolToEvent',
+      'Calendar/SetOHLCSymbolTradeDirectionByTitleAndCountry',
       null,
       {
         params: {

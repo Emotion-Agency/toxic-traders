@@ -2,6 +2,7 @@
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import type { IReactionItem } from '~/types/calendar/reactions'
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
+import { symbolDirAdapterFromStringToNumber } from '~/utils/adapters/calendar/symbolDirAdapter'
 
 const searchInput = reactive({
   required: false,
@@ -82,23 +83,38 @@ const reactionEvent = ref<ITableCalendarEvent>(null)
 
 const { toast } = useToasts()
 
+const isUpdatingReactions = ref(false)
+
 const updateReactions = async (
   items: IReactionItem[],
   event: ITableCalendarEvent
 ) => {
-  console.log(items)
   try {
     const itemsRequests = items.map(item => {
       return new Promise(async (resolve, reject) => {
         try {
-          await bindSymbol(event.event, event.country, item.id, item.order)
-
-          await setSymbolDirection(
-            event.event,
-            event.country,
-            item.id,
-            item.direction
+          const alreadyBoundedSymbol = event.symbols.find(
+            symbol => symbol.ohlcSymbolId === item.id
           )
+
+          if (!alreadyBoundedSymbol) {
+            await bindSymbol(event.event, event.country, item.id, item.order)
+          }
+
+          const isSymbolDirectionChanged =
+            alreadyBoundedSymbol?.tradeDirection !==
+            symbolDirAdapterFromStringToNumber(item.direction)
+
+          console.log(item, alreadyBoundedSymbol, isSymbolDirectionChanged)
+
+          if (isSymbolDirectionChanged) {
+            await setSymbolDirection(
+              event.event,
+              event.country,
+              item.id,
+              item.direction
+            )
+          }
 
           resolve(true)
         } catch (error) {
@@ -106,10 +122,18 @@ const updateReactions = async (
         }
       })
     })
+
+    isUpdatingReactions.value = true
     await Promise.all(itemsRequests)
+    await getAllEventsByPage(currentPage.value, itemsCount.value)
+
     toast.success('Reactions updated')
+
+    reactionEvent.value = null
   } catch (error) {
     toast.error('Error updating reactions')
+  } finally {
+    isUpdatingReactions.value = false
   }
 }
 </script>
@@ -167,6 +191,7 @@ const updateReactions = async (
       :is-open="!!reactionEvent"
       :event="reactionEvent"
       :symbols="symbols"
+      :is-loading="isUpdatingReactions"
       @close="reactionEvent = null"
       @save="updateReactions"
     />

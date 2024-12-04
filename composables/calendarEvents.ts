@@ -1,5 +1,6 @@
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import { calendarEventAdapter } from '~/utils/adapters/calendar/calendarEventAdapter'
+import { symbolDirAdapterFromStringToNumber } from '~/utils/adapters/calendar/symbolDirAdapter'
 import {
   bindOHLCSymbolToEvent,
   disableCalendarEvent,
@@ -152,7 +153,7 @@ export const useCalendarEvents = () => {
         title,
         country,
         symbolId,
-        tradeDirection === 'Buy' ? 0 : 1
+        symbolDirAdapterFromStringToNumber(tradeDirection)
       )
       const data = res?.data
       if (!data) {
