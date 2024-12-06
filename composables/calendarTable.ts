@@ -12,18 +12,6 @@ export const useCalendarTable = (
     sortOrder: (Number(route.query.sortedOrder as string) as 1 | 2) || 1,
   })
 
-  const sortedEvents = computed(() => {
-    return events.value.sort((a, b) => {
-      if (sortState.value.sortBy === 'Time') {
-        if (sortState.value.sortOrder === 1) {
-          return new Date(b.time).getTime() - new Date(a.time).getTime()
-        } else {
-          return new Date(a.time).getTime() - new Date(b.time).getTime()
-        }
-      }
-    })
-  })
-
   watch(totalCount, () => {
     totalCountPages.value = totalCount.value
   })
@@ -47,7 +35,6 @@ export const useCalendarTable = (
     router.push({
       query: {
         ...route.query,
-
         page: currentPage.value,
         count: itemsCount.value,
       },
@@ -64,6 +51,25 @@ export const useCalendarTable = (
     })
   })
 
+  const sortedEvents = computed(() => {
+    return events.value.sort((a, b) => {
+      if (sortState.value.sortBy === 'Time') {
+        if (sortState.value.sortOrder === 1) {
+          return new Date(b.time).getTime() - new Date(a.time).getTime()
+        } else {
+          return new Date(a.time).getTime() - new Date(b.time).getTime()
+        }
+      }
+    })
+  })
+
+  const paginatedEvents = computed(() => {
+    const start = (currentPage.value - 1) * itemsCount.value
+    const end = start + itemsCount.value
+
+    return sortedEvents.value.slice(start, end)
+  })
+
   return {
     onSort,
     sortState,
@@ -71,6 +77,7 @@ export const useCalendarTable = (
     itemsCount,
     searchValue,
     totalCountPages,
+    paginatedEvents,
     nextPageClick,
     prevPageClick,
     onInputBlur,

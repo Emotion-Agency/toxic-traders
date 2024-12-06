@@ -29,6 +29,7 @@ const {
   onInputChange,
   onSort,
   sortState,
+  paginatedEvents,
 } = useCalendarTable(events, totalCount)
 
 onMounted(async () => {
@@ -75,15 +76,15 @@ onMounted(async () => {
       message="Oops! No events found"
     />
 
-    <section v-else-if="events.length && !isLoading" class="calendar-content">
+    <section v-else-if="events.length" class="calendar-content">
       <div class="calendar-table-wrapper">
         <CalendarTable
           :sort-state="sortState"
-          :events="events"
+          :events="paginatedEvents"
           @sort="onSort"
         />
         <ThePagination
-          v-if="totalCountPages / events?.length > 1"
+          v-if="totalCountPages / paginatedEvents?.length > 1"
           class="calendar-table__pagination"
           input-id="calendar-table-pagination"
           input-name="calendar-table-pagination"
@@ -100,6 +101,6 @@ onMounted(async () => {
         />
       </div>
     </section>
-    <UiLoader v-else="isLoading" />
+    <UiLoader v-if="isLoading" />
   </main>
 </template>

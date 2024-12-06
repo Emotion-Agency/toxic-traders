@@ -38,7 +38,21 @@ const {
 const getAllEvents = async () => {
   try {
     isLoading.value = true
-    await getFourWeeksEvents(currentPage.value, itemsCount.value)
+    if (!startDate.value) {
+      await getFourWeeksEvents(
+        currentPage.value,
+        itemsCount.value,
+        sortState.value.sortOrder === 1 ? 0 : 1
+      )
+    } else {
+      await getEvents({
+        startDate: startDate.value,
+        endDate: endDate.value,
+        page: currentPage.value,
+        count: itemsCount.value,
+        sort: sortState.value.sortOrder === 1 ? 0 : 1,
+      })
+    }
   } catch (error) {
     console.error(error)
   } finally {
@@ -50,15 +64,8 @@ const onSaveDate = async (reset?: boolean) => {
   try {
     isModalOpen.value = false
     isLoading.value = true
-    if (!startDate.value) {
-      await getAllEvents()
-    } else {
-      await getEvents({
-        startDate: startDate.value,
-        endDate: endDate.value,
-        page: currentPage.value,
-        count: itemsCount.value,
-      })
+    await getAllEvents()
+    if (startDate.value) {
       addCustomSelectOption()
     }
     reset && (selectedDate.value = null)
@@ -141,7 +148,7 @@ watch([startDate, endDate], () => {
   currentPage.value = 1
 })
 
-watch([currentPage, itemsCount], () => {
+watch([currentPage, itemsCount, sortState], () => {
   getAllEvents()
 })
 </script>
@@ -213,7 +220,7 @@ watch([currentPage, itemsCount], () => {
       message="Oops! No events found"
     />
 
-    <section v-else-if="events.length && !isLoading" class="calendar-content">
+    <section v-else-if="events.length" class="calendar-content">
       <div class="calendar-table-wrapper">
         <CalendarTable
           :sort-state="sortState"
@@ -239,6 +246,6 @@ watch([currentPage, itemsCount], () => {
         </ThePagination>
       </div>
     </section>
-    <UiLoader v-else="isLoading" />
+    <UiLoader v-if="isLoading" />
   </main>
 </template>
