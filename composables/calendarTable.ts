@@ -1,6 +1,9 @@
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 
-export const useCalendarTable = (events: Ref<ITableCalendarEvent[]>) => {
+export const useCalendarTable = (
+  events: Ref<ITableCalendarEvent[]>,
+  totalCount: Ref<number>
+) => {
   const router = useRouter()
   const route = useRoute()
 
@@ -19,6 +22,10 @@ export const useCalendarTable = (events: Ref<ITableCalendarEvent[]>) => {
         }
       }
     })
+  })
+
+  watch(totalCount, () => {
+    totalCountPages.value = totalCount.value
   })
 
   const {

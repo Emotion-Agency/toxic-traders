@@ -15,7 +15,7 @@ const searchInput = reactive({
   isRightButton: true,
 })
 
-const { events, totalCount, getAllEventsByPage } = useCalendarEvents()
+const { events, totalCount, getGroupedEvents } = useCalendarEvents()
 
 const symbols = ref<IOHLCSymbol[]>([])
 
@@ -48,7 +48,7 @@ const { bindSymbol, setSymbolDirection } = useCalendarEvents()
 onMounted(async () => {
   try {
     isLoading.value = true
-    await getAllEventsByPage(currentPage.value, itemsCount.value)
+    await getGroupedEvents(currentPage.value, itemsCount.value)
     totalCountPages.value = totalCount.value
 
     symbols.value = await getSymbols()
@@ -71,7 +71,7 @@ watch([currentPage, itemsCount], async () => {
   document.documentElement.scrollTop = 0
   try {
     isLoading.value = true
-    await getAllEventsByPage(currentPage.value, itemsCount.value)
+    await getGroupedEvents(currentPage.value, itemsCount.value)
   } catch (error) {
     console.error(error)
   } finally {
@@ -125,7 +125,7 @@ const updateReactions = async (
 
     isUpdatingReactions.value = true
     await Promise.all(itemsRequests)
-    await getAllEventsByPage(currentPage.value, itemsCount.value)
+    await getGroupedEvents(currentPage.value, itemsCount.value)
 
     toast.success('Reactions updated')
 

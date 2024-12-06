@@ -35,48 +35,6 @@ export interface ICalendarEventData {
   totalCount: number
 }
 
-export const getCalendarEvents = async (
-  startDate: string,
-  endDate?: string
-) => {
-  try {
-    const res = await axiosInstance.get<ICalendarEvent[]>(
-      '/Calendar/GetCalendarEvents',
-      {
-        params: {
-          startDate,
-          endDate: endDate || startDate,
-        },
-      }
-    )
-
-    return res
-  } catch (error) {
-    throw error
-  }
-}
-
-export const getCalendarEventsByTitleAndCountry = async (
-  Title: string,
-  Country: string
-) => {
-  try {
-    const res = await axiosInstance.get<ICalendarEvent[]>(
-      '/Calendar/GetCalendarEventsByTitleAndCountry',
-      {
-        params: {
-          Title,
-          Country,
-        },
-      }
-    )
-
-    return res
-  } catch (error) {
-    throw error
-  }
-}
-
 interface IGetAllCalendarEvents {
   page: number
   pageSize: number
@@ -84,7 +42,35 @@ interface IGetAllCalendarEvents {
   endDate?: Date | string
 }
 
-export const getAllCalendarEvents = async ({
+interface IGetAllCalendarEventsUngrouped extends IGetAllCalendarEvents {
+  sortOrder?: 0 | 1
+  filter?: 0 | 1 | 2
+}
+
+export const getCalendarEventsByTitleAndCountry = async (
+  Title: string,
+  Country: string,
+  Filter?: 0 | 1 | 2
+) => {
+  try {
+    const res = await axiosInstance.get<ICalendarEvent[]>(
+      '/Calendar/GetAllCalendarEventsByExactTitleAndCountry',
+      {
+        params: {
+          Title,
+          Country,
+          Filter,
+        },
+      }
+    )
+
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getAllGroupedCalendarEvents = async ({
   page,
   pageSize,
   startDate,
@@ -99,6 +85,35 @@ export const getAllCalendarEvents = async ({
           pageSize,
           startDate: startDate ?? '2021-01-01 00:00:00',
           endDate: endDate ?? new Date(Date.now()),
+        },
+      }
+    )
+
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getAllCalendarEvents = async ({
+  page,
+  pageSize,
+  startDate,
+  endDate,
+  sortOrder,
+  filter,
+}: IGetAllCalendarEventsUngrouped) => {
+  try {
+    const res = await axiosInstance.get<ICalendarEventData>(
+      '/Calendar/GetAllCalendarEvents',
+      {
+        params: {
+          page,
+          pageSize,
+          startDate: startDate ?? '2021-01-01 00:00:00',
+          endDate: endDate ?? new Date(Date.now()),
+          sortOrder: sortOrder ?? 0,
+          filter: filter ?? 0,
         },
       }
     )

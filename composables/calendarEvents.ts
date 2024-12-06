@@ -5,7 +5,7 @@ import {
   bindOHLCSymbolToEvent,
   disableCalendarEvent,
   getAllCalendarEvents,
-  getCalendarEvents,
+  getAllGroupedCalendarEvents,
   getCalendarEventsByTitleAndCountry,
   setImportanceToEvent,
   setOHLCSymbolTradeDirection,
@@ -27,23 +27,38 @@ export const useCalendarEvents = () => {
     return events.value
   }
 
-  const getEvents = async (page: number, count: number) => {
+  interface IGetEventsParams {
+    page: number
+    count: number
+    startDate?: string
+    endDate?: string
+    sort?: 0 | 1
+  }
+
+  const getEvents = async ({
+    page,
+    count,
+    startDate,
+    endDate,
+    sort,
+  }: IGetEventsParams) => {
     try {
-      const twoWeeks = 12096e5
       const res = await getAllCalendarEvents({
         page,
         pageSize: count,
-
-        startDate: new Date(new Date().getTime() - twoWeeks).toISOString(),
-
-        endDate: new Date(new Date().getTime() + twoWeeks).toISOString(),
+        startDate,
+        endDate,
+        sortOrder: sort,
+        filter: 2,
       })
       const data = res?.data
+
       if (!data) {
         throw new Error('No data returned from the API')
       }
 
       prepareEvents(data.events)
+
       totalCount.value = data.totalCount
     } catch (error) {
       console.error('Error fetching events:', error)
@@ -51,47 +66,48 @@ export const useCalendarEvents = () => {
     }
   }
 
-  const getEventsByDate = async (startDate: string, endDate?: string) => {
+  const getGroupedEvents = async (page: number, count: number) => {
     try {
-      const res = await getCalendarEvents(startDate, endDate)
+      const res = await getAllGroupedCalendarEvents({ page, pageSize: count })
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')
       }
 
-      prepareEvents(data)
+      prepareEvents(data.events)
+
+      totalCount.value = data.totalCount
     } catch (error) {
       console.error('Error fetching events:', error)
       toast.error('An error occurred while fetching events. Please try again.')
     }
+  }
+
+  const getFourWeeksEvents = async (
+    page: number,
+    count: number,
+    sort?: 0 | 1
+  ) => {
+    const twoWeeks = 12096e5
+    await getEvents({
+      page,
+      count,
+      sort,
+      startDate: new Date(new Date().getTime() - twoWeeks).toISOString(),
+      endDate: new Date(new Date().getTime() + twoWeeks).toISOString(),
+    })
   }
 
   const getEventsByName = async (title: string, country: string) => {
     try {
-      const res = await getCalendarEventsByTitleAndCountry(title, country)
+      const res = await getCalendarEventsByTitleAndCountry(title, country, 2)
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')
       }
 
       prepareEvents(data)
-    } catch (error) {
-      console.error('Error fetching events:', error)
-      toast.error('An error occurred while fetching events. Please try again.')
-    }
-  }
-
-  const getAllEventsByPage = async (page: number, count: number) => {
-    try {
-      const res = await getAllCalendarEvents({ page, pageSize: count })
-      const data = res?.data
-      if (!data) {
-        throw new Error('No data returned from the API')
-      }
-
-      prepareEvents(data.events)
-
-      totalCount.value = data.totalCount
+      totalCount.value = data.length
     } catch (error) {
       console.error('Error fetching events:', error)
       toast.error('An error occurred while fetching events. Please try again.')
@@ -174,9 +190,9 @@ export const useCalendarEvents = () => {
     totalCount,
     activeEvent,
     getEvents,
-    getEventsByDate,
+    getGroupedEvents,
+    getFourWeeksEvents,
     getEventsByName,
-    getAllEventsByPage,
     disableEvent,
     bindSymbol,
     changeImportance,

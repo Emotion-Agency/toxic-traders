@@ -17,7 +17,8 @@ function formatDate(date: Date): string {
 
 const isModalOpen = ref(false)
 
-const { events, getEvents, getEventsByDate, totalCount } = useCalendarEvents()
+const { events, getEvents, getFourWeeksEvents, totalCount } =
+  useCalendarEvents()
 const isLoading = ref(false)
 
 const {
@@ -32,14 +33,12 @@ const {
   onInputChange,
   onSort,
   sortState,
-} = useCalendarTable(events)
+} = useCalendarTable(events, totalCount)
 
 const getAllEvents = async () => {
   try {
     isLoading.value = true
-    await getEvents(currentPage.value, itemsCount.value)
-
-    totalCountPages.value = totalCount.value
+    await getFourWeeksEvents(currentPage.value, itemsCount.value)
   } catch (error) {
     console.error(error)
   } finally {
@@ -54,7 +53,12 @@ const onSaveDate = async (reset?: boolean) => {
     if (!startDate.value) {
       await getAllEvents()
     } else {
-      await getEventsByDate(startDate.value, endDate.value)
+      await getEvents({
+        startDate: startDate.value,
+        endDate: endDate.value,
+        page: currentPage.value,
+        count: itemsCount.value,
+      })
       addCustomSelectOption()
     }
     reset && (selectedDate.value = null)
@@ -217,7 +221,7 @@ watch([currentPage, itemsCount], () => {
           @sort="onSort"
         />
         <ThePagination
-          v-if="totalCountPages / events?.length > 1"
+          v-if="totalCountPages > events.length / itemsCount"
           class="calendar-table__pagination"
           input-id="calendar-table-pagination"
           input-name="calendar-table-pagination"

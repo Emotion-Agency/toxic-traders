@@ -3,7 +3,7 @@ const route = useRoute()
 
 const { country, title } = route.query
 
-const { events, getEventsByName, activeEvent } = useCalendarEvents()
+const { events, getEventsByName, activeEvent, totalCount } = useCalendarEvents()
 const isLoading = ref(false)
 
 const getEvents = async () => {
@@ -17,7 +17,19 @@ const getEvents = async () => {
   }
 }
 
-const { onSort, sortState } = useCalendarTable(events)
+const {
+  currentPage,
+  itemsCount,
+  totalCountPages,
+  searchValue,
+  nextPageClick,
+  prevPageClick,
+  onChangeCount,
+  onInputBlur,
+  onInputChange,
+  onSort,
+  sortState,
+} = useCalendarTable(events, totalCount)
 
 onMounted(async () => {
   await getEvents()
@@ -33,7 +45,7 @@ onMounted(async () => {
 
     if (!activeElementIdx) return
 
-    console.log(events.value, activeEvent.value)
+    currentPage.value = Math.ceil((activeElementIdx + 1) / itemsCount.value)
   }
 })
 </script>
@@ -69,6 +81,22 @@ onMounted(async () => {
           :sort-state="sortState"
           :events="events"
           @sort="onSort"
+        />
+        <ThePagination
+          v-if="totalCountPages / events?.length > 1"
+          class="calendar-table__pagination"
+          input-id="calendar-table-pagination"
+          input-name="calendar-table-pagination"
+          :total-pages="totalCountPages"
+          :current-page="currentPage"
+          :options="['25', '50', '100']"
+          :items-count="itemsCount"
+          :input-value="searchValue"
+          @next-click="nextPageClick"
+          @prev-click="prevPageClick"
+          @selected-item="onChangeCount"
+          @on-blur-value="onInputBlur"
+          @on-change-value="onInputChange"
         />
       </div>
     </section>
