@@ -43,7 +43,7 @@ const isLoading = ref(false)
 
 const { getSymbols } = useSymbols()
 
-const { bindSymbol, setSymbolDirection } = useCalendarEvents()
+const { bindSymbol, unbindSymbol, setSymbolDirection } = useCalendarEvents()
 
 onMounted(async () => {
   try {
@@ -105,8 +105,6 @@ const updateReactions = async (
             alreadyBoundedSymbol?.tradeDirection !==
             symbolDirAdapterFromStringToNumber(item.direction)
 
-          console.log(item, alreadyBoundedSymbol, isSymbolDirectionChanged)
-
           if (isSymbolDirectionChanged) {
             await setSymbolDirection(
               event.event,
@@ -123,7 +121,23 @@ const updateReactions = async (
       })
     })
 
+    const deletedSymbols = event.symbols.filter(
+      symbol => !items.find(item => item.id === symbol.ohlcSymbolId)
+    )
+
+    console.log(deletedSymbols)
+
     isUpdatingReactions.value = true
+
+    if (deletedSymbols) {
+      await Promise.all(
+        deletedSymbols.map(
+          async symbol =>
+            await unbindSymbol(event.event, event.country, symbol.ohlcSymbolId)
+        )
+      )
+    }
+
     await Promise.all(itemsRequests)
     await getGroupedEvents(currentPage.value, itemsCount.value)
 
@@ -132,6 +146,7 @@ const updateReactions = async (
     reactionEvent.value = null
   } catch (error) {
     toast.error('Error updating reactions')
+    console.log(error)
   } finally {
     isUpdatingReactions.value = false
   }

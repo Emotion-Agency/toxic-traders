@@ -9,6 +9,7 @@ import {
   getCalendarEventsByTitleAndCountry,
   setImportanceToEvent,
   setOHLCSymbolTradeDirection,
+  unbindOHLCSymbolToEvent,
   type ICalendarEvent,
 } from '~/utils/api/calendar/calendarEvents'
 
@@ -143,6 +144,21 @@ export const useCalendarEvents = () => {
     }
   }
 
+  const unbindSymbol = async (
+    title: string,
+    country: string,
+    symbolId: number
+  ) => {
+    try {
+      await unbindOHLCSymbolToEvent(title, country, symbolId)
+    } catch (error) {
+      console.error('Error unbinding symbols:', error)
+      toast.error(
+        'An error occurred while unbinding symbols. Please try again.'
+      )
+    }
+  }
+
   const changeImportance = async (
     title: string,
     country: string,
@@ -195,6 +211,7 @@ export const useCalendarEvents = () => {
     getEventsByName,
     disableEvent,
     bindSymbol,
+    unbindSymbol,
     changeImportance,
     setSymbolDirection,
   }

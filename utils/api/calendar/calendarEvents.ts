@@ -198,6 +198,29 @@ export const bindOHLCSymbolToEvent = async (
   }
 }
 
+export const unbindOHLCSymbolToEvent = async (
+  title: string,
+  country: string,
+  symbolId: number
+) => {
+  try {
+    const res = await axiosInstance.delete(
+      '/Calendar/UnbindOHLCSymbolByTitleAndCountry',
+      {
+        params: {
+          Title: title,
+          Country: country,
+          symbolId,
+        },
+      }
+    )
+
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
 export const setOHLCSymbolTradeDirection = async (
   title: string,
   country: string,
