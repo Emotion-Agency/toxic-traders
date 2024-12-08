@@ -101,7 +101,13 @@ export const useCalendarEvents = () => {
 
   const getEventsByName = async (title: string, country: string) => {
     try {
-      const res = await getCalendarEventsByTitleAndCountry(title, country, 2)
+      const res = await getCalendarEventsByTitleAndCountry({
+        Title: title,
+        Country: country,
+        Filter: 2,
+        page: 1,
+        pageSize: 1000,
+      })
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')

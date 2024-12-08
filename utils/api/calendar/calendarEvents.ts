@@ -47,19 +47,31 @@ interface IGetAllCalendarEventsUngrouped extends IGetAllCalendarEvents {
   filter?: 0 | 1 | 2
 }
 
-export const getCalendarEventsByTitleAndCountry = async (
-  Title: string,
-  Country: string,
-  Filter?: 0 | 1 | 2
-) => {
+interface IGetCalendarEventsByTitleAndCountry {
+  Title: string
+  Country: string
+  Filter: 0 | 1 | 2
+  page: number
+  pageSize: number
+}
+
+export const getCalendarEventsByTitleAndCountry = async ({
+  Title,
+  Country,
+  Filter,
+  page,
+  pageSize,
+}: IGetCalendarEventsByTitleAndCountry) => {
   try {
     const res = await axiosInstance.get<ICalendarEvent[]>(
-      '/Calendar/GetAllCalendarEventsByExactTitleAndCountry',
+      '/Calendar/GetAllCalendarEventsByTitleAndCountryFiltered',
       {
         params: {
           Title,
           Country,
           Filter,
+          page,
+          pageSize,
         },
       }
     )

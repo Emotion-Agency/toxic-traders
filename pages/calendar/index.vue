@@ -134,6 +134,7 @@ const onReset = () => {
   selectedDate.value = null
   startDate.value = null
   endDate.value = null
+  currentPage.value = 1
   getAllEvents()
 }
 
@@ -141,8 +142,8 @@ watch([startDate, endDate], () => {
   router.push({
     query: {
       ...route.query,
-      startDate: startDate.value && getDateDay(startDate.value),
-      endDate: endDate.value && getDateDay(endDate.value),
+      startDate: startDate.value ? getDateDay(startDate.value) : null,
+      endDate: endDate.value ? getDateDay(endDate.value) : null,
     },
   })
   currentPage.value = 1
