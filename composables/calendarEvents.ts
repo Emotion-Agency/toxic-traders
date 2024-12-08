@@ -21,9 +21,7 @@ export const useCalendarEvents = () => {
   const { toast } = useToasts()
 
   const prepareEvents = (data: ICalendarEvent[]) => {
-    events.value = data
-      .map(event => calendarEventAdapter(event))
-      .sort((a, b) => new Date(b.time)?.getTime() - new Date(a.time)?.getTime())
+    events.value = data.map(event => calendarEventAdapter(event))
 
     return events.value
   }
