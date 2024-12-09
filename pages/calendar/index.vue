@@ -142,8 +142,8 @@ watch([startDate, endDate], () => {
   router.push({
     query: {
       ...route.query,
-      startDate: startDate.value ? getDateDay(startDate.value) : null,
-      endDate: endDate.value ? getDateDay(endDate.value) : null,
+      startDate: startDate.value ? getDateDay(startDate.value) : undefined,
+      endDate: endDate.value ? getDateDay(endDate.value) : undefined,
     },
   })
   currentPage.value = 1
