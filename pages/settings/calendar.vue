@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import debounce from 'debounce'
 import type { ITableCalendarEvent } from '~/types/calendar/events'
 import type { IReactionItem } from '~/types/calendar/reactions'
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
@@ -11,11 +12,11 @@ const searchInput = reactive({
   type: 'text',
   value: '',
   placeholder: 'Search news',
-  disabled: false,
   isRightButton: true,
 })
 
-const { events, totalCount, getGroupedEvents } = useCalendarEvents()
+const { events, totalCount, getGroupedEvents, getGroupedEventsByName } =
+  useCalendarEvents()
 
 const symbols = ref<IOHLCSymbol[]>([])
 
@@ -37,9 +38,45 @@ const {
   route.query.count ? Number(route.query.count) : 100
 )
 
-const onSearch = () => {}
-
 const isLoading = ref(false)
+const mode = ref<'all' | 'pagination'>('pagination')
+
+const getAllEvents = async () => {
+  await getGroupedEvents(currentPage.value, itemsCount.value)
+  totalCountPages.value = totalCount.value
+  mode.value = 'pagination'
+}
+
+const getSearchEvents = async () => {
+  await getGroupedEventsByName(searchInput.value)
+  currentPage.value = 1
+  totalCountPages.value = totalCount.value
+
+  mode.value = 'all'
+}
+
+const searchHandler = async () => {
+  try {
+    isLoading.value = true
+    if (!searchInput.value.trim()) {
+      await getAllEvents()
+      return
+    }
+
+    await getSearchEvents()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const debouncedSearchHandler = debounce(searchHandler, 500)
+
+const onSearch = async (e: iInputData) => {
+  searchInput.value = e.value
+  await debouncedSearchHandler()
+}
 
 const { getSymbols } = useSymbols()
 
@@ -48,8 +85,7 @@ const { bindSymbol, unbindSymbol, setSymbolDirection } = useCalendarEvents()
 onMounted(async () => {
   try {
     isLoading.value = true
-    await getGroupedEvents(currentPage.value, itemsCount.value)
-    totalCountPages.value = totalCount.value
+    await getAllEvents()
 
     symbols.value = await getSymbols()
   } catch (error) {
@@ -71,7 +107,9 @@ watch([currentPage, itemsCount], async () => {
   document.documentElement.scrollTop = 0
   try {
     isLoading.value = true
-    await getGroupedEvents(currentPage.value, itemsCount.value)
+    if (mode.value === 'pagination') {
+      await getAllEvents()
+    }
   } catch (error) {
     console.error(error)
   } finally {
@@ -125,8 +163,6 @@ const updateReactions = async (
       symbol => !items.find(item => item.id === symbol.ohlcSymbolId)
     )
 
-    console.log(deletedSymbols)
-
     isUpdatingReactions.value = true
 
     if (deletedSymbols) {
@@ -139,7 +175,7 @@ const updateReactions = async (
     }
 
     await Promise.all(itemsRequests)
-    await getGroupedEvents(currentPage.value, itemsCount.value)
+    await getAllEvents()
 
     toast.success('Reactions updated')
 
@@ -164,7 +200,7 @@ const updateReactions = async (
         :name="searchInput.name"
         :type="searchInput.type"
         :placeholder="searchInput.placeholder"
-        :disabled="searchInput.disabled"
+        :disabled="isLoading"
         :is-right-button="searchInput.isRightButton"
         class="settings-calendar__search"
         @input-value="onSearch"
@@ -186,6 +222,7 @@ const updateReactions = async (
         />
       </ul>
       <ThePagination
+        v-if="mode === 'pagination'"
         class="settings-calendar__pagination"
         :currentPage="currentPage"
         :itemsCount="itemsCount"

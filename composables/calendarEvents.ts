@@ -10,6 +10,7 @@ import {
   getAllCalendarEvents,
   getAllGroupedCalendarEvents,
   getCalendarEventsByTitleAndCountry,
+  getGroupedCalendarEventsByTitle,
   setImportanceToEvent,
   setOHLCSymbolTradeDirection,
   unbindOHLCSymbolToEvent,
@@ -127,6 +128,22 @@ export const useCalendarEvents = () => {
     }
   }
 
+  const getGroupedEventsByName = async (title: string) => {
+    try {
+      const res = await getGroupedCalendarEventsByTitle(title)
+      const data = res?.data
+      if (!data) {
+        throw new Error('No data returned from the API')
+      }
+
+      prepareEvents(data)
+      totalCount.value = data?.length
+    } catch (error) {
+      console.error('Error fetching events:', error)
+      toast.error('An error occurred while fetching events. Please try again.')
+    }
+  }
+
   const disableEvent = async (
     title: string,
     country: string,
@@ -221,6 +238,7 @@ export const useCalendarEvents = () => {
     getGroupedEvents,
     getFourWeeksEvents,
     getEventsByName,
+    getGroupedEventsByName,
     disableEvent,
     bindSymbol,
     unbindSymbol,
