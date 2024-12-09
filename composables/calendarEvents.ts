@@ -1,4 +1,7 @@
-import type { ITableCalendarEvent } from '~/types/calendar/events'
+import type {
+  ICalendarEvent,
+  ITableCalendarEvent,
+} from '~/types/calendar/events'
 import { calendarEventAdapter } from '~/utils/adapters/calendar/calendarEventAdapter'
 import { symbolDirAdapterFromStringToNumber } from '~/utils/adapters/calendar/symbolDirAdapter'
 import {
@@ -10,7 +13,6 @@ import {
   setImportanceToEvent,
   setOHLCSymbolTradeDirection,
   unbindOHLCSymbolToEvent,
-  type ICalendarEvent,
 } from '~/utils/api/calendar/calendarEvents'
 
 export const useCalendarEvents = () => {
@@ -45,8 +47,10 @@ export const useCalendarEvents = () => {
       const res = await getAllCalendarEvents({
         page,
         pageSize: count,
-        startDate: startDate ? startDate + 'T00:00:00' : undefined,
-        endDate: endDate ? endDate + 'T23:59:59' : startDate + 'T23:59:59',
+        startDate: startDate ? getDateDay(startDate) + 'T00:00:00' : undefined,
+        endDate: endDate
+          ? getDateDay(endDate) + 'T23:59:59'
+          : getDateDay(startDate) + 'T23:59:59',
         sortOrder: sort,
         filter: 2,
       })

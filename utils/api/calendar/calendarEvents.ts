@@ -1,39 +1,8 @@
-import type { IOHLCSymbol } from '~/types/ohlc/symbols'
+import type {
+  ICalendarEvent,
+  ICalendarEventData,
+} from '~/types/calendar/events'
 import axiosInstance from '../axiosInstance'
-
-export interface ICalendarEventSymbol {
-  calendarEventId: number
-  ohlcSymbol: IOHLCSymbol
-  ohlcSymbolId: number
-  order: number
-  tradeDirection: 0 | 1
-}
-
-export interface ICalendarEvent {
-  id: number
-  actual: string
-  comment: string
-  country: string
-  currency: string
-  date: string
-  event: string
-  forecast: string
-  importance: string
-  indicator: string
-  period: string
-  previous: string
-  scale: string
-  source: string
-  title: string
-  unit: string
-  disable: boolean
-  symbols: ICalendarEventSymbol[]
-}
-
-export interface ICalendarEventData {
-  events: ICalendarEvent[]
-  totalCount: number
-}
 
 interface IGetAllCalendarEvents {
   page: number

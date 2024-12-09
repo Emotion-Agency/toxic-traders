@@ -1,5 +1,7 @@
-import type { ITableCalendarEvent } from '~/types/calendar/events'
-import type { ICalendarEvent } from '~/utils/api/calendar/calendarEvents'
+import type {
+  ICalendarEvent,
+  ITableCalendarEvent,
+} from '~/types/calendar/events'
 
 export const calendarEventAdapter = (
   event: ICalendarEvent
@@ -17,7 +19,7 @@ export const calendarEventAdapter = (
   }
 
   return {
-    id: event.id,
+    id: event.DbId,
     time: `${event.date}+0`,
     event: event.title,
     country: event.country,
