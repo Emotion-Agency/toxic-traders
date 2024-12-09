@@ -122,8 +122,8 @@ export const getAllCalendarEvents = async ({
         params: {
           page,
           pageSize,
-          startDate: startDate ?? '2021-01-01 00:00:00',
-          endDate: endDate ?? new Date(Date.now()),
+          startDate,
+          endDate,
           sortOrder: sortOrder ?? 0,
           filter: filter ?? 0,
         },

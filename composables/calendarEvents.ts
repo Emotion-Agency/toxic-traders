@@ -45,8 +45,8 @@ export const useCalendarEvents = () => {
       const res = await getAllCalendarEvents({
         page,
         pageSize: count,
-        startDate,
-        endDate,
+        startDate: startDate ? startDate + 'T00:00:00' : undefined,
+        endDate: endDate ? endDate + 'T23:59:59' : startDate + 'T23:59:59',
         sortOrder: sort,
         filter: 2,
       })
@@ -92,8 +92,12 @@ export const useCalendarEvents = () => {
       page,
       count,
       sort,
-      startDate: new Date(new Date().getTime() - twoWeeks).toISOString(),
-      endDate: new Date(new Date().getTime() + twoWeeks).toISOString(),
+      startDate: getDateDay(
+        new Date(new Date().getTime() - twoWeeks).toISOString()
+      ),
+      endDate: getDateDay(
+        new Date(new Date().getTime() + twoWeeks).toISOString()
+      ),
     })
   }
 
