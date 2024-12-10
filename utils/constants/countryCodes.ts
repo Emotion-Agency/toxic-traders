@@ -248,4 +248,5 @@ export const countryCodes = [
   'YE',
   'ZM',
   'ZW',
+  'EU',
 ]
