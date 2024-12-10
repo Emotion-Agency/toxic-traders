@@ -16,3 +16,14 @@ export interface IOHLCSymbol {
   serverType: number
   ohlcRows: IOHLCRow[] | null
 }
+
+export interface IOHLCData {
+  time: string
+  openPrice: number
+  highPrice: number
+  lowPrice: number
+  closePrice: number
+  tickVolume: number
+  spread: number
+  volume: number
+}

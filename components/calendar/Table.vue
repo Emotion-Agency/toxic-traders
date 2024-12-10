@@ -66,11 +66,9 @@ const isNegative = (number: number | string) => {
 
 const getNumberVariant = (
   number: number | string,
-  symbols: ICalendarEventSymbol[]
+  event: ITableCalendarEvent
 ) => {
-  const firstSymbol = symbols?.[0]
-
-  const dir = firstSymbol?.tradeDirection
+  const dir = event.firstSymbol?.tradeDirection
 
   if (isNaN(Number(number))) {
     return 'neutral'
@@ -80,8 +78,12 @@ const getNumberVariant = (
     return 'neutral'
   }
 
-  if (isNegative(number)) {
+  if (isNegative(number) && dir === 0) {
     return 'negative'
+  }
+
+  if (!isNegative(number) && dir === 1) {
+    return 'positive'
   }
 
   return 'positive'
@@ -180,7 +182,7 @@ onMounted(() => {
             >
               <CalendarTableNumber
                 :number="event.actual"
-                :variant="getNumberVariant(event.dev, event.symbols)"
+                :variant="getNumberVariant(event.dev, event)"
                 :unit="event.unit"
                 :scale="event.scale"
               />
@@ -216,7 +218,7 @@ onMounted(() => {
               :disable-tooltip="!event.dev"
             >
               <CalendarTableNumber
-                :variant="getNumberVariant(event.dev, event.symbols)"
+                :variant="getNumberVariant(event.dev, event)"
                 :number="event.dev"
                 :unit="event.unit"
                 :scale="event.scale"

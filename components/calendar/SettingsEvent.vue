@@ -19,9 +19,8 @@ const bindedSymbols = computed(() => {
   return props.event.symbols.map(symbol => symbol.ohlcSymbol.symbol)
 })
 
-const selectedSymbol = ref<string>(
-  props.event?.symbols?.sort((a, b) => a.order - b.order)[0]?.ohlcSymbol
-    .symbol || null
+const selectedSymbol = computed<string>(
+  () => props.event?.firstSymbol?.ohlcSymbol?.symbol || null
 )
 
 const selectedImportance = ref<string>(importance[props.event.importance])

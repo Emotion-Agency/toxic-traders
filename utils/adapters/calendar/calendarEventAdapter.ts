@@ -18,6 +18,8 @@ export const calendarEventAdapter = (
     return parseFloat(event.actual) - parseFloat(event.forecast)
   }
 
+  const firstSymbol = event.symbols?.sort((a, b) => a.order - b.order)[0]
+
   return {
     id: event.DbId,
     time: `${event.date}+0`,
@@ -31,7 +33,8 @@ export const calendarEventAdapter = (
     scale: event.scale,
     dev: getDeviation(),
     slug: createSlugByTitleAndCountry(event.title, event.country),
-    symbols: event.symbols,
+    symbols: event.symbols?.sort((a, b) => a.order - b.order),
+    firstSymbol,
     disable: event.disable,
   }
 }

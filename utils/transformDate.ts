@@ -15,11 +15,20 @@ export const formatDate = (input: string): string => {
   return `${year}-${month}-${day}`
 }
 
+const formatDateInDdMmYyyyFormat = (input: string | number): string => {
+  const date = new Date(input)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+
+  return `${day}.${month}.${year}`
+}
+
 export const getDateDay = (input: string): string => {
   return formatDate(input)
 }
 
-export const getDateTime = (input: string) => {
+export const getDateTime = (input: string | number) => {
   const date = new Date(input)
   const pad = (num: number) => num.toString().padStart(2, '0')
 
@@ -32,6 +41,12 @@ export const getDateTime = (input: string) => {
 
 export const formatDateWithTime = (dateStr: string): string => {
   return `${getDateDay(dateStr)} ${getDateTime(dateStr)}`
+}
+
+export const formatDateWithTimeDdMmYyyy = (
+  dateStr: string | number
+): string => {
+  return `${formatDateInDdMmYyyyFormat(dateStr)} ${getDateTime(dateStr)}`
 }
 
 export const formatDateAmpm = (input: string): string => {

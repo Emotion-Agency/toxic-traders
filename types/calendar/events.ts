@@ -49,5 +49,6 @@ export interface ITableCalendarEvent {
   scale: string
   slug: string
   symbols: ICalendarEventSymbol[]
+  firstSymbol: ICalendarEventSymbol | undefined
   disable: boolean
 }

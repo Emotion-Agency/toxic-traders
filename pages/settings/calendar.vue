@@ -175,7 +175,7 @@ const updateReactions = async (
     }
 
     await Promise.all(itemsRequests)
-    await getAllEvents()
+    await searchHandler()
 
     toast.success('Reactions updated')
 
