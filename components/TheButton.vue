@@ -28,12 +28,16 @@ const href = props.tag === 'a' ? props.href : undefined
   <component
     :is="tag"
     class="button"
-    :class="[`button--${variant}`, `button--${buttonSize}`]"
+    :class="[
+      `button--${variant}`,
+      `button--${buttonSize}`,
+      { 'button--disabled': disabled },
+    ]"
     :to="to"
     :href="href"
     :target="props.tag === 'a' ? '_blank' : undefined"
     :rel="props.tag === 'a' ? 'noreferer noopener' : undefined"
-    :disabled="props.tag === 'button' ? disabled : undefined"
+    :disabled="disabled"
     :type="props.tag === 'button' ? (props.type ?? 'button') : undefined"
   >
     <slot name="start-icon" />

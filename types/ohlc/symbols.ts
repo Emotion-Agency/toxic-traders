@@ -17,13 +17,9 @@ export interface IOHLCSymbol {
   ohlcRows: IOHLCRow[] | null
 }
 
-export interface IOHLCData {
-  time: string
-  openPrice: number
-  highPrice: number
-  lowPrice: number
-  closePrice: number
-  tickVolume: number
-  spread: number
-  volume: number
+export type IOHLCData = IOHLCRow
+
+export interface ICandle {
+  x: Date | string
+  y: [number, number, number, number]
 }

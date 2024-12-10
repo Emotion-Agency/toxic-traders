@@ -239,7 +239,9 @@ onMounted(() => {
               :disable-tooltip="true"
             >
               <TheButton
-                :to="`/chart/${event.country}/${event.event}`"
+                :to="`/calendar/chart/${event.id}?title=${event.event}&country=${event.country}`"
+                tag="nuxt-link"
+                :disabled="!event.firstSymbol"
                 class="calendar-table__button"
                 size="small"
                 @click.stop.prevent

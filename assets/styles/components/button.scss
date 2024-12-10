@@ -48,10 +48,6 @@
     &:hover:not([disabled]) {
       background-color: var(--primary-dark);
     }
-
-    &:disabled {
-      opacity: 0.55;
-    }
   }
 
   &--outlined {
@@ -75,10 +71,6 @@
         }
       }
     }
-
-    &:disabled {
-      opacity: 0.55;
-    }
   }
 
   &--soft {
@@ -100,10 +92,6 @@
           fill: var(--white);
         }
       }
-    }
-
-    &:disabled {
-      opacity: 0.55;
     }
   }
 
@@ -171,6 +159,13 @@
         }
       }
     }
+  }
+
+  &:disabled,
+  &--disabled {
+    cursor: not-allowed !important;
+    opacity: 0.55 !important;
+    pointer-events: none;
   }
 }
 
