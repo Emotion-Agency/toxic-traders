@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import type { ITableCalendarEvent } from '~/types/calendar/events'
+import type {
+  ICalendarEventSymbol,
+  ITableCalendarEvent,
+} from '~/types/calendar/events'
 import type { IReactionItem } from '~/types/calendar/reactions'
 
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
 import { symbolDirAdapterFromNumberToString } from '~/utils/adapters/calendar/symbolDirAdapter'
-import type { ICalendarEventSymbol } from '~/utils/api/calendar/calendarEvents'
 
 interface IProps {
   isOpen: boolean

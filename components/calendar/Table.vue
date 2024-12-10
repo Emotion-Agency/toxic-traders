@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import type { ITableCalendarEvent } from '~/types/calendar/events'
+import type {
+  ICalendarEventSymbol,
+  ITableCalendarEvent,
+} from '~/types/calendar/events'
 
 import Table from '../Table.vue'
 
@@ -61,7 +64,14 @@ const isNegative = (number: number | string) => {
   return Number(number) < 0
 }
 
-const getNumberVariant = (number: number | string) => {
+const getNumberVariant = (
+  number: number | string,
+  symbols: ICalendarEventSymbol[]
+) => {
+  const firstSymbol = symbols?.[0]
+
+  const dir = firstSymbol?.tradeDirection
+
   if (isNaN(Number(number))) {
     return 'neutral'
   }
@@ -170,7 +180,7 @@ onMounted(() => {
             >
               <CalendarTableNumber
                 :number="event.actual"
-                :variant="getNumberVariant(event.dev)"
+                :variant="getNumberVariant(event.dev, event.symbols)"
                 :unit="event.unit"
                 :scale="event.scale"
               />
@@ -206,7 +216,7 @@ onMounted(() => {
               :disable-tooltip="!event.dev"
             >
               <CalendarTableNumber
-                :variant="getNumberVariant(event.dev)"
+                :variant="getNumberVariant(event.dev, event.symbols)"
                 :number="event.dev"
                 :unit="event.unit"
                 :scale="event.scale"
@@ -216,8 +226,9 @@ onMounted(() => {
               :item="null"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--reaction`]"
+              :disable-tooltip="true"
             >
-              +590 pips
+              <CalendarTableReaction :event="event" />
             </TableCell>
             <TableCell
               :item="null"
