@@ -156,9 +156,11 @@ onMounted(() => {
               :item="event.importance"
               class="calendar-table__cell"
               :class="[`calendar-table__cell--impact`]"
-              :tooltip-text="`Impact: ${event.importance}`"
+              :tooltip-text="`Impact: ${Number(event.importance) + 1}`"
             >
-              <CalendarImpact :impact="Number(event.importance) as 1 | 2 | 3" />
+              <CalendarImpact
+                :impact="(Number(event.importance) + 1) as 1 | 2 | 3"
+              />
             </TableCell>
             <TableCell
               :item="event.actual"
