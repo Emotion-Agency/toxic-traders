@@ -12,6 +12,7 @@ const props = defineProps<IProps>()
 const $el = ref<HTMLElement | null>(null)
 
 onMounted(() => {
+  if (!$el.value) return
   const options = {
     series: [
       {
