@@ -84,6 +84,7 @@ const inputItem = computed(() => ({
         <InputSelect
           v-slot="{ renderedItems }"
           :options="options"
+          :value="itemsCount + ' rows'"
           :placeholder="itemsCount + ' rows'"
           @select="selectItem"
         >
