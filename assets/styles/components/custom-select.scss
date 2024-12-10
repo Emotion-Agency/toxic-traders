@@ -55,6 +55,9 @@
   @include input-default;
   color: var(--secondary-dark);
   user-select: none;
+  &--placeholder {
+    color: var(--secondary-light) !important;
+  }
 }
 
 .custom-select__reset {

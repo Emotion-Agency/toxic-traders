@@ -122,7 +122,10 @@ const validate = () => {
       >{{ title }} <abbr v-if="required === true">*</abbr>
     </span>
     <div class="custom-select__selected" @click="toggleList">
-      <p class="custom-select__text">
+      <p
+        class="custom-select__text"
+        :class="[!selectedItem && 'custom-select__text--placeholder']"
+      >
         {{ selectedItem ?? placeholder }}
       </p>
 
