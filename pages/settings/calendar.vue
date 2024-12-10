@@ -200,7 +200,6 @@ const updateReactions = async (
         :name="searchInput.name"
         :type="searchInput.type"
         :placeholder="searchInput.placeholder"
-        :disabled="isLoading"
         :is-right-button="searchInput.isRightButton"
         class="settings-calendar__search"
         @input-value="onSearch"
