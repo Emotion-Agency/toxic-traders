@@ -11,10 +11,12 @@ import {
   getAllGroupedCalendarEvents,
   getCalendarEventsByTitleAndCountry,
   getGroupedCalendarEventsByTitle,
+  getGroupedCalendarEventsByTitleAndCountry,
   setImportanceToEvent,
   setOHLCSymbolTradeDirection,
   unbindOHLCSymbolToEvent,
 } from '~/utils/api/calendar/calendarEvents'
+import { countryCodes } from '~/utils/constants/countryCodes'
 
 export const useCalendarEvents = () => {
   const events = ref<ITableCalendarEvent[]>([])
@@ -128,9 +130,23 @@ export const useCalendarEvents = () => {
     }
   }
 
-  const getGroupedEventsByName = async (title: string) => {
+  const getGroupedEventsByName = async (query: string) => {
     try {
-      const res = await getGroupedCalendarEventsByTitle(title)
+      const [country, ...title] = query.split(' ')
+
+      const isCountry = countryCodes.includes(country)
+
+      let res: { data: ICalendarEvent[] } | undefined
+
+      if (isCountry) {
+        res = await getGroupedCalendarEventsByTitleAndCountry(
+          title?.join(' '),
+          country
+        )
+      } else {
+        res = await getGroupedCalendarEventsByTitle(query)
+      }
+
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')
