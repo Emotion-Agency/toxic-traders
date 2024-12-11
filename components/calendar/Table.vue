@@ -54,7 +54,7 @@ onMounted(async () => {
 })
 
 const getCountryFlag = (countryCode: string) => {
-  const country = countries.value.find(
+  const country = countries.value?.find(
     country => country.countryShortName === countryCode
   )
   return country?.countryFlag

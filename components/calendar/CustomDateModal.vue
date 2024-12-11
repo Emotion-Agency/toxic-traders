@@ -33,23 +33,27 @@ const { theme } = useAppState()
     <div class="calendar-date-modal__inputs">
       <div class="calendar-date-modal__input">
         <p class="calendar-date-modal__label">Start date</p>
-        <VueDatePicker
-          :teleport="true"
-          :enable-time-picker="false"
-          v-model="startDate"
-          placeholder="22.05.1998"
-          :dark="isDark || theme === 'dark'"
-        />
+        <ClientOnly>
+          <VueDatePicker
+            :teleport="true"
+            :enable-time-picker="false"
+            v-model="startDate"
+            placeholder="22.05.1998"
+            :dark="isDark || theme === 'dark'"
+          />
+        </ClientOnly>
       </div>
       <div class="calendar-date-modal__input">
         <p class="calendar-date-modal__label">End Date</p>
-        <VueDatePicker
-          :teleport="true"
-          :enable-time-picker="false"
-          v-model="endDate"
-          placeholder="22.05.1998"
-          :dark="isDark || theme === 'dark'"
-        />
+        <ClientOnly>
+          <VueDatePicker
+            :teleport="true"
+            :enable-time-picker="false"
+            v-model="endDate"
+            placeholder="22.05.1998"
+            :dark="isDark || theme === 'dark'"
+          />
+        </ClientOnly>
       </div>
     </div>
 

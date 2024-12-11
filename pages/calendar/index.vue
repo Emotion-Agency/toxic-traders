@@ -17,8 +17,7 @@ function formatDate(date: Date): string {
 
 const isModalOpen = ref(false)
 
-const { events, getEvents, getFourWeeksEvents, totalCount } =
-  useCalendarEvents()
+const { events, getEvents, getWeekEvents, totalCount } = useCalendarEvents()
 const isLoading = ref(false)
 
 const {
@@ -39,7 +38,7 @@ const getAllEvents = async () => {
   try {
     isLoading.value = true
     if (!startDate.value) {
-      await getFourWeeksEvents(
+      await getWeekEvents(
         currentPage.value,
         itemsCount.value,
         sortState.value.sortOrder === 1 ? 0 : 1

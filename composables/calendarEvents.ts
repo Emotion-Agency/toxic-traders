@@ -49,10 +49,15 @@ export const useCalendarEvents = () => {
       const res = await getAllCalendarEvents({
         page,
         pageSize: count,
-        startDate: startDate ? getDateDay(startDate) + 'T00:00:00' : undefined,
+        startDate: startDate
+          ? getDateDay(startDate) +
+            `T00:00:00${getGMTTime(-new Date().getTimezoneOffset())}`
+          : undefined,
         endDate: endDate
-          ? getDateDay(endDate) + 'T23:59:59'
-          : getDateDay(startDate) + 'T23:59:59',
+          ? getDateDay(endDate) +
+            `T23:59:59${getGMTTime(-new Date().getTimezoneOffset())}`
+          : getDateDay(startDate) +
+            `T23:59:59${getGMTTime(-new Date().getTimezoneOffset())}`,
         sortOrder: sort,
         filter: 2,
       })
@@ -88,22 +93,27 @@ export const useCalendarEvents = () => {
     }
   }
 
-  const getFourWeeksEvents = async (
-    page: number,
-    count: number,
-    sort?: 0 | 1
-  ) => {
+  const getWeekEvents = async (page: number, count: number, sort?: 0 | 1) => {
     const twoWeeks = 12096e5
+
+    const today = new Date()
+
+    const startOfWeek = new Date(today)
+    startOfWeek.setDate(today.getDate() - today.getDay())
+    const endOfWeek = new Date(startOfWeek)
+    endOfWeek.setDate(startOfWeek.getDate() + 6)
+
+    console.log(
+      getDateDay(startOfWeek.toString()),
+      getDateDay(endOfWeek.toString())
+    )
+
     await getEvents({
       page,
       count,
       sort,
-      startDate: getDateDay(
-        new Date(new Date().getTime() - twoWeeks).toISOString()
-      ),
-      endDate: getDateDay(
-        new Date(new Date().getTime() + twoWeeks).toISOString()
-      ),
+      startDate: getDateDay(startOfWeek.toString()),
+      endDate: getDateDay(endOfWeek.toString()),
     })
   }
 
@@ -251,7 +261,7 @@ export const useCalendarEvents = () => {
     activeEvent,
     getEvents,
     getGroupedEvents,
-    getFourWeeksEvents,
+    getWeekEvents,
     getEventsByName,
     getGroupedEventsByName,
     disableEvent,
