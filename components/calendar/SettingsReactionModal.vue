@@ -78,10 +78,10 @@ const onSymbolSearch = (searchValue: string) => {
   symbolsSearchValue.value = searchValue
 }
 
-const onSelect = (value: string, itemsIdx: number, symbolsIdx: number) => {
+const onSelect = (value: string, itemsIdx: number) => {
   items.value[itemsIdx].ohlcSymbol = value
 
-  const symbolId = props.symbols?.find((_, i) => i === symbolsIdx)?.id
+  const symbolId = props.symbols?.find(symbol => symbol.symbol === value)?.id
 
   items.value[itemsIdx].id = symbolId
 }
@@ -128,7 +128,7 @@ const onSave = () => {
             :key="option"
             :index="i"
             :option="option"
-            @select="onSelect($event, idx, i)"
+            @select="onSelect($event, idx)"
           />
         </InputSelect>
         <div class="scrm__dir">
