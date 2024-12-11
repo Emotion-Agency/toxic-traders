@@ -12,7 +12,10 @@ export default defineNuxtConfig({
     strict: false,
   },
 
-  plugins: ['~/plugins/vue-datepicker.ts'],
+  plugins: [
+    '~/plugins/vue-datepicker.ts',
+    '~/plugins/vue-apexcharts.client.ts',
+  ],
 
   modules: ['@vueuse/nuxt'],
 })
