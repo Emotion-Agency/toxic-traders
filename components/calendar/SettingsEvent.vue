@@ -16,7 +16,20 @@ const emit = defineEmits(['openReactions', 'updateEvent'])
 
 const importance = ['Low', 'Medium', 'High']
 
-const filteredSymbols = ref<IOHLCSymbol[]>(props.symbols)
+const symbolsSearchValue = ref('')
+
+const filteredSymbols = computed<IOHLCSymbol[]>(() =>
+  props.symbols
+    .filter(item => !bindedSymbols.value.includes(item.symbol))
+    ?.filter(
+      item =>
+        item.symbol
+          .toLowerCase()
+          .trim()
+          .includes(symbolsSearchValue.value.toLowerCase().trim()) &&
+        item.symbol !== selectedSymbol.value
+    )
+)
 
 const bindedSymbols = computed(() => {
   return props.event.symbols.map(symbol => symbol.ohlcSymbol.symbol)
@@ -27,15 +40,6 @@ const selectedSymbol = computed<string>(
 )
 
 const selectedImportance = ref<string>(importance[props.event.importance])
-
-watch(
-  () => props.symbols,
-  () => {
-    filteredSymbols.value = props.symbols.filter(
-      item => !bindedSymbols.value.includes(item.symbol)
-    )
-  }
-)
 
 watch(
   () => props.event.importance,
@@ -63,14 +67,7 @@ const symbolsSelect = computed(() => {
 })
 
 const onSymbolSearch = (searchValue: string) => {
-  filteredSymbols.value = props.symbols?.filter(
-    item =>
-      item.symbol
-        .toLowerCase()
-        .trim()
-        .includes(searchValue.toLowerCase().trim()) &&
-      item.symbol !== selectedSymbol.value
-  )
+  symbolsSearchValue.value = searchValue
 }
 
 const { countryFlags, getFlags } = useFlags()
