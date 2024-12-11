@@ -225,11 +225,11 @@ const nextHandler = () => {
             :data="candles"
             :event-time="activeEvent.time"
           />
+          <NotFound
+            v-if="!candles?.length && !isLoading"
+            message="No data found"
+          />
         </div>
-        <NotFound
-          v-if="!candles?.length && !isLoading"
-          message="No data found"
-        />
       </div>
     </section>
   </main>
