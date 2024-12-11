@@ -10,7 +10,6 @@ import {
   getAllCalendarEvents,
   getAllGroupedCalendarEvents,
   getCalendarEventsByTitleAndCountry,
-  getGroupedCalendarEventsByTitle,
   getGroupedCalendarEventsByTitleAndCountry,
   setImportanceToEvent,
   setOHLCSymbolTradeDirection,

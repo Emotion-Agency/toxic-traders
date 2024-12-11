@@ -60,35 +60,6 @@ const getCountryFlag = (countryCode: string) => {
   return country?.countryFlag
 }
 
-const isNegative = (number: number | string) => {
-  return Number(number) < 0
-}
-
-const getNumberVariant = (
-  number: number | string,
-  event: ITableCalendarEvent
-) => {
-  const dir = event.firstSymbol?.tradeDirection
-
-  if (isNaN(Number(number))) {
-    return 'neutral'
-  }
-
-  if (Number(number) === 0) {
-    return 'neutral'
-  }
-
-  if (isNegative(number) && dir === 0) {
-    return 'negative'
-  }
-
-  if (!isNegative(number) && dir === 1) {
-    return 'positive'
-  }
-
-  return 'positive'
-}
-
 const $el = ref<HTMLElement | null>(null)
 
 const { activeEvent } = useCalendarEvents()
@@ -182,7 +153,7 @@ onMounted(() => {
             >
               <CalendarTableNumber
                 :number="event.actual"
-                :variant="getNumberVariant(event.dev, event)"
+                :variant="getEventNumberVariant(event.dev, event)"
                 :unit="event.unit"
                 :scale="event.scale"
               />
@@ -218,7 +189,7 @@ onMounted(() => {
               :disable-tooltip="!event.dev"
             >
               <CalendarTableNumber
-                :variant="getNumberVariant(event.dev, event)"
+                :variant="getEventNumberVariant(event.dev, event)"
                 :number="event.dev"
                 :unit="event.unit"
                 :scale="event.scale"

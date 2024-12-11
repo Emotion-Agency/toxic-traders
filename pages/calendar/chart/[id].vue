@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ICandle, IOHLCData } from '~/types/ohlc/symbols'
+import type { ICandle } from '~/types/ohlc/symbols'
 import { symbolToCandleAdapter } from '~/utils/adapters/ohls/symbolToCandleAdapter'
 import { getOHLCSymbolsData } from '~/utils/api/ohlc/symbolsData'
 
@@ -11,19 +11,21 @@ const { events, getEventsByName, activeEvent } = useCalendarEvents()
 const isLoading = ref(false)
 
 const candles = ref<ICandle[]>([])
+const countries = ref([])
 
-onMounted(async () => {
+const selectedSymbol = ref(activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol)
+
+watchDeep(activeEvent, () => {
+  selectedSymbol.value = activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol
+})
+
+const { getFlags } = useFlags()
+
+const getChartData = async () => {
   try {
     isLoading.value = true
-    await getEventsByName(title as string, country as string)
 
-    if (events.value.length) {
-      activeEvent.value = events.value.find(
-        event => event.id?.toString() === route.params.id
-      )
-    }
-
-    if (!activeEvent.value?.firstSymbol) {
+    if (!selectedSymbol.value) {
       return
     }
 
@@ -39,7 +41,7 @@ onMounted(async () => {
     const reactionCandles = await getOHLCSymbolsData(
       formatDateWithTimeDdMmYyyy(eventReleaseDate - timeBeforeRelease),
       formatDateWithTimeDdMmYyyy(eventReleaseDate + timeAfterRelease),
-      activeEvent.value.firstSymbol?.ohlcSymbol?.symbol
+      selectedSymbol.value
     )
 
     candles.value = reactionCandles?.map(candle =>
@@ -50,17 +52,179 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+onMounted(async () => {
+  isLoading.value = true
+
+  await getEventsByName(title as string, country as string)
+
+  isLoading.value = false
+
+  if (events.value.length) {
+    activeEvent.value = events.value.find(
+      event => event.id?.toString() === route.params.id
+    )
+  }
+
+  try {
+    countries.value = await getFlags()
+  } catch (error) {
+    console.log(error)
+  }
 })
+
+watch(selectedSymbol, () => {
+  getChartData()
+})
+
+const getCountryFlag = (countryCode: string) => {
+  const country = countries.value.find(
+    country => country.countryShortName === countryCode
+  )
+  return country?.countryFlag
+}
+
+const router = useRouter()
+
+const prevEvent = computed(() => {
+  return events.value[events.value.indexOf(activeEvent.value) - 1]
+})
+
+const nextEvent = computed(() => {
+  return events.value[events.value.indexOf(activeEvent.value) + 1]
+})
+
+const prevHandler = () => {
+  if (prevEvent.value) {
+    router.push({
+      path: `/calendar/chart/${prevEvent.value.id}`,
+      query: { country: prevEvent.value.country, title: prevEvent.value.event },
+    })
+  }
+}
+
+const nextHandler = () => {
+  if (nextEvent.value) {
+    router.push({
+      path: `/calendar/chart/${nextEvent.value.id}`,
+      query: { country: nextEvent.value.country, title: nextEvent.value.event },
+    })
+  }
+}
 </script>
 
 <template>
-  <main style="margin-top: 120px">
-    <section>
-      <div class="container">
-        <h1>{{ country }} {{ title }}</h1>
+  <main>
+    <section class="calendar-chart">
+      <div class="container calendar-chart__container">
         <UiLoader v-if="isLoading" />
-        <div v-if="candles?.length">
-          <Chart :data="candles" :event-time="activeEvent.time" />
+        <div v-if="activeEvent" class="calendar-chart__content">
+          <nav class="calendar-chart__nav">
+            <button class="calendar-chart__prev" @click="prevHandler">
+              ({{ formatDateWithTime(prevEvent?.time) }})
+            </button>
+            <div class="calendar-chart__nav-content">
+              <h1 class="calendar-chart__title">
+                <span>
+                  <img
+                    v-if="getCountryFlag(activeEvent.country)?.url"
+                    class="calendar-chart__flag"
+                    :src="getCountryFlag(activeEvent.country)?.url"
+                    :alt="getCountryFlag(activeEvent.country).alt"
+                  />
+                </span>
+                {{ country }} {{ title }}
+              </h1>
+              <time class="calendar-chart__date">{{ activeEvent.time }}</time>
+              <CalendarImpact
+                class="calendar-chart__impact"
+                :impact="(Number(activeEvent.importance) + 1) as 1 | 2 | 3"
+              />
+
+              <CalendarChartItem
+                title="Actual:"
+                :number="{
+                  number: activeEvent.actual,
+                  variant: getEventNumberVariant(activeEvent.dev, activeEvent),
+                  unit: activeEvent.unit,
+                  scale: activeEvent.scale,
+                }"
+              />
+              <CalendarChartItem
+                title="Forecast:"
+                :number="{
+                  number: activeEvent.forecast,
+                  unit: activeEvent.unit,
+                  scale: activeEvent.scale,
+                }"
+              />
+              <CalendarChartItem
+                title="Previous:"
+                :number="{
+                  number: activeEvent.previous,
+                  unit: activeEvent.unit,
+                  scale: activeEvent.scale,
+                }"
+              />
+              <CalendarChartItem
+                title="Dev:"
+                :number="{
+                  number: activeEvent.dev,
+                  unit: activeEvent.unit,
+                  scale: activeEvent.scale,
+                  variant: getEventNumberVariant(activeEvent.dev, activeEvent),
+                }"
+              />
+            </div>
+            <button class="calendar-chart__next" @click="nextHandler">
+              ({{ formatDateWithTime(nextEvent?.time) }})
+            </button>
+          </nav>
+          <div class="calendar-chart__second-nav">
+            <InputSelect
+              v-slot="{ renderedItems }"
+              :options="
+                activeEvent.symbols?.map(symbol => symbol?.ohlcSymbol?.symbol)
+              "
+              :value="activeEvent?.firstSymbol?.ohlcSymbol?.symbol"
+              placeholder="Select symbol"
+            >
+              <InputSelectOption
+                v-for="(option, idx) in renderedItems"
+                :index="idx"
+                :key="idx"
+                :value="option"
+                :option="option"
+                @select="selectedSymbol = option"
+              />
+            </InputSelect>
+
+            <TheButton button-size="small">
+              View
+              <template #end-icon>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.125 9.75C7.125 10.0484 7.00647 10.3345 6.7955 10.5455C6.58452 10.7565 6.29837 10.875 6 10.875C5.70163 10.875 5.41548 10.7565 5.2045 10.5455C4.99353 10.3345 4.875 10.0484 4.875 9.75C4.875 9.45163 4.99353 9.16548 5.2045 8.9545C5.41548 8.74353 5.70163 8.625 6 8.625C6.29837 8.625 6.58452 8.74353 6.7955 8.9545C7.00647 9.16548 7.125 9.45163 7.125 9.75ZM7.125 6C7.125 6.29837 7.00647 6.58452 6.7955 6.7955C6.58452 7.00647 6.29837 7.125 6 7.125C5.70163 7.125 5.41548 7.00647 5.2045 6.7955C4.99353 6.58452 4.875 6.29837 4.875 6C4.875 5.70163 4.99353 5.41548 5.2045 5.2045C5.41548 4.99353 5.70163 4.875 6 4.875C6.29837 4.875 6.58452 4.99353 6.7955 5.2045C7.00647 5.41548 7.125 5.70163 7.125 6V6ZM7.125 2.25C7.125 2.54837 7.00647 2.83452 6.7955 3.0455C6.58452 3.25647 6.29837 3.375 6 3.375C5.70163 3.375 5.41548 3.25647 5.2045 3.0455C4.99353 2.83452 4.875 2.54837 4.875 2.25C4.875 1.95163 4.99353 1.66548 5.2045 1.4545C5.41548 1.24353 5.70163 1.125 6 1.125C6.29837 1.125 6.58452 1.24353 6.7955 1.4545C7.00647 1.66548 7.125 1.95163 7.125 2.25V2.25Z"
+                    fill="white"
+                  />
+                </svg>
+              </template>
+            </TheButton>
+          </div>
+          <Chart
+            v-if="candles?.length"
+            :data="candles"
+            :event-time="activeEvent.time"
+          />
         </div>
         <NotFound
           v-if="!candles?.length && !isLoading"

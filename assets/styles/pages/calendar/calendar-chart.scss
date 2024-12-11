@@ -1,0 +1,75 @@
+.calendar-chart {
+  padding-top: 81px;
+  padding-bottom: 24px;
+  background-color: var(--white);
+  min-height: 100vh;
+}
+
+.calendar-chart__content {
+  height: calc(100vh - 81px);
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-chart__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--gray-300);
+}
+.calendar-chart__prev,
+.calendar-chart__next {
+  @include button-small;
+  color: var(--gray-500);
+}
+
+.calendar-chart__nav-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.calendar-chart__title {
+  @include heading-b-h6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.calendar-chart__date {
+  font-size: 14px;
+}
+.calendar-chart__impact {
+  font-size: 14px;
+}
+
+.calendar__chart-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1em;
+  gap: 16px;
+}
+.calendar__chart-item-title {
+  @include heading-b-h6;
+  font-size: 14px;
+  line-height: 1em;
+}
+.calendar__chart-item-text {
+  font-size: 12px;
+  line-height: 1em;
+}
+
+.calendar-chart__flag {
+  display: block;
+  max-width: 100%;
+  height: 1em;
+}
+
+.calendar-chart__second-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-300);
+}
