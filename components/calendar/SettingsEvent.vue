@@ -54,7 +54,7 @@ const symbolsSelect = computed(() => {
     title: 'Main Symbol',
     searchInput: {
       required: false,
-      name: 'Spreads search symbol',
+      name: 'Settings search symbol',
       type: 'text',
       placeholder: 'Search symbol',
       isRightButton: true,

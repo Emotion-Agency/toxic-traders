@@ -19,6 +19,8 @@ const props = defineProps<IProps>()
 
 const emit = defineEmits(['close', 'save'])
 
+const symbolsSearchValue = ref('')
+
 const itemsAdapter = (symbol: ICalendarEventSymbol): IReactionItem => {
   return {
     ohlcSymbol: symbol.ohlcSymbol.symbol,
@@ -65,7 +67,16 @@ const filteredOptions = computed(() => {
     ?.filter(symbol => {
       return !items.value.some(item => item.ohlcSymbol === symbol)
     })
+    ?.filter(symbol => {
+      return symbol
+        .toLowerCase()
+        .includes(symbolsSearchValue.value.toLowerCase())
+    })
 })
+
+const onSymbolSearch = (searchValue: string) => {
+  symbolsSearchValue.value = searchValue
+}
 
 const onSelect = (value: string, itemsIdx: number, symbolsIdx: number) => {
   items.value[itemsIdx].ohlcSymbol = value
@@ -101,7 +112,16 @@ const onSave = () => {
           v-slot="{ renderedItems }"
           :options="filteredOptions"
           placeholder="Select Symbol"
+          :search-input="{
+            id: `scrm-symbol-search--${idx}`,
+            required: false,
+            name: 'Search reaction symbol',
+            type: 'text',
+            placeholder: 'Search symbol',
+            isRightButton: true,
+          }"
           :value="symbol.ohlcSymbol"
+          @search="onSymbolSearch"
         >
           <InputSelectOption
             v-for="(option, i) in renderedItems"
