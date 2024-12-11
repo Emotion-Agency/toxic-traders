@@ -10,7 +10,7 @@ const props = defineProps<IProps>()
 
 const isDark = usePreferredDark()
 
-const { theme } = useAppState()
+const { themeValue } = useAppState()
 
 const options = computed(() => ({
   chart: {
@@ -56,7 +56,7 @@ const options = computed(() => ({
   },
 
   theme: {
-    mode: theme.value !== 'system' ? theme.value : isDark ? 'dark' : 'light',
+    mode: themeValue,
   },
 }))
 </script>

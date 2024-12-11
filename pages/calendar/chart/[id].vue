@@ -136,7 +136,9 @@ const nextHandler = () => {
                 </span>
                 {{ country }} {{ title }}
               </h1>
-              <time class="calendar-chart__date">{{ activeEvent.time }}</time>
+              <time class="calendar-chart__date">{{
+                formatDateWithTime(activeEvent.time)
+              }}</time>
               <CalendarImpact
                 class="calendar-chart__impact"
                 :impact="(Number(activeEvent.importance) + 1) as 1 | 2 | 3"

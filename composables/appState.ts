@@ -8,9 +8,9 @@ export const useAppState = () => {
 
   const isDark = usePreferredColorScheme()
 
-  const isThemeDark = computed(() =>
-    theme.value !== 'system' ? theme.value === 'dark' : isDark
+  const themeValue = computed(() =>
+    theme.value !== 'system' ? theme.value : isDark ? 'dark' : 'light'
   )
 
-  return { isInEditor, isLoaded, isWaiting, theme, isThemeDark }
+  return { isInEditor, isLoaded, isWaiting, theme, themeValue }
 }
