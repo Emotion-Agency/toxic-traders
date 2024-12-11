@@ -8,9 +8,14 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const options = {
+const isDark = usePreferredDark()
+
+const { theme } = useAppState()
+
+const options = computed(() => ({
   chart: {
     id: 'vuechart-example',
+    background: 'transparent',
   },
   annotations: {
     xaxis: [
@@ -49,7 +54,11 @@ const options = {
   tooltip: {
     enabled: true,
   },
-}
+
+  theme: {
+    mode: theme.value !== 'system' ? theme.value : isDark ? 'dark' : 'light',
+  },
+}))
 </script>
 
 <template>
