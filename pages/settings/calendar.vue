@@ -187,6 +187,12 @@ const updateReactions = async (
     isUpdatingReactions.value = false
   }
 }
+
+const updateEvent = async (eventToUpdate: ITableCalendarEvent) => {
+  events.value = events.value.map(event =>
+    event.id === eventToUpdate.id ? eventToUpdate : event
+  )
+}
 </script>
 
 <template>
@@ -218,6 +224,7 @@ const updateReactions = async (
           :event="event"
           :symbols="symbols"
           @open-reactions="reactionEvent = $event"
+          @update-event="$event => updateEvent($event)"
         />
       </ul>
       <ThePagination

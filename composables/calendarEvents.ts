@@ -134,17 +134,17 @@ export const useCalendarEvents = () => {
     try {
       const [country, ...title] = query.split(' ')
 
-      const isCountry = countryCodes.includes(country)
+      const isCountry = countryCodes.includes(country?.toUpperCase())
 
       let res: { data: ICalendarEvent[] } | undefined
 
       if (isCountry) {
         res = await getGroupedCalendarEventsByTitleAndCountry(
           title?.join(' '),
-          country
+          country?.toUpperCase()
         )
       } else {
-        res = await getGroupedCalendarEventsByTitle(query)
+        res = await getGroupedCalendarEventsByTitleAndCountry(query)
       }
 
       const data = res?.data

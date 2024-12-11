@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import type { ITableCalendarEvent } from '~/types/calendar/events'
+import type {
+  ICalendarEventSymbol,
+  ITableCalendarEvent,
+} from '~/types/calendar/events'
 import type { IOHLCSymbol } from '~/types/ohlc/symbols'
 
 interface IProps {
@@ -9,7 +12,7 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const emit = defineEmits(['openReactions'])
+const emit = defineEmits(['openReactions', 'updateEvent'])
 
 const importance = ['Low', 'Medium', 'High']
 
@@ -28,7 +31,9 @@ const selectedImportance = ref<string>(importance[props.event.importance])
 watch(
   () => props.symbols,
   () => {
-    filteredSymbols.value = props.symbols
+    filteredSymbols.value = props.symbols.filter(
+      item => !bindedSymbols.value.includes(item.symbol)
+    )
   }
 )
 
@@ -39,7 +44,8 @@ watch(
   }
 )
 
-const { disableEvent, bindSymbol, changeImportance } = useCalendarEvents()
+const { disableEvent, bindSymbol, changeImportance, unbindSymbol } =
+  useCalendarEvents()
 
 const symbolsSelect = computed(() => {
   return {
@@ -76,14 +82,6 @@ const getCountryFlag = (countryCode: string) => {
   return country?.countryFlag
 }
 
-onMounted(async () => {
-  try {
-    await getFlags()
-  } catch (error) {
-    console.error(error)
-  }
-})
-
 const onDisable = async (value, event: ITableCalendarEvent) => {
   await disableEvent(event.event, event.country, value.isChecked)
 }
@@ -99,15 +97,54 @@ const onImportanceChange = (value: string, event: ITableCalendarEvent) => {
 const onSymbolChange = async (
   _: iInputData,
   event: ITableCalendarEvent,
-  symbol: IOHLCSymbol
+  symbol: string
 ) => {
-  await bindSymbol(
-    event.event,
-    event.country,
-    symbol.id,
-    bindedSymbols.value?.length + 1 || 1
+  const currentSymbol = props.symbols.find(item => item.symbol === symbol)
+
+  if (bindedSymbols.value.includes(currentSymbol.symbol)) {
+    await unbindSymbol(event.event, event.country, currentSymbol.id)
+  }
+
+  if (props.event.symbols[0]) {
+    await unbindSymbol(
+      event.event,
+      event.country,
+      props.event.symbols[0].ohlcSymbolId
+    )
+  }
+
+  await bindSymbol(event.event, event.country, currentSymbol.id, 0)
+
+  const newSymbol: ICalendarEventSymbol = {
+    ohlcSymbol: currentSymbol,
+    calendarEventId: event.id,
+    ohlcSymbolId: currentSymbol.id,
+    order: 0,
+    tradeDirection: 0,
+  }
+
+  let updatedEventSymbols = event.symbols.filter(
+    item => item.ohlcSymbolId !== currentSymbol.id
   )
+
+  updatedEventSymbols.shift()
+  updatedEventSymbols.unshift(newSymbol)
+
+  const newEvent: ITableCalendarEvent = {
+    ...event,
+    symbols: updatedEventSymbols,
+  }
+
+  emit('updateEvent', newEvent)
 }
+
+onMounted(async () => {
+  try {
+    await getFlags()
+  } catch (error) {
+    console.error(error)
+  }
+})
 </script>
 
 <template>
@@ -170,7 +207,7 @@ const onSymbolChange = async (
         :key="option"
         :option="option"
         :index="idx"
-        @select="onSymbolChange($event, event, symbols[idx])"
+        @select="onSymbolChange($event, event, option)"
       >
         {{ option }}
       </InputSelectOption>
