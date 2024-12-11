@@ -56,7 +56,7 @@ const options = computed(() => ({
   },
 
   theme: {
-    mode: themeValue,
+    mode: themeValue.value,
   },
 }))
 </script>
