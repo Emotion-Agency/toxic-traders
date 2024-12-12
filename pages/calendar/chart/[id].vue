@@ -47,8 +47,6 @@ const getChartData = async () => {
     candles.value = reactionCandles?.map(candle =>
       symbolToCandleAdapter(candle)
     )
-
-    console.log(candles.value)
   } catch (error) {
     console.log(error)
   } finally {
