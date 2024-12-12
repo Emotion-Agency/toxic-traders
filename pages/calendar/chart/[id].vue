@@ -128,7 +128,8 @@ const onSelect = () => {
         <div v-if="activeEvent" class="calendar-chart__content">
           <nav class="calendar-chart__nav">
             <button class="calendar-chart__prev" @click="prevHandler">
-              ({{ prevEvent?.time ? formatDateWithTime(prevEvent?.time) : '' }})
+              <i><IconsChevronLeft /></i>
+              {{ prevEvent?.time ? formatDateWithTime(prevEvent?.time) : '' }}
             </button>
             <div class="calendar-chart__nav-content">
               <h1 class="calendar-chart__title">
@@ -192,7 +193,8 @@ const onSelect = () => {
               />
             </div>
             <button class="calendar-chart__next" @click="nextHandler">
-              ({{ nextEvent?.time ? formatDateWithTime(nextEvent?.time) : '' }})
+              {{ nextEvent?.time ? formatDateWithTime(nextEvent?.time) : '' }}
+              <i><IconsChevronRight /></i>
             </button>
           </nav>
           <div class="calendar-chart__second-nav">

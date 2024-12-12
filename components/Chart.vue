@@ -15,6 +15,11 @@ const options = computed(() => ({
   chart: {
     id: 'vuechart-example',
     background: 'transparent',
+    toolbar: {
+      show: false,
+    },
+
+    fontFamily: 'Inter, sans-serif',
   },
   annotations: {
     xaxis: [
@@ -47,9 +52,6 @@ const options = computed(() => ({
     },
   },
   yaxis: {
-    tooltip: {
-      enabled: true,
-    },
     lines: {
       show: true,
     },

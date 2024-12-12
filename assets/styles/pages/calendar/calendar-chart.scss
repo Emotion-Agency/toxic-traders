@@ -22,7 +22,14 @@
 .calendar-chart__prev,
 .calendar-chart__next {
   @include button-small;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--gray-500);
+  svg {
+    display: block;
+    height: 1em;
+  }
 }
 
 .calendar-chart__nav-content {
