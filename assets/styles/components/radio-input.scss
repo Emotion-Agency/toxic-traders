@@ -83,7 +83,6 @@
 
 .radio-input__text {
   @include text-body;
-  color: var(--gray-800);
 }
 
 @keyframes radio-tick {

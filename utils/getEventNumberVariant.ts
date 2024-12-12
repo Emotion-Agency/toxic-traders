@@ -18,12 +18,8 @@ export const getEventNumberVariant = (
     return 'neutral'
   }
 
-  if (isNegative(number) && dir === 0) {
+  if (isNegative(number)) {
     return 'negative'
-  }
-
-  if (!isNegative(number) && dir === 1) {
-    return 'positive'
   }
 
   return 'positive'
