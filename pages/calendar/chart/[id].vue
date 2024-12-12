@@ -29,9 +29,8 @@ const getChartData = async () => {
       return
     }
 
-    const eventReleaseDate = new Date(activeEvent.value.time).getTime()
+    const eventReleaseTimestamp = new Date(activeEvent.value?.time).getTime()
 
-    console.log(new Date(activeEvent.value.time), eventReleaseDate)
     const minute = 60 * 1000
 
     // 15 minutes before the event release
@@ -40,14 +39,16 @@ const getChartData = async () => {
     const timeAfterRelease = 2 * 60 * minute
 
     const reactionCandles = await getOHLCSymbolsData(
-      formatDateWithTimeDdMmYyyy(eventReleaseDate - timeBeforeRelease),
-      formatDateWithTimeDdMmYyyy(eventReleaseDate + timeAfterRelease),
+      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),
+      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp + timeAfterRelease),
       selectedSymbol.value
     )
 
     candles.value = reactionCandles?.map(candle =>
       symbolToCandleAdapter(candle)
     )
+
+    console.log(candles.value)
   } catch (error) {
     console.log(error)
   } finally {

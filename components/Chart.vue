@@ -37,6 +37,7 @@ const options = computed(() => ({
 
   xaxis: {
     type: 'category',
+
     lines: {
       show: true,
     },

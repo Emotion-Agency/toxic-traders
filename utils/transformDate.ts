@@ -1,4 +1,5 @@
-import { get } from 'http'
+import moment from 'moment-timezone'
+import { serverTimezone } from './constants/timezones'
 
 interface iDateTimeParams {
   startDateTime: string
@@ -13,15 +14,6 @@ export const formatDate = (input: string): string => {
   const day = String(date.getDate()).padStart(2, '0')
 
   return `${year}-${month}-${day}`
-}
-
-const formatDateInDdMmYyyyFormat = (input: string | number): string => {
-  const date = new Date(input)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-
-  return `${day}.${month}.${year}`
 }
 
 export const getDateDay = (input: string): string => {
@@ -44,9 +36,12 @@ export const formatDateWithTime = (dateStr: string): string => {
 }
 
 export const formatDateWithTimeDdMmYyyy = (
-  dateStr: string | number
+  dateStr: string | number,
+  tz: string = serverTimezone
 ): string => {
-  return `${formatDateInDdMmYyyyFormat(dateStr)} ${getDateTime(dateStr)}`
+  const formatType = 'DD.MM.YYYY HH:mm:ss'
+
+  return moment(dateStr).tz(tz).format(formatType)
 }
 
 export const formatDateAmpm = (input: string): string => {

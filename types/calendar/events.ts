@@ -38,6 +38,7 @@ export interface ICalendarEventData {
 export interface ITableCalendarEvent {
   id: number
   time: string
+  serverTime: string
   event: string
   country: string
   importance: string

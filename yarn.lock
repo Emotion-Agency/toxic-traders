@@ -1513,6 +1513,13 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/moment-timezone@^0.5.30":
+  version "0.5.30"
+  resolved "https://registry.yarnpkg.com/@types/moment-timezone/-/moment-timezone-0.5.30.tgz#340ed45fe3e715f4a011f5cfceb7cb52aad46fc7"
+  integrity sha512-aDVfCsjYnAQaV/E9Qc24C5Njx1CoDjXsEgkxtp9NyXDpYu4CCbmclb6QhWloS9UTU/8YROUEEdEkWI0D7DxnKg==
+  dependencies:
+    moment-timezone "*"
+
 "@types/node@*", "@types/node@^22.0.0":
   version "22.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-22.0.0.tgz#04862a2a71e62264426083abe1e27e87cac05a30"
@@ -4956,6 +4963,18 @@ mlly@^1.7.2, mlly@^1.7.3:
     pathe "^1.1.2"
     pkg-types "^1.2.1"
     ufo "^1.5.4"
+
+moment-timezone@*, moment-timezone@^0.5.46:
+  version "0.5.46"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.46.tgz#a21aa6392b3c6b3ed916cd5e95858a28d893704a"
+  integrity sha512-ZXm9b36esbe7OmdABqIWJuBBiLLwAjrN7CE+7sYdCCx82Nabt1wHDj8TVseS59QIlfFPbOoiBPm6ca9BioG4hw==
+  dependencies:
+    moment "^2.29.4"
+
+moment@^2.29.4:
+  version "2.30.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
+  integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
 
 mri@^1.2.0:
   version "1.2.0"

@@ -1,8 +1,9 @@
+import moment from 'moment-timezone'
 import type {
   ICalendarEvent,
   ITableCalendarEvent,
 } from '~/types/calendar/events'
-import { newsTimezoneOffset } from '~/utils/constants/timezones'
+import { newsTimezoneOffset, serverTimezone } from '~/utils/constants/timezones'
 
 export const calendarEventAdapter = (
   event: ICalendarEvent
@@ -21,9 +22,14 @@ export const calendarEventAdapter = (
 
   const firstSymbol = event.symbols?.sort((a, b) => a.order - b.order)[0]
 
+  const getServerTime = () => {
+    return moment.utc(event.date).tz(serverTimezone).format()
+  }
+
   return {
     id: event.DbId,
     time: `${event.date}${newsTimezoneOffset}`,
+    serverTime: getServerTime(),
     event: event.title,
     country: event.country,
     importance: event.importance,
