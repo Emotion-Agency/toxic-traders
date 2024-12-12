@@ -8,8 +8,6 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const isDark = usePreferredDark()
-
 const { themeValue } = useAppState()
 
 const options = computed(() => ({

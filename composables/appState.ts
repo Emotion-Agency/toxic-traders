@@ -6,11 +6,14 @@ export const useAppState = () => {
   const isWaiting = useState('isWaiting', () => false)
   const theme = useState<Theme>('theme', () => 'system')
 
-  const isDark = usePreferredColorScheme()
+  const isDark = usePreferredDark()
 
-  const themeValue = computed(() =>
-    theme.value !== 'system' ? theme.value : isDark ? 'dark' : 'light'
-  )
+  const themeValue = computed(() => {
+    if (theme.value === 'system') {
+      return isDark.value ? 'dark' : 'light'
+    }
+    return theme.value
+  })
 
   return { isInEditor, isLoaded, isWaiting, theme, themeValue }
 }
