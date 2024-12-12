@@ -115,7 +115,9 @@ const nextHandler = () => {
 }
 
 const onSelect = () => {
-  getChartData()
+  nextTick(() => {
+    getChartData()
+  })
 }
 </script>
 
