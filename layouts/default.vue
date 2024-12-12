@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { useFonts } from '~/composables/fonts'
+import {
+  clientTimezone,
+  clientTimezoneOffset,
+  serverTimezone,
+  serverTimezoneOffset,
+} from '~/utils/constants/timezones'
 
 useFonts()
 

@@ -16,6 +16,7 @@ import {
   unbindOHLCSymbolToEvent,
 } from '~/utils/api/calendar/calendarEvents'
 import { countryCodes } from '~/utils/constants/countryCodes'
+import { clientTimezoneOffset } from '~/utils/constants/timezones'
 
 export const useCalendarEvents = () => {
   const events = ref<ITableCalendarEvent[]>([])
@@ -50,14 +51,11 @@ export const useCalendarEvents = () => {
         page,
         pageSize: count,
         startDate: startDate
-          ? getDateDay(startDate) +
-            `T00:00:00${getGMTTime(-new Date().getTimezoneOffset())}`
+          ? getDateDay(startDate) + `T00:00:00${clientTimezoneOffset}`
           : undefined,
         endDate: endDate
-          ? getDateDay(endDate) +
-            `T23:59:59${getGMTTime(-new Date().getTimezoneOffset())}`
-          : getDateDay(startDate) +
-            `T23:59:59${getGMTTime(-new Date().getTimezoneOffset())}`,
+          ? getDateDay(endDate) + `T23:59:59${clientTimezoneOffset}`
+          : getDateDay(startDate) + `T23:59:59${clientTimezoneOffset}`,
         sortOrder: sort,
         filter: 2,
       })
@@ -94,19 +92,12 @@ export const useCalendarEvents = () => {
   }
 
   const getWeekEvents = async (page: number, count: number, sort?: 0 | 1) => {
-    const twoWeeks = 12096e5
-
     const today = new Date()
 
     const startOfWeek = new Date(today)
     startOfWeek.setDate(today.getDate() - today.getDay())
     const endOfWeek = new Date(startOfWeek)
     endOfWeek.setDate(startOfWeek.getDate() + 6)
-
-    console.log(
-      getDateDay(startOfWeek.toString()),
-      getDateDay(endOfWeek.toString())
-    )
 
     await getEvents({
       page,

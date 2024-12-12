@@ -2,6 +2,7 @@ import type {
   ICalendarEvent,
   ITableCalendarEvent,
 } from '~/types/calendar/events'
+import { newsTimezoneOffset } from '~/utils/constants/timezones'
 
 export const calendarEventAdapter = (
   event: ICalendarEvent
@@ -22,7 +23,7 @@ export const calendarEventAdapter = (
 
   return {
     id: event.DbId,
-    time: `${event.date}+0`,
+    time: `${event.date}${newsTimezoneOffset}`,
     event: event.title,
     country: event.country,
     importance: event.importance,
