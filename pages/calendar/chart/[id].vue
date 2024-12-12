@@ -66,6 +66,10 @@ onMounted(async () => {
     activeEvent.value = events.value.find(
       event => event.id?.toString() === route.params.id
     )
+
+    nextTick(() => {
+      getChartData()
+    })
   }
 
   try {
@@ -75,12 +79,8 @@ onMounted(async () => {
   }
 })
 
-watch(selectedSymbol, () => {
-  getChartData()
-})
-
 const getCountryFlag = (countryCode: string) => {
-  const country = countries.value.find(
+  const country = countries.value?.find(
     country => country.countryShortName === countryCode
   )
   return country?.countryFlag
@@ -113,6 +113,10 @@ const nextHandler = () => {
     })
   }
 }
+
+const onSelect = () => {
+  getChartData()
+}
 </script>
 
 <template>
@@ -123,7 +127,7 @@ const nextHandler = () => {
         <div v-if="activeEvent" class="calendar-chart__content">
           <nav class="calendar-chart__nav">
             <button class="calendar-chart__prev" @click="prevHandler">
-              ({{ formatDateWithTime(prevEvent?.time) }})
+              ({{ prevEvent?.time ? formatDateWithTime(prevEvent?.time) : '' }})
             </button>
             <div class="calendar-chart__nav-content">
               <h1 class="calendar-chart__title">
@@ -187,7 +191,7 @@ const nextHandler = () => {
               />
             </div>
             <button class="calendar-chart__next" @click="nextHandler">
-              ({{ formatDateWithTime(nextEvent?.time) }})
+              ({{ nextEvent?.time ? formatDateWithTime(nextEvent?.time) : '' }})
             </button>
           </nav>
           <div class="calendar-chart__second-nav">
@@ -198,6 +202,7 @@ const nextHandler = () => {
               "
               :value="activeEvent?.firstSymbol?.ohlcSymbol?.symbol"
               placeholder="Select symbol"
+              @select="onSelect"
             >
               <InputSelectOption
                 v-for="(option, idx) in renderedItems"
