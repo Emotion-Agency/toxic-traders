@@ -12,13 +12,17 @@
 }
 
 .calendar-chart__nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding-top: 14px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--gray-300);
 }
+
+.calendar-chart__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .calendar-chart__prev,
 .calendar-chart__next {
   @include button-small;
@@ -79,4 +83,8 @@
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid var(--gray-300);
+}
+
+.calendar-chart__chart-container {
+  height: 100%;
 }

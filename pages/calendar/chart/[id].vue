@@ -123,10 +123,10 @@ const onSelect = () => {
 <template>
   <main>
     <section class="calendar-chart">
-      <div class="container calendar-chart__container">
-        <UiLoader v-if="isLoading" />
-        <div v-if="activeEvent" class="calendar-chart__content">
-          <nav class="calendar-chart__nav">
+      <UiLoader v-if="isLoading" />
+      <div v-if="activeEvent" class="calendar-chart__content">
+        <nav class="calendar-chart__nav">
+          <div class="container calendar-chart__container">
             <button class="calendar-chart__prev" @click="prevHandler">
               <i><IconsChevronLeft /></i>
               {{ prevEvent?.time ? formatDateWithTime(prevEvent?.time) : '' }}
@@ -196,8 +196,10 @@ const onSelect = () => {
               {{ nextEvent?.time ? formatDateWithTime(nextEvent?.time) : '' }}
               <i><IconsChevronRight /></i>
             </button>
-          </nav>
-          <div class="calendar-chart__second-nav">
+          </div>
+        </nav>
+        <div class="calendar-chart__second-nav">
+          <div class="container calendar-chart__container">
             <InputSelect
               v-slot="{ renderedItems }"
               :options="
@@ -237,6 +239,8 @@ const onSelect = () => {
               </template>
             </TheButton>
           </div>
+        </div>
+        <div class="container calendar-chart__chart-container">
           <Chart
             v-if="candles?.length"
             :data="candles"
