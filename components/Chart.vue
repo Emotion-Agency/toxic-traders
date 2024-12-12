@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import moment from 'moment-timezone'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 interface IProps {
@@ -18,7 +19,7 @@ const options = computed(() => ({
   annotations: {
     xaxis: [
       {
-        x: getDateTime(props.eventTime),
+        x: new Date(props.eventTime).getTime(),
         borderColor: '#00E396',
         label: {
           borderColor: '#00E396',
@@ -36,7 +37,10 @@ const options = computed(() => ({
   },
 
   xaxis: {
-    type: 'category',
+    type: 'datetime',
+    labels: {
+      datetimeUTC: false,
+    },
 
     lines: {
       show: true,

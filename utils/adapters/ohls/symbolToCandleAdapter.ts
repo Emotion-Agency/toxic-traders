@@ -8,7 +8,7 @@ export const symbolToCandleAdapter = (item: IOHLCData): ICandle => {
       .tz(item.time, serverTimezone)
       .clone()
       .tz(clientTimezone)
-      .format('HH:mm:ss'),
+      .format('YYYY-MM-DD HH:mm:ssZ'),
     y: [item.openPrice, item.highPrice, item.lowPrice, item.closePrice],
   }
 }
