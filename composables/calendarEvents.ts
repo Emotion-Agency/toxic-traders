@@ -9,6 +9,7 @@ import {
   disableCalendarEvent,
   getAllCalendarEvents,
   getAllGroupedCalendarEvents,
+  getCalendarEventsByExactTitleAndCountry,
   getCalendarEventsByTitleAndCountry,
   getGroupedCalendarEventsByTitleAndCountry,
   setImportanceToEvent,
@@ -117,6 +118,26 @@ export const useCalendarEvents = () => {
         page: 1,
         pageSize: 1000,
       })
+      const data = res?.data
+      if (!data) {
+        throw new Error('No data returned from the API')
+      }
+
+      prepareEvents(data)
+      totalCount.value = data.length
+    } catch (error) {
+      console.error('Error fetching events:', error)
+      toast.error('An error occurred while fetching events. Please try again.')
+    }
+  }
+
+  const getEventsByExactName = async (title: string, country: string) => {
+    try {
+      const res = await getCalendarEventsByExactTitleAndCountry(
+        title,
+        country,
+        2
+      )
       const data = res?.data
       if (!data) {
         throw new Error('No data returned from the API')
@@ -254,6 +275,7 @@ export const useCalendarEvents = () => {
     getGroupedEvents,
     getWeekEvents,
     getEventsByName,
+    getEventsByExactName,
     getGroupedEventsByName,
     disableEvent,
     bindSymbol,

@@ -7,7 +7,7 @@ const route = useRoute()
 
 const { country, title } = route.query
 
-const { events, getEventsByName, activeEvent } = useCalendarEvents()
+const { events, getEventsByExactName, activeEvent } = useCalendarEvents()
 const isLoading = ref(false)
 
 const candles = ref<ICandle[]>([])
@@ -57,7 +57,7 @@ const getChartData = async () => {
 onMounted(async () => {
   isLoading.value = true
 
-  await getEventsByName(title as string, country as string)
+  await getEventsByExactName(title as string, country as string)
 
   isLoading.value = false
 

@@ -51,13 +51,19 @@ export const getCalendarEventsByTitleAndCountry = async ({
   }
 }
 
-export const getGroupedCalendarEventsByTitle = async (title: string) => {
+export const getCalendarEventsByExactTitleAndCountry = async (
+  Title: string,
+  Country: string,
+  Filter: 0 | 1 | 2
+) => {
   try {
     const res = await axiosInstance.get<ICalendarEvent[]>(
-      '/Calendar/GetCalendarEventsByTitle',
+      '/Calendar/GetAllCalendarEventsByExactTitleAndCountry',
       {
         params: {
-          Title: title,
+          Title,
+          Country,
+          Filter,
         },
       }
     )
