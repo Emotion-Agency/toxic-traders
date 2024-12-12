@@ -148,7 +148,10 @@ const nextHandler = () => {
                 title="Actual:"
                 :number="{
                   number: activeEvent.actual,
-                  variant: getEventNumberVariant(activeEvent.dev, activeEvent),
+                  variant: getEventNumberVariant(
+                    activeEvent.dev,
+                    activeEvent?.firstSymbol?.tradeDirection
+                  ),
                   unit: activeEvent.unit,
                   scale: activeEvent.scale,
                 }"
@@ -175,7 +178,10 @@ const nextHandler = () => {
                   number: activeEvent.dev,
                   unit: activeEvent.unit,
                   scale: activeEvent.scale,
-                  variant: getEventNumberVariant(activeEvent.dev, activeEvent),
+                  variant: getEventNumberVariant(
+                    activeEvent.dev,
+                    activeEvent?.firstSymbol?.tradeDirection
+                  ),
                 }"
               />
             </div>

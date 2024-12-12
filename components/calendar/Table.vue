@@ -153,7 +153,12 @@ onMounted(() => {
             >
               <CalendarTableNumber
                 :number="event.actual"
-                :variant="getEventNumberVariant(event.dev, event)"
+                :variant="
+                  getEventNumberVariant(
+                    event.dev,
+                    event?.firstSymbol?.tradeDirection
+                  )
+                "
                 :unit="event.unit"
                 :scale="event.scale"
               />
@@ -189,7 +194,12 @@ onMounted(() => {
               :disable-tooltip="!event.dev"
             >
               <CalendarTableNumber
-                :variant="getEventNumberVariant(event.dev, event)"
+                :variant="
+                  getEventNumberVariant(
+                    event.dev,
+                    event?.firstSymbol?.tradeDirection
+                  )
+                "
                 :number="event.dev"
                 :unit="event.unit"
                 :scale="event.scale"
