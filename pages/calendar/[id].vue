@@ -29,6 +29,7 @@ const {
   onInputChange,
   onSort,
   sortState,
+  sortedEvents,
   paginatedEvents,
 } = useCalendarTable(events, totalCount)
 
@@ -36,15 +37,15 @@ onMounted(async () => {
   await getEvents()
 
   if (events.value.length) {
-    activeEvent.value = events.value.find(
+    activeEvent.value = sortedEvents.value.find(
       event => event.id?.toString() === route.params.id
     )
 
-    const activeElementIdx = events.value.findIndex(
+    const activeElementIdx = sortedEvents.value.findIndex(
       event => event.id?.toString() === route.params.id
     )
 
-    if (!activeElementIdx) return
+    if (activeElementIdx < 0) return
 
     currentPage.value = Math.ceil((activeElementIdx + 1) / itemsCount.value)
   }
@@ -72,11 +73,11 @@ onMounted(async () => {
     </section>
 
     <NotFound
-      v-if="!events.length && !isLoading"
+      v-if="(!events.length || !activeEvent) && !isLoading"
       message="Oops! No events found"
     />
 
-    <section v-else-if="events.length" class="calendar-content">
+    <section v-else-if="events.length && activeEvent" class="calendar-content">
       <div class="calendar-table-wrapper">
         <CalendarTable
           :sort-state="sortState"

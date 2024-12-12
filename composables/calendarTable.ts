@@ -77,6 +77,7 @@ export const useCalendarTable = (
     itemsCount,
     searchValue,
     totalCountPages,
+    sortedEvents,
     paginatedEvents,
     nextPageClick,
     prevPageClick,

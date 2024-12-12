@@ -116,7 +116,7 @@ export const useCalendarEvents = () => {
         Country: country,
         Filter: 2,
         page: 1,
-        pageSize: 1000,
+        pageSize: 10000,
       })
       const data = res?.data
       if (!data) {

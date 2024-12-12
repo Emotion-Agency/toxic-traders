@@ -31,6 +31,7 @@ const getChartData = async () => {
 
     const eventReleaseDate = new Date(activeEvent.value.time).getTime()
 
+    console.log(new Date(activeEvent.value.time), eventReleaseDate)
     const minute = 60 * 1000
 
     // 15 minutes before the event release

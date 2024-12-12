@@ -68,6 +68,7 @@ onMounted(() => {
   setTimeout(() => {
     if (activeEvent.value) {
       const el = document.getElementById(activeEvent.value?.id?.toString())
+      console.log(el)
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
