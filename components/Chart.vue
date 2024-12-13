@@ -41,14 +41,23 @@ const options = computed(() => ({
     ],
   },
 
+  grid: {
+    yaxis: {
+      lines: {
+        show: true,
+      },
+    },
+    // xaxis: {
+    //   lines: {
+    //     show: true,
+    //   },
+    // },
+  },
+
   xaxis: {
     type: 'datetime',
     labels: {
       datetimeUTC: false,
-    },
-
-    lines: {
-      show: true,
     },
   },
   yaxis: {

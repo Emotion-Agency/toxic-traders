@@ -75,6 +75,24 @@ onMounted(() => {
     }
   }, 200)
 })
+
+const getEventURL = (event: ITableCalendarEvent) => {
+  const encodedParams = new URLSearchParams({
+    title: event.event,
+    country: event.country,
+  }).toString()
+
+  return `/calendar/${event.id}?${encodedParams}`
+}
+
+const getChartURL = (event: ITableCalendarEvent) => {
+  const encodedParams = new URLSearchParams({
+    title: event.event,
+    country: event.country,
+  }).toString()
+
+  return `/calendar/chart/${event.id}?${encodedParams}`
+}
 </script>
 
 <template>
@@ -108,7 +126,7 @@ onMounted(() => {
             :key="event.id"
             :id="event.id"
             :link="{
-              url: `/calendar/${event.id}?title=${event.event}&country=${event.country}`,
+              url: getEventURL(event),
             }"
             :class="[event.id === activeEvent?.id && 'table-row--active']"
           >
@@ -221,7 +239,7 @@ onMounted(() => {
               :disable-tooltip="true"
             >
               <TheButton
-                :to="`/calendar/chart/${event.id}?title=${event.event}&country=${event.country}`"
+                :to="getChartURL(event)"
                 tag="nuxt-link"
                 :disabled="!event.firstSymbol"
                 class="calendar-table__button"
