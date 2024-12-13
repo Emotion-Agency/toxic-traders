@@ -1,19 +1,12 @@
 import moment from 'moment-timezone'
 import { serverTimezone } from './constants/timezones'
 
-interface iDateTimeParams {
-  startDateTime: string
-  seconds: number
-  timezone: string | number
-}
-
 export const formatDate = (input: string): string => {
   const date = new Date(input)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
 
-  return `${year}-${month}-${day}`
+  const formatType = 'YYYY-MM-DD'
+
+  return moment(date).format(formatType)
 }
 
 export const getDateDay = (input: string): string => {
@@ -22,13 +15,10 @@ export const getDateDay = (input: string): string => {
 
 export const getDateTime = (input: string | number) => {
   const date = new Date(input)
-  const pad = (num: number) => num.toString().padStart(2, '0')
 
-  const hours = pad(date.getHours())
-  const minutes = pad(date.getMinutes())
-  const seconds = pad(date.getSeconds())
+  const formatType = 'HH:mm:ss'
 
-  return `${hours}:${minutes}:${seconds}`
+  return moment(date).format(formatType)
 }
 
 export const formatDateWithTime = (dateStr: string): string => {
@@ -47,21 +37,9 @@ export const formatDateWithTimeDdMmYyyy = (
 export const formatDateAmpm = (input: string): string => {
   const date = new Date(input)
 
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
+  const formatType = 'YYYY-MM-DD hh:mm:ss A'
 
-  let hours = date.getHours()
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  const seconds = String(date.getSeconds()).padStart(2, '0')
-
-  const ampm = hours >= 12 ? 'PM' : 'AM'
-
-  hours = hours % 12 || 12
-
-  const formattedHours = String(hours).padStart(2, '0')
-
-  return `${year}-${month}-${day} ${formattedHours}:${minutes}:${seconds} ${ampm}`
+  return moment(date).format(formatType)
 }
 
 export const formatDateToSeconds = (dateStr: string): number => {
@@ -69,110 +47,6 @@ export const formatDateToSeconds = (dateStr: string): number => {
 
   return Math.floor(date.getTime() / 1000)
 }
-
-export const getStartDateTime = (startDateTime: string): string => {
-  const [dateTime, timeZone] = startDateTime.split(/([+-]\d{2}:\d{2})$/)
-
-  const utcDate = new Date(`${dateTime}Z`)
-
-  const offsetSign = timeZone[0]
-  const offsetHours = parseInt(timeZone.slice(1, 3), 10)
-  const offsetMinutes = parseInt(timeZone.slice(4, 6), 10)
-
-  const offsetTotalMinutes = offsetHours * 60 + offsetMinutes
-  const offsetMilliseconds = offsetTotalMinutes * 60 * 1000
-
-  const adjustedTime = new Date(
-    utcDate.getTime() +
-      (offsetSign === '+' ? offsetMilliseconds : -offsetMilliseconds)
-  )
-
-  const year = adjustedTime.getUTCFullYear()
-  const month = String(adjustedTime.getUTCMonth() + 1).padStart(2, '0')
-  const day = String(adjustedTime.getUTCDate()).padStart(2, '0')
-  const hours = String(adjustedTime.getUTCHours()).padStart(2, '0')
-  const minutes = String(adjustedTime.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(adjustedTime.getUTCSeconds()).padStart(2, '0')
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-}
-
-// export const getStartDateTime = (startDateTime: string): string => {
-//   const [dateTime, timeZone] = startDateTime.split(/([+-]\d{2}:\d{2})$/)
-
-//   const utcDate = new Date(`${dateTime}Z`)
-
-//   const offsetSign = timeZone[0]
-//   const offsetHours = parseInt(timeZone.substr(1, 2), 10)
-//   const offsetMinutes = parseInt(timeZone.substr(4, 2), 10)
-
-//   const offsetTotalMinutes = offsetHours * 60 + offsetMinutes
-//   const offsetMilliseconds = offsetTotalMinutes * 60 * 1000
-
-//   const adjustedTime = new Date(
-//     utcDate.getTime() +
-//       (offsetSign === '+' ? offsetMilliseconds : -offsetMilliseconds)
-//   )
-
-//   const year = adjustedTime.getUTCFullYear()
-//   const month = String(adjustedTime.getUTCMonth() + 1).padStart(2, '0')
-//   const day = String(adjustedTime.getUTCDate()).padStart(2, '0')
-//   const hours = String(adjustedTime.getUTCHours()).padStart(2, '0')
-//   const minutes = String(adjustedTime.getUTCMinutes()).padStart(2, '0')
-//   const seconds = String(adjustedTime.getUTCSeconds()).padStart(2, '0')
-
-//   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-// }
-
-export const getEndDateTime = ({
-  seconds,
-  startDateTime,
-}: {
-  seconds: number
-  startDateTime: string
-}) => {
-  const [datePart, timePart] = startDateTime.split(' ')
-  const [year, month, day] = datePart.split('-').map(Number)
-  const [hour, minute, second] = timePart.split(':').map(Number)
-
-  const totalSeconds = hour * 3600 + minute * 60 + second + seconds
-  const newHour = Math.floor(totalSeconds / 3600) % 24
-  const newMinute = Math.floor((totalSeconds % 3600) / 60)
-  const newSecond = totalSeconds % 60
-
-  const newDate = new Date(year, month - 1, day, newHour, newMinute, newSecond)
-
-  const formattedDate = `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')}`
-  const formattedTime = `${String(newHour).padStart(2, '0')}:${String(newMinute).padStart(2, '0')}:${String(newSecond).padStart(2, '0')}`
-
-  return `${formattedDate} ${formattedTime}`
-}
-
-// export const getEndDateTime = ({
-//   startDateTime,
-//   seconds,
-//   timezone,
-// }: iDateTimeParams): string => {
-//   const startDate = new Date(startDateTime)
-
-//   let targetOffset: number
-
-//   if (typeof timezone === 'string') {
-//     const timezoneMatch = timezone.match(/GMT([+-]\d+)/)
-//     if (timezoneMatch) {
-//       targetOffset = parseInt(timezoneMatch[1]) * 60 * 60 * 1000
-//     } else {
-//       throw new Error('Invalid timezone format')
-//     }
-//   } else if (typeof timezone === 'number') {
-//     targetOffset = timezone * 60 * 1000
-//   } else {
-//     throw new Error('Timezone must be a number or a string in GMT format')
-//   }
-
-//   const endDate = new Date(startDate.getTime() + seconds * 1000 - targetOffset)
-//   return endDate.toISOString()
-// }
 
 export const minutesToGMT = (input: number | string): string => {
   if (input === 'N/A') {

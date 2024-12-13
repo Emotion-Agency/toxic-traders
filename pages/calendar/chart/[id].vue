@@ -18,7 +18,7 @@ watchDeep(activeEvent, () => {
   selectedSymbol.value = activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol
 })
 
-const { countries, getCountryFlag } = useCountries()
+const { getCountryFlag } = useCountries()
 
 const getChartData = async () => {
   try {
