@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import debounce from 'debounce'
+import { max } from 'moment-timezone'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 interface IProps {
@@ -10,20 +12,121 @@ const props = defineProps<IProps>()
 
 const { themeValue } = useAppState()
 
-function handleMouseDown(event, chartContext) {
-  console.log('down')
+let isDrawing = false
+const lineData = ref(null)
+
+const firstCoord = ref({ x: 0, y: 0 })
+const lastCoord = ref({ x: 0, y: 0 })
+
+const $chartContainer = ref<HTMLElement>(null)
+const chart = ref(null)
+
+const series = ref([
+  {
+    type: 'candlestick',
+    data: props.data,
+  },
+  {
+    type: 'line',
+    name: 'trendline',
+    data: [],
+  },
+])
+
+const ch = computed(() => chart.value?.chart)
+
+function getCoordinates(event: MouseEvent) {
+  const $inner = $chartContainer.value.querySelector('.apexcharts-grid-borders')
+  const rect = $inner.getBoundingClientRect()
+  const x = event.clientX - rect.left
+  const y = event.clientY - rect.top
+
+  const xPercent = x / rect.width
+  const yPercent = y / rect.height
+
+  console.log(xPercent, yPercent)
+
+  const xValue =
+    ch.value.w.globals.minX +
+    (ch.value.w.globals.maxX - ch.value.w.globals.minX) * xPercent
+
+  const yValue =
+    ch.value.w.globals.minY +
+    (ch.value.w.globals.maxY - ch.value.w.globals.minY) * (1 - yPercent)
+
+  return { x: xValue, y: yValue.toFixed(3) }
 }
 
-function handleMouseMove(event, chartContext) {
-  console.log('move', event, chartContext)
+const updateSeries = () => {
+  series.value[1].data = [
+    {
+      x: firstCoord.value.x,
+      y: firstCoord.value.y,
+    },
+    {
+      x: lastCoord.value.x,
+      y: lastCoord.value.y,
+    },
+  ]
 }
 
-function handleMouseUp(event, chartContext) {
-  console.log('up')
+const throttleUpdateSeries = useThrottleFn(updateSeries, 500)
+
+const drawLine = () => {
+  if (!firstCoord.value || !lastCoord.value) return
+  ch.value.clearAnnotations()
+
+  ch.value.addPointAnnotation({
+    x: firstCoord.value.x,
+    y: firstCoord.value.y,
+    label: {
+      text: 'Price: ' + firstCoord.value.y,
+    },
+  })
+
+  const priceDifference = lastCoord.value.y - firstCoord.value.y
+
+  const percentageChange = (
+    (priceDifference / firstCoord.value.y) *
+    100
+  ).toFixed(2)
+
+  const bars = Math.round(
+    Math.abs(lastCoord.value.x - firstCoord.value.x) / 60000
+  )
+
+  ch.value.addPointAnnotation({
+    x: lastCoord.value.x,
+    y: lastCoord.value.y,
+    label: {
+      text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.y}`,
+      textAnchor: 'end',
+    },
+  })
+
+  throttleUpdateSeries()
 }
 
-function handleMouseLeave() {
-  console.log('leave')
+function handleMouseDown(event: MouseEvent) {
+  isDrawing = true
+
+  lastCoord.value = { x: 0, y: 0 }
+
+  firstCoord.value = getCoordinates(event)
+
+  console.log(new Date(firstCoord.value.x))
+}
+
+function handleMouseMove(event: MouseEvent) {
+  if (!isDrawing) return
+
+  lastCoord.value = getCoordinates(event)
+
+  drawLine()
+}
+
+function handleMouseUp() {
+  isDrawing = false
 }
 
 const options = computed(() => ({
@@ -32,13 +135,14 @@ const options = computed(() => ({
     background: 'transparent',
     toolbar: {
       show: false,
+      autoSelected: 'pan',
     },
 
     fontFamily: 'Inter, sans-serif',
 
     events: {
-      mouseMove: (event, chartContext) => handleMouseMove(event, chartContext),
-      mouseLeave: handleMouseLeave,
+      mouseMove: handleMouseMove,
+      mouseLeave: handleMouseUp,
     },
   },
   annotations: {
@@ -94,22 +198,64 @@ const options = computed(() => ({
       format: 'dd MMM yyyy HH:mm',
     },
     enabled: true,
+    shared: true,
+    intersect: false,
+  },
+
+  stroke: {
+    curve: 'straight',
+  },
+  legend: {
+    show: false,
   },
 
   theme: {
     mode: themeValue.value,
   },
 }))
+
+// const series = computed(() => {
+//   if (
+//     !firstCoord.value.x ||
+//     !lastCoord.value.x ||
+//     !lastCoord.value.x ||
+//     !lastCoord.value.y
+//   )
+//     return [
+//       {
+//         type: 'candlestick',
+//         data: props.data,
+//       },
+//     ]
+
+//   return [
+//     {
+//       type: 'candlestick',
+//       data: props.data,
+//     },
+//     {
+//       type: 'line',
+//       name: 'trendline',
+//       data: [
+//         {
+//           x: firstCoord.value.x,
+//           y: firstCoord.value.y,
+//         },
+//         {
+//           x: lastCoord.value.x,
+//           y: lastCoord.value.y,
+//         },
+//       ],
+//     },
+//   ]
+// })
 </script>
 
 <template>
-  <div class="t-chart">
+  <div ref="$chartContainer" class="t-chart">
     <VueApexCharts
-      :series="[
-        {
-          data: props.data,
-        },
-      ]"
+      ref="chart"
+      :series="series"
       height="100%"
       type="candlestick"
       :options="options"
