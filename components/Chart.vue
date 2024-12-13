@@ -107,7 +107,7 @@ const drawLine = () => {
     },
   })
 
-  throttleUpdateSeries()
+  // throttleUpdateSeries()
 }
 
 function handleMouseDown(event: MouseEvent) {
@@ -116,8 +116,6 @@ function handleMouseDown(event: MouseEvent) {
   lastCoord.value = { x: 0, y: 0 }
 
   firstCoord.value = getCoordinates(event)
-
-  console.log(new Date(firstCoord.value.x))
 }
 
 function handleMouseMove(event: MouseEvent) {
@@ -264,5 +262,17 @@ const options = computed(() => ({
       :options="options"
       @mouseup="handleMouseUp"
     />
+
+    <svg ref="svgOverlay" class="svg-overlay">
+      <line
+        v-if="firstCoord && lastCoord"
+        :x1="firstCoord.x"
+        :y1="firstCoord.y"
+        :x2="lastCoord.x"
+        :y2="lastCoord.y"
+        stroke="red"
+        stroke-width="2"
+      />
+    </svg>
   </div>
 </template>
