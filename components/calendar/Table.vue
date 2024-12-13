@@ -30,7 +30,7 @@ const headings = [
   'Show Chart',
 ]
 
-const countries = ref([])
+const { getCountryFlag } = useCountries()
 
 interface GroupedByDate {
   [key: string]: ITableCalendarEvent[]
@@ -46,19 +46,6 @@ const eventsGroupedByDate = computed<GroupedByDate>(() => {
     return acc
   }, {})
 })
-
-const { getFlags } = useFlags()
-
-onMounted(async () => {
-  countries.value = await getFlags()
-})
-
-const getCountryFlag = (countryCode: string) => {
-  const country = countries.value?.find(
-    country => country.countryShortName === countryCode
-  )
-  return country?.countryFlag
-}
 
 const $el = ref<HTMLElement | null>(null)
 

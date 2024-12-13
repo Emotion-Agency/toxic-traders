@@ -3,7 +3,7 @@ export interface iCountries {
   countryShortName: string
   countryFlag: {
     url: string
-    alt: string
+    alt?: string
   }
   id?: number
 }

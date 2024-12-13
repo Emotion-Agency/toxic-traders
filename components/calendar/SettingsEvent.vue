@@ -70,14 +70,7 @@ const onSymbolSearch = (searchValue: string) => {
   symbolsSearchValue.value = searchValue
 }
 
-const { countryFlags, getFlags } = useFlags()
-
-const getCountryFlag = (countryCode: string) => {
-  const country = countryFlags.value?.find(
-    country => country.countryShortName === countryCode
-  )
-  return country?.countryFlag
-}
+const { countries, getCountryFlag } = useCountries()
 
 const onDisable = async (value, event: ITableCalendarEvent) => {
   await disableEvent(event.event, event.country, value.isChecked)
@@ -134,14 +127,6 @@ const onSymbolChange = async (
 
   emit('updateEvent', newEvent)
 }
-
-onMounted(async () => {
-  try {
-    await getFlags()
-  } catch (error) {
-    console.error(error)
-  }
-})
 </script>
 
 <template>

@@ -3,7 +3,7 @@ import type { iLink } from '~/types'
 
 interface iProps {
   title: string | number
-  img?: { url: string; alt: string }
+  img?: { url: string; alt?: string }
   link?: iLink
   text?: string | number
   additionalText?: string | number | iLink

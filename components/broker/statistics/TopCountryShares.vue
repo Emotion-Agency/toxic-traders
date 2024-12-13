@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { getCountriesFlag } from '~/utils/api/countries/getCountries'
 import type {
   iBrokerCompanyNameStatisticAhrefs,
   iBrokerCompanyNameStatisticSemrush,
   iBrokerCompanyNameStatisticSimilarWeb,
 } from '~/types/broker/brokerStatisticProvider'
-import type { iCountries } from '~/types/countries/countries'
+
 import { brokerStatisticsCountrySharesAdapter } from '~/utils/adapters/brokerStatisticsCountryShares'
 
 interface iProps {
@@ -24,10 +23,11 @@ const topCountryShares = ref<
   }[]
 >([])
 
-const flagsRequestData = ref<iCountries[]>([])
+const { countries } = useCountries()
+
 const countriesWithFlag = computed(() => {
   return topCountryShares.value.map(item => {
-    const matchingFlag = flagsRequestData.value.find(
+    const matchingFlag = countries.value.find(
       flag =>
         flag.countryShortName.toLowerCase() === item.CountryCode.toLowerCase()
     )
@@ -52,8 +52,6 @@ watch(
 )
 
 onMounted(async () => {
-  flagsRequestData.value = await getCountriesFlag()
-
   topCountryShares.value = brokerStatisticsCountrySharesAdapter(
     props.activeItem
   )

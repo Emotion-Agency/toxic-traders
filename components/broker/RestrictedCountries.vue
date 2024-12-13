@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getBrokerRestrictedCountriesList } from '~/utils/api/brokers/brokerRestrictedCountriesList'
-import { getCountriesFlag } from '~/utils/api/countries/getCountries'
+
 import type { iCountries } from '~/types/countries/countries'
 import type { iInputMultiselect } from '~/types'
 
@@ -64,11 +64,12 @@ const removeCountries = async (item: iInputMultiselect) => {
   await getCountriesList()
 }
 
+const { countries: countriesApi } = useCountries()
+
 onMounted(async () => {
-  const countriesApi = await getCountriesFlag()
   const countries = await getBrokerRestrictedCountriesList()
   const countryMap = new Map(
-    countriesApi.map(country => [country.countryShortName, country])
+    countriesApi.value.map(country => [country.countryShortName, country])
   )
 
   restrictedCountriesList.value = Object.entries(countries).reduce(

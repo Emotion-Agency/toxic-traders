@@ -11,7 +11,6 @@ const { events, getEventsByExactName, activeEvent } = useCalendarEvents()
 const isLoading = ref(false)
 
 const candles = ref<ICandle[]>([])
-const countries = ref([])
 
 const selectedSymbol = ref(activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol)
 
@@ -19,7 +18,7 @@ watchDeep(activeEvent, () => {
   selectedSymbol.value = activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol
 })
 
-const { getFlags } = useFlags()
+const { countries, getCountryFlag } = useCountries()
 
 const getChartData = async () => {
   try {
@@ -70,20 +69,7 @@ onMounted(async () => {
       getChartData()
     })
   }
-
-  try {
-    countries.value = await getFlags()
-  } catch (error) {
-    console.log(error)
-  }
 })
-
-const getCountryFlag = (countryCode: string) => {
-  const country = countries.value?.find(
-    country => country.countryShortName === countryCode
-  )
-  return country?.countryFlag
-}
 
 const router = useRouter()
 
