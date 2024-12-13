@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import moment from 'moment-timezone'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 interface IProps {
@@ -11,15 +10,36 @@ const props = defineProps<IProps>()
 
 const { themeValue } = useAppState()
 
+function handleMouseDown(event, chartContext) {
+  console.log('down')
+}
+
+function handleMouseMove(event, chartContext) {
+  console.log('move', event, chartContext)
+}
+
+function handleMouseUp(event, chartContext) {
+  console.log('up')
+}
+
+function handleMouseLeave() {
+  console.log('leave')
+}
+
 const options = computed(() => ({
   chart: {
-    id: 'vuechart-example',
+    id: 'calendar-chart',
     background: 'transparent',
     toolbar: {
       show: false,
     },
 
     fontFamily: 'Inter, sans-serif',
+
+    events: {
+      mouseMove: (event, chartContext) => handleMouseMove(event, chartContext),
+      mouseLeave: handleMouseLeave,
+    },
   },
   annotations: {
     xaxis: [
@@ -93,6 +113,8 @@ const options = computed(() => ({
       height="100%"
       type="candlestick"
       :options="options"
+      @mousedown="handleMouseDown"
+      @mouseup="handleMouseUp"
     />
   </div>
 </template>

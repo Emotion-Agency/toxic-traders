@@ -14,6 +14,24 @@ const candles = ref<ICandle[]>([])
 
 const selectedSymbol = ref(activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol)
 
+type TTimeframe = '1m' | '5m' | '15m'
+
+const selectedTimeframe = ref<TTimeframe>('1m')
+
+const filteredCandledByTimeframe = computed(() => {
+  if (selectedTimeframe.value === '1m') {
+    return candles.value
+  }
+
+  if (selectedTimeframe.value === '5m') {
+    return candles.value.filter((_, idx) => idx % 5 === 0)
+  }
+
+  if (selectedTimeframe.value === '15m') {
+    return candles.value.filter((_, idx) => idx % 15 === 0)
+  }
+})
+
 watchDeep(activeEvent, () => {
   selectedSymbol.value = activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol
 })
@@ -186,24 +204,42 @@ const onSelect = () => {
         </nav>
         <div class="calendar-chart__second-nav">
           <div class="container calendar-chart__container">
-            <InputSelect
-              v-slot="{ renderedItems }"
-              :options="
-                activeEvent.symbols?.map(symbol => symbol?.ohlcSymbol?.symbol)
-              "
-              :value="activeEvent?.firstSymbol?.ohlcSymbol?.symbol"
-              placeholder="Select symbol"
-              @select="onSelect"
-            >
-              <InputSelectOption
-                v-for="(option, idx) in renderedItems"
-                :index="idx"
-                :key="idx"
-                :value="option"
-                :option="option"
-                @select="selectedSymbol = option"
-              />
-            </InputSelect>
+            <div class="calendar-chart__second-nav-left">
+              <InputSelect
+                v-slot="{ renderedItems }"
+                :options="
+                  activeEvent.symbols?.map(symbol => symbol?.ohlcSymbol?.symbol)
+                "
+                :value="activeEvent?.firstSymbol?.ohlcSymbol?.symbol"
+                placeholder="Select symbol"
+                @select="onSelect"
+              >
+                <InputSelectOption
+                  v-for="(option, idx) in renderedItems"
+                  :index="idx"
+                  :key="idx"
+                  :value="option"
+                  :option="option"
+                  @select="selectedSymbol = option"
+                />
+              </InputSelect>
+
+              <InputSelect
+                v-slot="{ renderedItems }"
+                :options="['1m', '5m', '15m']"
+                :value="selectedTimeframe"
+                placeholder="Select timeframe"
+              >
+                <InputSelectOption
+                  v-for="(option, idx) in renderedItems"
+                  :index="idx"
+                  :key="idx"
+                  :value="option"
+                  :option="option"
+                  @select="selectedTimeframe = option"
+                />
+              </InputSelect>
+            </div>
 
             <TheButton button-size="small">
               View
@@ -229,7 +265,7 @@ const onSelect = () => {
         <div class="container calendar-chart__chart-container">
           <Chart
             v-if="candles?.length"
-            :data="candles"
+            :data="filteredCandledByTimeframe"
             :event-time="activeEvent.time"
           />
           <NotFound

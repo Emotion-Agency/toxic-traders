@@ -93,3 +93,9 @@
 .calendar-chart__chart-container {
   height: 100%;
 }
+
+.calendar-chart__second-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
