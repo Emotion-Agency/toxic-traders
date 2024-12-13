@@ -25,16 +25,17 @@ const options = computed(() => ({
     xaxis: [
       {
         x: new Date(props.eventTime).getTime(),
-        borderColor: '#00E396',
+        borderColor: 'transparent',
         label: {
-          borderColor: '#00E396',
+          borderColor: 'var(--primary-default)',
+
           style: {
             fontSize: '12px',
             color: '#fff',
-            background: '#00E396',
+            background: 'var(--primary-default)',
           },
           orientation: 'horizontal',
-          offsetY: 7,
+          offsetY: -7,
           text: 'Event release',
         },
       },
@@ -56,6 +57,9 @@ const options = computed(() => ({
 
   xaxis: {
     type: 'datetime',
+    tooltip: {
+      enabled: false,
+    },
     labels: {
       datetimeUTC: false,
     },
@@ -65,9 +69,9 @@ const options = computed(() => ({
       show: true,
     },
   },
-  tooltip: {
-    enabled: true,
-  },
+  // tooltip: {
+  //   enabled: true,
+  // },
 
   theme: {
     mode: themeValue.value,
