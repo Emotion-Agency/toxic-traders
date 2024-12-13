@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<IProps>(), {
 })
 
 const styledNumber = computed(() => {
-  if (props.number) {
+  if (props.number !== undefined) {
     return Number(props.number).toFixed(1) + props.scale + ' ' + props.unit
   }
   return '-'
