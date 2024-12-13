@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import debounce from 'debounce'
-import { max } from 'moment-timezone'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 interface IProps {
   data: ICandle[]
   eventTime?: string
+  timeframe: number
 }
 
 const props = defineProps<IProps>()
@@ -13,7 +12,6 @@ const props = defineProps<IProps>()
 const { themeValue } = useAppState()
 
 let isDrawing = false
-const lineData = ref(null)
 
 const firstCoord = ref({ x: 0, y: 0 })
 const lastCoord = ref({ x: 0, y: 0 })
@@ -33,6 +31,13 @@ const series = ref([
   },
 ])
 
+watch(
+  () => props.data,
+  () => {
+    series.value[0].data = props.data
+  }
+)
+
 const ch = computed(() => chart.value?.chart)
 
 function getCoordinates(event: MouseEvent) {
@@ -43,8 +48,6 @@ function getCoordinates(event: MouseEvent) {
 
   const xPercent = x / rect.width
   const yPercent = y / rect.height
-
-  console.log(xPercent, yPercent)
 
   const xValue =
     ch.value.w.globals.minX +
@@ -92,7 +95,7 @@ const drawLine = () => {
   ).toFixed(2)
 
   const bars = Math.round(
-    Math.abs(lastCoord.value.x - firstCoord.value.x) / 60000
+    Math.abs(lastCoord.value.x - firstCoord.value.x) / 60000 / props.timeframe
   )
 
   ch.value.addPointAnnotation({
@@ -252,14 +255,13 @@ const options = computed(() => ({
 </script>
 
 <template>
-  <div ref="$chartContainer" class="t-chart">
+  <div ref="$chartContainer" class="t-chart" @mousedown="handleMouseDown">
     <VueApexCharts
       ref="chart"
       :series="series"
       height="100%"
       type="candlestick"
       :options="options"
-      @mousedown="handleMouseDown"
       @mouseup="handleMouseUp"
     />
   </div>
