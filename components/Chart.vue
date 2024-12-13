@@ -255,7 +255,7 @@ const options = computed(() => ({
 </script>
 
 <template>
-  <div ref="$chartContainer" class="t-chart" @mousedown="handleMouseDown">
+  <div ref="$chartContainer" class="t-chart">
     <VueApexCharts
       ref="chart"
       :series="series"
