@@ -58,7 +58,7 @@ const options = computed(() => ({
   xaxis: {
     type: 'datetime',
     tooltip: {
-      enabled: false,
+      enabled: true,
     },
     labels: {
       datetimeUTC: false,
@@ -69,9 +69,12 @@ const options = computed(() => ({
       show: true,
     },
   },
-  // tooltip: {
-  //   enabled: true,
-  // },
+  tooltip: {
+    x: {
+      format: 'dd MMM yyyy HH:mm',
+    },
+    enabled: true,
+  },
 
   theme: {
     mode: themeValue.value,
