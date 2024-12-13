@@ -1945,4 +1945,11 @@ export const countriesData: iCountries[] = [
       url: 'https://flagcdn.com/w320/ai.png',
     },
   },
+  {
+    countryFullName: 'European Union',
+    countryShortName: 'EU',
+    countryFlag: {
+      url: 'https://flagcdn.com/w320/eu.png',
+    },
+  },
 ]
