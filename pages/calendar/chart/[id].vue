@@ -16,7 +16,7 @@ const selectedSymbol = ref(activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol)
 
 type TTimeframe = '1m' | '5m' | '15m'
 
-const selectedTimeframe = ref<TTimeframe>('15m')
+const selectedTimeframe = ref<TTimeframe>('1m')
 
 const filteredCandledByTimeframe = computed(() => {
   if (selectedTimeframe.value === '1m') {
