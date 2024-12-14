@@ -2,6 +2,8 @@
 import { resize } from '@emotionagency/utils'
 import type { ICandle } from '~/types/ohlc/symbols'
 
+//http://localhost:3001/calendar/chart/82073?country=CH&title=SNB+Interest+Rate+Decision+%D0%A2
+
 interface IProps {
   data: ICandle[]
   eventTime?: string
@@ -64,15 +66,14 @@ const initPriceRangeTool = () => {
 
 const drawLine = () => {
   if (!firstCoord.value || !lastCoord.value) return
-  ch.value.clearAnnotations()
 
-  ch.value.addPointAnnotation({
-    x: firstCoord.value.xValue,
-    y: firstCoord.value.yValue,
-    label: {
-      text: 'Price: ' + firstCoord.value.yValue,
-    },
-  })
+  // ch.value.addPointAnnotation({
+  //   x: firstCoord.value.xValue,
+  //   y: firstCoord.value.yValue,
+  //   label: {
+  //     text: 'Price: ' + firstCoord.value.yValue,
+  //   },
+  // })
 
   const priceDifference = lastCoord.value.yValue - firstCoord.value.yValue
 
@@ -87,14 +88,18 @@ const drawLine = () => {
       props.timeframe
   )
 
-  ch.value.addPointAnnotation({
-    x: lastCoord.value.xValue,
-    y: lastCoord.value.yValue,
-    label: {
-      text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.yValue}`,
-      textAnchor: 'end',
-    },
-  })
+  console.log(
+    `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.yValue}`
+  )
+
+  // ch.value.addPointAnnotation({
+  //   x: lastCoord.value.xValue,
+  //   y: lastCoord.value.yValue,
+  //   label: {
+  //     text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.yValue}`,
+  //     textAnchor: 'end',
+  //   },
+  // })
 }
 
 function handleMouseDown(event: MouseEvent) {
@@ -130,7 +135,6 @@ const options = computed(() => ({
 
     events: {
       mouseMove: handleMouseMove,
-      mouseLeave: handleMouseUp,
       mounted: initPriceRangeTool,
     },
   },
@@ -225,14 +229,28 @@ const series = computed(() => {
     />
 
     <svg ref="$priceRangeTool" class="svg-overlay">
+      <circle
+        v-if="firstCoord.x"
+        :cx="firstCoord.x"
+        :cy="firstCoord.y"
+        r="3"
+        fill="var(--primary-default)"
+      />
       <line
         v-if="firstCoord.x && lastCoord.x && firstCoord.y && lastCoord.y"
         :x1="firstCoord.x"
         :y1="firstCoord.y"
         :x2="lastCoord.x"
         :y2="lastCoord.y"
-        stroke="red"
+        stroke="var(--primary-default)"
         stroke-width="2"
+      />
+      <circle
+        v-if="lastCoord.x"
+        :cx="lastCoord.x"
+        :cy="lastCoord.y"
+        r="3"
+        fill="var(--primary-default)"
       />
     </svg>
   </div>
