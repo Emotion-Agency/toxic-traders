@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resize } from '@emotionagency/utils'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 interface IProps {
@@ -13,30 +14,12 @@ const { themeValue } = useAppState()
 
 let isDrawing = false
 
-const firstCoord = ref({ x: 0, y: 0 })
-const lastCoord = ref({ x: 0, y: 0 })
+const firstCoord = ref({ x: 0, xValue: 0, y: 0, yValue: 0 })
+const lastCoord = ref({ x: 0, xValue: 0, y: 0, yValue: 0 })
 
 const $chartContainer = ref<HTMLElement>(null)
 const chart = ref(null)
-
-const series = ref([
-  {
-    type: 'candlestick',
-    data: props.data,
-  },
-  {
-    type: 'line',
-    name: 'trendline',
-    data: [],
-  },
-])
-
-watch(
-  () => props.data,
-  () => {
-    series.value[0].data = props.data
-  }
-)
+const $priceRangeTool = ref<SVGElement>(null)
 
 const ch = computed(() => chart.value?.chart)
 
@@ -57,63 +40,67 @@ function getCoordinates(event: MouseEvent) {
     ch.value.w.globals.minY +
     (ch.value.w.globals.maxY - ch.value.w.globals.minY) * (1 - yPercent)
 
-  return { x: xValue, y: yValue.toFixed(3) }
+  return { x, y, xValue, yValue }
 }
 
-const updateSeries = () => {
-  series.value[1].data = [
-    {
-      x: firstCoord.value.x,
-      y: firstCoord.value.y,
-    },
-    {
-      x: lastCoord.value.x,
-      y: lastCoord.value.y,
-    },
-  ]
-}
+const initPriceRangeTool = () => {
+  const svg = $priceRangeTool.value
 
-const throttleUpdateSeries = useThrottleFn(updateSeries, 500)
+  if (!svg) return
+
+  const $inner = $chartContainer.value.querySelector('.apexcharts-grid-borders')
+  const innerRect = $inner.getBoundingClientRect()
+  const containerRect = $chartContainer.value.getBoundingClientRect()
+
+  resize.on(() => {
+    const top = innerRect.top - containerRect.top
+
+    svg.style.width = innerRect.width + 'px'
+    svg.style.height = innerRect.height + 'px'
+    svg.style.top = top + 'px'
+    svg.style.left = innerRect.left + 'px'
+  })
+}
 
 const drawLine = () => {
   if (!firstCoord.value || !lastCoord.value) return
   ch.value.clearAnnotations()
 
   ch.value.addPointAnnotation({
-    x: firstCoord.value.x,
-    y: firstCoord.value.y,
+    x: firstCoord.value.xValue,
+    y: firstCoord.value.yValue,
     label: {
-      text: 'Price: ' + firstCoord.value.y,
+      text: 'Price: ' + firstCoord.value.yValue,
     },
   })
 
-  const priceDifference = lastCoord.value.y - firstCoord.value.y
+  const priceDifference = lastCoord.value.yValue - firstCoord.value.yValue
 
   const percentageChange = (
-    (priceDifference / firstCoord.value.y) *
+    (priceDifference / firstCoord.value.yValue) *
     100
   ).toFixed(2)
 
   const bars = Math.round(
-    Math.abs(lastCoord.value.x - firstCoord.value.x) / 60000 / props.timeframe
+    Math.abs(lastCoord.value.xValue - firstCoord.value.xValue) /
+      60000 /
+      props.timeframe
   )
 
   ch.value.addPointAnnotation({
-    x: lastCoord.value.x,
-    y: lastCoord.value.y,
+    x: lastCoord.value.xValue,
+    y: lastCoord.value.yValue,
     label: {
-      text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.y}`,
+      text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.yValue}`,
       textAnchor: 'end',
     },
   })
-
-  // throttleUpdateSeries()
 }
 
 function handleMouseDown(event: MouseEvent) {
   isDrawing = true
 
-  lastCoord.value = { x: 0, y: 0 }
+  lastCoord.value = { x: 0, y: 0, xValue: 0, yValue: 0 }
 
   firstCoord.value = getCoordinates(event)
 }
@@ -144,6 +131,7 @@ const options = computed(() => ({
     events: {
       mouseMove: handleMouseMove,
       mouseLeave: handleMouseUp,
+      mounted: initPriceRangeTool,
     },
   },
   annotations: {
@@ -215,41 +203,14 @@ const options = computed(() => ({
   },
 }))
 
-// const series = computed(() => {
-//   if (
-//     !firstCoord.value.x ||
-//     !lastCoord.value.x ||
-//     !lastCoord.value.x ||
-//     !lastCoord.value.y
-//   )
-//     return [
-//       {
-//         type: 'candlestick',
-//         data: props.data,
-//       },
-//     ]
-
-//   return [
-//     {
-//       type: 'candlestick',
-//       data: props.data,
-//     },
-//     {
-//       type: 'line',
-//       name: 'trendline',
-//       data: [
-//         {
-//           x: firstCoord.value.x,
-//           y: firstCoord.value.y,
-//         },
-//         {
-//           x: lastCoord.value.x,
-//           y: lastCoord.value.y,
-//         },
-//       ],
-//     },
-//   ]
-// })
+const series = computed(() => {
+  return [
+    {
+      type: 'candlestick',
+      data: props.data,
+    },
+  ]
+})
 </script>
 
 <template>
@@ -263,9 +224,9 @@ const options = computed(() => ({
       @mouseup="handleMouseUp"
     />
 
-    <svg ref="svgOverlay" class="svg-overlay">
+    <svg ref="$priceRangeTool" class="svg-overlay">
       <line
-        v-if="firstCoord && lastCoord"
+        v-if="firstCoord.x && lastCoord.x && firstCoord.y && lastCoord.y"
         :x1="firstCoord.x"
         :y1="firstCoord.y"
         :x2="lastCoord.x"
