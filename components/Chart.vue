@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { resize } from '@emotionagency/utils'
+import { spawn } from 'child_process'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 //http://localhost:3001/calendar/chart/82073?country=CH&title=SNB+Interest+Rate+Decision+%D0%A2
@@ -14,118 +14,40 @@ const props = defineProps<IProps>()
 
 const { themeValue } = useAppState()
 
-let isDrawing = false
-
-const firstCoord = ref({ x: 0, xValue: 0, y: 0, yValue: 0 })
-const lastCoord = ref({ x: 0, xValue: 0, y: 0, yValue: 0 })
-
-const $chartContainer = ref<HTMLElement>(null)
 const chart = ref(null)
-const $priceRangeTool = ref<SVGElement>(null)
+const $chartContainer = ref<HTMLElement | null>(null)
+const $priceRangeTool = ref<SVGElement | null>(null)
 
-const ch = computed(() => chart.value?.chart)
-
-function getCoordinates(event: MouseEvent) {
-  const $inner = $chartContainer.value.querySelector('.apexcharts-grid-borders')
-  const rect = $inner.getBoundingClientRect()
-  const x = event.clientX - rect.left
-  const y = event.clientY - rect.top
-
-  const xPercent = x / rect.width
-  const yPercent = y / rect.height
-
-  const xValue =
-    ch.value.w.globals.minX +
-    (ch.value.w.globals.maxX - ch.value.w.globals.minX) * xPercent
-
-  const yValue =
-    ch.value.w.globals.minY +
-    (ch.value.w.globals.maxY - ch.value.w.globals.minY) * (1 - yPercent)
-
-  return { x, y, xValue, yValue }
-}
-
-const initPriceRangeTool = () => {
-  const svg = $priceRangeTool.value
-
-  if (!svg) return
-
-  const $inner = $chartContainer.value.querySelector('.apexcharts-grid-borders')
-  const innerRect = $inner.getBoundingClientRect()
-  const containerRect = $chartContainer.value.getBoundingClientRect()
-
-  resize.on(() => {
-    const top = innerRect.top - containerRect.top
-
-    svg.style.width = innerRect.width + 'px'
-    svg.style.height = innerRect.height + 'px'
-    svg.style.top = top + 'px'
-    svg.style.left = innerRect.left + 'px'
-  })
-}
-
-const drawLine = () => {
-  if (!firstCoord.value || !lastCoord.value) return
-
-  // ch.value.addPointAnnotation({
-  //   x: firstCoord.value.xValue,
-  //   y: firstCoord.value.yValue,
-  //   label: {
-  //     text: 'Price: ' + firstCoord.value.yValue,
-  //   },
-  // })
-
-  const priceDifference = lastCoord.value.yValue - firstCoord.value.yValue
-
-  const percentageChange = (
-    (priceDifference / firstCoord.value.yValue) *
-    100
-  ).toFixed(2)
-
-  const bars = Math.round(
-    Math.abs(lastCoord.value.xValue - firstCoord.value.xValue) /
-      60000 /
-      props.timeframe
-  )
-
-  console.log(
-    `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.yValue}`
-  )
-
-  // ch.value.addPointAnnotation({
-  //   x: lastCoord.value.xValue,
-  //   y: lastCoord.value.yValue,
-  //   label: {
-  //     text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.yValue}`,
-  //     textAnchor: 'end',
-  //   },
-  // })
-}
-
-function handleMouseDown(event: MouseEvent) {
-  isDrawing = true
-
-  lastCoord.value = { x: 0, y: 0, xValue: 0, yValue: 0 }
-
-  firstCoord.value = getCoordinates(event)
-}
-
-function handleMouseMove(event: MouseEvent) {
-  if (!isDrawing) return
-
-  lastCoord.value = getCoordinates(event)
-
-  drawLine()
-}
-
-function handleMouseUp() {
-  isDrawing = false
-}
+const {
+  firstCoord,
+  lastCoord,
+  isDrawing,
+  bars,
+  endDate,
+  percentageChange,
+  priceDifference,
+  initPriceRangeTool,
+  setChartBounds,
+  recalcBounds,
+  handleMouseDown,
+  handleMouseMove,
+  handleMouseUp,
+  resetDrawing,
+} = usePriceRangeTool({
+  chart,
+  $chartContainer: $chartContainer as Ref<HTMLElement>,
+  $priceRangeTool: $priceRangeTool as Ref<SVGElement>,
+  timeframe: props.timeframe,
+})
 
 const options = computed(() => ({
   chart: {
     id: 'calendar-chart',
     background: 'transparent',
+    zoom: {
+      enabled: !isDrawing.value,
+    },
+
     toolbar: {
       show: false,
       autoSelected: 'pan',
@@ -136,6 +58,10 @@ const options = computed(() => ({
     events: {
       mouseMove: handleMouseMove,
       mounted: initPriceRangeTool,
+      updated: () => {
+        setChartBounds()
+        recalcBounds()
+      },
     },
   },
   annotations: {
@@ -165,11 +91,6 @@ const options = computed(() => ({
         show: true,
       },
     },
-    // xaxis: {
-    //   lines: {
-    //     show: true,
-    //   },
-    // },
   },
 
   xaxis: {
@@ -215,6 +136,13 @@ const series = computed(() => {
     },
   ]
 })
+
+watch(
+  () => props.data,
+  () => {
+    resetDrawing()
+  }
+)
 </script>
 
 <template>
@@ -253,5 +181,19 @@ const series = computed(() => {
         fill="var(--primary-default)"
       />
     </svg>
+    <span
+      v-if="lastCoord.x && lastCoord.y"
+      class="prt-value"
+      style="position: absolute"
+      :style="{
+        top: `${lastCoord.y - 20}px`,
+        left: `${lastCoord.x - 75}px`,
+      }"
+    >
+      <span>delta: {{ priceDifference?.toFixed(3) }}</span>
+      <span>change: {{ percentageChange?.toFixed(2) }}%</span>
+      <span>bars: {{ bars }}</span>
+      <span>date: {{ endDate }}</span>
+    </span>
   </div>
 </template>
