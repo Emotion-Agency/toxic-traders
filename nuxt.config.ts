@@ -17,5 +17,11 @@ export default defineNuxtConfig({
     '~/plugins/vue-apexcharts.client.ts',
   ],
 
+  build: {
+    transpile: [
+      process.env.NODE_ENV === 'production' ? '@emotionagency/utils' : null,
+    ],
+  },
+
   modules: ['@vueuse/nuxt'],
 })
