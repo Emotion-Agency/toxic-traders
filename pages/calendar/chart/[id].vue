@@ -2,6 +2,7 @@
 import type { ICandle } from '~/types/ohlc/symbols'
 import { symbolToCandleAdapter } from '~/utils/adapters/ohls/symbolToCandleAdapter'
 import { getOHLCSymbolsData } from '~/utils/api/ohlc/symbolsData'
+import { serverTimezone } from '~/utils/constants/timezones'
 
 const route = useRoute()
 
@@ -48,12 +49,21 @@ const getChartData = async () => {
 
     const eventReleaseTimestamp = new Date(activeEvent.value?.time).getTime()
 
+    console.log(new Date(activeEvent.value?.time).isDstObserved())
+
     const minute = 60 * 1000
 
     // 15 minutes before the event release
     const timeBeforeRelease = 15 * minute
     // two hours after the event release
     const timeAfterRelease = 2 * 60 * minute
+
+    console.log(
+      activeEvent.value?.time,
+      ajustForMarchShift(eventReleaseTimestamp, serverTimezone),
+      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),
+      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp + timeAfterRelease)
+    )
 
     const reactionCandles = await getOHLCSymbolsData(
       formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),

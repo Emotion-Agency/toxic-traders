@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ICandle } from '~/types/ohlc/symbols'
+import type PriceRangeTool from './PriceRangeTool.vue'
 
 //http://localhost:3001/calendar/chart/82073?country=CH&title=SNB+Interest+Rate+Decision+%D0%A2
 
@@ -15,16 +16,20 @@ const { themeValue } = useAppState()
 
 const chart = ref(null)
 const $chartContainer = ref<HTMLElement | null>(null)
-const $priceRangeTool = ref<SVGElement | null>(null)
+const priceRangeToolComponent = ref<typeof PriceRangeTool>(null)
+
+const $priceRangeTool = computed(() => {
+  return priceRangeToolComponent.value?.$el
+})
 
 const {
   firstCoord,
   lastCoord,
   isDrawing,
   bars,
-  endDate,
   percentageChange,
   priceDifference,
+  startDate,
   initPriceRangeTool,
   setChartBounds,
   recalcPRTPos,
@@ -158,45 +163,30 @@ watch(
       @mouseup="handleMouseUp"
     />
 
-    <svg ref="$priceRangeTool" class="svg-overlay">
-      <circle
-        v-if="firstCoord.x"
-        :cx="firstCoord.x"
-        :cy="firstCoord.y"
-        r="3"
-        fill="var(--primary-default)"
-      />
-      <line
-        v-if="firstCoord.x && lastCoord.x && firstCoord.y && lastCoord.y"
-        :x1="firstCoord.x"
-        :y1="firstCoord.y"
-        :x2="lastCoord.x"
-        :y2="lastCoord.y"
-        stroke="var(--primary-default)"
-        stroke-width="2"
-      />
-      <circle
-        v-if="lastCoord.x"
-        :cx="lastCoord.x"
-        :cy="lastCoord.y"
-        r="3"
-        fill="var(--primary-default)"
-      />
-    </svg>
-    <div
-      v-if="lastCoord.x && lastCoord.y"
-      ref="$tooltip"
-      class="prt-value"
-      style="position: absolute"
-      :style="{
-        top: `${lastCoord.y - 40}px`,
-        left: `${lastCoord.x - 120}px`,
-      }"
+    <ChartPriceRangeTool
+      ref="priceRangeToolComponent"
+      :first-coord="firstCoord"
+      :last-coord="lastCoord"
     >
-      <span>delta: {{ priceDifference?.toFixed(3) }}</span>
-      <span>change: {{ percentageChange?.toFixed(2) }}%</span>
-      <span>bars: {{ bars }}</span>
-      <span>date: {{ endDate }}</span>
-    </div>
+      <ChartTooltip
+        :coords="firstCoord"
+        ref="endTooltip"
+        v-if="firstCoord.x && firstCoord.y"
+      >
+        <span>price: {{ firstCoord.yValue.toFixed(3) }}</span>
+        <span>date: {{ startDate }}</span>
+      </ChartTooltip>
+
+      <ChartTooltip
+        :coords="lastCoord"
+        ref="endTooltip"
+        v-if="lastCoord.x && lastCoord.y"
+      >
+        <span>price: {{ lastCoord.yValue.toFixed(3) }}</span>
+        <span>delta: {{ priceDifference?.toFixed(3) }}</span>
+        <span>change: {{ percentageChange?.toFixed(2) }}%</span>
+        <span>bars: {{ bars }}</span>
+      </ChartTooltip>
+    </ChartPriceRangeTool>
   </div>
 </template>

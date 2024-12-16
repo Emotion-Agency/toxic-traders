@@ -1,6 +1,6 @@
 export const getTimezoneOffsetByLocale = (
   locale: string,
-  date = new Date()
+  date: string | Date = new Date()
 ) => {
   // Get the UTC offset in minutes
   const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))

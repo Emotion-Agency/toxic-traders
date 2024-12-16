@@ -1,6 +1,23 @@
 import moment from 'moment-timezone'
 import { serverTimezone } from './constants/timezones'
 
+declare global {
+  interface Date {
+    stdTimezoneOffset(): number
+    isDstObserved(): boolean
+  }
+}
+
+Date.prototype.stdTimezoneOffset = function () {
+  const jan = new Date(this.getFullYear(), 0, 1)
+  const jul = new Date(this.getFullYear(), 6, 1)
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset())
+}
+
+Date.prototype.isDstObserved = function () {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset()
+}
+
 export const formatDate = (input: string): string => {
   const date = new Date(input)
 
@@ -69,4 +86,14 @@ export const addSeconds = (date: Date, seconds: number): Date => {
   }
 
   return new Date(Date.now())
+}
+
+export const ajustForMarchShift = (
+  datestring: string | number | Date,
+  targetTimezone: string
+): string => {
+  return moment
+    .utc(datestring)
+    .tz(targetTimezone)
+    .format('DD.MM.YYYY HH:mm:ssZ')
 }
