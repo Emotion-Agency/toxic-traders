@@ -4,7 +4,7 @@ import { candlesSelector } from '~/components/chart/constants'
 
 interface IProps {
   chart: Ref<any>
-  timeframe: number
+  timeframe: Ref<number>
   enabled: Ref<boolean>
   $chartContainer: Ref<HTMLElement | null>
 }
@@ -102,7 +102,7 @@ export const usePriceRangeTool = ({
     return Math.round(
       Math.abs(lastCoord.value.xValue - firstCoord.value.xValue) /
         60000 /
-        timeframe
+        timeframe.value
     )
   })
 

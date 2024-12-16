@@ -36,7 +36,7 @@ const {
 } = usePriceRangeTool({
   chart,
   $chartContainer: $chartContainer as Ref<HTMLElement>,
-  timeframe: props.timeframe,
+  timeframe: computed(() => props.timeframe),
   enabled: isEnabledPRT,
 })
 

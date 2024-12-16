@@ -155,10 +155,16 @@ const toolsHandler = (tool: string) => {
       <div v-if="activeEvent" class="calendar-chart__content">
         <nav class="calendar-chart__nav">
           <div class="container calendar-chart__container">
-            <button class="calendar-chart__prev" @click="prevHandler">
-              <i><IconsChevronLeft /></i>
-              {{ prevEvent?.time ? formatDateWithTime(prevEvent?.time) : '' }}
-            </button>
+            <div>
+              <button
+                v-if="prevEvent?.time"
+                class="calendar-chart__prev"
+                @click="prevHandler"
+              >
+                <i><IconsChevronLeft /></i>
+                {{ prevEvent?.time ? formatDateWithTime(prevEvent?.time) : '' }}
+              </button>
+            </div>
             <div class="calendar-chart__nav-content">
               <h1 class="calendar-chart__title">
                 <span>
@@ -220,10 +226,16 @@ const toolsHandler = (tool: string) => {
                 }"
               />
             </div>
-            <button class="calendar-chart__next" @click="nextHandler">
-              {{ nextEvent?.time ? formatDateWithTime(nextEvent?.time) : '' }}
-              <i><IconsChevronRight /></i>
-            </button>
+            <div>
+              <button
+                v-if="nextEvent?.time"
+                class="calendar-chart__next"
+                @click="nextHandler"
+              >
+                {{ nextEvent?.time ? formatDateWithTime(nextEvent?.time) : '' }}
+                <i><IconsChevronRight /></i>
+              </button>
+            </div>
           </div>
         </nav>
         <div class="calendar-chart__second-nav">
