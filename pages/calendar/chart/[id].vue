@@ -268,6 +268,7 @@ const toolsHandler = (tool: string) => {
                 <HeadlessTooltip v-for="tool in tools" :key="tool.title">
                   <template #trigger>
                     <button
+                      :aria-label="tool.title"
                       class="tool"
                       :class="{ 'tool--active': tool.active }"
                       @click="toolsHandler(tool.title)"
