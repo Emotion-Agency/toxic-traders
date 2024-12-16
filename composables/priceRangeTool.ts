@@ -1,4 +1,4 @@
-import { resize } from '@emotionagency/utils'
+import { raf, resize } from '@emotionagency/utils'
 import gsap from 'gsap'
 import moment from 'moment-timezone'
 
@@ -19,21 +19,63 @@ export const usePriceRangeTool = ({
 
   const chartBounds = ref({ minX: 0, maxX: 0, minY: 0, maxY: 0 })
 
-  const firstCoord = ref({ x: 0, xValue: 0, y: 0, yValue: 0 })
-  const lastCoord = ref({ x: 0, xValue: 0, y: 0, yValue: 0 })
+  const mouseStart = ref({ x: 0, y: 0 })
+  const mouseEnd = ref({ x: 0, y: 0 })
 
-  const chartInstance = computed(() => chart.value?.chart)
+  const mousePercentStart = ref({ x: 0, y: 0 })
+  const mousePercentEnd = ref({ x: 0, y: 0 })
+
+  const firstCoord = computed(() => {
+    const xValue = gsap.utils.mapRange(
+      0,
+      1,
+      chartBounds.value.minX,
+      chartBounds.value.maxX,
+      mousePercentStart.value.x
+    )
+
+    const yValue = gsap.utils.mapRange(
+      0,
+      1,
+      chartBounds.value.minY,
+      chartBounds.value.maxY,
+      1 - mousePercentStart.value.y
+    )
+
+    return { x: mouseStart.value.x, y: mouseStart.value.y, xValue, yValue }
+  })
+
+  const lastCoord = computed(() => {
+    const xValue = gsap.utils.mapRange(
+      0,
+      1,
+      chartBounds.value.minX,
+      chartBounds.value.maxX,
+      mousePercentEnd.value.x
+    )
+
+    const yValue = gsap.utils.mapRange(
+      0,
+      1,
+      chartBounds.value.minY,
+      chartBounds.value.maxY,
+      1 - mousePercentEnd.value.y
+    )
+
+    return { x: mouseEnd.value.x, y: mouseEnd.value.y, xValue, yValue }
+  })
 
   const candlesSelector = '.apexcharts-grid-borders'
 
   const setChartBounds = () => {
-    if (!chartInstance.value) return
+    const chartInstance = chart.value?.chart
+    if (!chartInstance) return
 
     chartBounds.value = {
-      minX: chartInstance.value.w.globals.minX,
-      maxX: chartInstance.value.w.globals.maxX,
-      minY: chartInstance.value.w.globals.minY,
-      maxY: chartInstance.value.w.globals.maxY,
+      minX: chartInstance.w.globals.minX,
+      maxX: chartInstance.w.globals.maxX,
+      minY: chartInstance.w.globals.minY,
+      maxY: chartInstance.w.globals.maxY,
     }
   }
 
@@ -47,26 +89,10 @@ export const usePriceRangeTool = ({
     const xPercent = gsap.utils.clamp(0, 100, x / rect.width)
     const yPercent = gsap.utils.clamp(0, 100, y / rect.height)
 
-    const xValue = gsap.utils.mapRange(
-      0,
-      1,
-      chartBounds.value.minX,
-      chartBounds.value.maxX,
-      xPercent
-    )
-
-    const yValue = gsap.utils.mapRange(
-      0,
-      1,
-      chartBounds.value.minY,
-      chartBounds.value.maxY,
-      1 - yPercent
-    )
-
-    return { x, y, xValue, yValue }
+    return { x, y, xPercent, yPercent }
   }
 
-  const recalcBounds = () => {
+  const recalcPRTPos = () => {
     const $candles = $chartContainer.value?.querySelector(candlesSelector)
 
     const innerRect = $candles.getBoundingClientRect()
@@ -81,11 +107,10 @@ export const usePriceRangeTool = ({
   }
 
   const initPriceRangeTool = () => {
-    resize.on(recalcBounds)
+    resize.on(recalcPRTPos)
   }
 
   const priceDifference = computed(() => {
-    console.log(firstCoord.value.yValue, lastCoord.value.yValue)
     if (!firstCoord.value.yValue || !lastCoord.value.yValue) return 0
 
     return lastCoord.value.yValue - firstCoord.value.yValue
@@ -122,20 +147,36 @@ export const usePriceRangeTool = ({
   function handleMouseDown(event: MouseEvent) {
     isDrawing.value = true
 
-    lastCoord.value = { x: 0, y: 0, xValue: 0, yValue: 0 }
+    mouseEnd.value = { x: 0, y: 0 }
+    mousePercentEnd.value = { x: 0, y: 0 }
 
-    firstCoord.value = setCoordinates(event)
+    // lastCoord.value = { x: 0, y: 0, xValue: 0, yValue: 0 }
+
+    const { x, y, xPercent, yPercent } = setCoordinates(event)
+
+    mouseStart.value = { x, y }
+    mousePercentStart.value = { x: xPercent, y: yPercent }
   }
 
   function handleMouseMove(event: MouseEvent) {
     if (!isDrawing.value) return
 
-    lastCoord.value = setCoordinates(event)
+    const { x, y, xPercent, yPercent } = setCoordinates(event)
+
+    mouseEnd.value = { x, y }
+    mousePercentEnd.value = { x: xPercent, y: yPercent }
+  }
+
+  function handleMouseUp() {
+    isDrawing.value = false
   }
 
   const resetDrawing = () => {
-    firstCoord.value = { x: 0, xValue: 0, y: 0, yValue: 0 }
-    lastCoord.value = { x: 0, xValue: 0, y: 0, yValue: 0 }
+    isDrawing.value = false
+    mouseStart.value = { x: 0, y: 0 }
+    mouseEnd.value = { x: 0, y: 0 }
+    mousePercentStart.value = { x: 0, y: 0 }
+    mousePercentEnd.value = { x: 0, y: 0 }
   }
 
   const keyboardHandler = (event: KeyboardEvent) => {
@@ -144,16 +185,13 @@ export const usePriceRangeTool = ({
     }
   }
 
-  function handleMouseUp() {
-    isDrawing.value = false
-  }
-
   onMounted(() => {
     document.addEventListener('keydown', keyboardHandler)
   })
 
   onBeforeUnmount(() => {
-    resize.off(recalcBounds)
+    resize.off(recalcPRTPos)
+
     document.removeEventListener('keydown', keyboardHandler)
   })
 
@@ -167,7 +205,7 @@ export const usePriceRangeTool = ({
     startDate,
     endDate,
     initPriceRangeTool,
-    recalcBounds,
+    recalcPRTPos,
     setChartBounds,
     handleMouseDown,
     handleMouseMove,

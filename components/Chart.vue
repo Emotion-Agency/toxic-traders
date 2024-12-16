@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { spawn } from 'child_process'
 import type { ICandle } from '~/types/ohlc/symbols'
 
 //http://localhost:3001/calendar/chart/82073?country=CH&title=SNB+Interest+Rate+Decision+%D0%A2
@@ -28,7 +27,7 @@ const {
   priceDifference,
   initPriceRangeTool,
   setChartBounds,
-  recalcBounds,
+  recalcPRTPos,
   handleMouseDown,
   handleMouseMove,
   handleMouseUp,
@@ -58,9 +57,12 @@ const options = computed(() => ({
     events: {
       mouseMove: handleMouseMove,
       mounted: initPriceRangeTool,
+      animationEnd: () => {
+        setChartBounds()
+      },
       updated: () => {
         setChartBounds()
-        recalcBounds()
+        recalcPRTPos()
       },
     },
   },
@@ -181,19 +183,20 @@ watch(
         fill="var(--primary-default)"
       />
     </svg>
-    <span
+    <div
       v-if="lastCoord.x && lastCoord.y"
+      ref="$tooltip"
       class="prt-value"
       style="position: absolute"
       :style="{
-        top: `${lastCoord.y - 20}px`,
-        left: `${lastCoord.x - 75}px`,
+        top: `${lastCoord.y - 40}px`,
+        left: `${lastCoord.x - 120}px`,
       }"
     >
       <span>delta: {{ priceDifference?.toFixed(3) }}</span>
       <span>change: {{ percentageChange?.toFixed(2) }}%</span>
       <span>bars: {{ bars }}</span>
       <span>date: {{ endDate }}</span>
-    </span>
+    </div>
   </div>
 </template>
