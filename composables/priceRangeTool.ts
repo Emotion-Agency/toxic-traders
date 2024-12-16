@@ -1,18 +1,17 @@
 import { raf, resize } from '@emotionagency/utils'
 import gsap from 'gsap'
 import moment from 'moment-timezone'
+import { candlesSelector } from '~/components/chart/constants'
 
 interface IProps {
   chart: Ref<any>
   timeframe: number
   $chartContainer: Ref<HTMLElement | null>
-  $priceRangeTool: Ref<SVGElement | null>
 }
 
 export const usePriceRangeTool = ({
   chart,
   $chartContainer,
-  $priceRangeTool,
   timeframe,
 }: IProps) => {
   const isDrawing = ref(false)
@@ -65,8 +64,6 @@ export const usePriceRangeTool = ({
     return { x: mouseEnd.value.x, y: mouseEnd.value.y, xValue, yValue }
   })
 
-  const candlesSelector = '.apexcharts-grid-borders'
-
   const setChartBounds = () => {
     const chartInstance = chart.value?.chart
     if (!chartInstance) return
@@ -90,24 +87,6 @@ export const usePriceRangeTool = ({
     const yPercent = gsap.utils.clamp(0, 100, y / rect.height)
 
     return { x, y, xPercent, yPercent }
-  }
-
-  const recalcPRTPos = () => {
-    const $candles = $chartContainer.value?.querySelector(candlesSelector)
-
-    const innerRect = $candles.getBoundingClientRect()
-    const containerRect = $chartContainer.value.getBoundingClientRect()
-
-    const top = innerRect.top - containerRect.top
-
-    $priceRangeTool.value.style.width = innerRect.width + 'px'
-    $priceRangeTool.value.style.height = innerRect.height + 'px'
-    $priceRangeTool.value.style.top = top + 'px'
-    $priceRangeTool.value.style.left = innerRect.left + 'px'
-  }
-
-  const initPriceRangeTool = () => {
-    resize.on(recalcPRTPos)
   }
 
   const priceDifference = computed(() => {
@@ -187,11 +166,11 @@ export const usePriceRangeTool = ({
 
   onMounted(() => {
     document.addEventListener('keydown', keyboardHandler)
+
+    console.log(chart.value)
   })
 
   onBeforeUnmount(() => {
-    resize.off(recalcPRTPos)
-
     document.removeEventListener('keydown', keyboardHandler)
   })
 
@@ -204,8 +183,7 @@ export const usePriceRangeTool = ({
     percentageChange,
     startDate,
     endDate,
-    initPriceRangeTool,
-    recalcPRTPos,
+
     setChartBounds,
     handleMouseDown,
     handleMouseMove,

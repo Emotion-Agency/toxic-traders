@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import emitter from 'tiny-emitter/instance'
+
+import { resize } from '@emotionagency/utils'
+import { candlesSelector } from './constants'
+
 interface IProps {
   firstCoord: { x: number; y: number }
   lastCoord: { x: number; y: number }
@@ -11,10 +16,61 @@ const $el = ref<SVGElement | null>(null)
 defineExpose({
   $el,
 })
+
+const parent = inject('parent') as Ref<HTMLElement>
+
+const coords = ref({
+  top: '0',
+  left: '0',
+  width: '0',
+  height: '0',
+})
+
+const updateCoords = () => {
+  console.log(parent.value)
+  if (!parent.value) {
+    return
+  }
+  const $candles = parent.value?.querySelector(candlesSelector)
+
+  if (!$candles) {
+    return
+  }
+
+  const innerRect = $candles.getBoundingClientRect()
+  const containerRect = parent.value?.getBoundingClientRect()
+
+  const top = innerRect.top - containerRect.top
+
+  coords.value = {
+    top: top + 'px',
+    left: innerRect.left + 'px',
+    width: innerRect.width + 'px',
+    height: innerRect.height + 'px',
+  }
+}
+
+useMutationObserver(parent, updateCoords, {
+  attributes: true,
+})
+
+const initPriceRangeTool = () => {
+  resize.on(updateCoords)
+}
+
+onMounted(() => {
+  initPriceRangeTool()
+  emitter.on('chart-updated', updateCoords)
+})
+
+onBeforeUnmount(() => {
+  resize.off(updateCoords)
+  emitter.off('chart-updated', updateCoords)
+})
 </script>
 
 <template>
-  <svg ref="$el" class="svg-overlay">
+  <svg ref="$el" class="svg-overlay" :style="coords">
     <circle
       v-if="firstCoord.x"
       :cx="firstCoord.x"

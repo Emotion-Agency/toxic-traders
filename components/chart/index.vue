@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import emitter from 'tiny-emitter/instance'
 import type { ICandle } from '~/types/ohlc/symbols'
-import type PriceRangeTool from './PriceRangeTool.vue'
 
 //http://localhost:3001/calendar/chart/82073?country=CH&title=SNB+Interest+Rate+Decision+%D0%A2
 
@@ -16,11 +16,6 @@ const { themeValue } = useAppState()
 
 const chart = ref(null)
 const $chartContainer = ref<HTMLElement | null>(null)
-const priceRangeToolComponent = ref<typeof PriceRangeTool>(null)
-
-const $priceRangeTool = computed(() => {
-  return priceRangeToolComponent.value?.$el
-})
 
 const {
   firstCoord,
@@ -30,9 +25,7 @@ const {
   percentageChange,
   priceDifference,
   startDate,
-  initPriceRangeTool,
   setChartBounds,
-  recalcPRTPos,
   handleMouseDown,
   handleMouseMove,
   handleMouseUp,
@@ -40,7 +33,6 @@ const {
 } = usePriceRangeTool({
   chart,
   $chartContainer: $chartContainer as Ref<HTMLElement>,
-  $priceRangeTool: $priceRangeTool as Ref<SVGElement>,
   timeframe: props.timeframe,
 })
 
@@ -61,13 +53,12 @@ const options = computed(() => ({
 
     events: {
       mouseMove: handleMouseMove,
-      mounted: initPriceRangeTool,
       animationEnd: () => {
         setChartBounds()
       },
       updated: () => {
         setChartBounds()
-        recalcPRTPos()
+        emitter.emit('chart-updated', chart.value)
       },
     },
   },
@@ -150,6 +141,8 @@ watch(
     resetDrawing()
   }
 )
+
+provide('parent', $chartContainer)
 </script>
 
 <template>
@@ -163,11 +156,7 @@ watch(
       @mouseup="handleMouseUp"
     />
 
-    <ChartPriceRangeTool
-      ref="priceRangeToolComponent"
-      :first-coord="firstCoord"
-      :last-coord="lastCoord"
-    >
+    <ChartPriceRangeTool :first-coord="firstCoord" :last-coord="lastCoord">
       <ChartTooltip
         :coords="firstCoord"
         ref="endTooltip"
