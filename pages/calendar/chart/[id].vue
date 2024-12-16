@@ -265,15 +265,18 @@ const toolsHandler = (tool: string) => {
               </InputSelect>
 
               <div class="tools">
-                <button
-                  v-for="tool in tools"
-                  :key="tool.title"
-                  class="tool"
-                  :class="{ 'tool--active': tool.active }"
-                  @click="toolsHandler(tool.title)"
-                >
-                  <component :is="tool.icon"></component>
-                </button>
+                <HeadlessTooltip v-for="tool in tools" :key="tool.title">
+                  <template #trigger>
+                    <button
+                      class="tool"
+                      :class="{ 'tool--active': tool.active }"
+                      @click="toolsHandler(tool.title)"
+                    >
+                      <component :is="tool.icon"></component>
+                    </button>
+                  </template>
+                  <span>{{ tool.title }}</span>
+                </HeadlessTooltip>
               </div>
             </div>
 

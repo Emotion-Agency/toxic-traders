@@ -1,6 +1,7 @@
 [data-tooltip-content] {
-  background-color: var(--gray-900);
+  background-color: rgba(0, 0, 0, 0.5);
   color: var(--white);
+  backdrop-filter: blur(4px);
   padding: 0.5em;
   border-radius: 4px;
   font-size: 0.875em;

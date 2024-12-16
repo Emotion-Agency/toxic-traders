@@ -38,6 +38,7 @@ const tooltipPos = computed(() => {
 <template>
   <div
     ref="$el"
+    data-tooltip-content
     class="prt-tooltip"
     :style="`transform: translate(${tooltipPos.left}, ${tooltipPos.top})`"
   >
