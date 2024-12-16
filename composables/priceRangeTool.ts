@@ -1,4 +1,3 @@
-import { raf, resize } from '@emotionagency/utils'
 import gsap from 'gsap'
 import moment from 'moment-timezone'
 import { candlesSelector } from '~/components/chart/constants'
@@ -6,6 +5,7 @@ import { candlesSelector } from '~/components/chart/constants'
 interface IProps {
   chart: Ref<any>
   timeframe: number
+  enabled: Ref<boolean>
   $chartContainer: Ref<HTMLElement | null>
 }
 
@@ -13,6 +13,7 @@ export const usePriceRangeTool = ({
   chart,
   $chartContainer,
   timeframe,
+  enabled,
 }: IProps) => {
   const isDrawing = ref(false)
 
@@ -124,12 +125,11 @@ export const usePriceRangeTool = ({
   })
 
   function handleMouseDown(event: MouseEvent) {
+    if (!enabled.value) return
     isDrawing.value = true
 
     mouseEnd.value = { x: 0, y: 0 }
     mousePercentEnd.value = { x: 0, y: 0 }
-
-    // lastCoord.value = { x: 0, y: 0, xValue: 0, yValue: 0 }
 
     const { x, y, xPercent, yPercent } = setCoordinates(event)
 
@@ -138,6 +138,8 @@ export const usePriceRangeTool = ({
   }
 
   function handleMouseMove(event: MouseEvent) {
+    if (!enabled.value) return
+
     if (!isDrawing.value) return
 
     const { x, y, xPercent, yPercent } = setCoordinates(event)
@@ -147,6 +149,7 @@ export const usePriceRangeTool = ({
   }
 
   function handleMouseUp() {
+    if (!enabled.value) return
     isDrawing.value = false
   }
 
@@ -166,8 +169,6 @@ export const usePriceRangeTool = ({
 
   onMounted(() => {
     document.addEventListener('keydown', keyboardHandler)
-
-    console.log(chart.value)
   })
 
   onBeforeUnmount(() => {
@@ -183,7 +184,6 @@ export const usePriceRangeTool = ({
     percentageChange,
     startDate,
     endDate,
-
     setChartBounds,
     handleMouseDown,
     handleMouseMove,

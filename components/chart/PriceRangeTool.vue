@@ -27,7 +27,6 @@ const coords = ref({
 })
 
 const updateCoords = () => {
-  console.log(parent.value)
   if (!parent.value) {
     return
   }
@@ -59,7 +58,7 @@ const initPriceRangeTool = () => {
 }
 
 onMounted(() => {
-  initPriceRangeTool()
+  nextTick(initPriceRangeTool)
   emitter.on('chart-updated', updateCoords)
 })
 

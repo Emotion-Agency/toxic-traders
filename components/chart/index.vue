@@ -8,6 +8,7 @@ interface IProps {
   data: ICandle[]
   eventTime?: string
   timeframe: number
+  activeTool?: string
 }
 
 const props = defineProps<IProps>()
@@ -17,14 +18,16 @@ const { themeValue } = useAppState()
 const chart = ref(null)
 const $chartContainer = ref<HTMLElement | null>(null)
 
+const isEnabledPRT = computed(() => props.activeTool === 'Draw')
+
 const {
   firstCoord,
   lastCoord,
-  isDrawing,
   bars,
   percentageChange,
   priceDifference,
   startDate,
+  isDrawing,
   setChartBounds,
   handleMouseDown,
   handleMouseMove,
@@ -34,6 +37,7 @@ const {
   chart,
   $chartContainer: $chartContainer as Ref<HTMLElement>,
   timeframe: props.timeframe,
+  enabled: isEnabledPRT,
 })
 
 const options = computed(() => ({
@@ -136,7 +140,7 @@ const series = computed(() => {
 })
 
 watch(
-  () => props.data,
+  () => [props.data],
   () => {
     resetDrawing()
   }

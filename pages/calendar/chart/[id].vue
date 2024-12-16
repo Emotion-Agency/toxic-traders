@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import Cursor from '~/components/icons/Cursor.vue'
+import Move from '~/components/icons/Move.vue'
 import type { ICandle } from '~/types/ohlc/symbols'
 import { symbolToCandleAdapter } from '~/utils/adapters/ohls/symbolToCandleAdapter'
 import { getOHLCSymbolsData } from '~/utils/api/ohlc/symbolsData'
@@ -132,6 +134,18 @@ const onSelect = () => {
     getChartData()
   })
 }
+
+const tools = ref([
+  { icon: markRaw(Cursor), title: 'Draw', active: true },
+  { icon: markRaw(Move), title: 'Move', active: false },
+])
+
+const toolsHandler = (tool: string) => {
+  tools.value = tools.value.map(item => ({
+    ...item,
+    active: item.title === tool,
+  }))
+}
 </script>
 
 <template>
@@ -249,6 +263,18 @@ const onSelect = () => {
                   @select="selectedTimeframe = option"
                 />
               </InputSelect>
+
+              <div class="tools">
+                <button
+                  v-for="tool in tools"
+                  :key="tool.title"
+                  class="tool"
+                  :class="{ 'tool--active': tool.active }"
+                  @click="toolsHandler(tool.title)"
+                >
+                  <component :is="tool.icon"></component>
+                </button>
+              </div>
             </div>
 
             <TheButton button-size="small">
@@ -278,6 +304,7 @@ const onSelect = () => {
             :data="filteredCandledByTimeframe"
             :event-time="activeEvent.time"
             :timeframe="parseInt(selectedTimeframe)"
+            :active-tool="tools.find(tool => tool.active)?.title"
           />
           <NotFound
             v-if="!candles?.length && !isLoading"
