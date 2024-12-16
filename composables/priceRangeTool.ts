@@ -4,8 +4,8 @@ import { candlesSelector } from '~/components/chart/constants'
 
 interface IProps {
   chart: Ref<any>
-  timeframe: Ref<number>
-  enabled: Ref<boolean>
+  timeframe: ComputedRef<number>
+  enabled: ComputedRef<boolean>
   $chartContainer: Ref<HTMLElement | null>
 }
 
