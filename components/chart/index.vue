@@ -139,13 +139,6 @@ const series = computed(() => {
   ]
 })
 
-watch(
-  () => [props.data],
-  () => {
-    resetDrawing()
-  }
-)
-
 provide('parent', $chartContainer)
 </script>
 
