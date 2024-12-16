@@ -435,10 +435,10 @@
   dependencies:
     mime "^3.0.0"
 
-"@emotionagency/utils@^1.1.14":
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/@emotionagency/utils/-/utils-1.1.14.tgz#376d162c40826633cbebb3247bc328d80c647a9e"
-  integrity sha512-1UHwnfmio+aSXFoe7SPxGkWU2p7VKmKdkV4FmENM59Xh+QEoAH479cpW8/Cxs1zikNTocCd4JM37mL/wpIbzBA==
+"@emotionagency/utils@^1.1.16":
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/@emotionagency/utils/-/utils-1.1.16.tgz#526cb53b4b450f3332791371cf01af4c462d6550"
+  integrity sha512-hUi90t8UTDcOH8+3U/SNBrsH/+V2ATJlxBBFwAhnDPDjLcaYX7XNrbUGx+NdmnEI044lESvY1BfMCdno+AF3Kg==
 
 "@esbuild/aix-ppc64@0.20.2":
   version "0.20.2"
