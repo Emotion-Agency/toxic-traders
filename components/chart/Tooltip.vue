@@ -38,7 +38,7 @@ const tooltipPos = computed(() => {
 <template>
   <div
     ref="$el"
-    class="prt-value"
+    class="prt-tooltip"
     :style="`transform: translate(${tooltipPos.left}, ${tooltipPos.top})`"
   >
     <slot />
