@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { ICandle } from '~/types/ohlc/symbols'
 
+//http://localhost:3001/calendar/chart/82073?country=CH&title=SNB+Interest+Rate+Decision+%D0%A2
+
 interface IProps {
   data: ICandle[]
   eventTime?: string
@@ -11,129 +13,40 @@ const props = defineProps<IProps>()
 
 const { themeValue } = useAppState()
 
-let isDrawing = false
-
-const firstCoord = ref({ x: 0, y: 0 })
-const lastCoord = ref({ x: 0, y: 0 })
-
-const $chartContainer = ref<HTMLElement>(null)
 const chart = ref(null)
+const $chartContainer = ref<HTMLElement | null>(null)
+const $priceRangeTool = ref<SVGElement | null>(null)
 
-const series = ref([
-  {
-    type: 'candlestick',
-    data: props.data,
-  },
-  {
-    type: 'line',
-    name: 'trendline',
-    data: [],
-  },
-])
-
-watch(
-  () => props.data,
-  () => {
-    series.value[0].data = props.data
-  }
-)
-
-const ch = computed(() => chart.value?.chart)
-
-function getCoordinates(event: MouseEvent) {
-  const $inner = $chartContainer.value.querySelector('.apexcharts-grid-borders')
-  const rect = $inner.getBoundingClientRect()
-  const x = event.clientX - rect.left
-  const y = event.clientY - rect.top
-
-  const xPercent = x / rect.width
-  const yPercent = y / rect.height
-
-  const xValue =
-    ch.value.w.globals.minX +
-    (ch.value.w.globals.maxX - ch.value.w.globals.minX) * xPercent
-
-  const yValue =
-    ch.value.w.globals.minY +
-    (ch.value.w.globals.maxY - ch.value.w.globals.minY) * (1 - yPercent)
-
-  return { x: xValue, y: yValue.toFixed(3) }
-}
-
-const updateSeries = () => {
-  series.value[1].data = [
-    {
-      x: firstCoord.value.x,
-      y: firstCoord.value.y,
-    },
-    {
-      x: lastCoord.value.x,
-      y: lastCoord.value.y,
-    },
-  ]
-}
-
-const throttleUpdateSeries = useThrottleFn(updateSeries, 500)
-
-const drawLine = () => {
-  if (!firstCoord.value || !lastCoord.value) return
-  ch.value.clearAnnotations()
-
-  ch.value.addPointAnnotation({
-    x: firstCoord.value.x,
-    y: firstCoord.value.y,
-    label: {
-      text: 'Price: ' + firstCoord.value.y,
-    },
-  })
-
-  const priceDifference = lastCoord.value.y - firstCoord.value.y
-
-  const percentageChange = (
-    (priceDifference / firstCoord.value.y) *
-    100
-  ).toFixed(2)
-
-  const bars = Math.round(
-    Math.abs(lastCoord.value.x - firstCoord.value.x) / 60000 / props.timeframe
-  )
-
-  ch.value.addPointAnnotation({
-    x: lastCoord.value.x,
-    y: lastCoord.value.y,
-    label: {
-      text: `Δ: ${priceDifference.toFixed(3)}, Bars: ${bars}, %: ${percentageChange}, Price: ${lastCoord.value.y}`,
-      textAnchor: 'end',
-    },
-  })
-
-  // throttleUpdateSeries()
-}
-
-function handleMouseDown(event: MouseEvent) {
-  isDrawing = true
-
-  lastCoord.value = { x: 0, y: 0 }
-
-  firstCoord.value = getCoordinates(event)
-}
-
-function handleMouseMove(event: MouseEvent) {
-  if (!isDrawing) return
-
-  lastCoord.value = getCoordinates(event)
-
-  drawLine()
-}
-
-function handleMouseUp() {
-  isDrawing = false
-}
+const {
+  firstCoord,
+  lastCoord,
+  isDrawing,
+  bars,
+  endDate,
+  percentageChange,
+  priceDifference,
+  initPriceRangeTool,
+  setChartBounds,
+  recalcPRTPos,
+  handleMouseDown,
+  handleMouseMove,
+  handleMouseUp,
+  resetDrawing,
+} = usePriceRangeTool({
+  chart,
+  $chartContainer: $chartContainer as Ref<HTMLElement>,
+  $priceRangeTool: $priceRangeTool as Ref<SVGElement>,
+  timeframe: props.timeframe,
+})
 
 const options = computed(() => ({
   chart: {
     id: 'calendar-chart',
     background: 'transparent',
+    zoom: {
+      enabled: !isDrawing.value,
+    },
+
     toolbar: {
       show: false,
       autoSelected: 'pan',
@@ -143,7 +56,14 @@ const options = computed(() => ({
 
     events: {
       mouseMove: handleMouseMove,
-      mouseLeave: handleMouseUp,
+      mounted: initPriceRangeTool,
+      animationEnd: () => {
+        setChartBounds()
+      },
+      updated: () => {
+        setChartBounds()
+        recalcPRTPos()
+      },
     },
   },
   annotations: {
@@ -173,11 +93,6 @@ const options = computed(() => ({
         show: true,
       },
     },
-    // xaxis: {
-    //   lines: {
-    //     show: true,
-    //   },
-    // },
   },
 
   xaxis: {
@@ -215,41 +130,21 @@ const options = computed(() => ({
   },
 }))
 
-// const series = computed(() => {
-//   if (
-//     !firstCoord.value.x ||
-//     !lastCoord.value.x ||
-//     !lastCoord.value.x ||
-//     !lastCoord.value.y
-//   )
-//     return [
-//       {
-//         type: 'candlestick',
-//         data: props.data,
-//       },
-//     ]
+const series = computed(() => {
+  return [
+    {
+      type: 'candlestick',
+      data: props.data,
+    },
+  ]
+})
 
-//   return [
-//     {
-//       type: 'candlestick',
-//       data: props.data,
-//     },
-//     {
-//       type: 'line',
-//       name: 'trendline',
-//       data: [
-//         {
-//           x: firstCoord.value.x,
-//           y: firstCoord.value.y,
-//         },
-//         {
-//           x: lastCoord.value.x,
-//           y: lastCoord.value.y,
-//         },
-//       ],
-//     },
-//   ]
-// })
+watch(
+  () => props.data,
+  () => {
+    resetDrawing()
+  }
+)
 </script>
 
 <template>
@@ -263,16 +158,45 @@ const options = computed(() => ({
       @mouseup="handleMouseUp"
     />
 
-    <svg ref="svgOverlay" class="svg-overlay">
+    <svg ref="$priceRangeTool" class="svg-overlay">
+      <circle
+        v-if="firstCoord.x"
+        :cx="firstCoord.x"
+        :cy="firstCoord.y"
+        r="3"
+        fill="var(--primary-default)"
+      />
       <line
-        v-if="firstCoord && lastCoord"
+        v-if="firstCoord.x && lastCoord.x && firstCoord.y && lastCoord.y"
         :x1="firstCoord.x"
         :y1="firstCoord.y"
         :x2="lastCoord.x"
         :y2="lastCoord.y"
-        stroke="red"
+        stroke="var(--primary-default)"
         stroke-width="2"
       />
+      <circle
+        v-if="lastCoord.x"
+        :cx="lastCoord.x"
+        :cy="lastCoord.y"
+        r="3"
+        fill="var(--primary-default)"
+      />
     </svg>
+    <div
+      v-if="lastCoord.x && lastCoord.y"
+      ref="$tooltip"
+      class="prt-value"
+      style="position: absolute"
+      :style="{
+        top: `${lastCoord.y - 40}px`,
+        left: `${lastCoord.x - 120}px`,
+      }"
+    >
+      <span>delta: {{ priceDifference?.toFixed(3) }}</span>
+      <span>change: {{ percentageChange?.toFixed(2) }}%</span>
+      <span>bars: {{ bars }}</span>
+      <span>date: {{ endDate }}</span>
+    </div>
   </div>
 </template>

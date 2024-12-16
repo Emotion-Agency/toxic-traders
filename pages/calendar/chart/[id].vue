@@ -10,7 +10,7 @@ const { country, title } = route.query
 const { events, getEventsByExactName, activeEvent } = useCalendarEvents()
 const isLoading = ref(false)
 
-const candles = ref<ICandle[]>()
+const candles = ref<ICandle[]>([])
 
 const selectedSymbol = ref(activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol)
 

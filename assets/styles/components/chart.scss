@@ -2,3 +2,28 @@
   width: 100%;
   height: 100%;
 }
+
+.svg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.prt-value {
+  pointer-events: none;
+  font-size: 10px;
+  // max-width: 150px;
+  z-index: 1000;
+  background-color: var(--gray-900);
+  color: var(--white);
+  padding: 0.5em;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 200px;
+  column-gap: 4px;
+}
