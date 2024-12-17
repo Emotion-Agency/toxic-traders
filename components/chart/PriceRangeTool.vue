@@ -136,8 +136,8 @@ const { themeValue } = useAppState()
         :x2="line.x2"
         :y1="line.y1"
         :y2="line.y2"
-        :stroke="themeValue === 'dark' ? 'var(--white)' : 'var(--black)'"
-        stroke-width="0.2"
+        stroke="var(--primary-default)"
+        stroke-width="1"
         stroke-dasharray="5"
       />
     </g>
