@@ -9,7 +9,7 @@ interface IProps {
   lastCoord: { x: number; y: number }
 }
 
-defineProps<IProps>()
+const props = defineProps<IProps>()
 
 const $el = ref<SVGElement | null>(null)
 
@@ -19,7 +19,12 @@ defineExpose({
 
 const parent = inject('parent') as Ref<HTMLElement>
 
-const coords = ref({
+const coords = ref<{
+  top: string
+  left: string
+  width: string
+  height: string
+}>({
   top: '0',
   left: '0',
   width: '0',
@@ -67,6 +72,43 @@ onBeforeUnmount(() => {
   resize.off(updateCoords)
   emitter.off('chart-updated', updateCoords)
 })
+
+const helperLines = computed(() => {
+  const { firstCoord, lastCoord } = props
+
+  return [
+    {
+      x1: firstCoord.x,
+      y1: 0,
+      x2: firstCoord.x,
+      y2: parseInt(coords.value.height),
+      isActive: !!firstCoord.x,
+    },
+    {
+      x1: lastCoord.x,
+      y1: 0,
+      x2: lastCoord.x,
+      y2: parseInt(coords.value.height),
+      isActive: !!lastCoord.x,
+    },
+    {
+      x1: 0,
+      y1: firstCoord.y,
+      x2: parseInt(coords.value.width),
+      y2: firstCoord.y,
+      isActive: !!firstCoord.y,
+    },
+    {
+      x1: 0,
+      y1: lastCoord.y,
+      x2: parseInt(coords.value.width),
+      y2: lastCoord.y,
+      isActive: !!lastCoord.y,
+    },
+  ]
+})
+
+const { themeValue } = useAppState()
 </script>
 
 <template>
@@ -87,6 +129,19 @@ onBeforeUnmount(() => {
       stroke="var(--primary-default)"
       stroke-width="2"
     />
+    <g v-for="(line, idx) in helperLines" v-show="line?.isActive">
+      <line
+        :key="idx"
+        :x1="line.x1"
+        :x2="line.x2"
+        :y1="line.y1"
+        :y2="line.y2"
+        :stroke="themeValue === 'dark' ? 'var(--white)' : 'var(--black)'"
+        stroke-width="0.2"
+        stroke-dasharray="5"
+      />
+    </g>
+
     <circle
       v-if="lastCoord.x"
       :cx="lastCoord.x"
