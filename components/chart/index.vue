@@ -113,7 +113,7 @@ const options = computed(() => ({
     x: {
       format: 'dd MMM yyyy HH:mm',
     },
-    enabled: true,
+    enabled: !isDrawing.value,
     shared: true,
     intersect: false,
   },
@@ -154,24 +154,32 @@ provide('parent', $chartContainer)
     />
 
     <ChartPriceRangeTool :first-coord="firstCoord" :last-coord="lastCoord">
-      <ChartTooltip
+      <!-- <ChartTooltip
         :coords="firstCoord"
         ref="endTooltip"
         v-if="firstCoord.x && firstCoord.y"
       >
         <span>price: {{ firstCoord.yValue.toFixed(3) }}</span>
         <span>date: {{ startDate }}</span>
-      </ChartTooltip>
+      </ChartTooltip> -->
 
       <ChartTooltip
         :coords="lastCoord"
         ref="endTooltip"
         v-if="lastCoord.x && lastCoord.y"
       >
-        <span>price: {{ lastCoord.yValue.toFixed(3) }}</span>
-        <span>delta: {{ priceDifference?.toFixed(3) }}</span>
-        <span>change: {{ percentageChange?.toFixed(2) }}%</span>
-        <span>bars: {{ bars }}</span>
+        <span
+          ><b>{{ lastCoord.yValue.toFixed(3) }}</b></span
+        >
+        <span
+          >delta: <b>{{ priceDifference?.toFixed(3) }}</b></span
+        >
+        <span
+          >change: <b>{{ percentageChange?.toFixed(2) }}%</b></span
+        >
+        <span
+          >bars: <b>{{ bars }}</b></span
+        >
       </ChartTooltip>
     </ChartPriceRangeTool>
   </div>
