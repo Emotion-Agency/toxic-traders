@@ -148,14 +148,14 @@ const helperValues = computed(() => {
     {
       x: props.firstCoord.x + 'px',
       y: coords.value.height,
-      value: moment(props.firstCoord.xValue).format('DD.MM.YYYY HH:mm:ss'),
+      value: moment(props.firstCoord.xValue).format('DD.MM.YYYY HH:mm'),
       axis: 'x',
       isActive: !!props.firstCoord.x,
     },
     {
       x: props.lastCoord.x + 'px',
       y: coords.value.height,
-      value: moment(props.lastCoord.xValue).format('DD.MM.YYYY HH:mm:ss'),
+      value: moment(props.lastCoord.xValue).format('DD.MM.YYYY HH:mm'),
       axis: 'x',
       isActive: !!props.lastCoord.x,
     },
