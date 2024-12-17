@@ -37,6 +37,7 @@ const updateCoords = () => {
   }
 
   const innerRect = $candles.getBoundingClientRect()
+
   const containerRect = parent.value?.getBoundingClientRect()
 
   const top = innerRect.top - containerRect.top

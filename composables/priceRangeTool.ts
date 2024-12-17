@@ -79,12 +79,16 @@ export const usePriceRangeTool = ({
 
   function setCoordinates(event: MouseEvent) {
     const $candles = $chartContainer.value?.querySelector(candlesSelector)
+    const $xAxis = $chartContainer.value?.querySelector('.apexcharts-xaxis')
+    const xAxisRect = $xAxis?.getBoundingClientRect()
 
     const rect = $candles.getBoundingClientRect()
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
-    const xPercent = gsap.utils.clamp(0, 100, x / rect.width)
+    const xAxisX = event.clientX - xAxisRect.left
+
+    const xPercent = gsap.utils.clamp(0, 100, xAxisX / xAxisRect.width)
     const yPercent = gsap.utils.clamp(0, 100, y / rect.height)
 
     return { x, y, xPercent, yPercent }
