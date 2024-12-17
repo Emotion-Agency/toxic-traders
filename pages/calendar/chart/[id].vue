@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import Cursor from '~/components/icons/Cursor.vue'
-import Move from '~/components/icons/Move.vue'
 import type { ICandle } from '~/types/ohlc/symbols'
 import { symbolToCandleAdapter } from '~/utils/adapters/ohls/symbolToCandleAdapter'
 import { getOHLCSymbolsData } from '~/utils/api/ohlc/symbolsData'
@@ -83,6 +81,8 @@ const getChartData = async () => {
   }
 }
 
+const { tools, toolsHandler, toolsKeyHandler } = useChartTools()
+
 onMounted(async () => {
   isLoading.value = true
 
@@ -99,6 +99,8 @@ onMounted(async () => {
       getChartData()
     })
   }
+
+  document.addEventListener('keydown', toolsKeyHandler)
 })
 
 const router = useRouter()
@@ -135,17 +137,9 @@ const onSelect = () => {
   })
 }
 
-const tools = ref([
-  { icon: markRaw(Cursor), title: 'Draw', active: true },
-  { icon: markRaw(Move), title: 'Move', active: false },
-])
-
-const toolsHandler = (tool: string) => {
-  tools.value = tools.value.map(item => ({
-    ...item,
-    active: item.title === tool,
-  }))
-}
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', toolsKeyHandler)
+})
 </script>
 
 <template>
@@ -288,7 +282,7 @@ const toolsHandler = (tool: string) => {
                       <component :is="tool.icon"></component>
                     </button>
                   </template>
-                  <span>{{ tool.title }}</span>
+                  <span>{{ tool.title }} ({{ tool.triggerBtn }})</span>
                 </HeadlessTooltip>
               </div>
             </div>

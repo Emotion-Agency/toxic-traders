@@ -103,10 +103,18 @@
 .tools {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  [data-tooltip-trigger] {
+    display: block;
+  }
 }
 .tool {
   color: var(--gray-400);
+  display: block;
+  svg {
+    display: block;
+    height: 1em;
+  }
   &--active {
     color: var(--primary-default);
   }
