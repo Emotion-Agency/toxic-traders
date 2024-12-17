@@ -216,36 +216,5 @@ const helperValues = computed(() => {
     >
       {{ item.value }}
     </div>
-
-    <!-- <ChartTooltip
-      :coords="{ x: 0 + offset.x, y: firstCoord.y + offset.y }"
-      v-if="firstCoord.y"
-    >
-      {{ firstCoord.yValue.toFixed(3) }}
-    </ChartTooltip>
-    <ChartTooltip
-      :coords="{ x: 0 + offset.x, y: lastCoord.y + offset.y }"
-      v-if="firstCoord.y"
-    >
-      {{ lastCoord.yValue.toFixed(3) }}
-    </ChartTooltip>
-    <ChartTooltip
-      :coords="{
-        x: firstCoord.x + offset.x,
-        y: parseInt(coords.height) + offset.y,
-      }"
-      v-if="firstCoord.x"
-    >
-      {{ moment(firstCoord.xValue).format('DD.MM.YYYY HH:MM:SS') }}
-    </ChartTooltip>
-    <ChartTooltip
-      :coords="{
-        x: lastCoord.x + offset.x,
-        y: parseInt(coords.height) + offset.y,
-      }"
-      v-if="lastCoord.x"
-    >
-      {{ moment(lastCoord.xValue).format('DD.MM.YYYY HH:MM:SS') }}
-    </ChartTooltip> -->
   </div>
 </template>
