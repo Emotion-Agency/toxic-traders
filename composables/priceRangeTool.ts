@@ -84,6 +84,13 @@ export const usePriceRangeTool = ({
     const $xAxis = $chartContainer.value?.querySelector(
       '.apexcharts-candlestick-series'
     )
+    const $candleEls = $chartContainer.value?.querySelectorAll(
+      '.apexcharts-candlestick-area'
+    )
+
+    const $firstCandle = $candleEls?.[0]
+
+    const candleRect = $firstCandle?.getBoundingClientRect()
 
     const xAxisRect = $xAxis?.getBoundingClientRect()
 
@@ -91,9 +98,11 @@ export const usePriceRangeTool = ({
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
-    const xAxisX = event.clientX - xAxisRect.left
+    const width = xAxisRect.width - (candleRect.width / 2) * 2
 
-    const xPercent = gsap.utils.clamp(0, 1, xAxisX / xAxisRect.width)
+    const xAxisX = event.clientX - xAxisRect.left - candleRect.width / 2
+
+    const xPercent = gsap.utils.clamp(0, 1, xAxisX / width)
     const yPercent = gsap.utils.clamp(0, 1, y / rect.height)
 
     return { x, y, xPercent, yPercent }
