@@ -242,6 +242,18 @@
     }
   }
 
+  .password-new__form {
+    background-color: var(--gray-800);
+
+    .password-new__title {
+      color: var(--white);
+    }
+
+    .password-new__description {
+      color: var(--white);
+    }
+  }
+
   .settings__title {
     color: var(--white);
   }
