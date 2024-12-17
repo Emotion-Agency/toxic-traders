@@ -44,11 +44,11 @@
   border-radius: 4px;
   color: var(--white);
   position: absolute;
-  transform: translateY(50%);
+  transform: translateY(50%) translateX(12.5%);
 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   &--x {
-    transform: translateY(118%);
+    transform: translateY(118%) translateX(12.5%);
   }
 }

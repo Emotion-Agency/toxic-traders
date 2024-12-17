@@ -70,7 +70,7 @@ const updateOffset = () => {
 
   const $candles = parent.value?.querySelector(candlesSelector)
 
-  const containerRect = parent.value?.getBoundingClientRect()
+  const containerRect = $prt.value?.getBoundingClientRect()
   const innerRect = $candles?.getBoundingClientRect()
 
   offset.value = {
@@ -136,24 +136,28 @@ const helperValues = computed(() => {
       y: props.firstCoord.y + 'px',
       value: props.firstCoord.yValue.toFixed(3),
       axis: 'y',
+      isActive: !!props.firstCoord.y,
     },
     {
       x: 0,
       y: props.lastCoord.y + 'px',
       value: props.lastCoord.yValue.toFixed(3),
       axis: 'y',
+      isActive: !!props.lastCoord.y,
     },
     {
       x: props.firstCoord.x + 'px',
       y: coords.value.height,
       value: moment(props.firstCoord.xValue).format('DD.MM.YYYY HH:mm:ss'),
       axis: 'x',
+      isActive: !!props.firstCoord.x,
     },
     {
       x: props.lastCoord.x + 'px',
       y: coords.value.height,
       value: moment(props.lastCoord.xValue).format('DD.MM.YYYY HH:mm:ss'),
       axis: 'x',
+      isActive: !!props.lastCoord.x,
     },
   ]
 })
@@ -204,6 +208,7 @@ const helperValues = computed(() => {
     </svg>
     <div
       v-for="(item, idx) in helperValues"
+      v-show="item?.isActive"
       :key="idx"
       class="prt-helper-value"
       :class="`prt-helper-value--${item.axis}`"
