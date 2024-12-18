@@ -15,6 +15,7 @@ export interface IOHLCSymbol {
   serverName: string
   serverType: number
   ohlcRows: IOHLCRow[] | null
+  digits: number
 }
 
 export type IOHLCData = IOHLCRow

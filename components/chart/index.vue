@@ -9,6 +9,7 @@ interface IProps {
   eventTime?: string
   timeframe: number
   activeTool?: string
+  digits: number
 }
 
 const props = defineProps<IProps>()
@@ -154,25 +155,16 @@ provide('parent', $chartContainer)
     />
 
     <ChartPriceRangeTool :first-coord="firstCoord" :last-coord="lastCoord">
-      <!-- <ChartTooltip
-        :coords="firstCoord"
-        ref="endTooltip"
-        v-if="firstCoord.x && firstCoord.y"
-      >
-        <span>price: {{ firstCoord.yValue.toFixed(3) }}</span>
-        <span>date: {{ startDate }}</span>
-      </ChartTooltip> -->
-
       <ChartTooltip
         :coords="lastCoord"
         ref="endTooltip"
         v-if="lastCoord.x && lastCoord.y"
       >
         <span
-          ><b>{{ lastCoord.yValue.toFixed(3) }}</b></span
+          ><b>{{ lastCoord.yValue.toFixed(digits) }}</b></span
         >
         <span
-          >delta: <b>{{ priceDifference?.toFixed(3) }}</b></span
+          >delta: <b>{{ priceDifference?.toFixed(digits) }}</b></span
         >
         <span
           >change: <b>{{ percentageChange?.toFixed(2) }}%</b></span

@@ -15,11 +15,17 @@ const candles = ref<ICandle[]>([])
 
 const selectedSymbol = ref(activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol)
 
+const selectedSymbolDigits = computed(() => {
+  return activeEvent.value.symbols?.find(
+    symbol => symbol.ohlcSymbol.symbol === selectedSymbol.value
+  )?.ohlcSymbol.digits
+})
+
 type TTimeframe = '1m' | '5m' | '15m'
 
 const selectedTimeframe = ref<TTimeframe>('1m')
 
-const filteredCandledByTimeframe = computed(() => {
+const filteredCandleByTimeframe = computed(() => {
   if (selectedTimeframe.value === '1m') {
     return candles.value
   }
@@ -49,7 +55,7 @@ const getChartData = async () => {
 
     const eventReleaseTimestamp = new Date(activeEvent.value?.time).getTime()
 
-    console.log(new Date(activeEvent.value?.time).isDstObserved())
+    // console.log(new Date(activeEvent.value?.time).isDstObserved())
 
     const minute = 60 * 1000
 
@@ -58,12 +64,12 @@ const getChartData = async () => {
     // two hours after the event release
     const timeAfterRelease = 2 * 60 * minute
 
-    console.log(
-      activeEvent.value?.time,
-      ajustForMarchShift(eventReleaseTimestamp, serverTimezone),
-      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),
-      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp + timeAfterRelease)
-    )
+    // console.log(
+    //   activeEvent.value?.time,
+    //   ajustForMarchShift(eventReleaseTimestamp, serverTimezone),
+    //   formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),
+    //   formatDateWithTimeDdMmYyyy(eventReleaseTimestamp + timeAfterRelease)
+    // )
 
     const reactionCandles = await getOHLCSymbolsData(
       formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),
@@ -311,10 +317,11 @@ onBeforeUnmount(() => {
         <div class="container calendar-chart__chart-container">
           <Chart
             v-if="candles?.length"
-            :data="filteredCandledByTimeframe"
+            :data="filteredCandleByTimeframe"
             :event-time="activeEvent.time"
             :timeframe="parseInt(selectedTimeframe)"
             :active-tool="tools.find(tool => tool.active)?.title"
+            :digits="selectedSymbolDigits"
           />
           <NotFound
             v-if="!candles?.length && !isLoading"

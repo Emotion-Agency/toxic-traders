@@ -1,4 +1,5 @@
 import moment from 'moment-timezone'
+import bigDecimal from 'js-big-decimal'
 import type {
   ICalendarEvent,
   ITableCalendarEvent,
@@ -10,14 +11,14 @@ export const calendarEventAdapter = (
 ): ITableCalendarEvent => {
   const getDeviation = () => {
     if (event.actual && !event.forecast && event.previous) {
-      return parseFloat(event.actual) - parseFloat(event.previous)
+      return bigDecimal.subtract(event.actual, event.previous)
     }
 
     if ((!event.forecast && !event.previous) || !event.actual) {
       return
     }
 
-    return parseFloat(event.actual) - parseFloat(event.forecast)
+    return bigDecimal.subtract(event.actual, event.forecast)
   }
 
   const firstSymbol = event.symbols?.sort((a, b) => a.order - b.order)[0]
