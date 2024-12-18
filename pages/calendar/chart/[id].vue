@@ -101,8 +101,6 @@ onMounted(async () => {
       event => event.id?.toString() === route.params.id
     )
 
-    console.log(activeEvent.value)
-
     nextTick(() => {
       getChartData()
     })

@@ -109,6 +109,11 @@ const options = computed(() => ({
     lines: {
       show: true,
     },
+    labels: {
+      formatter: function (value) {
+        return value.toFixed(props.digits)
+      },
+    },
   },
   tooltip: {
     x: {
@@ -154,7 +159,11 @@ provide('parent', $chartContainer)
       @mouseup="handleMouseUp"
     />
 
-    <ChartPriceRangeTool :first-coord="firstCoord" :last-coord="lastCoord">
+    <ChartPriceRangeTool
+      :digits="digits"
+      :first-coord="firstCoord"
+      :last-coord="lastCoord"
+    >
       <ChartTooltip
         :coords="lastCoord"
         ref="endTooltip"
@@ -167,7 +176,7 @@ provide('parent', $chartContainer)
           >delta: <b>{{ priceDifference?.toFixed(digits) }}</b></span
         >
         <span
-          >change: <b>{{ percentageChange?.toFixed(2) }}%</b></span
+          >change: <b>{{ percentageChange?.toFixed(digits) }}%</b></span
         >
         <span
           >bars: <b>{{ bars }}</b></span

@@ -8,6 +8,7 @@ import moment from 'moment-timezone'
 interface IProps {
   firstCoord: { x: number; y: number; xValue: number; yValue: number }
   lastCoord: { x: number; y: number; xValue: number; yValue: number }
+  digits: number
 }
 
 const props = defineProps<IProps>()
@@ -134,14 +135,14 @@ const helperValues = computed(() => {
     {
       x: 0,
       y: props.firstCoord.y + 'px',
-      value: props.firstCoord.yValue.toFixed(3),
+      value: props.firstCoord.yValue.toFixed(props.digits),
       axis: 'y',
       isActive: !!props.firstCoord.y,
     },
     {
       x: 0,
       y: props.lastCoord.y + 'px',
-      value: props.lastCoord.yValue.toFixed(3),
+      value: props.lastCoord.yValue.toFixed(props.digits),
       axis: 'y',
       isActive: !!props.lastCoord.y,
     },

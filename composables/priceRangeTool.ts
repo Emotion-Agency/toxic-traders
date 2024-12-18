@@ -54,8 +54,6 @@ export const usePriceRangeTool = ({
       mousePercentEnd.value.x
     )
 
-    console.log(mousePercentEnd.value)
-
     const yValue = gsap.utils.mapRange(
       0,
       1,
