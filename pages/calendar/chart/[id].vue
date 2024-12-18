@@ -101,6 +101,8 @@ onMounted(async () => {
       event => event.id?.toString() === route.params.id
     )
 
+    console.log(activeEvent.value)
+
     nextTick(() => {
       getChartData()
     })
@@ -329,6 +331,7 @@ onBeforeUnmount(() => {
           />
         </div>
       </div>
+      <NotFound v-if="!activeEvent && !isLoading" message="Event not found" />
     </section>
   </main>
 </template>
