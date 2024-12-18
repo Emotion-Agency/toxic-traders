@@ -6,6 +6,7 @@ export interface ICalendarEventSymbol {
   ohlcSymbolId: number
   order: number
   tradeDirection: 0 | 1
+  reaction: string
 }
 
 export interface ICalendarEvent {

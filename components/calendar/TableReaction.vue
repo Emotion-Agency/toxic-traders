@@ -1,71 +1,49 @@
 <script lang="ts" setup>
 import type { ITableCalendarEvent } from '~/types/calendar/events'
-import { getOHLCSymbolsData } from '~/utils/api/ohlc/symbolsData'
 
 interface IProps {
   event: ITableCalendarEvent
 }
 
-const props = defineProps<IProps>()
+defineProps<IProps>()
 
-const maxChange = ref<number>(0)
-const isLoading = ref<boolean>(false)
-
-const getReaction = async () => {
-  const { firstSymbol } = props.event
-
-  const oneMinute = 60 * 1000
-  const thirtyMinutes = 30 * oneMinute
-
-  const previousCandleTime = new Date(props.event.time).getTime() - oneMinute
-
-  if (!firstSymbol) {
-    return
-  }
-
-  try {
-    isLoading.value = true
-    const reactionCandles = await getOHLCSymbolsData(
-      formatDateWithTimeDdMmYyyy(previousCandleTime),
-      formatDateWithTimeDdMmYyyy(
-        previousCandleTime + thirtyMinutes + oneMinute
-      ),
-      firstSymbol?.ohlcSymbol?.symbol
-    )
-
-    if (!reactionCandles?.length) {
-      return
-    }
-
-    const firstCandle = reactionCandles[0]
-
-    const firstCandleClosePrice = firstCandle.closePrice
-
-    const ThirtyMinutesCandles = reactionCandles.slice(1)
-
-    maxChange.value = ThirtyMinutesCandles.reduce((acc, candle) => {
-      const change = Math.abs(candle.closePrice - firstCandleClosePrice)
-      return change > acc ? change : acc
-    }, 0)
-  } catch (error) {
-    console.log(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-const onClick = async () => {
-  await getReaction()
-}
+const onClick = () => {}
 </script>
 
 <template>
-  <button @click.stop.prevent="onClick" class="calendar-table__reaction">
-    <span v-if="maxChange > 0">+</span>
-    <span v-if="isLoading"><Spinner /></span>
-    <span v-else-if="maxChange !== undefined"
-      >{{ maxChange.toFixed(2) }} pips</span
+  <HeadlessDropdownMenu
+    class="dropdown"
+    trigger="hover"
+    v-if="event?.firstSymbol?.reaction"
+  >
+    <HeadlessDropdownTrigger
+      class="calendar-table__reaction"
+      @click.stop.prevent="onClick"
     >
-    <span v-else>no data</span>
-  </button>
+      <span class="header__account-name">{{
+        event?.firstSymbol?.reaction
+      }}</span>
+    </HeadlessDropdownTrigger>
+    <Teleport to="#teleports">
+      <Transition name="dropdown">
+        <HeadlessDropdownItems
+          position-x="right"
+          position-y="top"
+          style="z-index: 1000"
+          class="dropdown__items"
+        >
+          <HeadlessDropdownItem
+            v-for="(item, idx) in event.symbols"
+            :key="idx"
+            class="dropdown__item calendar__table-reaction-item"
+          >
+            {{ item?.ohlcSymbol?.symbol }}
+            <b>{{ item.reaction || '-' }}</b>
+          </HeadlessDropdownItem>
+        </HeadlessDropdownItems>
+      </Transition>
+    </Teleport>
+  </HeadlessDropdownMenu>
+
+  <span v-else>-</span>
 </template>
