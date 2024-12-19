@@ -203,6 +203,10 @@ export const useCalendarEvents = () => {
     order: number
   ) => {
     try {
+      if (!Number.isInteger(order)) {
+        throw new Error('Order should be an integer, get ' + order)
+      }
+
       await bindOHLCSymbolToEvent(title, country, symbolId, order)
     } catch (error) {
       console.error('Error binding symbols:', error)
