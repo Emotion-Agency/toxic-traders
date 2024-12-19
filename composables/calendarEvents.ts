@@ -204,6 +204,7 @@ export const useCalendarEvents = () => {
   ) => {
     try {
       if (!Number.isInteger(order)) {
+        toast.error(`Order should be an integer, get ${order}`)
         throw new Error('Order should be an integer, get ' + order)
       }
 
