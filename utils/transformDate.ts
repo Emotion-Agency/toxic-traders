@@ -48,6 +48,11 @@ export const formatDateWithTimeDdMmYyyy = (
 ): string => {
   const formatType = 'DD.MM.YYYY HH:mm:ss'
 
+  console.log(
+    moment.utc(dateStr).tz('America/New_York').format(formatType),
+    moment.utc(dateStr).tz(tz).format(formatType)
+  )
+
   return moment(dateStr).tz(tz).format(formatType)
 }
 
@@ -88,12 +93,31 @@ export const addSeconds = (date: Date, seconds: number): Date => {
   return new Date(Date.now())
 }
 
-export const ajustForMarchShift = (
-  datestring: string | number | Date,
-  targetTimezone: string
+export const formatDateWithCustomDST = (
+  dateStr: string | number,
+  serverTz: string = 'Europe/Kiev',
+  dstTz: string = 'America/New_York'
 ): string => {
-  return moment
-    .utc(datestring)
-    .tz(targetTimezone)
-    .format('DD.MM.YYYY HH:mm:ssZ')
+  const formatType = 'DD.MM.YYYY HH:mm:ss'
+
+  // Convert the date to the server timezone (Europe/Kiev)
+  const serverDate = moment(dateStr).tz(serverTz)
+
+  // Get the UTC offset for the server timezone (Europe/Kiev)
+  const serverOffset = serverDate.utcOffset()
+
+  // Get the UTC offset for the DST timezone (America/New_York)
+  const dstOffset = moment(dateStr).tz(dstTz).utcOffset()
+
+  // if 120 thats means that the server is not in DST when the DST timezone is in DST, and 60 when the server and DST Timezone is in DST
+  const offsetDifference = Math.abs(dstOffset) - Math.abs(serverOffset)
+
+  if (offsetDifference === 120) {
+    serverDate.add(1, 'hour')
+  }
+
+  console.log(offsetDifference, serverDate.format(formatType))
+
+  // Format the adjusted date
+  return serverDate.format(formatType)
 }

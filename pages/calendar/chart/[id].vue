@@ -72,8 +72,8 @@ const getChartData = async () => {
     // )
 
     const reactionCandles = await getOHLCSymbolsData(
-      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp - timeBeforeRelease),
-      formatDateWithTimeDdMmYyyy(eventReleaseTimestamp + timeAfterRelease),
+      formatDateWithCustomDST(eventReleaseTimestamp - timeBeforeRelease),
+      formatDateWithCustomDST(eventReleaseTimestamp + timeAfterRelease),
       selectedSymbol.value
     )
 

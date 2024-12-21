@@ -146,6 +146,26 @@ const series = computed(() => {
 })
 
 provide('parent', $chartContainer)
+
+const delta = computed(() => {
+  const dif = lastCoord.value.yValue - firstCoord.value.yValue
+
+  // if (dif > 1) {
+  return dif?.toFixed(props.digits) || 0
+  // }
+
+  // const isNegative = dif < 0
+
+  // const [integer, decimal] = dif?.toFixed(props.digits).split('.')
+
+  // let valueArr = decimal?.split('')
+
+  // let firstNotZeroIndex = valueArr?.findIndex(item => item !== '0')
+
+  // valueArr = valueArr?.slice(firstNotZeroIndex)
+
+  // return isNegative ? `-${valueArr?.join('')}` : valueArr?.join('')
+})
 </script>
 
 <template>
@@ -173,7 +193,7 @@ provide('parent', $chartContainer)
           ><b>{{ lastCoord.yValue.toFixed(digits) }}</b></span
         >
         <span
-          >delta: <b>{{ priceDifference?.toFixed(digits) }}</b></span
+          >delta: <b>{{ delta }}</b></span
         >
         <span
           >change: <b>{{ percentageChange?.toFixed(digits) }}%</b></span
