@@ -93,6 +93,23 @@ export const addSeconds = (date: Date, seconds: number): Date => {
   return new Date(Date.now())
 }
 
+export const hasDifBetweenDST = (
+  dateStr: string | number,
+  serverTz: string = 'Europe/Kiev',
+  dstTz: string = 'America/New_York'
+): boolean => {
+  const serverDate = moment(dateStr).tz(serverTz)
+
+  const serverOffset = serverDate.utcOffset()
+
+  const dstOffset = moment(dateStr).tz(dstTz).utcOffset()
+
+  const offsetDifference = Math.abs(dstOffset) - Math.abs(serverOffset)
+
+  // if 120 thats means that the server is not in DST when the New York timezone is in DST
+  return offsetDifference === 120
+}
+
 export const formatDateWithCustomDST = (
   dateStr: string | number,
   serverTz: string = 'Europe/Kiev',
@@ -100,24 +117,13 @@ export const formatDateWithCustomDST = (
 ): string => {
   const formatType = 'DD.MM.YYYY HH:mm:ss'
 
-  // Convert the date to the server timezone (Europe/Kiev)
   const serverDate = moment(dateStr).tz(serverTz)
 
-  // Get the UTC offset for the server timezone (Europe/Kiev)
-  const serverOffset = serverDate.utcOffset()
+  const hasOffset = hasDifBetweenDST(dateStr, serverTz, dstTz)
 
-  // Get the UTC offset for the DST timezone (America/New_York)
-  const dstOffset = moment(dateStr).tz(dstTz).utcOffset()
-
-  // if 120 thats means that the server is not in DST when the DST timezone is in DST, and 60 when the server and DST Timezone is in DST
-  const offsetDifference = Math.abs(dstOffset) - Math.abs(serverOffset)
-
-  if (offsetDifference === 120) {
+  if (hasOffset) {
     serverDate.add(1, 'hour')
   }
 
-  console.log(offsetDifference, serverDate.format(formatType))
-
-  // Format the adjusted date
   return serverDate.format(formatType)
 }
