@@ -94,9 +94,9 @@ const getCurrentSpreadRequest = async () => {
         broker: item?.brokerCompanyNames[0],
         accountType: item?.accountType,
         serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+        digits: item?.digits,
         spread: item?.spread,
         newsSpread: item?.newsSpread,
-        digits: item?.digits,
       }
     })
 
@@ -177,9 +177,9 @@ watch(
         broker: item?.brokerCompanyNames[0],
         accountType: item?.accountType,
         serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
+        digits: item?.digits,
         spread: item?.spread,
         newsSpread: item?.newsSpread,
-        digits: item?.digits,
       }
     })
   }
