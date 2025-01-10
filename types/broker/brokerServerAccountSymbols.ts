@@ -102,6 +102,7 @@ export interface iBrokerServerAccountTable {
 export interface iBrokerServerAccountSymbolsSpread {
   id: number
   spread: number
+  digits: number
   newsSpread: number
   brokerCompanyNames: string[]
   accountType: string
@@ -116,6 +117,7 @@ export interface iBrokerUniqueServerAccountSymbolsSpread {
   serverType: string
   spread: number
   newsSpread: number
+  digits: number
 }
 
 export interface iBrokerServerAccountSymbolsSpreadsParams {

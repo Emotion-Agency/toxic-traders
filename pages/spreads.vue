@@ -15,7 +15,7 @@ const filteredSymbolsDescriptions = ref([])
 const spreads = ref<iBrokerServerAccountSymbolsSpread[]>([])
 const filteredSpreads = ref<iBrokerUniqueServerAccountSymbolsSpread[]>([])
 const selectedSymbol = ref<string>(null)
-const selectedDescription = ref<string>(null)
+const selectedDescription = ref<string>('Gold')
 const isContentLoading = ref(true)
 const isTableLoading = ref(true)
 const sortBy = ref('BrokerCompanyNames')
@@ -96,6 +96,7 @@ const getCurrentSpreadRequest = async () => {
         serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
         spread: item?.spread,
         newsSpread: item?.newsSpread,
+        digits: item?.digits,
       }
     })
 
@@ -178,6 +179,7 @@ watch(
         serverType: item?.serverType === 0 ? 'MT4' : 'MT5',
         spread: item?.spread,
         newsSpread: item?.newsSpread,
+        digits: item?.digits,
       }
     })
   }
