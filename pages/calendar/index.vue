@@ -8,8 +8,13 @@ const selectedDate = ref<string | null>(null)
 const router = useRouter()
 const route = useRoute()
 
-const startDate = ref<string>(route.query.startDate as string)
-const endDate = ref<string>(route.query.endDate as string)
+const dateRange = ref<string[] | null[]>([
+  route.query.startDate as string,
+  route.query.endDate as string,
+])
+
+const startDate = computed(() => dateRange.value[0])
+const endDate = computed(() => dateRange.value[1])
 
 function formatDate(date: Date): string {
   return date.toISOString().split('T')[0]
@@ -96,34 +101,32 @@ const onSelect = (e: iSelectInput) => {
   const today = new Date()
   switch (e.value) {
     case 'Today':
-      startDate.value = formatDate(today)
-      endDate.value = null
+      dateRange.value = [formatDate(today), null]
+
       break
     case 'Tomorrow':
       const tomorrow = new Date(today)
       tomorrow.setDate(today.getDate() + 1)
-      startDate.value = formatDate(tomorrow)
-      endDate.value = null
+      dateRange.value = [formatDate(tomorrow), null]
       break
     case 'This week':
       const startOfWeek = new Date(today)
       startOfWeek.setDate(today.getDate() - today.getDay())
       const endOfWeek = new Date(startOfWeek)
       endOfWeek.setDate(startOfWeek.getDate() + 6)
-      startDate.value = formatDate(startOfWeek)
-      endDate.value = formatDate(endOfWeek)
+
+      dateRange.value = [formatDate(startOfWeek), formatDate(endOfWeek)]
       break
     case 'Next week':
       const startOfNextWeek = new Date(today)
       startOfNextWeek.setDate(today.getDate() + (7 - today.getDay()))
       const endOfNextWeek = new Date(startOfNextWeek)
       endOfNextWeek.setDate(startOfNextWeek.getDate() + 6)
-      startDate.value = formatDate(startOfNextWeek)
-      endDate.value = formatDate(endOfNextWeek)
+
+      dateRange.value = [formatDate(startOfNextWeek), formatDate(endOfNextWeek)]
       break
     default:
-      startDate.value = null
-      endDate.value = null
+      dateRange.value = [null, null]
   }
 
   onSaveDate()
@@ -131,8 +134,9 @@ const onSelect = (e: iSelectInput) => {
 
 const onReset = () => {
   selectedDate.value = null
-  startDate.value = null
-  endDate.value = null
+
+  dateRange.value = [null, null]
+
   currentPage.value = 1
   getAllEvents()
 }
@@ -196,8 +200,7 @@ watch([currentPage, itemsCount, sortState], () => {
           <CalendarCustomDateModal
             :is-open="isModalOpen"
             @close="isModalOpen = false"
-            v-model:startDate="startDate"
-            v-model:endDate="endDate"
+            v-model:date="dateRange"
             @save="onSaveDate()"
           />
 

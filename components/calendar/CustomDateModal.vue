@@ -7,8 +7,7 @@ defineProps<IProps>()
 
 const emit = defineEmits(['close', 'save'])
 
-const startDate = defineModel('startDate')
-const endDate = defineModel('endDate')
+const date = defineModel<string[]>('date')
 
 const onSave = () => {
   emit('save')
@@ -32,24 +31,13 @@ const { theme } = useAppState()
     </p>
     <div class="calendar-date-modal__inputs">
       <div class="calendar-date-modal__input">
-        <p class="calendar-date-modal__label">Start date</p>
+        <p class="calendar-date-modal__label">Choose date</p>
         <ClientOnly>
           <VueDatePicker
             :teleport="true"
             :enable-time-picker="false"
-            v-model="startDate"
-            placeholder="22.05.1998"
-            :dark="isDark || theme === 'dark'"
-          />
-        </ClientOnly>
-      </div>
-      <div class="calendar-date-modal__input">
-        <p class="calendar-date-modal__label">End Date</p>
-        <ClientOnly>
-          <VueDatePicker
-            :teleport="true"
-            :enable-time-picker="false"
-            v-model="endDate"
+            v-model="date"
+            range
             placeholder="22.05.1998"
             :dark="isDark || theme === 'dark'"
           />
