@@ -37,6 +37,11 @@ const view = ref<'main' | 'tile-window'>('main')
 const mainSymbol = reactiveComputed(() => ({
   value: activeEvent.value?.firstSymbol?.ohlcSymbol?.symbol,
 }))
+
+const getSecondarySymbols = (idx: number) => {
+  return activeEvent.value.symbols?.find((_, i) => i === idx)?.ohlcSymbol
+    ?.symbol
+}
 </script>
 
 <template>
@@ -59,7 +64,7 @@ const mainSymbol = reactiveComputed(() => ({
           <CalendarTileItem
             v-for="item in 4"
             :key="item"
-            :main-symbol="mainSymbol.value"
+            :main-symbol="getSecondarySymbols(item - 1)"
             :events="events"
             :initial-event="activeEvent"
           />

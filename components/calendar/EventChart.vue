@@ -258,6 +258,7 @@ onBeforeUnmount(() => {
         <div class="container calendar-chart__container">
           <div class="calendar-chart__second-nav-left">
             <InputSelect
+              v-if="props.showChart"
               v-slot="{ renderedItems }"
               :options="
                 activeEvent.symbols?.map(symbol => symbol?.ohlcSymbol?.symbol)
@@ -277,6 +278,7 @@ onBeforeUnmount(() => {
             </InputSelect>
 
             <InputSelect
+              v-if="props.showChart"
               v-slot="{ renderedItems }"
               :options="['1m', '5m', '15m']"
               :value="selectedTimeframe"
@@ -292,7 +294,7 @@ onBeforeUnmount(() => {
               />
             </InputSelect>
 
-            <div class="tools">
+            <div v-if="props.showChart" class="tools">
               <HeadlessTooltip v-for="tool in tools" :key="tool.title">
                 <template #trigger>
                   <button
