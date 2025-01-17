@@ -3,6 +3,7 @@ import type { iInput, iOptionItem, iSearchInput } from '~/types'
 
 interface iProps {
   options: string[]
+  allOptions?: string[]
   placeholder: string
   title?: string
   searchInput?: iSearchInput
@@ -75,8 +76,19 @@ const outsideClick = event => {
   }
 }
 
+const search = ref('')
+
 const onSearch = (input: iInput) => {
+  search.value = input.value
   emit('search', input.value)
+}
+
+const onSearchEnter = () => {
+  const value = search.value?.trim()
+  console.log(value, props.allOptions?.includes(value), props.allOptions)
+  if (props.options?.includes(value) || props.allOptions?.includes(value)) {
+    selectItem(value)
+  }
 }
 
 onMounted(() => {
@@ -155,9 +167,10 @@ const validate = () => {
           :is-right-button="searchInput?.isRightButton"
           class="custom-select__input"
           @input-value="onSearch"
+          @keydown.enter="onSearchEnter"
         >
           <template #right-icon>
-            <IconsSearch />
+            <IconsSearch @click="onSearchEnter" />
           </template>
         </InputField>
       </div>

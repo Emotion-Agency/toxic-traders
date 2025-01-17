@@ -255,6 +255,7 @@ onMounted(async () => {
                 <InputSelect
                   v-slot="{ renderedItems }"
                   :options="descriptionSelect.options"
+                  :all-options="symbolsDescriptions"
                   :search-input="descriptionSelect.searchInput"
                   :placeholder="descriptionSelect.placeholder"
                   :title="descriptionSelect.title"
