@@ -26,10 +26,18 @@ onMounted(async () => {
 const router = useRouter()
 
 const changeEventHandler = (event: ITableCalendarEvent) => {
-  router.push({
-    path: `/calendar/chart/${event.id}`,
-    query: { country: event.country, title: event.event },
-  })
+  activeEvent.value = event
+
+  history.pushState(
+    {},
+    '',
+    `/calendar/chart/${event.id}?country=${event.country}&title=${event.event}`
+  )
+
+  // router.push({
+  //   path: `/calendar/chart/${event.id}`,
+  //   query: { country: event.country, title: event.event },
+  // })
 }
 
 const view = ref<'main' | 'tile-window'>('main')

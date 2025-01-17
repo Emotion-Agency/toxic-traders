@@ -12,7 +12,6 @@ const props = defineProps<IProps>()
 const activeEvent = ref<ITableCalendarEvent | undefined>(props.initialEvent)
 
 const changeEventHandler = (event: ITableCalendarEvent) => {
-  console.log(event)
   activeEvent.value = event
 }
 </script>
