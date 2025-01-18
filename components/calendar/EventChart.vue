@@ -66,8 +66,6 @@ const filteredCandleByTimeframe = computed(() => {
 watchDeep(
   () => props.activeEvent,
   () => {
-    selectedSymbol.value = props.activeEvent?.firstSymbol?.ohlcSymbol?.symbol
-
     nextTick(() => {
       getChartData()
     })

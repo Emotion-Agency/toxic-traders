@@ -9,7 +9,9 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const activeEvent = ref<ITableCalendarEvent | undefined>(props.initialEvent)
+const activeEvent = reactiveComputed<{
+  value: ITableCalendarEvent | undefined
+}>(() => ({ value: props.initialEvent }))
 
 const changeEventHandler = (event: ITableCalendarEvent) => {
   activeEvent.value = event
@@ -23,7 +25,7 @@ const changeEventHandler = (event: ITableCalendarEvent) => {
     :events="events"
     :show-chart="true"
     :main-symbol="mainSymbol"
-    :active-event="activeEvent"
+    :active-event="activeEvent.value"
     @prev="changeEventHandler"
     @next="changeEventHandler"
   />
