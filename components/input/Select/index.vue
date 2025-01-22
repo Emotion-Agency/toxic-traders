@@ -85,10 +85,8 @@ const onSearch = (input: iInput) => {
 
 const onSearchEnter = () => {
   const value = search.value?.trim()
-  console.log(value, props.allOptions?.includes(value), props.allOptions)
-  if (props.options?.includes(value) || props.allOptions?.includes(value)) {
-    selectItem(value)
-  }
+
+  selectItem(value)
 }
 
 onMounted(() => {
