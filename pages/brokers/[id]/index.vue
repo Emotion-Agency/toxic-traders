@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { iCompanyNamesItem } from '~/types/broker/brokerCompanyNames'
+
 const route = useRoute()
 const brokerId = route.params.id
 const settingsModalOpened = ref(false)
@@ -33,6 +35,8 @@ const historyModalOpen = () => {
 const historyModalClose = () => {
   historyModalOpened.value = false
 }
+
+const companyNames = ref<iCompanyNamesItem[]>([])
 </script>
 
 <template>
@@ -41,10 +45,17 @@ const historyModalClose = () => {
       <aside class="broker-aside">
         <div class="broker-aside__wrapper">
           <div class="broker-aside__content">
-            <BrokerCompanyName :broker-id="Number(brokerId)" />
+            <BrokerCompanyName
+              :names="companyNames"
+              :broker-id="Number(brokerId)"
+              @update="companyNames = $event"
+            />
             <BrokerCategory :broker-id="Number(brokerId)" />
             <BrokerServerLocation :broker-id="Number(brokerId)" />
-            <BrokerServerAddresses :broker-id="Number(brokerId)" />
+            <BrokerServerAddresses
+              :company-name="companyNames[0]?.companyName"
+              :broker-id="Number(brokerId)"
+            />
             <BrokerWebsites :broker-id="Number(brokerId)" />
             <BrokerReviews :broker-id="Number(brokerId)" />
           </div>

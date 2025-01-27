@@ -1,13 +1,17 @@
 import axiosInstance from '../axiosInstance'
 import type { iServerAddressesData } from '~/types/broker/brokerServerAddresses'
 
-export const getBrokerServerAddresses = async (brokerId: number) => {
+export const getBrokerServerAddresses = async (
+  brokerId: number,
+  brokerCompanyName: string
+) => {
   try {
     const { data }: iServerAddressesData = await axiosInstance.get(
-      'Broker/ServerAddresses',
+      'Broker/BrokerCompanyNameAddresses',
       {
         params: {
           brokerId,
+          brokerCompanyName,
         },
       }
     )
@@ -15,7 +19,7 @@ export const getBrokerServerAddresses = async (brokerId: number) => {
     return data
   } catch (e) {
     if (e.response.status === 400) {
-      return { brokerServerAddresses: [] }
+      return { addresses: [] }
     }
     console.error(e.message)
     throw e

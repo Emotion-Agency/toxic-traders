@@ -3,11 +3,17 @@ import { getBrokerServerAddresses } from '~/utils/api/brokers/brokerServerAddres
 export const useBrokerServerAddresses = () => {
   const { toast } = useToasts()
 
-  const getServerAddresses = async (brokerId: number) => {
+  const getServerAddresses = async (
+    brokerId: number,
+    brokerCompanyName: string
+  ) => {
     try {
-      const { brokerServerAddresses } = await getBrokerServerAddresses(brokerId)
+      const { addresses } = await getBrokerServerAddresses(
+        brokerId,
+        brokerCompanyName
+      )
 
-      return brokerServerAddresses
+      return addresses
     } catch (error) {
       console.error('Error fetching server addresses:', error)
       toast.error(

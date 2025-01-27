@@ -5,6 +5,6 @@ export interface iServerAddress {
 
 export interface iServerAddressesData {
   data: {
-    brokerServerAddresses: iServerAddress[]
+    addresses: iServerAddress[]
   }
 }
