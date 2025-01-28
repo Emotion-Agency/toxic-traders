@@ -3,15 +3,9 @@ import { getBrokerServerAddresses } from '~/utils/api/brokers/brokerServerAddres
 export const useBrokerServerAddresses = () => {
   const { toast } = useToasts()
 
-  const getServerAddresses = async (
-    brokerId: number,
-    brokerCompanyName: string
-  ) => {
+  const getServerAddresses = async (brokerId: number) => {
     try {
-      const { addresses } = await getBrokerServerAddresses(
-        brokerId,
-        brokerCompanyName
-      )
+      const { addresses } = await getBrokerServerAddresses(brokerId)
 
       return addresses
     } catch (error) {

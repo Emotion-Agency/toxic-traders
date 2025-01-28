@@ -52,10 +52,7 @@ const companyNames = ref<iCompanyNamesItem[]>([])
             />
             <BrokerCategory :broker-id="Number(brokerId)" />
             <BrokerServerLocation :broker-id="Number(brokerId)" />
-            <BrokerServerAddresses
-              :company-name="companyNames[0]?.companyName"
-              :broker-id="Number(brokerId)"
-            />
+            <BrokerServerAddresses :broker-id="Number(brokerId)" />
             <BrokerWebsites :broker-id="Number(brokerId)" />
             <BrokerReviews :broker-id="Number(brokerId)" />
           </div>

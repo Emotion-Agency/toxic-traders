@@ -3,7 +3,6 @@ import type { iServerAddress } from '~/types/broker/brokerServerAddresses'
 
 interface iProps {
   brokerId: number
-  companyName?: string
 }
 
 const props = defineProps<iProps>()
@@ -21,13 +20,8 @@ const showLessServerAddresses = () => {
   filteredServerAddresses.value = serverAddresses.value.slice(0, 1)
 }
 
-watchEffect(async () => {
-  if (!props.companyName) return
-
-  const serverAddressesRequest = await getServerAddresses(
-    props.brokerId,
-    props.companyName
-  )
+onMounted(async () => {
+  const serverAddressesRequest = await getServerAddresses(props.brokerId)
 
   if (serverAddressesRequest?.length) {
     serverAddresses.value = serverAddressesRequest
