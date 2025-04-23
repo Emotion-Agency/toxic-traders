@@ -3,21 +3,6 @@ import { resize } from '~/utils/ea'
 
 const $el = ref<HTMLElement | null>(null)
 
-const navigationList = [
-  {
-    text: 'Calendar',
-    link: '/calendar/',
-  },
-  {
-    text: 'Brokers',
-    link: '/brokers/',
-  },
-  {
-    text: 'Spreads',
-    link: '/spreads/',
-  },
-]
-
 const calcHeight = () => {
   const height = $el.value.offsetHeight
   document.documentElement.style.setProperty('--h', `${height}px`)
@@ -41,16 +26,7 @@ useOnBeforeUnmountDelay(() => {
             <IconsLogo />
           </span>
         </NuxtLink>
-        <nav class="header__list">
-          <NuxtLink
-            v-for="(item, idx) in navigationList"
-            :key="idx"
-            :to="item.link"
-            class="header__link"
-          >
-            {{ item.text }}
-          </NuxtLink>
-        </nav>
+        <TheNavigation />
       </div>
       <div class="header__side header__side--right">
         <HeadlessTooltip>
