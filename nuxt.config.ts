@@ -23,5 +23,5 @@ export default defineNuxtConfig({
     ],
   },
 
-  modules: ['@vueuse/nuxt'],
+  modules: ['@vueuse/nuxt', 'reka-ui/nuxt'],
 })
