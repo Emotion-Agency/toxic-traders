@@ -10,7 +10,7 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const emit = defineEmits(['sort', 'delete'])
+const emit = defineEmits(['sort', 'delete', 'update'])
 
 const headings = ['Status', 'Name', 'IP Address', 'Actions']
 
@@ -97,7 +97,11 @@ const isSortable = (field: string) => {
             :disable-tooltip="true"
           >
             <div class="servers-table__actions">
-              <button type="button" class="servers-table__actions-btn">
+              <button
+                type="button"
+                class="servers-table__actions-btn"
+                @click="emit('update', item.id)"
+              >
                 <IconsPencilSquare />
               </button>
               <button

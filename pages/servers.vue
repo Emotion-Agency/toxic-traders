@@ -85,6 +85,7 @@ const sortedOrder = ref<1 | 2>(
 const selectedServerId = ref<string | null>(null)
 const deleteModalOpened = ref(false)
 const createModalOpened = ref(false)
+const updateModalOpened = ref(false)
 
 const {
   currentPage,
@@ -152,12 +153,10 @@ watch([currentPage, itemsCount], async () => {
 
 const handleCreateModalOpen = () => {
   createModalOpened.value = true
-  document.body.classList.add('modal-open')
 }
 
 const handleCreateModalClose = () => {
   createModalOpened.value = false
-  document.body.classList.remove('modal-open')
 }
 
 const handleDeleteModalClose = () => {
@@ -167,6 +166,14 @@ const handleDeleteModalClose = () => {
 const handleDeleteModalOpen = (id: string) => {
   selectedServerId.value = id
   deleteModalOpened.value = true
+}
+
+const handleUpdateModalOpen = () => {
+  updateModalOpened.value = true
+}
+
+const handleUpdateModalClose = () => {
+  updateModalOpened.value = false
 }
 
 const handleDeleteServer = () => {
@@ -180,6 +187,10 @@ const handleDeleteServer = () => {
 
 const handleCreateServer = () => {
   console.log('Server created')
+}
+
+const handleUpdateServer = () => {
+  console.log('Server updated')
 }
 </script>
 
@@ -214,6 +225,7 @@ const handleCreateServer = () => {
           :default-sort-order="sortedOrder"
           @sort="onSort"
           @delete="handleDeleteModalOpen"
+          @update="handleUpdateModalOpen"
         />
         <ThePagination
           class="servers-content__pagination"
@@ -244,6 +256,12 @@ const handleCreateServer = () => {
       :modal-opened="createModalOpened"
       @close="handleCreateModalClose"
       @created="handleCreateServer"
+    />
+    <ServersUpdateServerModal
+      :servers="servers"
+      :modal-opened="updateModalOpened"
+      @close="handleUpdateModalClose"
+      @updated="handleUpdateServer"
     />
   </main>
 </template>

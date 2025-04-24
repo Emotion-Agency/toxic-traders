@@ -9,7 +9,7 @@ interface iProps {
 
 defineProps<iProps>()
 
-const emit = defineEmits(['close', 'created'])
+const emit = defineEmits(['close', 'updated'])
 
 interface iServersInput {
   required?: boolean
@@ -76,7 +76,7 @@ const resetInputs = () => {
   })
 }
 
-const onAddClick = async () => {
+const onUpdateClick = async () => {
   // const serviceName = serversInputs.value.find(
   //   el => el.name === 'service'
   // ).value
@@ -93,11 +93,11 @@ const onAddClick = async () => {
 
   resetInputs()
 
-  emit('created')
+  emit('updated')
   emit('close')
 }
 
-const handleCreateModalClose = () => {
+const handleUpdateModalClose = () => {
   emit('close')
 }
 </script>
@@ -105,14 +105,14 @@ const handleCreateModalClose = () => {
 <template>
   <TheModal
     :modal-opened="modalOpened"
-    title="Create new server"
-    @close="handleCreateModalClose"
+    title="Edit new server"
+    @close="handleUpdateModalClose"
   >
-    <div class="create-server__modal-content">
+    <div class="update-server__modal-content">
       <div
         v-for="(input, index) in serversInputs"
         :key="index"
-        class="create-server__input-item"
+        class="update-server__input-item"
       >
         <InputSelect
           v-slot="{ renderedItems }"
@@ -146,12 +146,12 @@ const handleCreateModalClose = () => {
         />
       </div>
     </div>
-    <div class="create-server__buttons">
+    <div class="update-server__buttons">
       <TheButton
         tag="button"
         variant="close"
         button-size="medium"
-        @click="handleCreateModalClose"
+        @click="handleUpdateModalClose"
       >
         Close
       </TheButton>
@@ -159,9 +159,9 @@ const handleCreateModalClose = () => {
         tag="button"
         variant="fill"
         button-size="medium"
-        @click="onAddClick"
+        @click="onUpdateClick"
       >
-        Create
+        Update
       </TheButton>
     </div>
   </TheModal>
