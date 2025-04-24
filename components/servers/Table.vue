@@ -10,7 +10,7 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const emit = defineEmits(['sort'])
+const emit = defineEmits(['sort', 'delete'])
 
 const headings = ['Status', 'Name', 'IP Address', 'Actions']
 
@@ -100,7 +100,11 @@ const isSortable = (field: string) => {
               <button type="button" class="servers-table__actions-btn">
                 <IconsPencilSquare />
               </button>
-              <button type="button" class="servers-table__actions-btn">
+              <button
+                type="button"
+                class="servers-table__actions-btn"
+                @click="emit('delete', item.id)"
+              >
                 <IconsX />
               </button>
             </div>

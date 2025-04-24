@@ -8,11 +8,6 @@ export interface iServersData {
 const router = useRouter()
 const route = useRoute()
 
-const isLoading = ref(false)
-const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
-const sortedOrder = ref<1 | 2>(
-  route.query?.sortedOrder ? (+route.query?.sortedOrder as 1 | 2) : 1
-)
 const servers = ref<iServersData[]>([
   {
     id: '1',
@@ -82,6 +77,14 @@ const servers = ref<iServersData[]>([
   },
 ])
 
+const isLoading = ref(false)
+const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
+const sortedOrder = ref<1 | 2>(
+  route.query?.sortedOrder ? (+route.query?.sortedOrder as 1 | 2) : 1
+)
+const selectedServerId = ref<string | null>(null)
+const deleteModalOpened = ref(false)
+
 const {
   currentPage,
   itemsCount,
@@ -145,6 +148,24 @@ watch([currentPage, itemsCount], async () => {
     },
   })
 })
+
+const handleDeleteModalClose = () => {
+  deleteModalOpened.value = false
+}
+
+const handleDeleteModalOpen = (id: string) => {
+  selectedServerId.value = id
+  deleteModalOpened.value = true
+}
+
+const handleDeleteServer = () => {
+  if (!selectedServerId.value) return
+  servers.value = servers.value.filter(
+    server => server.id !== selectedServerId.value
+  )
+  deleteModalOpened.value = false
+  selectedServerId.value = null
+}
 </script>
 
 <template>
@@ -173,6 +194,7 @@ watch([currentPage, itemsCount], async () => {
           :default-sort-by="sortedBy"
           :default-sort-order="sortedOrder"
           @sort="onSort"
+          @delete="handleDeleteModalOpen"
         />
         <ThePagination
           class="servers-content__pagination"
@@ -191,5 +213,12 @@ watch([currentPage, itemsCount], async () => {
         />
       </div>
     </section>
+    <DeleteModal
+      :modal-opened="deleteModalOpened"
+      text="Are you sure you want to delete this account? This action cannot be prevented"
+      @close="handleDeleteModalClose"
+      @delete="handleDeleteServer"
+      :is-loading="isLoading"
+    />
   </main>
 </template>
