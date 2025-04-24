@@ -1,0 +1,15 @@
+.hero-servers {
+  padding-top: 142px;
+  padding-bottom: 24px;
+}
+
+.hero-servers__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-servers__title {
+  @include heading-m-h1;
+  max-width: 500px;
+}
