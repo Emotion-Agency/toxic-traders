@@ -84,6 +84,7 @@ const sortedOrder = ref<1 | 2>(
 )
 const selectedServerId = ref<string | null>(null)
 const deleteModalOpened = ref(false)
+const createModalOpened = ref(false)
 
 const {
   currentPage,
@@ -149,6 +150,16 @@ watch([currentPage, itemsCount], async () => {
   })
 })
 
+const handleCreateModalOpen = () => {
+  createModalOpened.value = true
+  document.body.classList.add('modal-open')
+}
+
+const handleCreateModalClose = () => {
+  createModalOpened.value = false
+  document.body.classList.remove('modal-open')
+}
+
 const handleDeleteModalClose = () => {
   deleteModalOpened.value = false
 }
@@ -166,6 +177,10 @@ const handleDeleteServer = () => {
   deleteModalOpened.value = false
   selectedServerId.value = null
 }
+
+const handleCreateServer = () => {
+  console.log('Server created')
+}
 </script>
 
 <template>
@@ -173,7 +188,11 @@ const handleDeleteServer = () => {
     <section class="hero-servers">
       <div class="container hero-servers__wrapper">
         <h1 class="hero-servers__title">Servers</h1>
-        <TheButton tag="button" class="hero-servers__btn">
+        <TheButton
+          tag="button"
+          class="hero-servers__btn"
+          @click="handleCreateModalOpen"
+        >
           <template #start-icon>
             <IconsPlus />
           </template>
@@ -219,6 +238,12 @@ const handleDeleteServer = () => {
       @close="handleDeleteModalClose"
       @delete="handleDeleteServer"
       :is-loading="isLoading"
+    />
+    <ServersCreateServerModal
+      :servers="servers"
+      :modal-opened="createModalOpened"
+      @close="handleCreateModalClose"
+      @created="handleCreateServer"
     />
   </main>
 </template>

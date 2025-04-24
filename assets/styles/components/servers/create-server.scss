@@ -1,0 +1,14 @@
+.create-server__modal-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-top: 16px;
+}
+
+.create-server__buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+}
