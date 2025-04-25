@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useClients } from '~/composables/clients'
+import type { IClient } from '~/types/clients/clients'
+
 export interface iServersData {
   id: string
   status: string
@@ -7,6 +10,21 @@ export interface iServersData {
 }
 const router = useRouter()
 const route = useRoute()
+
+const { getAllClients } = useClients()
+
+const clients = ref<IClient[]>([])
+
+onMounted(async () => {
+  clients.value = await getAllClients({
+    page: 1,
+    count: 15,
+    sortBy: 'id',
+    sortOrder: 1,
+  })
+
+  console.log(clients.value)
+})
 
 const servers = ref<iServersData[]>([
   {
