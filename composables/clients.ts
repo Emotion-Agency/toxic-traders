@@ -1,4 +1,8 @@
-import type { IClient, IGetAllClientsPayload } from '~/types/clients/clients'
+import type {
+  IClient,
+  IClientData,
+  IGetAllClientsPayload,
+} from '~/types/clients/clients'
 import { getAllClientsRequest } from '~/utils/api/clients/getAllClients'
 
 export const useClients = () => {
@@ -6,7 +10,7 @@ export const useClients = () => {
 
   const getAllClients = async (
     payload: IGetAllClientsPayload
-  ): Promise<IClient[] | undefined> => {
+  ): Promise<IClientData> => {
     try {
       const data = await getAllClientsRequest(payload)
 

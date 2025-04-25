@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import type { IClient } from '~/types/clients/clients'
 import Table from '../Table.vue'
-import type { iServersData } from '~/pages/servers.vue'
 
 interface IProps {
-  serversData: iServersData[]
+  servers: IClient[]
   defaultSortBy?: string
   defaultSortOrder?: 1 | 2
 }
@@ -35,6 +35,17 @@ const notSortableFields = ['Actions']
 const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
+
+const serverStatus = (status: string) => {
+  if (status.toLowerCase() === 'disconnected') {
+    return 'Offline'
+  }
+  if (status.toLowerCase() === 'connected') {
+    return 'Online'
+  }
+
+  return
+}
 </script>
 
 <template>
@@ -59,39 +70,39 @@ const isSortable = (field: string) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableRow v-for="item in serversData" :key="item.id" :id="item.id">
+        <TableRow v-for="server in servers" :key="server.id" :id="server.id">
           <TableCell
-            :item="item.status"
+            :item="server.status"
             class="servers-table__cell"
             :class="[`servers-table__cell--status`]"
             :disable-tooltip="true"
           >
             <div
               class="servers-table__status"
-              :class="`servers-table__status--${item.status}`"
+              :class="`servers-table__status--${serverStatus(server.status).toLowerCase()}`"
             >
               <span />
               <p class="servers-table__status-text">
-                {{ formatNameToNormalCase(item.status) }}
+                {{ serverStatus(server.status) }}
               </p>
             </div>
           </TableCell>
           <TableCell
-            :item="item.name"
+            :item="server.clientName"
             class="servers-table__cell"
             :class="[`servers-table__cell--name`]"
           >
-            {{ item.name }}
+            {{ server.clientName }}
           </TableCell>
           <TableCell
-            :item="item.address"
+            :item="server.ip"
             class="servers-table__cell"
             :class="[`servers-table__cell--address`]"
           >
-            {{ item.address }}
+            {{ server.ip }}
           </TableCell>
           <TableCell
-            :item="item.address"
+            :item="server.ip"
             class="servers-table__cell"
             :class="[`servers-table__cell--actions`]"
             :disable-tooltip="true"
@@ -100,14 +111,14 @@ const isSortable = (field: string) => {
               <button
                 type="button"
                 class="servers-table__actions-btn"
-                @click="emit('update', item.id)"
+                @click="emit('update', server.id)"
               >
                 <IconsPencilSquare />
               </button>
               <button
                 type="button"
                 class="servers-table__actions-btn"
-                @click="emit('delete', item.id)"
+                @click="emit('delete', server.id)"
               >
                 <IconsX />
               </button>

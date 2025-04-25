@@ -26,6 +26,11 @@ export interface IClient {
   status: 'Disconnected' | 'Connected'
 }
 
+export interface IClientData {
+  totalCount: number
+  clients: IClient[]
+}
+
 export interface IGetAllClientsPayload {
   page: number
   count: number

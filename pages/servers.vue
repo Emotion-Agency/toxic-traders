@@ -13,87 +13,23 @@ const route = useRoute()
 
 const { getAllClients } = useClients()
 
-const clients = ref<IClient[]>([])
+const servers = ref<IClient[]>([])
 
 onMounted(async () => {
-  clients.value = await getAllClients({
-    page: 1,
-    count: 15,
-    sortBy: 'id',
-    sortOrder: 1,
-  })
+  isLoading.value = true
 
-  console.log(clients.value)
+  try {
+    const clientData = await getAllClients({
+      page: 1,
+      count: 15,
+      sortBy: 'id',
+      sortOrder: 1,
+    })
+    servers.value = clientData.clients
+  } finally {
+    isLoading.value = false
+  }
 })
-
-const servers = ref<iServersData[]>([
-  {
-    id: '1',
-    status: 'online',
-    name: 'TradeSphere',
-    address: '192.168.1.1:8080',
-  },
-  {
-    id: '2',
-    status: 'offline',
-    name: 'MarketAnalyzer',
-    address: '192.168.1.2:8080',
-  },
-  {
-    id: '3',
-    status: 'online',
-    name: 'TradeOptimizer',
-    address: '192.168.1.3:8080',
-  },
-  {
-    id: '4',
-    status: 'offline',
-    name: 'RiskManager',
-    address: '192.168.1.4:8080',
-  },
-  {
-    id: '5',
-    status: 'online',
-    name: 'ProfitTracker',
-    address: '192.168.1.5:8080',
-  },
-  {
-    id: '6',
-    status: 'online',
-    name: 'AlgoTrader',
-    address: '192.168.1.6:8080',
-  },
-  {
-    id: '7',
-    status: 'offline',
-    name: 'DataMiner',
-    address: '192.168.1.7:8080',
-  },
-  {
-    id: '8',
-    status: 'online',
-    name: 'SignalProcessor',
-    address: '192.168.1.8:8080',
-  },
-  {
-    id: '9',
-    status: 'offline',
-    name: 'TrendAnalyzer',
-    address: '192.168.1.9:8080',
-  },
-  {
-    id: '10',
-    status: 'online',
-    name: 'PortfolioManager',
-    address: '192.168.1.10:8080',
-  },
-  {
-    id: '11',
-    status: 'offline',
-    name: 'LiquidityMonitor',
-    address: '192.168.1.11:8080',
-  },
-])
 
 const isLoading = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
@@ -194,14 +130,14 @@ const handleUpdateModalClose = () => {
   updateModalOpened.value = false
 }
 
-const handleDeleteServer = () => {
-  if (!selectedServerId.value) return
-  servers.value = servers.value.filter(
-    server => server.id !== selectedServerId.value
-  )
-  deleteModalOpened.value = false
-  selectedServerId.value = null
-}
+// const handleDeleteServer = () => {
+//   if (!selectedServerId.value) return
+//   servers.value = servers.value.filter(
+//     server => server.id !== selectedServerId.value
+//   )
+//   deleteModalOpened.value = false
+//   selectedServerId.value = null
+// }
 
 const handleCreateServer = () => {
   console.log('Server created')
@@ -230,15 +166,14 @@ const handleUpdateServer = () => {
       </div>
     </section>
 
-    <UiLoader v-if="isLoading" />
-    <NotFound
-      v-if="!servers.length && !isLoading"
-      message="Oops! No servers found"
-    />
-    <section v-else-if="servers.length" class="servers-content">
-      <div class="container servers-content__table-wrapper">
+    <section class="servers-content">
+      <UiLoader v-if="isLoading" />
+      <div
+        v-else-if="servers.length"
+        class="container servers-content__table-wrapper"
+      >
         <ServersTable
-          :servers-data="sortedServers"
+          :servers="sortedServers"
           :default-sort-by="sortedBy"
           :default-sort-order="sortedOrder"
           @sort="onSort"
@@ -262,10 +197,14 @@ const handleUpdateServer = () => {
         />
       </div>
     </section>
-    <DeleteModal
-      :modal-opened="deleteModalOpened"
-      text="Are you sure you want to delete this account? This action cannot be prevented"
-      @close="handleDeleteModalClose"
+    <NotFound
+      v-if="!servers.length && !isLoading"
+      message="Oops! No servers found"
+    />
+    <!-- <DeleteModal
+    :modal-opened="deleteModalOpened"
+    text="Are you sure you want to delete this account? This action cannot be prevented"
+    @close="handleDeleteModalClose"
       @delete="handleDeleteServer"
       :is-loading="isLoading"
     />
@@ -280,6 +219,6 @@ const handleUpdateServer = () => {
       :modal-opened="updateModalOpened"
       @close="handleUpdateModalClose"
       @updated="handleUpdateServer"
-    />
+    /> -->
   </main>
 </template>

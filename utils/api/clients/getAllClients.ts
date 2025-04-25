@@ -1,10 +1,13 @@
-import type { IClient, IGetAllClientsPayload } from '~/types/clients/clients'
+import type {
+  IClientData,
+  IGetAllClientsPayload,
+} from '~/types/clients/clients'
 import axiosInstance from '../axiosInstance'
 
 export const getAllClientsRequest = async (
   payload: IGetAllClientsPayload
-): Promise<IClient[]> => {
-  const { data } = await axiosInstance.get<IClient[]>('/Clients', {
+): Promise<IClientData> => {
+  const { data } = await axiosInstance.get<IClientData>('/Clients', {
     params: {
       page: payload.page,
       count: payload.count,
