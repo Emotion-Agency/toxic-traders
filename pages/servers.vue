@@ -8,28 +8,13 @@ export interface iServersData {
   name: string
   address: string
 }
+
 const router = useRouter()
 const route = useRoute()
 
 const { getAllClients } = useClients()
 
 const servers = ref<IClient[]>([])
-
-onMounted(async () => {
-  isLoading.value = true
-
-  try {
-    const clientData = await getAllClients({
-      page: 1,
-      count: 15,
-      sortBy: 'id',
-      sortOrder: 1,
-    })
-    servers.value = clientData.clients
-  } finally {
-    isLoading.value = false
-  }
-})
 
 const isLoading = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
@@ -94,17 +79,6 @@ const onSort = async (sortState: ISortState) => {
   })
 }
 
-watch([currentPage, itemsCount], async () => {
-  router.push({
-    query: {
-      ...route.query,
-
-      page: currentPage.value,
-      count: itemsCount.value,
-    },
-  })
-})
-
 const handleCreateModalOpen = () => {
   createModalOpened.value = true
 }
@@ -146,6 +120,37 @@ const handleCreateServer = () => {
 const handleUpdateServer = () => {
   console.log('Server updated')
 }
+
+watch([currentPage, itemsCount], async () => {
+  router.push({
+    query: {
+      ...route.query,
+
+      page: currentPage.value,
+      count: itemsCount.value,
+    },
+  })
+})
+
+onMounted(async () => {
+  isLoading.value = true
+
+  try {
+    const clientData = await getAllClients({
+      page: 1,
+      count: 15,
+      sortBy: 'id',
+      sortOrder: 1,
+    })
+
+    servers.value = clientData.clients
+    totalCountPages.value = clientData.totalCount
+
+    console.log(servers.value)
+  } finally {
+    isLoading.value = false
+  }
+})
 </script>
 
 <template>
@@ -207,14 +212,14 @@ const handleUpdateServer = () => {
     @close="handleDeleteModalClose"
       @delete="handleDeleteServer"
       :is-loading="isLoading"
-    />
+    /> -->
     <ServersCreateServerModal
       :servers="servers"
       :modal-opened="createModalOpened"
       @close="handleCreateModalClose"
       @created="handleCreateServer"
     />
-    <ServersUpdateServerModal
+    <!-- <ServersUpdateServerModal
       :servers="servers"
       :modal-opened="updateModalOpened"
       @close="handleUpdateModalClose"

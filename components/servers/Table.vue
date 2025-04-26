@@ -36,15 +36,15 @@ const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
 
-const serverStatus = (status: string) => {
-  if (status.toLowerCase() === 'disconnected') {
-    return 'Offline'
-  }
-  if (status.toLowerCase() === 'connected') {
-    return 'Online'
-  }
+const serverStatus = (status?: string) => {
+  if (!status) return 'Offline'
 
-  return
+  const normalizedStatus = status.toLowerCase()
+
+  if (normalizedStatus === 'disconnected') return 'Offline'
+  if (normalizedStatus === 'connected') return 'Online'
+
+  return 'Offline'
 }
 </script>
 
@@ -102,7 +102,6 @@ const serverStatus = (status: string) => {
             {{ server.ip }}
           </TableCell>
           <TableCell
-            :item="server.ip"
             class="servers-table__cell"
             :class="[`servers-table__cell--actions`]"
             :disable-tooltip="true"

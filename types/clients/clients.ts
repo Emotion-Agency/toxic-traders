@@ -37,3 +37,14 @@ export interface IGetAllClientsPayload {
   sortBy?: string
   sortOrder?: 0 | 1
 }
+
+export interface ICreateClientPayload {
+  clientName: string
+  ip: string
+}
+
+export interface IUpdateClientPayload {
+  id: number
+  clientName?: string
+  ip?: string
+}

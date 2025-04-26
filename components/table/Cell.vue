@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface iProps {
-  item: string | number | null | undefined
+  item?: string | number | null | undefined
   isSort?: boolean
   sortOrder?: 1 | 2
   isActive?: boolean

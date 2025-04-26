@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { iServersData } from '~/pages/servers.vue'
-import type { iInput, iSelectInput } from '~/types'
+import type { iInput } from '~/types'
+import type { iClient } from '~/types/settings/users'
 
 interface iProps {
   modalOpened: boolean
-  servers: iServersData[]
+  servers: iClient[]
 }
 
 defineProps<iProps>()
@@ -41,26 +41,11 @@ const serversInputs = ref<iServersInput[]>([
     value: '',
     placeholder: '42.42.42.42',
   },
-  {
-    type: 'select',
-    id: `servers-port`,
-    title: 'Port',
-    name: 'Port',
-    placeholder: '0042',
-    value: '',
-  },
 ])
 
-const onInputChange = (e: iInput) => {
-  serversInputs.value = serversInputs.value.map(item => {
-    if (item.id === e.id) {
-      item.value = e.value
-    }
-    return item
-  })
-}
+const { createClient } = await useClients()
 
-const onSelectChange = (e: iSelectInput) => {
+const onInputChange = (e: iInput) => {
   serversInputs.value = serversInputs.value.map(item => {
     if (item.id === e.id) {
       item.value = e.value
@@ -77,19 +62,10 @@ const resetInputs = () => {
 }
 
 const onAddClick = async () => {
-  // const serviceName = serversInputs.value.find(
-  //   el => el.name === 'service'
-  // ).value
-
-  // const url = serversInputs.value.find(el => el.name === 'Link').value
-
-  // const numberOfReviews = +serversInputs.value.find(
-  //   el => el.name === 'Reviews count'
-  // ).value
-
-  // const rating = +serversInputs.value.find(el => el.name === 'Rating').value
-
-  // await createServer(props.brokerId, url, rating, numberOfReviews, serviceName)
+  await createClient({
+    clientName: serversInputs.value.find(el => el.name === 'Name').value,
+    ip: serversInputs.value.find(el => el.name === 'Address').value,
+  })
 
   resetInputs()
 
@@ -114,26 +90,7 @@ const handleCreateModalClose = () => {
         :key="index"
         class="create-server__input-item"
       >
-        <InputSelect
-          v-slot="{ renderedItems }"
-          v-if="input.type === 'select'"
-          :id="input.id"
-          :name="input.name"
-          :options="['0042', '0043', '0044']"
-          :title="input.title"
-          :placeholder="input.placeholder"
-          :value="input.value"
-          @select="onSelectChange"
-        >
-          <InputSelectOption
-            v-for="(option, idx) in renderedItems"
-            :key="option"
-            :index="idx"
-            :option="option"
-          />
-        </InputSelect>
         <InputField
-          v-else
           :id="input.id"
           :key="index"
           :required="input.required"
@@ -160,6 +117,7 @@ const handleCreateModalClose = () => {
         variant="fill"
         button-size="medium"
         @click="onAddClick"
+        :disabled="serversInputs.some(input => !input.value)"
       >
         Create
       </TheButton>
