@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { iInput } from '~/types'
-import type { iClient } from '~/types/settings/users'
+import type { IClient } from '~/types/clients/clients'
 
 interface iProps {
   modalOpened: boolean
-  servers: iClient[]
+  servers: IClient[]
 }
 
 defineProps<iProps>()

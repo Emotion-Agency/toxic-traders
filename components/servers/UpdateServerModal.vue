@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import type { iServersData } from '~/pages/servers.vue'
-import type { iInput, iSelectInput } from '~/types'
+import type { iInput } from '~/types'
+import type { IClient } from '~/types/clients/clients'
 
 interface iProps {
   modalOpened: boolean
-  servers: iServersData[]
+  servers: IClient[]
+  serverId?: number
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const emit = defineEmits(['close', 'updated'])
 
@@ -41,26 +42,11 @@ const serversInputs = ref<iServersInput[]>([
     value: '',
     placeholder: '42.42.42.42',
   },
-  {
-    type: 'select',
-    id: `servers-port`,
-    title: 'Port',
-    name: 'Port',
-    placeholder: '0042',
-    value: '',
-  },
 ])
 
-const onInputChange = (e: iInput) => {
-  serversInputs.value = serversInputs.value.map(item => {
-    if (item.id === e.id) {
-      item.value = e.value
-    }
-    return item
-  })
-}
+const { updateClient } = await useClients()
 
-const onSelectChange = (e: iSelectInput) => {
+const onInputChange = (e: iInput) => {
   serversInputs.value = serversInputs.value.map(item => {
     if (item.id === e.id) {
       item.value = e.value
@@ -77,19 +63,11 @@ const resetInputs = () => {
 }
 
 const onUpdateClick = async () => {
-  // const serviceName = serversInputs.value.find(
-  //   el => el.name === 'service'
-  // ).value
-
-  // const url = serversInputs.value.find(el => el.name === 'Link').value
-
-  // const numberOfReviews = +serversInputs.value.find(
-  //   el => el.name === 'Reviews count'
-  // ).value
-
-  // const rating = +serversInputs.value.find(el => el.name === 'Rating').value
-
-  // await createServer(props.brokerId, url, rating, numberOfReviews, serviceName)
+  await updateClient({
+    id: props.serverId,
+    clientName: serversInputs.value.find(el => el.name === 'Name').value,
+    ip: serversInputs.value.find(el => el.name === 'Address').value,
+  })
 
   resetInputs()
 
@@ -114,26 +92,7 @@ const handleUpdateModalClose = () => {
         :key="index"
         class="update-server__input-item"
       >
-        <InputSelect
-          v-slot="{ renderedItems }"
-          v-if="input.type === 'select'"
-          :id="input.id"
-          :name="input.name"
-          :options="['0042', '0043', '0044']"
-          :title="input.title"
-          :placeholder="input.placeholder"
-          :value="input.value"
-          @select="onSelectChange"
-        >
-          <InputSelectOption
-            v-for="(option, idx) in renderedItems"
-            :key="option"
-            :index="idx"
-            :option="option"
-          />
-        </InputSelect>
         <InputField
-          v-else
           :id="input.id"
           :key="index"
           :required="input.required"

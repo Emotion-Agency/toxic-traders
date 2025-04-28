@@ -31,7 +31,7 @@ export const useClients = () => {
     }
   }
 
-  const getClient = async (id: string): Promise<IClient> => {
+  const getClient = async (id: number): Promise<IClient> => {
     try {
       const { data } = await getClientRequest(id)
       return data
@@ -72,7 +72,7 @@ export const useClients = () => {
     }
   }
 
-  const deleteClient = async (id: string) => {
+  const deleteClient = async (id: number) => {
     try {
       const res = await deleteClientRequest(id)
       toast.success('Client deleted successfully.')

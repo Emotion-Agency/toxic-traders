@@ -2,13 +2,6 @@
 import { useClients } from '~/composables/clients'
 import type { IClient } from '~/types/clients/clients'
 
-export interface iServersData {
-  id: string
-  status: string
-  name: string
-  address: string
-}
-
 const router = useRouter()
 const route = useRoute()
 
@@ -19,7 +12,7 @@ const servers = ref<IClient[]>([])
 const isLoading = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'clientname')
 const sortedOrder = ref<1 | 2>(1)
-const selectedServerId = ref<string | null>(null)
+const selectedServerId = ref<number | null>(null)
 const deleteModalOpened = ref(false)
 const createModalOpened = ref(false)
 const updateModalOpened = ref(false)
@@ -86,12 +79,13 @@ const handleDeleteModalClose = () => {
   deleteModalOpened.value = false
 }
 
-const handleDeleteModalOpen = (id: string) => {
+const handleDeleteModalOpen = (id: number) => {
   selectedServerId.value = id
   deleteModalOpened.value = true
 }
 
-const handleUpdateModalOpen = () => {
+const handleUpdateModalOpen = (id: number) => {
+  selectedServerId.value = id
   updateModalOpened.value = true
 }
 
@@ -113,8 +107,8 @@ const handleCreateServer = async () => {
   await fetchAllServers()
 }
 
-const handleUpdateServer = () => {
-  console.log('Server updated')
+const handleUpdateServer = async () => {
+  await fetchAllServers()
 }
 
 watch([currentPage, itemsCount], async () => {
@@ -200,11 +194,12 @@ onMounted(async () => {
       @close="handleCreateModalClose"
       @created="handleCreateServer"
     />
-    <!-- <ServersUpdateServerModal
+    <ServersUpdateServerModal
+      :server-id="selectedServerId"
       :servers="servers"
       :modal-opened="updateModalOpened"
       @close="handleUpdateModalClose"
       @updated="handleUpdateServer"
-    /> -->
+    />
   </main>
 </template>
