@@ -5,46 +5,42 @@ import type { IClient } from '~/types/clients/clients'
 interface iProps {
   modalOpened: boolean
   servers: IClient[]
-  serverId?: number
+  selectedServer?: IClient | null
 }
 
 const props = defineProps<iProps>()
 
 const emit = defineEmits(['close', 'updated'])
 
-interface iServersInput {
-  required?: boolean
-  id: string
-  name: string
-  type?: string
-  value: string
-  placeholder: string
-  title?: string
-  options?: string[]
-}
+const { updateClient } = await useClients()
 
-const serversInputs = ref<iServersInput[]>([
+const createInputs = (server?: IClient | null) => [
   {
-    required: false,
-    id: `servers-name`,
+    id: 'update-server-name',
     title: 'Name',
     name: 'Name',
     type: 'text',
-    value: '',
+    value: server?.clientName || '',
     placeholder: 'Server name',
   },
   {
-    required: false,
-    id: `servers-address`,
+    id: 'update-server-address',
     title: 'IP',
     name: 'Address',
     type: 'text',
-    value: '',
+    value: server?.ip || '',
     placeholder: '42.42.42.42',
   },
-])
+]
 
-const { updateClient } = await useClients()
+const serversInputs = ref(createInputs(props.selectedServer))
+
+watch(
+  () => props.selectedServer,
+  server => {
+    serversInputs.value = createInputs(server)
+  }
+)
 
 const onInputChange = (e: iInput) => {
   serversInputs.value = serversInputs.value.map(item => {
@@ -64,7 +60,7 @@ const resetInputs = () => {
 
 const onUpdateClick = async () => {
   await updateClient({
-    id: props.serverId,
+    id: props.selectedServer?.id,
     clientName: serversInputs.value.find(el => el.name === 'Name').value,
     ip: serversInputs.value.find(el => el.name === 'Address').value,
   })
@@ -95,7 +91,6 @@ const handleUpdateModalClose = () => {
         <InputField
           :id="input.id"
           :key="index"
-          :required="input.required"
           :name="input.name"
           :type="input.type"
           :title="input.title"

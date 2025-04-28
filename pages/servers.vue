@@ -5,14 +5,14 @@ import type { IClient } from '~/types/clients/clients'
 const router = useRouter()
 const route = useRoute()
 
-const { getAllClients, deleteClient } = useClients()
+const { getAllClients, deleteClient, getClient } = useClients()
 
 const servers = ref<IClient[]>([])
 
 const isLoading = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'clientname')
 const sortedOrder = ref<1 | 2>(1)
-const selectedServerId = ref<number | null>(null)
+const selectedServer = ref<IClient | null>(null)
 const deleteModalOpened = ref(false)
 const createModalOpened = ref(false)
 const updateModalOpened = ref(false)
@@ -77,30 +77,32 @@ const handleCreateModalClose = () => {
 
 const handleDeleteModalClose = () => {
   deleteModalOpened.value = false
+  selectedServer.value = null
 }
 
-const handleDeleteModalOpen = (id: number) => {
-  selectedServerId.value = id
+const handleDeleteModalOpen = async (id: number) => {
+  selectedServer.value = await getClient(id)
   deleteModalOpened.value = true
 }
 
-const handleUpdateModalOpen = (id: number) => {
-  selectedServerId.value = id
+const handleUpdateModalOpen = async (id: number) => {
+  selectedServer.value = await getClient(id)
   updateModalOpened.value = true
 }
 
 const handleUpdateModalClose = () => {
   updateModalOpened.value = false
+  selectedServer.value = null
 }
 
 const handleDeleteServer = async () => {
-  if (!selectedServerId.value) return
+  if (!selectedServer.value) return
 
-  await deleteClient(selectedServerId.value)
+  await deleteClient(selectedServer.value?.id)
   await fetchAllServers()
 
   deleteModalOpened.value = false
-  selectedServerId.value = null
+  selectedServer.value = null
 }
 
 const handleCreateServer = async () => {
@@ -195,7 +197,7 @@ onMounted(async () => {
       @created="handleCreateServer"
     />
     <ServersUpdateServerModal
-      :server-id="selectedServerId"
+      :selected-server="selectedServer"
       :servers="servers"
       :modal-opened="updateModalOpened"
       @close="handleUpdateModalClose"

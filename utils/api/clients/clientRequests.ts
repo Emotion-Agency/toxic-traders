@@ -6,11 +6,7 @@ import axiosInstance from '../axiosInstance'
 
 export const getClientRequest = async (id: number) => {
   try {
-    const res = await axiosInstance.get(`'/Clients/${id}'`, {
-      params: {
-        id,
-      },
-    })
+    const res = await axiosInstance.get(`/Clients/${id}`)
 
     return res
   } catch (error) {

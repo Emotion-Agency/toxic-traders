@@ -25,7 +25,7 @@ interface iServersInput {
 const serversInputs = ref<iServersInput[]>([
   {
     required: false,
-    id: `servers-name`,
+    id: `create-server-name`,
     title: 'Name',
     name: 'Name',
     type: 'text',
@@ -34,7 +34,7 @@ const serversInputs = ref<iServersInput[]>([
   },
   {
     required: false,
-    id: `servers-address`,
+    id: `create-server-address`,
     title: 'IP',
     name: 'Address',
     type: 'text',
