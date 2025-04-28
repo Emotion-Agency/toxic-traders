@@ -12,11 +12,11 @@ const props = defineProps<IProps>()
 
 const emit = defineEmits(['sort', 'delete', 'update'])
 
-const headings = ['Status', 'Name', 'IP Address', 'Actions']
+const headings = ['status', 'clientName', 'ip', 'actions']
 
-const formattedHeadingFields = computed(() => {
-  return headings.map(field => formatNameToNormalCase(field))
-})
+const formattedHeadingFields = computed(() =>
+  headings.map(h => formatNameToNormalCase(h))
+)
 
 const { sortState, onSort } = useSort(
   {
@@ -54,12 +54,18 @@ const serverStatus = (status?: string) => {
       <TableHead>
         <TableRow>
           <TableCell
-            v-for="headerItem in formattedHeadingFields"
-            :key="headerItem"
+            v-for="(headerItem, idx) in formattedHeadingFields"
+            :key="idx"
             :item="headerItem"
             :is-sort="isSortable(headerItem)"
             :sort-order="sortState.sortOrder"
-            :is-active="sortState.sortBy === headerItem"
+            :is-active="
+              sortState.sortBy?.toLowerCase() === headerItem?.toLowerCase() ||
+              sortState.sortBy?.toLowerCase() ===
+                headings[idx]?.toLowerCase() ||
+              sortState.sortBy?.toLowerCase() ===
+                formattedHeadingFields[idx]?.toLowerCase()
+            "
             class="servers-table__cell"
             :class="[`servers-table__cell--${toDashCase(headerItem)}`]"
             :disable-tooltip="true"

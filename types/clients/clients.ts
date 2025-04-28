@@ -35,7 +35,7 @@ export interface IGetAllClientsPayload {
   page: number
   count: number
   sortBy?: string
-  sortOrder?: 0 | 1
+  sortOrder?: 1 | 2
 }
 
 export interface ICreateClientPayload {

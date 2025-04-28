@@ -12,15 +12,13 @@ export interface iServersData {
 const router = useRouter()
 const route = useRoute()
 
-const { getAllClients } = useClients()
+const { getAllClients, deleteClient } = useClients()
 
 const servers = ref<IClient[]>([])
 
 const isLoading = ref(false)
-const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
-const sortedOrder = ref<1 | 2>(
-  route.query?.sortedOrder ? (+route.query?.sortedOrder as 1 | 2) : 1
-)
+const sortedBy = ref((route.query?.sortedBy as string) ?? 'clientname')
+const sortedOrder = ref<1 | 2>(1)
 const selectedServerId = ref<string | null>(null)
 const deleteModalOpened = ref(false)
 const createModalOpened = ref(false)
@@ -41,42 +39,39 @@ const {
   route.query.count && Number(route.query.count)
 )
 
-const sortedServers = computed(() => {
-  const key = sortedBy.value
-  const order = sortedOrder.value
+const fetchAllServers = async () => {
+  try {
+    isLoading.value = true
 
-  return [...servers.value].sort((a, b) => {
-    const aVal = a[key as keyof iServersData]
-    const bVal = b[key as keyof iServersData]
+    const { clients, totalCount } = await getAllClients({
+      page: currentPage.value,
+      count: itemsCount.value,
+      sortBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
+      sortOrder: sortedOrder.value,
+    })
 
-    if (typeof aVal === 'string') {
-      return order === 1
-        ? aVal.localeCompare(bVal as string)
-        : (bVal as string).localeCompare(aVal)
-    }
+    servers.value = clients
+    totalCountPages.value = totalCount
 
-    if (typeof aVal === 'boolean') {
-      return order === 1
-        ? Number(bVal) - Number(aVal)
-        : Number(aVal) - Number(bVal)
-    }
-
-    return 0
-  })
-})
+    console.log(servers.value)
+  } finally {
+    isLoading.value = false
+  }
+}
 
 const onSort = async (sortState: ISortState) => {
-  sortedBy.value = removeSpaces(formatToSnakeCase(sortState.sortBy))
-  if (sortedBy.value === 'ipaddress') sortedBy.value = 'address'
+  sortedBy.value = sortState.sortBy
   sortedOrder.value = sortState.sortOrder
 
   router.push({
     query: {
       ...route.query,
-      sortedBy: sortedBy.value,
+      sortedBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
       sortedOrder: sortedOrder.value,
     },
   })
+
+  await fetchAllServers()
 }
 
 const handleCreateModalOpen = () => {
@@ -104,17 +99,18 @@ const handleUpdateModalClose = () => {
   updateModalOpened.value = false
 }
 
-// const handleDeleteServer = () => {
-//   if (!selectedServerId.value) return
-//   servers.value = servers.value.filter(
-//     server => server.id !== selectedServerId.value
-//   )
-//   deleteModalOpened.value = false
-//   selectedServerId.value = null
-// }
+const handleDeleteServer = async () => {
+  if (!selectedServerId.value) return
 
-const handleCreateServer = () => {
-  console.log('Server created')
+  await deleteClient(selectedServerId.value)
+  await fetchAllServers()
+
+  deleteModalOpened.value = false
+  selectedServerId.value = null
+}
+
+const handleCreateServer = async () => {
+  await fetchAllServers()
 }
 
 const handleUpdateServer = () => {
@@ -122,10 +118,11 @@ const handleUpdateServer = () => {
 }
 
 watch([currentPage, itemsCount], async () => {
+  await fetchAllServers()
+
   router.push({
     query: {
       ...route.query,
-
       page: currentPage.value,
       count: itemsCount.value,
     },
@@ -133,23 +130,7 @@ watch([currentPage, itemsCount], async () => {
 })
 
 onMounted(async () => {
-  isLoading.value = true
-
-  try {
-    const clientData = await getAllClients({
-      page: 1,
-      count: 15,
-      sortBy: 'id',
-      sortOrder: 1,
-    })
-
-    servers.value = clientData.clients
-    totalCountPages.value = clientData.totalCount
-
-    console.log(servers.value)
-  } finally {
-    isLoading.value = false
-  }
+  await fetchAllServers()
 })
 </script>
 
@@ -178,7 +159,7 @@ onMounted(async () => {
         class="container servers-content__table-wrapper"
       >
         <ServersTable
-          :servers="sortedServers"
+          :servers="servers"
           :default-sort-by="sortedBy"
           :default-sort-order="sortedOrder"
           @sort="onSort"
@@ -206,13 +187,13 @@ onMounted(async () => {
       v-if="!servers.length && !isLoading"
       message="Oops! No servers found"
     />
-    <!-- <DeleteModal
-    :modal-opened="deleteModalOpened"
-    text="Are you sure you want to delete this account? This action cannot be prevented"
-    @close="handleDeleteModalClose"
+    <DeleteModal
+      :modal-opened="deleteModalOpened"
+      text="Are you sure you want to delete this account? This action cannot be prevented"
+      @close="handleDeleteModalClose"
       @delete="handleDeleteServer"
       :is-loading="isLoading"
-    /> -->
+    />
     <ServersCreateServerModal
       :servers="servers"
       :modal-opened="createModalOpened"
