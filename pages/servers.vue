@@ -45,8 +45,6 @@ const fetchAllServers = async () => {
 
     servers.value = clients
     totalCountPages.value = totalCount
-
-    console.log(servers.value)
   } finally {
     isLoading.value = false
   }
@@ -166,7 +164,7 @@ onMounted(async () => {
           class="servers-content__pagination"
           :total-pages="totalCountPages"
           :current-page="currentPage"
-          :options="['25 rows', '50 rows', '100 rows']"
+          :options="['25', '50', '100']"
           :items-count="itemsCount"
           :input-value="searchValue"
           input-id="servers-navigation"
