@@ -1,0 +1,21 @@
+.hero-accounts {
+  padding-top: 142px;
+  padding-bottom: 24px;
+}
+
+.hero-accounts__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-accounts__title {
+  @include heading-m-h1;
+  max-width: 500px;
+}
+
+.hero-accounts__btns {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
