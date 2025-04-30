@@ -307,6 +307,23 @@
   .tile-windows {
     background-color: var(--gray-800);
   }
+
+  .navigation__dropdown-content {
+    background-color: var(--secondary-dark);
+    border-color: var(--white);
+  }
+
+  .navigation__link {
+    &::before {
+      background-color: var(--white);
+    }
+
+    &:hover {
+      &::before {
+        background-color: var(--white);
+      }
+    }
+  }
 }
 
 .dark-mode {

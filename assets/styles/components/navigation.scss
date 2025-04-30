@@ -43,6 +43,10 @@
   transform-origin: var(--reka-dropdown-menu-content-transform-origin);
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
 
   &[data-state='open'] {
     animation-name: scaleIn;
