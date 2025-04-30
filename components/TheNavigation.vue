@@ -32,7 +32,17 @@ const navigationList = ref<iNavigationItem[]>([
       {
         id: 'servers',
         text: 'Servers',
-        link: '/servers/',
+        link: '/trading/servers/',
+      },
+      {
+        id: 'accounts',
+        text: 'Accounts',
+        link: '/trading/accounts/',
+      },
+      {
+        id: 'trader',
+        text: 'Trader',
+        link: '/trading/trader/',
       },
     ],
   },

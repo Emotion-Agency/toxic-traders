@@ -152,7 +152,7 @@ onMounted(async () => {
         v-else-if="servers.length"
         class="container servers-content__table-wrapper"
       >
-        <ServersTable
+        <TradingServersTable
           :servers="servers"
           :default-sort-by="sortedBy"
           :default-sort-order="sortedOrder"
@@ -188,13 +188,13 @@ onMounted(async () => {
       @delete="handleDeleteServer"
       :is-loading="isLoading"
     />
-    <ServersCreateServerModal
+    <TradingServersCreateServerModal
       :servers="servers"
       :modal-opened="createModalOpened"
       @close="handleCreateModalClose"
       @created="handleCreateServer"
     />
-    <ServersUpdateServerModal
+    <TradingServersUpdateServerModal
       :selected-server="selectedServer"
       :servers="servers"
       :modal-opened="updateModalOpened"

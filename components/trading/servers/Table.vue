@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import Table from '~/components/Table.vue'
 import type { IClient } from '~/types/clients/clients'
-import Table from '../Table.vue'
 
 interface IProps {
   servers: IClient[]
