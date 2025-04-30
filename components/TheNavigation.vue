@@ -23,16 +23,16 @@ const navigationList = ref<iNavigationItem[]>([
   {
     id: 'brokers',
     text: 'Brokers',
+    link: '/brokers/',
+  },
+  {
+    id: 'news-trader',
+    text: 'News Trader',
     menu: [
       {
         id: 'servers',
         text: 'Servers',
         link: '/servers/',
-      },
-      {
-        id: 'brokers',
-        text: 'Brokers',
-        link: '/brokers/',
       },
     ],
   },
@@ -48,7 +48,7 @@ const navigationList = ref<iNavigationItem[]>([
   <nav class="navigation">
     <template v-for="(item, idx) in navigationList" :key="idx">
       <DropdownMenuRoot
-        v-if="item.id === 'brokers'"
+        v-if="item.id === 'news-trader'"
         v-model:open="openMenuStates[item.text]"
         :modal="false"
       >
