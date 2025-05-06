@@ -1,21 +1,4 @@
-export interface ITradingAccount {
-  id: number
-  name: string
-  login: string
-  password: string
-  symbolSpec: string
-  brokerName: string
-  brokerServer: string
-  brokerServerType: number
-  placedTypeMt4: number
-  placedTypeMt5: number
-  profitCommission: number
-  balanceType: number
-  brokerServerIPsAndPing: Record<string, unknown>
-  orders: unknown[]
-  templates: unknown[]
-  clientId: number
-}
+import type { ITradingAccount } from '../trading-accounts/tradingAccounts'
 
 export interface IClient {
   id: number

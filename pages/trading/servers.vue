@@ -129,9 +129,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main>
+  <main class="container">
     <section class="hero-servers">
-      <div class="container hero-servers__wrapper">
+      <div class="hero-servers__wrapper">
         <h1 class="hero-servers__title">Servers</h1>
         <TheButton
           tag="button"
@@ -148,10 +148,7 @@ onMounted(async () => {
 
     <section class="servers-content">
       <UiLoader v-if="isLoading" />
-      <div
-        v-else-if="servers.length"
-        class="container servers-content__table-wrapper"
-      >
+      <div v-else-if="servers.length" class="servers-content__table-wrapper">
         <TradingServersTable
           :servers="servers"
           :default-sort-by="sortedBy"
