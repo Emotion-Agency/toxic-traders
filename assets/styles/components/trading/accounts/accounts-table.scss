@@ -1,13 +1,11 @@
-.trading-servers-table__cell {
-  // min-width: 348px !important;
-
+.accounts-table__cell {
   &--actions {
     display: flex;
     justify-content: flex-end;
   }
 }
 
-.trading-servers-table__status {
+.accounts-table__status {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -30,7 +28,7 @@
       background-color: var(--status-success);
     }
 
-    .trading-servers-table__status-text {
+    .accounts-table__status-text {
       color: var(--status-success);
     }
   }
@@ -42,23 +40,33 @@
       background-color: var(--status-danger);
     }
 
-    .trading-servers-table__status-text {
+    .accounts-table__status-text {
       color: var(--status-danger);
     }
   }
 }
 
-.trading-servers-table__status-text {
+.accounts-table__status-text {
   @include button-extra-small;
 }
 
-.trading-servers-table__actions {
+.accounts-table__actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: default;
+  justify-content: center;
+  gap: 3px;
+  width: 20px;
+  height: 20px;
+
+  span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    background-color: var(--black);
+    border-radius: 100%;
+  }
 }
 
-.trading-servers-table__actions-btn {
+.accounts-table__actions-btn {
   background-color: transparent;
 }

@@ -1,0 +1,29 @@
+.acc-content {
+  padding-bottom: 32px;
+}
+
+.acc-content__wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  flex-wrap: nowrap;
+  height: 100%;
+}
+
+.acc-content__table {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+.acc-content__pagination {
+  margin-top: 46px;
+}
+
+.acc-content__info {
+  display: flex;
+  flex-direction: column;
+  width: 448px;
+}

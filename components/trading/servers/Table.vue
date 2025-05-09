@@ -50,7 +50,7 @@ const serverStatus = (status?: string) => {
 
 <template>
   <div>
-    <Table class="servers-table">
+    <Table class="trading-trading-servers-table">
       <TableHead>
         <TableRow>
           <TableCell
@@ -66,8 +66,8 @@ const serverStatus = (status?: string) => {
               sortState.sortBy?.toLowerCase() ===
                 formattedHeadingFields[idx]?.toLowerCase()
             "
-            class="servers-table__cell"
-            :class="[`servers-table__cell--${toDashCase(headerItem)}`]"
+            class="trading-servers-table__cell"
+            :class="[`trading-servers-table__cell--${toDashCase(headerItem)}`]"
             :disable-tooltip="true"
             @sort="onSort"
           >
@@ -79,50 +79,50 @@ const serverStatus = (status?: string) => {
         <TableRow v-for="server in servers" :key="server.id" :id="server.id">
           <TableCell
             :item="server.status"
-            class="servers-table__cell"
-            :class="[`servers-table__cell--status`]"
+            class="trading-servers-table__cell"
+            :class="[`trading-servers-table__cell--status`]"
             :disable-tooltip="true"
           >
             <div
-              class="servers-table__status"
-              :class="`servers-table__status--${serverStatus(server.status).toLowerCase()}`"
+              class="trading-servers-table__status"
+              :class="`trading-servers-table__status--${serverStatus(server.status).toLowerCase()}`"
             >
               <span />
-              <p class="servers-table__status-text">
+              <p class="trading-servers-table__status-text">
                 {{ serverStatus(server.status) }}
               </p>
             </div>
           </TableCell>
           <TableCell
             :item="server.clientName"
-            class="servers-table__cell"
-            :class="[`servers-table__cell--name`]"
+            class="trading-servers-table__cell"
+            :class="[`trading-servers-table__cell--name`]"
           >
             {{ server.clientName }}
           </TableCell>
           <TableCell
             :item="server.ip"
-            class="servers-table__cell"
-            :class="[`servers-table__cell--address`]"
+            class="trading-servers-table__cell"
+            :class="[`trading-servers-table__cell--address`]"
           >
             {{ server.ip }}
           </TableCell>
           <TableCell
-            class="servers-table__cell"
-            :class="[`servers-table__cell--actions`]"
+            class="trading-servers-table__cell"
+            :class="[`trading-servers-table__cell--actions`]"
             :disable-tooltip="true"
           >
-            <div class="servers-table__actions">
+            <div class="trading-servers-table__actions">
               <button
                 type="button"
-                class="servers-table__actions-btn"
+                class="trading-servers-table__actions-btn"
                 @click="emit('update', server.id)"
               >
                 <IconsPencilSquare />
               </button>
               <button
                 type="button"
-                class="servers-table__actions-btn"
+                class="trading-servers-table__actions-btn"
                 @click="emit('delete', server.id)"
               >
                 <IconsX />

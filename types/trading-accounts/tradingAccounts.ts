@@ -138,6 +138,17 @@ export interface ITradingAccount {
   clientId: number
 }
 
+export interface ITradingAccountWithBalance {
+  id: number
+  balance: number
+  currency: string
+  name: string
+  ping: number
+  platform: number
+  status: number
+  type: string
+}
+
 export interface ITradingAccountsData {
   totalCount: number
   items: ITradingAccount[]
