@@ -2,6 +2,11 @@
   &--actions {
     display: flex;
     justify-content: flex-end;
+    overflow: visible;
+
+    .table-cell__content {
+      overflow: visible;
+    }
   }
 }
 
@@ -48,25 +53,4 @@
 
 .accounts-table__status-text {
   @include button-extra-small;
-}
-
-.accounts-table__actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  width: 20px;
-  height: 20px;
-
-  span {
-    display: block;
-    width: 4px;
-    height: 4px;
-    background-color: var(--black);
-    border-radius: 100%;
-  }
-}
-
-.accounts-table__actions-btn {
-  background-color: transparent;
 }

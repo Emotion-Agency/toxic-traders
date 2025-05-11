@@ -144,11 +144,7 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
             :class="[`accounts-table__cell--actions`]"
             :disable-tooltip="true"
           >
-            <button class="accounts-table__actions">
-              <span />
-              <span />
-              <span />
-            </button>
+            <TradingAccountsActionDropdown />
           </TableCell>
         </TableRow>
       </TableBody>
