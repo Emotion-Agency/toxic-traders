@@ -27,17 +27,15 @@
   position: absolute;
   top: 24px;
   right: 0;
-  height: fit-content;
   min-width: 208px;
   width: 100%;
-  padding: 16px;
-  background-color: var(--white);
-  border-radius: 10px;
+  overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
-  box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.05);
-  z-index: 1;
+  height: 0;
+  transition:
+    height 0.3s ease,
+    opacity 0.3s ease;
 
   &--opened {
     opacity: 1;
@@ -46,6 +44,13 @@
 }
 
 .action-dropdown__menu-wrapper {
+  padding: 16px;
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(12, 12, 13, 0.05);
+}
+
+.action-dropdown__menu-content {
   position: relative;
   display: flex;
   flex-direction: column;

@@ -1,23 +1,31 @@
 <script lang="ts" setup>
 const $el = ref<HTMLElement | null>(null)
+const $wrapper = ref<HTMLElement | null>(null)
 const menuOpened = ref(false)
 
 const toggleMenu = () => {
   menuOpened.value = !menuOpened.value
+  nextTick(() => {
+    if ($el.value && $wrapper.value) {
+      $el.value.style.height = menuOpened.value
+        ? `${$wrapper.value.offsetHeight}px`
+        : '0px'
+    }
+  })
 }
 
-const outsideClick = event => {
-  if (!$el.value.contains(event.target)) {
+const handleClickOutside = (e: MouseEvent) => {
+  if (!$el.value?.contains(e.target as Node)) {
     menuOpened.value = false
+    if ($el.value) $el.value.style.height = '0px'
   }
 }
 
 onMounted(() => {
-  document.body.addEventListener('click', outsideClick)
+  document.addEventListener('click', handleClickOutside)
 })
-
 onUnmounted(() => {
-  document.body.removeEventListener('click', outsideClick)
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
@@ -39,19 +47,21 @@ onUnmounted(() => {
       :class="menuOpened && 'action-dropdown__menu--opened'"
       @click.stop
     >
-      <div class="action-dropdown__menu-wrapper">
-        <button class="action-dropdown__menu-btn">
-          <IconsSuccess color="#000000" />
-          Check connection
-        </button>
-        <button class="action-dropdown__menu-btn">
-          <IconsEdit />
-          Edit
-        </button>
-        <button class="action-dropdown__menu-btn">
-          <IconsTrash />
-          Delete
-        </button>
+      <div ref="$wrapper" class="action-dropdown__menu-wrapper">
+        <div class="action-dropdown__menu-content">
+          <button class="action-dropdown__menu-btn">
+            <IconsSuccess color="#000000" />
+            Check connection
+          </button>
+          <button class="action-dropdown__menu-btn">
+            <IconsEdit />
+            Edit
+          </button>
+          <button class="action-dropdown__menu-btn">
+            <IconsTrash />
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
