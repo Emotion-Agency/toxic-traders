@@ -158,23 +158,24 @@ export interface ICreateTradingAccountPayload {
   name: string
   login: string
   password: string
-  brokerServer?: string
+  servers?: number
   brokerServerType?: number
   brokerName?: string
+  brokerServer?: string
   symbolSpec?: string
-  placedTypeMt4?: number
-  placedTypeMt5?: number
+  placedTypeMt4?: string
+  placedTypeMt5?: string
 }
 
 export interface IUpdateTradingAccountPayload {
-  id: string
   name: string
   login: string
   password: string
-  brokerServer?: string
+  servers?: number
   brokerServerType?: number
   brokerName?: string
+  brokerServer?: string
   symbolSpec?: string
-  placedTypeMt4?: number
-  placedTypeMt5?: number
+  placedTypeMt4?: string
+  placedTypeMt5?: string
 }

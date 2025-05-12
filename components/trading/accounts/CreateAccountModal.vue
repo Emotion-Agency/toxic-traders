@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { iInput, iSearchInput, iSelectInput } from '~/types'
+import type { ICreateTradingAccountPayload } from '~/types/trading-accounts/tradingAccounts'
 
 interface iProps {
   modalOpened: boolean
@@ -9,10 +10,12 @@ defineProps<iProps>()
 
 const emit = defineEmits(['close', 'create'])
 
+const isPassword = ref(false)
+
 const accountItems = ref<iSearchInput[]>([
   {
     title: 'Name',
-    required: false,
+    required: true,
     id: 'trading-account-name',
     name: 'Name',
     type: 'text',
@@ -24,7 +27,7 @@ const accountItems = ref<iSearchInput[]>([
   },
   {
     title: 'Login',
-    required: false,
+    required: true,
     id: 'trading-account-login',
     name: 'Login',
     type: 'text',
@@ -36,15 +39,15 @@ const accountItems = ref<iSearchInput[]>([
   },
   {
     title: 'Password',
-    required: false,
+    required: true,
     id: 'trading-account-password',
     name: 'Password',
-    type: 'text',
+    type: 'password',
     value: '',
     placeholder: '********',
     disabled: false,
     isLeftButton: false,
-    isRightButton: false,
+    isRightButton: true,
   },
   {
     id: 'trading-account-servers',
@@ -55,8 +58,8 @@ const accountItems = ref<iSearchInput[]>([
     value: '',
   },
   {
-    id: 'trading-account-broker-servers',
-    name: 'Broker servers',
+    id: 'trading-account-broker-servers-type',
+    name: 'Broker servers type',
     title: 'Broker Server Type',
     placeholder: 'Broker server type',
     options: ['MT4', 'MT5'],
@@ -109,22 +112,28 @@ const accountItems = ref<iSearchInput[]>([
   },
 ])
 
+const showPassword = () => {
+  isPassword.value = !isPassword.value
+}
+
+const getValue = (id: string) =>
+  accountItems.value.find(i => i.id === id)?.value || ''
+
 const handleSubmit = () => {
-  // if (
-  //   !!nameInput.value.error ||
-  //   !!emailInput.value.error ||
-  //   !!attachSelect.value.error ||
-  //   !!levelSelect.value.error
-  // ) {
-  //   return
-  // }
-  // emit('create', {
-  //   name: nameInput.value.value,
-  //   email: emailInput.value.value,
-  //   level: levelSelect.value.value,
-  //   attach: attachSelect.value.value,
-  //   access: accessCheckbox.value.checked,
-  // })
+  const payload: ICreateTradingAccountPayload = {
+    name: getValue('trading-account-name'),
+    login: getValue('trading-account-login'),
+    password: getValue('trading-account-password'),
+    servers: getValue('trading-account-servers') === 'MT5' ? 1 : 0,
+    brokerServerType: getValue('trading-account-servers') === 'MT5' ? 1 : 0,
+    brokerName: getValue('trading-account-broker-name'),
+    brokerServer: getValue('trading-account-broker-server'),
+    symbolSpec: getValue('trading-account-symbol-spec'),
+    placedTypeMt4: getValue('trading-account-placed-type'),
+    placedTypeMt5: getValue('trading-account-placed-type'),
+  }
+
+  emit('create', payload)
 }
 
 const onChange = (val: iInput) => {
@@ -216,7 +225,12 @@ const resetSelectedItem = (input: iSearchInput) => {
               :is-left-button="input.isLeftButton"
               :is-right-button="input.isRightButton"
               @input-value="onChange"
-            />
+              @right-click="showPassword"
+            >
+              <template #right-icon>
+                <IconsPasswordEye :is-visible="isPassword" />
+              </template>
+            </InputField>
           </div>
         </div>
 
@@ -236,7 +250,6 @@ const resetSelectedItem = (input: iSearchInput) => {
             type="submit"
             variant="fill"
             button-size="medium"
-            @click="emit('create')"
           >
             Create
           </TheButton>

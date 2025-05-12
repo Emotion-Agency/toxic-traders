@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {
+  ICreateTradingAccountPayload,
   ITradingAccount,
   ITradingAccountWithBalance,
 } from '~/types/trading-accounts/tradingAccounts'
@@ -112,8 +113,8 @@ const handleCreateAccountModalOpen = () => {
   createAccountModalOpened.value = true
 }
 
-const handleCreateAccount = () => {
-  console.log('account created')
+const handleCreateAccount = (acc: ICreateTradingAccountPayload) => {
+  console.log('account created', acc)
 }
 
 const handleDeleteServer = async () => {
