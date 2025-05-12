@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const emit = defineEmits(['delete'])
+
 const $el = ref<HTMLElement | null>(null)
 const $wrapper = ref<HTMLElement | null>(null)
 const menuOpened = ref(false)
@@ -57,7 +59,7 @@ onUnmounted(() => {
             <IconsEdit />
             Edit
           </button>
-          <button class="action-dropdown__menu-btn">
+          <button class="action-dropdown__menu-btn" @click="emit('delete')">
             <IconsTrash />
             Delete
           </button>

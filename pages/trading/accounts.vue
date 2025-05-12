@@ -12,7 +12,8 @@ const { getAllTradingAccounts, deleteTradingAccount, getTradingAccount } =
   useTradingAccounts()
 
 const accounts = ref<ITradingAccountWithBalance[]>([])
-const newAccounts = ref([])
+const selectedAccount = ref<ITradingAccount | null>(null)
+const deleteModalOpened = ref(false)
 
 const isLoading = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
@@ -88,6 +89,26 @@ const onSort = async (sortState: ISortState) => {
   await fetchAllAccounts()
 }
 
+const handleDeleteModalClose = () => {
+  deleteModalOpened.value = false
+  selectedAccount.value = null
+}
+
+const handleDeleteModalOpen = async (id: number) => {
+  selectedAccount.value = await getTradingAccount(id)
+  deleteModalOpened.value = true
+}
+
+const handleDeleteServer = async () => {
+  if (!selectedAccount.value) return
+
+  await deleteTradingAccount(selectedAccount.value?.id)
+  await fetchAllAccounts()
+
+  deleteModalOpened.value = false
+  selectedAccount.value = null
+}
+
 watch([currentPage, itemsCount], async () => {
   await fetchAllAccounts()
 
@@ -147,6 +168,7 @@ onMounted(async () => {
               :default-sort-by="sortedBy"
               :default-sort-order="sortedOrder"
               @sort="onSort"
+              @delete="handleDeleteModalOpen"
             />
             <ThePagination
               class="acc-content__pagination"
@@ -170,5 +192,12 @@ onMounted(async () => {
         </div>
       </div>
     </section>
+    <DeleteModal
+      :modal-opened="deleteModalOpened"
+      text="Are you sure you want to delete this account? This action cannot be prevented"
+      @close="handleDeleteModalClose"
+      @delete="handleDeleteServer"
+      :is-loading="isLoading"
+    />
   </main>
 </template>

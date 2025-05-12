@@ -144,7 +144,9 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
             :class="[`accounts-table__cell--actions`]"
             :disable-tooltip="true"
           >
-            <TradingAccountsActionDropdown />
+            <TradingAccountsActionDropdown
+              @delete="emit('delete', account.id)"
+            />
           </TableCell>
         </TableRow>
       </TableBody>
