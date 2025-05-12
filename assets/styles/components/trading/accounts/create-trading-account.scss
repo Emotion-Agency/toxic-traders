@@ -1,0 +1,17 @@
+.create-trading-account__form {
+  padding-top: 16px;
+}
+
+.create-trading-account__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.create-trading-account__btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 8px;
+  margin-top: 32px;
+}

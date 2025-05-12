@@ -8,12 +8,17 @@ import { getBalancesProfits } from '~/utils/api/trading-accounts/balancesProfits
 const router = useRouter()
 const route = useRoute()
 
-const { getAllTradingAccounts, deleteTradingAccount, getTradingAccount } =
-  useTradingAccounts()
+const {
+  getAllTradingAccounts,
+  deleteTradingAccount,
+  getTradingAccount,
+  createTradingAccount,
+} = useTradingAccounts()
 
 const accounts = ref<ITradingAccountWithBalance[]>([])
 const selectedAccount = ref<ITradingAccount | null>(null)
 const deleteModalOpened = ref(false)
+const createAccountModalOpened = ref(false)
 
 const isLoading = ref(false)
 const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
@@ -99,6 +104,18 @@ const handleDeleteModalOpen = async (id: number) => {
   deleteModalOpened.value = true
 }
 
+const handleCreateAccountModalClose = () => {
+  createAccountModalOpened.value = false
+}
+
+const handleCreateAccountModalOpen = () => {
+  createAccountModalOpened.value = true
+}
+
+const handleCreateAccount = () => {
+  console.log('account created')
+}
+
 const handleDeleteServer = async () => {
   if (!selectedAccount.value) return
 
@@ -132,7 +149,11 @@ onMounted(async () => {
       <div class="hero-accounts__wrapper">
         <h1 class="hero-accounts__title">Accounts</h1>
         <div class="hero-accounts__btns">
-          <TheButton tag="button" class="hero-accounts__btn">
+          <TheButton
+            tag="button"
+            class="hero-accounts__btn"
+            @click="handleCreateAccountModalOpen"
+          >
             <template #start-icon>
               <IconsPlus />
             </template>
@@ -198,6 +219,11 @@ onMounted(async () => {
       @close="handleDeleteModalClose"
       @delete="handleDeleteServer"
       :is-loading="isLoading"
+    />
+    <TradingAccountsCreateAccountModal
+      :modal-opened="createAccountModalOpened"
+      @close="handleCreateAccountModalClose"
+      @create="handleCreateAccount"
     />
   </main>
 </template>
