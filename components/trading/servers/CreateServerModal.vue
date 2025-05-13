@@ -25,7 +25,7 @@ interface iServersInput {
 const serversInputs = ref<iServersInput[]>([
   {
     required: false,
-    id: `create-server-name`,
+    id: `create-trading-server-name`,
     title: 'Name',
     name: 'Name',
     type: 'text',
@@ -34,7 +34,7 @@ const serversInputs = ref<iServersInput[]>([
   },
   {
     required: false,
-    id: `create-server-address`,
+    id: `create-trading-server-address`,
     title: 'IP',
     name: 'Address',
     type: 'text',
@@ -61,7 +61,7 @@ const resetInputs = () => {
   })
 }
 
-const onAddClick = async () => {
+const handleSubmit = async () => {
   await createClient({
     clientName: serversInputs.value.find(el => el.name === 'Name').value,
     ip: serversInputs.value.find(el => el.name === 'Address').value,
@@ -84,43 +84,48 @@ const handleCreateModalClose = () => {
     title="Create new server"
     @close="handleCreateModalClose"
   >
-    <div class="create-server__modal-content">
-      <div
-        v-for="(input, index) in serversInputs"
-        :key="index"
-        class="create-server__input-item"
-      >
-        <InputField
-          :id="input.id"
+    <form
+      novalidate
+      @submit.prevent="handleSubmit"
+      class="create-trading-server"
+    >
+      <div class="create-trading-server__modal-content">
+        <div
+          v-for="(input, index) in serversInputs"
           :key="index"
-          :required="input.required"
-          :name="input.name"
-          :type="input.type"
-          :title="input.title"
-          :placeholder="input.placeholder"
-          :value="input.value.toString()"
-          @input-value="onInputChange"
-        />
+          class="create-trading-server__input-item"
+        >
+          <InputField
+            :id="input.id"
+            :key="index"
+            :required="input.required"
+            :name="input.name"
+            :type="input.type"
+            :title="input.title"
+            :placeholder="input.placeholder"
+            :value="input.value.toString()"
+            @input-value="onInputChange"
+          />
+        </div>
       </div>
-    </div>
-    <div class="create-server__buttons">
-      <TheButton
-        tag="button"
-        variant="close"
-        button-size="medium"
-        @click="handleCreateModalClose"
-      >
-        Close
-      </TheButton>
-      <TheButton
-        tag="button"
-        variant="fill"
-        button-size="medium"
-        @click="onAddClick"
-        :disabled="serversInputs.some(input => !input.value)"
-      >
-        Create
-      </TheButton>
-    </div>
+      <div class="create-trading-server__buttons">
+        <TheButton
+          tag="button"
+          variant="close"
+          button-size="medium"
+          @click="handleCreateModalClose"
+        >
+          Close
+        </TheButton>
+        <TheButton
+          tag="button"
+          variant="fill"
+          button-size="medium"
+          :disabled="serversInputs.some(input => !input.value)"
+        >
+          Create
+        </TheButton>
+      </div>
+    </form>
   </TheModal>
 </template>
