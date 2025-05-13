@@ -8,7 +8,7 @@ export const updateBalances = async () => {
 
 export const updateCurrentBalance = async (accId: number) => {
   const { data } = await axiosInstance.get(
-    `/TradingAccounts/${accId}/UpdateBalances`
+    `/TradingAccounts/${accId}/UpdateBalance`
   )
 
   return data

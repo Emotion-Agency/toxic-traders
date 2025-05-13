@@ -10,7 +10,7 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
-const emit = defineEmits(['sort', 'delete', 'update'])
+const emit = defineEmits(['sort', 'delete', 'update', 'check'])
 
 const headings = [
   'status',
@@ -146,6 +146,7 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
           >
             <TradingAccountsActionDropdown
               @delete="emit('delete', account.id)"
+              @check="emit('check', account.id)"
             />
           </TableCell>
         </TableRow>

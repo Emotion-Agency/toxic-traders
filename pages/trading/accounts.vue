@@ -16,6 +16,8 @@ const {
   createTradingAccount,
 } = useTradingAccounts()
 
+const { updateCurrBalance } = useBalances()
+
 const accounts = ref<ITradingAccountWithBalance[]>([])
 const selectedAccount = ref<ITradingAccount | null>(null)
 const deleteModalOpened = ref(false)
@@ -124,6 +126,10 @@ const handleCreateAccount = (acc: ICreateTradingAccountPayload) => {
   console.log('account created', acc)
 }
 
+const handleCheckConnection = async (id: number) => {
+  await updateCurrBalance(id)
+}
+
 const handleDeleteServer = async () => {
   if (!selectedAccount.value) return
 
@@ -198,6 +204,7 @@ onMounted(async () => {
               :default-sort-order="sortedOrder"
               @sort="onSort"
               @delete="handleDeleteModalOpen"
+              @check="handleCheckConnection"
             />
             <ThePagination
               class="acc-content__pagination"

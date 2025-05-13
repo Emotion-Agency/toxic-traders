@@ -1,4 +1,7 @@
-import { updateBalances } from '~/utils/api/trading-accounts/updateBalances'
+import {
+  updateBalances,
+  updateCurrentBalance,
+} from '~/utils/api/trading-accounts/updateBalances'
 
 export const useBalances = () => {
   const { toast } = useToasts()
@@ -18,7 +21,7 @@ export const useBalances = () => {
     }
   }
 
-  const updateCurrentBalance = async (accId: number) => {
+  const updateCurrBalance = async (accId: number) => {
     try {
       const data = await updateCurrentBalance(accId)
       toast.success('Current balance updated successfully.')
@@ -35,6 +38,6 @@ export const useBalances = () => {
 
   return {
     updateAllBalances,
-    updateCurrentBalance,
+    updateCurrBalance,
   }
 }
