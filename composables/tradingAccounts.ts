@@ -61,10 +61,11 @@ export const useTradingAccounts = () => {
   }
 
   const updateTradingAccount = async (
-    payload: IUpdateTradingAccountPayload
+    payload: IUpdateTradingAccountPayload,
+    id: number
   ) => {
     try {
-      const res = await updateTradingAccountRequest(payload)
+      const res = await updateTradingAccountRequest(payload, id)
       toast.success('Trading account updated successfully.')
       return res
     } catch (error) {

@@ -27,13 +27,11 @@ export const createTradingAccountRequest = async (
 }
 
 export const updateTradingAccountRequest = async (
-  payload: IUpdateTradingAccountPayload
+  payload: IUpdateTradingAccountPayload,
+  id: number
 ) => {
   try {
-    const res = await axiosInstance.put(
-      `/TradingAccounts/${payload.id}`,
-      payload
-    )
+    const res = await axiosInstance.put(`/TradingAccounts/${id}`, payload)
 
     return res
   } catch (error) {
