@@ -78,8 +78,8 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
       <TableBody>
         <TableRow
           v-for="account in accounts"
-          :key="account.id"
-          :id="account.id"
+          :key="account?.id"
+          :id="account?.id"
         >
           <TableCell
             :item="account.status"

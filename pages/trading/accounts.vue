@@ -81,18 +81,25 @@ const fetchAllAccounts = async () => {
 }
 
 const onSort = async (sortState: ISortState) => {
-  sortedBy.value = sortState.sortBy
-  sortedOrder.value = sortState.sortOrder
-
-  router.push({
-    query: {
-      ...route.query,
-      sortedBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
-      sortedOrder: sortedOrder.value,
-    },
+  accounts.value = accounts.value.sort((a, b) => {
+    if (sortState.sortOrder === 1) {
+      return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+    } else {
+      return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+    }
   })
+  // sortedBy.value = sortState.sortBy
+  // sortedOrder.value = sortState.sortOrder
 
-  await fetchAllAccounts()
+  // router.push({
+  //   query: {
+  //     ...route.query,
+  //     sortedBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
+  //     sortedOrder: sortedOrder.value,
+  //   },
+  // })
+
+  // await fetchAllAccounts()
 }
 
 const handleDeleteModalClose = () => {
