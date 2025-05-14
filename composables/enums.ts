@@ -4,6 +4,10 @@ import { getBrokerRegulatorNames } from '~/utils/api/brokers/brokerRegulatorName
 import { getExecutionMT4 } from '~/utils/api/brokers/executionMT4'
 import { getExecutionMT5 } from '~/utils/api/brokers/executionMT5'
 import { getFillPolicyList } from '~/utils/api/brokers/fillPolicy'
+import {
+  getPlacedTypeMT4,
+  getPlacedTypeMT5,
+} from '~/utils/api/trading-accounts/placedTypes'
 
 export const useEnums = () => {
   const platforms = useState('platforms', () => [])
@@ -12,6 +16,8 @@ export const useEnums = () => {
   const fillPolicy = useState('fillPolicy', () => [])
   const executionMT4 = useState('executionMT4', () => [])
   const executionMT5 = useState('executionMT5', () => [])
+  const placedTypeMT4 = useState('placedTypeMT4', () => [])
+  const placedTypeMT5 = useState('placedTypeMT5', () => [])
 
   const getPlatformEnum = async () => {
     if (platforms.value.length) return platforms.value
@@ -61,6 +67,22 @@ export const useEnums = () => {
     return executionMT5.value
   }
 
+  const getPlacedTypeMT4Enum = async () => {
+    if (placedTypeMT4.value.length) return placedTypeMT4.value
+    const data = await getPlacedTypeMT4()
+
+    placedTypeMT4.value = Object.values(data)
+    return placedTypeMT4.value
+  }
+
+  const getPlacedTypeMT5Enum = async () => {
+    if (placedTypeMT5.value.length) return placedTypeMT5.value
+    const data = await getPlacedTypeMT5()
+
+    placedTypeMT5.value = Object.values(data)
+    return placedTypeMT5.value
+  }
+
   const getAllEnums = async () => {
     await Promise.all([
       getPlatformEnum(),
@@ -69,6 +91,8 @@ export const useEnums = () => {
       getFillPolicyEnum(),
       getExecutionMT4Enum(),
       getExecutionMT5Enum(),
+      getPlacedTypeMT4Enum(),
+      getPlacedTypeMT5Enum(),
     ])
 
     return {
@@ -78,6 +102,8 @@ export const useEnums = () => {
       fillPolicy: fillPolicy.value,
       executionMT4: executionMT4.value,
       executionMT5: executionMT5.value,
+      placedTypeMT4: placedTypeMT4.value,
+      placedTypeMT5: placedTypeMT5.value,
     }
   }
 
@@ -94,6 +120,10 @@ export const useEnums = () => {
     getExecutionMT4Enum,
     executionMT5,
     getExecutionMT5Enum,
+    placedTypeMT4,
+    getPlacedTypeMT4Enum,
+    placedTypeMT5,
+    getPlacedTypeMT5Enum,
     getAllEnums,
   }
 }

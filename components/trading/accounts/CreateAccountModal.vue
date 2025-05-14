@@ -6,9 +6,16 @@ interface iProps {
   modalOpened: boolean
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
 
 const emit = defineEmits(['close', 'create'])
+
+const {
+  getPlacedTypeMT4Enum,
+  getPlacedTypeMT5Enum,
+  placedTypeMT4,
+  placedTypeMT5,
+} = useEnums()
 
 const isPassword = ref(false)
 
@@ -120,6 +127,9 @@ const getValue = (id: string) =>
   accountItems.value.find(i => i.id === id)?.value || ''
 
 const handleSubmit = () => {
+  const placedType = getValue('trading-account-placed-type')
+  const isMT5 = getValue('trading-account-broker-servers-type') === 'MT5'
+
   const payload: ICreateTradingAccountPayload = {
     name: getValue('trading-account-name'),
     login: getValue('trading-account-login'),
@@ -129,8 +139,8 @@ const handleSubmit = () => {
     brokerName: getValue('trading-account-broker-name'),
     brokerServer: getValue('trading-account-broker-server'),
     symbolSpec: getValue('trading-account-symbol-spec'),
-    placedTypeMt4: getValue('trading-account-placed-type'),
-    placedTypeMt5: getValue('trading-account-placed-type'),
+    placedTypeMt4: isMT5 ? '' : placedType,
+    placedTypeMt5: isMT5 ? placedType : '',
   }
 
   emit('create', payload)
@@ -171,6 +181,42 @@ const resetSelectedItem = (input: iSearchInput) => {
     return item
   })
 }
+
+const filteredAccountItems = computed(() =>
+  accountItems.value.filter(input => {
+    if (input.id === 'trading-account-placed-type') {
+      return !!getValue('trading-account-broker-servers-type')
+    }
+    return true
+  })
+)
+
+watch(
+  () => props.modalOpened,
+  async () => {
+    await getPlacedTypeMT4Enum()
+    await getPlacedTypeMT5Enum()
+  }
+)
+
+watch(
+  () => getValue('trading-account-broker-servers-type'),
+  newValue => {
+    const newOptions =
+      newValue === 'MT4' ? placedTypeMT4.value : placedTypeMT5.value
+
+    accountItems.value = accountItems.value.map(item => {
+      if (item.id === 'trading-account-placed-type') {
+        return {
+          ...item,
+          options: newOptions,
+          value: '',
+        }
+      }
+      return item
+    })
+  }
+)
 </script>
 
 <template>
@@ -188,7 +234,7 @@ const resetSelectedItem = (input: iSearchInput) => {
       >
         <div class="create-trading-account__list">
           <div
-            v-for="(input, idx) in accountItems"
+            v-for="(input, idx) in filteredAccountItems"
             :key="idx"
             class="create-trading-account__item"
           >
