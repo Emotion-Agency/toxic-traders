@@ -17,6 +17,7 @@ const {
 } = useTradingAccounts()
 
 const { updateCurrBalance } = useBalances()
+const { toast } = useToasts()
 
 const accounts = ref<ITradingAccountWithBalance[]>([])
 const selectedAccount = ref<ITradingAccount | null>(null)
@@ -130,6 +131,11 @@ const handleCheckConnection = async (id: number) => {
   await updateCurrBalance(id)
 }
 
+const handleCheckAccounts = async () => {
+  await fetchAllAccounts()
+  toast.success('Accounts successfully checked.')
+}
+
 const handleDeleteServer = async () => {
   if (!selectedAccount.value) return
 
@@ -173,7 +179,12 @@ onMounted(async () => {
             </template>
             Add account
           </TheButton>
-          <TheButton tag="button" variant="outlined" class="hero-accounts__btn">
+          <TheButton
+            tag="button"
+            variant="outlined"
+            class="hero-accounts__btn"
+            @click="handleCheckAccounts"
+          >
             <template #start-icon>
               <IconsSuccess />
             </template>
