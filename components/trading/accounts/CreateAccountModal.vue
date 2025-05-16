@@ -114,7 +114,7 @@ const accountItems = ref<iSearchInput[]>([
     name: 'Placed type',
     title: 'Placed type',
     placeholder: 'Placed type',
-    options: ['Manually', 'Personal'],
+    options: [],
     value: '',
   },
 ])
