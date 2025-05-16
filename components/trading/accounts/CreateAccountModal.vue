@@ -29,6 +29,7 @@ const accountItems = ref<iSearchInput[]>([
     value: '',
     placeholder: 'Account name',
     disabled: false,
+    error: true,
     isLeftButton: false,
     isRightButton: false,
   },
@@ -41,6 +42,7 @@ const accountItems = ref<iSearchInput[]>([
     value: '',
     placeholder: 'Login',
     disabled: false,
+    error: true,
     isLeftButton: false,
     isRightButton: false,
   },
@@ -53,6 +55,7 @@ const accountItems = ref<iSearchInput[]>([
     value: '',
     placeholder: '********',
     disabled: false,
+    error: true,
     isLeftButton: false,
     isRightButton: true,
   },
@@ -115,9 +118,19 @@ const accountItems = ref<iSearchInput[]>([
     title: 'Placed type',
     placeholder: 'Placed type',
     options: [],
+    required: true,
     value: '',
+    error: false,
   },
 ])
+
+const hasBrokerServerType = computed(
+  () => !!getValue('trading-account-broker-servers-type')
+)
+
+const hasBrokerPlacedType = computed(
+  () => !!getValue('trading-account-broker-placed-type')
+)
 
 const showPassword = () => {
   isPassword.value = !isPassword.value
@@ -152,6 +165,7 @@ const onChange = (val: iInput) => {
       item = {
         ...item,
         value: val.value?.toString(),
+        error: item.required ? !val.value.trim() : val.error,
       }
     }
     return item
@@ -161,9 +175,15 @@ const onChange = (val: iInput) => {
 const getSelectedItem = (opts: iSelectInput) => {
   accountItems.value = accountItems.value.map(item => {
     if (item.id === opts.id) {
-      item = {
+      const isPlacedType = item.id === 'trading-account-placed-type'
+      const shouldError = isPlacedType
+        ? hasBrokerPlacedType.value
+        : (item.required ?? false)
+
+      return {
         ...item,
         value: opts.value,
+        error: shouldError,
       }
     }
     return item
@@ -173,9 +193,15 @@ const getSelectedItem = (opts: iSelectInput) => {
 const resetSelectedItem = (input: iSearchInput) => {
   accountItems.value = accountItems.value.map(item => {
     if (item.id === input.id) {
-      item = {
+      const isPlacedType = item.id === 'trading-account-placed-type'
+      const shouldError = isPlacedType
+        ? hasBrokerServerType.value
+        : (item.required ?? false)
+
+      return {
         ...item,
         value: '',
+        error: shouldError,
       }
     }
     return item
@@ -191,6 +217,8 @@ const filteredAccountItems = computed(() =>
   })
 )
 
+const hasErrors = computed(() => accountItems.value.some(item => item.error))
+
 watch(
   () => props.modalOpened,
   async () => {
@@ -205,12 +233,15 @@ watch(
     const newOptions =
       newValue === 'MT4' ? placedTypeMT4.value : placedTypeMT5.value
 
+    const shouldSetError = !!newValue
+
     accountItems.value = accountItems.value.map(item => {
       if (item.id === 'trading-account-placed-type') {
         return {
           ...item,
           options: newOptions,
           value: '',
+          error: shouldSetError,
         }
       }
       return item
@@ -296,6 +327,7 @@ watch(
             type="submit"
             variant="fill"
             button-size="medium"
+            :disabled="hasErrors"
           >
             Create
           </TheButton>

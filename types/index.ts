@@ -10,6 +10,7 @@ export interface iSearchInput {
   isLeftButton?: boolean
   isRightButton?: boolean
   options?: string[]
+  error?: boolean
   min?: number
   max?: number
 }
