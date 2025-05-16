@@ -21,42 +21,34 @@ const isPassword = ref(false)
 
 const accountItems = ref<iSearchInput[]>([
   {
-    title: 'Name',
-    required: true,
     id: 'trading-account-name',
     name: 'Name',
+    title: 'Name',
     type: 'text',
+    required: true,
     value: '',
     placeholder: 'Account name',
-    disabled: false,
     error: true,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
-    title: 'Login',
-    required: true,
     id: 'trading-account-login',
     name: 'Login',
+    title: 'Login',
     type: 'text',
+    required: true,
     value: '',
     placeholder: 'Login',
-    disabled: false,
     error: true,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
-    title: 'Password',
-    required: true,
     id: 'trading-account-password',
     name: 'Password',
+    title: 'Password',
     type: 'password',
+    required: true,
     value: '',
     placeholder: '********',
-    disabled: false,
     error: true,
-    isLeftButton: false,
     isRightButton: true,
   },
   {
@@ -76,46 +68,34 @@ const accountItems = ref<iSearchInput[]>([
     value: '',
   },
   {
-    title: 'Broker Name',
-    required: false,
     id: 'trading-account-broker-name',
     name: 'Broker name',
+    title: 'Broker Name',
     type: 'text',
     value: '',
     placeholder: 'Broker name',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
-    title: 'Broker Server',
-    required: false,
     id: 'trading-account-broker-server',
     name: 'Broker server',
+    title: 'Broker Server',
     type: 'text',
     value: '',
     placeholder: 'Broker server',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
-    title: 'Symbol spec',
-    required: false,
     id: 'trading-account-symbol-spec',
     name: 'Symbol spec',
+    title: 'Symbol spec',
     type: 'text',
     value: '',
     placeholder: 'Symbol spec',
-    disabled: false,
-    isLeftButton: false,
-    isRightButton: false,
   },
   {
-    type: 'select',
     id: 'trading-account-placed-type',
     name: 'Placed type',
     title: 'Placed type',
+    type: 'select',
     placeholder: 'Placed type',
     options: [],
     required: true,
@@ -124,100 +104,68 @@ const accountItems = ref<iSearchInput[]>([
   },
 ])
 
-const hasBrokerServerType = computed(
-  () => !!getValue('trading-account-broker-servers-type')
-)
-
-const hasBrokerPlacedType = computed(
-  () => !!getValue('trading-account-broker-placed-type')
-)
-
-const showPassword = () => {
-  isPassword.value = !isPassword.value
+const getItem = (id: string) => accountItems.value.find(i => i.id === id)
+const getValue = (id: string) => getItem(id)?.value || ''
+const updateItem = (id: string, data: Partial<iSearchInput>) => {
+  accountItems.value = accountItems.value.map(item =>
+    item.id === id ? { ...item, ...data } : item
+  )
 }
 
-const getValue = (id: string) =>
-  accountItems.value.find(i => i.id === id)?.value || ''
+const hasErrors = computed(() => accountItems.value.some(i => i.error))
+const filteredAccountItems = computed(() =>
+  accountItems.value.filter(
+    i =>
+      i.id !== 'trading-account-placed-type' ||
+      getValue('trading-account-broker-servers-type')
+  )
+)
+
+const showPassword = () => (isPassword.value = !isPassword.value)
+
+const onChange = (val: iInput) => {
+  updateItem(val.id, {
+    value: val.value?.toString(),
+    error: getItem(val.id)?.required ? !val.value.trim() : false,
+  })
+}
+
+const getSelectedItem = ({ id, value }: iSelectInput) => {
+  const isPlacedType = id === 'trading-account-placed-type'
+  updateItem(id, {
+    value,
+    error: isPlacedType
+      ? !!getValue('trading-account-broker-placed-type')
+      : (getItem(id)?.required ?? false),
+  })
+}
+
+const resetSelectedItem = ({ id, required }: iSearchInput) => {
+  const isPlacedType = id === 'trading-account-placed-type'
+  updateItem(id, {
+    value: '',
+    error: isPlacedType
+      ? !!getValue('trading-account-broker-servers-type')
+      : (required ?? false),
+  })
+}
 
 const handleSubmit = () => {
-  const placedType = getValue('trading-account-placed-type')
   const isMT5 = getValue('trading-account-broker-servers-type') === 'MT5'
-
-  const payload: ICreateTradingAccountPayload = {
+  const placedType = getValue('trading-account-placed-type')
+  emit('create', {
     name: getValue('trading-account-name'),
     login: getValue('trading-account-login'),
     password: getValue('trading-account-password'),
     servers: getValue('trading-account-servers') === 'MT5' ? 1 : 0,
-    brokerServerType: getValue('trading-account-servers') === 'MT5' ? 1 : 0,
+    brokerServerType: isMT5 ? 1 : 0,
     brokerName: getValue('trading-account-broker-name'),
     brokerServer: getValue('trading-account-broker-server'),
     symbolSpec: getValue('trading-account-symbol-spec'),
     placedTypeMt4: isMT5 ? '' : placedType,
     placedTypeMt5: isMT5 ? placedType : '',
-  }
-
-  emit('create', payload)
-}
-
-const onChange = (val: iInput) => {
-  accountItems.value = accountItems.value.map(item => {
-    if (item.id === val.id) {
-      item = {
-        ...item,
-        value: val.value?.toString(),
-        error: item.required ? !val.value.trim() : val.error,
-      }
-    }
-    return item
   })
 }
-
-const getSelectedItem = (opts: iSelectInput) => {
-  accountItems.value = accountItems.value.map(item => {
-    if (item.id === opts.id) {
-      const isPlacedType = item.id === 'trading-account-placed-type'
-      const shouldError = isPlacedType
-        ? hasBrokerPlacedType.value
-        : (item.required ?? false)
-
-      return {
-        ...item,
-        value: opts.value,
-        error: shouldError,
-      }
-    }
-    return item
-  })
-}
-
-const resetSelectedItem = (input: iSearchInput) => {
-  accountItems.value = accountItems.value.map(item => {
-    if (item.id === input.id) {
-      const isPlacedType = item.id === 'trading-account-placed-type'
-      const shouldError = isPlacedType
-        ? hasBrokerServerType.value
-        : (item.required ?? false)
-
-      return {
-        ...item,
-        value: '',
-        error: shouldError,
-      }
-    }
-    return item
-  })
-}
-
-const filteredAccountItems = computed(() =>
-  accountItems.value.filter(input => {
-    if (input.id === 'trading-account-placed-type') {
-      return !!getValue('trading-account-broker-servers-type')
-    }
-    return true
-  })
-)
-
-const hasErrors = computed(() => accountItems.value.some(item => item.error))
 
 watch(
   () => props.modalOpened,
@@ -229,22 +177,12 @@ watch(
 
 watch(
   () => getValue('trading-account-broker-servers-type'),
-  newValue => {
-    const newOptions =
-      newValue === 'MT4' ? placedTypeMT4.value : placedTypeMT5.value
-
-    const shouldSetError = !!newValue
-
-    accountItems.value = accountItems.value.map(item => {
-      if (item.id === 'trading-account-placed-type') {
-        return {
-          ...item,
-          options: newOptions,
-          value: '',
-          error: shouldSetError,
-        }
-      }
-      return item
+  val => {
+    const options = val === 'MT4' ? placedTypeMT4.value : placedTypeMT5.value
+    updateItem('trading-account-placed-type', {
+      options,
+      value: '',
+      error: !!val,
     })
   }
 )
