@@ -58,20 +58,18 @@ const fetchAllAccounts = async () => {
 
     accounts.value = items.map(account => {
       const balance = balancesProfits.find(
-        balance => balance.tradingAccountId === account.id
+        balance => balance?.tradingAccountId === account?.id
       )
 
-      if (!balance) return
-
       return {
-        id: account.id,
-        status: balance.onlineStatus,
-        ping: balance.lastPing,
-        name: account.name,
-        balance: balance.balance,
-        currency: balance.currency,
-        type: balance.balanceType,
-        platform: account.brokerServerType,
+        id: account?.id,
+        status: balance?.onlineStatus,
+        ping: balance?.lastPing,
+        name: account?.name,
+        balance: balance?.balance,
+        currency: balance?.currency,
+        type: balance?.balanceType,
+        platform: account?.brokerServerType,
       }
     })
 
@@ -123,8 +121,10 @@ const handleCreateAccountModalOpen = () => {
   createAccountModalOpened.value = true
 }
 
-const handleCreateAccount = (acc: ICreateTradingAccountPayload) => {
-  console.log('account created', acc)
+const handleCreateAccount = async (acc: ICreateTradingAccountPayload) => {
+  await createTradingAccount(acc)
+  await fetchAllAccounts()
+  createAccountModalOpened.value = false
 }
 
 const handleCheckConnection = async (id: number) => {

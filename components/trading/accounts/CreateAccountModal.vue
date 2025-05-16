@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { iInput, iSearchInput, iSelectInput } from '~/types'
-import type { ICreateTradingAccountPayload } from '~/types/trading-accounts/tradingAccounts'
 
 interface iProps {
   modalOpened: boolean
@@ -18,6 +17,7 @@ const {
 } = useEnums()
 
 const isPassword = ref(false)
+const selectedPlacedType = ref<number | null>(null)
 
 const accountItems = ref<iSearchInput[]>([
   {
@@ -105,7 +105,12 @@ const accountItems = ref<iSearchInput[]>([
 ])
 
 const getItem = (id: string) => accountItems.value.find(i => i.id === id)
-const getValue = (id: string) => getItem(id)?.value || ''
+const getValue = (id: string) => {
+  const item = getItem(id)
+  if (!item) return ''
+  const isSelect = Array.isArray(item.options)
+  return isSelect ? item.value || 0 : item.value || ''
+}
 const updateItem = (id: string, data: Partial<iSearchInput>) => {
   accountItems.value = accountItems.value.map(item =>
     item.id === id ? { ...item, ...data } : item
@@ -151,20 +156,34 @@ const resetSelectedItem = ({ id, required }: iSearchInput) => {
 }
 
 const handleSubmit = () => {
-  const isMT5 = getValue('trading-account-broker-servers-type') === 'MT5'
-  const placedType = getValue('trading-account-placed-type')
-  emit('create', {
+  const serverType = getValue('trading-account-broker-servers-type')
+  const placedTypeValue = getValue('trading-account-placed-type')
+  const isMT5 = serverType === 'MT5'
+  const placedEnum = isMT5 ? placedTypeMT5.value : placedTypeMT4.value
+
+  selectedPlacedType.value =
+    Number(
+      Object.keys(placedEnum).find(val => placedEnum[val] === placedTypeValue)
+    ) || null
+
+  const rawPayload = {
     name: getValue('trading-account-name'),
     login: getValue('trading-account-login'),
     password: getValue('trading-account-password'),
-    servers: getValue('trading-account-servers') === 'MT5' ? 1 : 0,
-    brokerServerType: isMT5 ? 1 : 0,
+    servers: null,
+    brokerServerType: serverType ? (isMT5 ? 1 : 0) : null,
     brokerName: getValue('trading-account-broker-name'),
     brokerServer: getValue('trading-account-broker-server'),
     symbolSpec: getValue('trading-account-symbol-spec'),
-    placedTypeMt4: isMT5 ? '' : placedType,
-    placedTypeMt5: isMT5 ? placedType : '',
-  })
+    placedTypeMt4: isMT5 ? null : selectedPlacedType.value,
+    placedTypeMt5: isMT5 ? selectedPlacedType.value : null,
+  }
+
+  const filteredPayload = Object.fromEntries(
+    Object.entries(rawPayload).filter(([, v]) => v != null && v !== '')
+  )
+
+  emit('create', filteredPayload)
 }
 
 watch(

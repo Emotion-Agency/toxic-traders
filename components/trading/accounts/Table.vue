@@ -82,62 +82,62 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
           :id="account?.id"
         >
           <TableCell
-            :item="account.status"
+            :item="account?.status"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--status`]"
             :disable-tooltip="true"
           >
             <div
               class="accounts-table__status"
-              :class="`accounts-table__status--${serverStatus(account.status)?.toLowerCase()}`"
+              :class="`accounts-table__status--${serverStatus(account?.status)?.toLowerCase()}`"
             >
               <span />
               <p class="accounts-table__status-text">
-                {{ serverStatus(account.status) }}
+                {{ serverStatus(account?.status) }}
               </p>
             </div>
           </TableCell>
           <TableCell
-            :item="account.ping"
+            :item="account?.ping"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--ping`]"
           >
-            {{ account.ping }}ms
+            {{ account?.ping }}ms
           </TableCell>
           <TableCell
-            :item="account.name"
+            :item="account?.name"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--name`]"
           >
-            {{ account.name }}
+            {{ account?.name }}
           </TableCell>
           <TableCell
-            :item="account.balance"
+            :item="account?.balance"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--balance`]"
           >
-            {{ account.balance }}
+            {{ account?.balance }}
           </TableCell>
           <TableCell
-            :item="account.currency"
+            :item="account?.currency"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--currency`]"
           >
-            {{ account.currency }}
+            {{ account?.currency }}
           </TableCell>
           <TableCell
-            :item="account.type"
+            :item="account?.type"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--type`]"
           >
-            {{ account.type }}
+            {{ account?.type }}
           </TableCell>
           <TableCell
-            :item="account.platform"
+            :item="account?.platform"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--platform`]"
           >
-            {{ account.platform === 0 ? 'MT4' : 'MT5' }}
+            {{ account?.platform === 0 ? 'MT4' : 'MT5' }}
           </TableCell>
           <TableCell
             class="accounts-table__cell"
@@ -145,8 +145,8 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
             :disable-tooltip="true"
           >
             <TradingAccountsActionDropdown
-              @delete="emit('delete', account.id)"
-              @check="emit('check', account.id)"
+              @delete="emit('delete', account?.id)"
+              @check="emit('check', account?.id)"
             />
           </TableCell>
         </TableRow>
