@@ -17,7 +17,7 @@ export const useClients = () => {
   const { toast } = useToasts()
 
   const getAllClients = async (
-    payload: IGetAllClientsPayload
+    payload?: IGetAllClientsPayload
   ): Promise<IClientData> => {
     try {
       const data = await getAllClientsRequest(payload)

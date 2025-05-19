@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { iInput, iSearchInput, iSelectInput } from '~/types'
+import type { IClient } from '~/types/clients/clients'
 
 interface iProps {
   modalOpened: boolean
@@ -15,9 +16,11 @@ const {
   placedTypeMT4,
   placedTypeMT5,
 } = useEnums()
+const { getAllClients } = useClients()
 
 const isPassword = ref(false)
 const selectedPlacedType = ref<number | null>(null)
+const serverList = ref<IClient[]>()
 
 const accountItems = ref<iSearchInput[]>([
   {
@@ -166,7 +169,7 @@ const handleSubmit = () => {
       Object.keys(placedEnum).find(val => placedEnum[val] === placedTypeValue)
     ) || null
 
-  const rawPayload = {
+  const payload = {
     name: getValue('trading-account-name'),
     login: getValue('trading-account-login'),
     password: getValue('trading-account-password'),
@@ -180,7 +183,7 @@ const handleSubmit = () => {
   }
 
   const filteredPayload = Object.fromEntries(
-    Object.entries(rawPayload).filter(([, v]) => v != null && v !== '')
+    Object.entries(payload).filter(([, v]) => v != null && v !== '')
   )
 
   emit('create', filteredPayload)
@@ -189,6 +192,16 @@ const handleSubmit = () => {
 watch(
   () => props.modalOpened,
   async () => {
+    const { clients } = await getAllClients()
+    serverList.value = clients
+
+    const clientNames = clients.map(c => c.clientName)
+
+    updateItem('trading-account-servers', {
+      options: clientNames,
+      value: '',
+    })
+
     await getPlacedTypeMT4Enum()
     await getPlacedTypeMT5Enum()
   }
