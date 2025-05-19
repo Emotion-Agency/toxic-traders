@@ -207,7 +207,7 @@ onMounted(async () => {
     <section class="acc-content">
       <div class="acc-content__wrapper">
         <div class="acc-content__table">
-          <UiLoader v-if="isLoading" />
+          <UiLoader v-if="isLoading" class="acc-content__loader" />
           <div v-else-if="accounts.length" class="acc-content__table-wrapper">
             <TradingAccountsTable
               :accounts="accounts"

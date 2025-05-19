@@ -11,11 +11,16 @@
 }
 
 .acc-content__table {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   flex: 1;
   min-width: 0;
+}
+
+.acc-content__loader {
+  position: absolute;
 }
 
 .acc-content__pagination {

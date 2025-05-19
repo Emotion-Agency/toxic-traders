@@ -39,5 +39,12 @@
 }
 
 .acc-toggle-menu__tables {
+  position: relative;
+  height: 100%;
   margin-top: 16px;
+  min-height: 60vh;
+}
+
+.acc-toggle-menu__loader {
+  position: absolute;
 }
