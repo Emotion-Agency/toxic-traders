@@ -121,7 +121,12 @@ const handleCreateAccount = async (acc: ICreateTradingAccountPayload) => {
 }
 
 const handleCheckConnection = async (id: number) => {
-  await updateCurrBalance(id)
+  try {
+    isLoading.value = true
+    await updateCurrBalance(id)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const handleCheckAccounts = async () => {
