@@ -9,9 +9,11 @@ export interface IBalancesProfitsItem {
   onlineStatus: number
 }
 
+export type ICurrencyData = Record<string, number>
+
 export interface IBalancesProfits {
   totalAccountsCount: number
-  totalBalances: Record<string, number>
-  totalProfits: Record<string, number>
+  totalBalances: ICurrencyData
+  totalProfits: ICurrencyData
   balancesProfits: IBalancesProfitsItem[]
 }

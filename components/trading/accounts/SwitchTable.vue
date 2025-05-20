@@ -1,19 +1,17 @@
 <script lang="ts" setup>
 import Table from '~/components/Table.vue'
-import type { ITradingAccount } from '~/types/trading-accounts/tradingAccounts'
+import type { ICurrencyData } from '~/types/trading-accounts/balancesProfits'
 
 interface IProps {
-  accounts: ITradingAccount[]
-  defaultSortBy?: string
-  defaultSortOrder?: 1 | 2
+  balance: ICurrencyData[]
 }
 
-const props = defineProps<IProps>()
+defineProps<IProps>()
 
 const emit = defineEmits(['sort'])
 
 const isLoading = ref(false)
-const headings = ['type', 'currency', 'amount']
+const headings = ['currency', 'amount']
 
 const formattedHeadingFields = computed(() =>
   headings.map(h => formatNameToNormalCase(h))
@@ -21,8 +19,8 @@ const formattedHeadingFields = computed(() =>
 
 const { sortState, onSort } = useSort(
   {
-    sortBy: props.defaultSortBy,
-    sortOrder: props.defaultSortOrder,
+    sortBy: '',
+    sortOrder: 1,
   },
   () => {
     emit('sort', {
@@ -35,7 +33,7 @@ const { sortState, onSort } = useSort(
 <template>
   <div>
     <UiLoader v-if="isLoading" />
-    <Table v-else-if="accounts.length" class="switch-table">
+    <Table v-else-if="balance.length" class="switch-table">
       <TableHead>
         <TableRow>
           <TableCell
@@ -61,31 +59,22 @@ const { sortState, onSort } = useSort(
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableRow
-          v-for="account in accounts"
-          :key="account.id"
-          :id="account.id"
-        >
+        <TableRow v-for="account in balance" :key="account.id" :id="account.id">
           <TableCell
-            :item="account.name"
+            v-for="([key], idx) in Object.entries(account)"
+            :key="idx"
+            :item="key"
             class="switch-table__cell"
-            :class="[`switch-table__cell--type`]"
           >
-            {{ account.name }}
+            {{ key || 'N/A' }}
           </TableCell>
           <TableCell
-            :item="account.tradingAccountBalanceFixed"
+            v-for="([_, value], idx) in Object.entries(account)"
+            :key="idx"
+            :item="value"
             class="switch-table__cell"
-            :class="[`switch-table__cell--currency`]"
           >
-            {{ account.tradingAccountBalanceFixed }}
-          </TableCell>
-          <TableCell
-            :item="account.balanceType"
-            class="switch-table__cell"
-            :class="[`switch-table__cell--amount`]"
-          >
-            {{ account.balanceType === 0 ? 'Personal' : 'Investor' }}
+            {{ trimDecimals(value, 2) || 'N/A' }}
           </TableCell>
         </TableRow>
       </TableBody>

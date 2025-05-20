@@ -1,27 +1,30 @@
 <script lang="ts" setup>
 import { getBalancesProfits } from '~/utils/api/trading-accounts/balancesProfits'
+import type { ICurrencyData } from '~/types/trading-accounts/balancesProfits'
 
-const router = useRouter()
-const route = useRoute()
-
-const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
-const sortedOrder = ref<1 | 2>(1)
-const profitData = ref<Record<string, number>[]>([])
-const totalData = ref<Record<string, number>[]>([])
+const profitData = ref<ICurrencyData[]>([])
+const totalData = ref<ICurrencyData[]>([])
 const selectedTab = ref<'profit' | 'total'>('profit')
 const isLoading = ref(false)
 
 const onSort = async (sortState: ISortState) => {
-  sortedBy.value = sortState.sortBy
-  sortedOrder.value = sortState.sortOrder
-
-  router.push({
-    query: {
-      ...route.query,
-      sortedBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
-      sortedOrder: sortedOrder.value,
-    },
-  })
+  if (selectedTab.value === 'profit') {
+    profitData.value = profitData.value.sort((a, b) => {
+      if (sortState.sortOrder === 1) {
+        return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+      } else {
+        return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+      }
+    })
+  } else {
+    totalData.value = totalData.value.sort((a, b) => {
+      if (sortState.sortOrder === 1) {
+        return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
+      } else {
+        return a[sortState.sortBy] < b[sortState.sortBy] ? 1 : -1
+      }
+    })
+  }
 }
 
 onMounted(async () => {
@@ -64,16 +67,12 @@ onMounted(async () => {
     </div>
     <div class="acc-toggle-menu__tables">
       <UiLoader v-if="isLoading" class="acc-toggle-menu__loader" />
-      <div v-else-if="profitData.length || totalData.length">
-        {{ selectedTab === 'profit' ? profitData : totalData }}
-      </div>
 
-      <!-- <TradingAccountsSwitchTable
-        :accounts="profitData || totalData"
-        :default-sort-by="sortedBy"
-        :default-sort-order="sortedOrder"
+      <TradingAccountsSwitchTable
+        v-else-if="profitData.length || totalData.length"
+        :balance="selectedTab === 'profit' ? profitData : totalData"
         @sort="onSort"
-      /> -->
+      />
     </div>
   </div>
 </template>

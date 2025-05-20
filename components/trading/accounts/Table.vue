@@ -4,11 +4,9 @@ import type { ITradingAccountWithBalance } from '~/types/trading-accounts/tradin
 
 interface IProps {
   accounts: ITradingAccountWithBalance[]
-  defaultSortBy?: string
-  defaultSortOrder?: 1 | 2
 }
 
-const props = defineProps<IProps>()
+defineProps<IProps>()
 
 const emit = defineEmits(['sort', 'delete', 'update', 'check'])
 
@@ -29,8 +27,8 @@ const formattedHeadingFields = computed(() =>
 
 const { sortState, onSort } = useSort(
   {
-    sortBy: props.defaultSortBy,
-    sortOrder: props.defaultSortOrder,
+    sortBy: '',
+    sortOrder: 1,
   },
   () => {
     emit('sort', {
@@ -45,7 +43,11 @@ const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
 
-const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
+const serverStatus = (status?: number) =>
+  ({
+    0: { id: 'offline', text: 'Offline' },
+    1: { id: 'online', text: 'Online' },
+  })[status!] ?? { id: 'unknown', text: 'Offline' }
 </script>
 
 <template>
@@ -89,11 +91,11 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
           >
             <div
               class="accounts-table__status"
-              :class="`accounts-table__status--${serverStatus(account?.status)?.toLowerCase()}`"
+              :class="`accounts-table__status--${serverStatus(account?.status)?.id?.toLowerCase()}`"
             >
               <span />
               <p class="accounts-table__status-text">
-                {{ serverStatus(account?.status) }}
+                {{ serverStatus(account?.status)?.text }}
               </p>
             </div>
           </TableCell>
@@ -102,35 +104,35 @@ const serverStatus = (status?: number) => (status === 1 ? 'Online' : 'Offline')
             class="accounts-table__cell"
             :class="[`accounts-table__cell--ping`]"
           >
-            {{ account?.ping }}ms
+            {{ account?.ping || 'N/A' }}{{ !account?.ping ? '' : 'ms' }}
           </TableCell>
           <TableCell
             :item="account?.name"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--name`]"
           >
-            {{ account?.name }}
+            {{ account?.name || 'N/A' }}
           </TableCell>
           <TableCell
             :item="account?.balance"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--balance`]"
           >
-            {{ account?.balance }}
+            {{ account?.balance || 'N/A' }}
           </TableCell>
           <TableCell
             :item="account?.currency"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--currency`]"
           >
-            {{ account?.currency }}
+            {{ account?.currency || 'N/A' }}
           </TableCell>
           <TableCell
             :item="account?.type"
             class="accounts-table__cell"
             :class="[`accounts-table__cell--type`]"
           >
-            {{ account?.type }}
+            {{ account?.type || 'N/A' }}
           </TableCell>
           <TableCell
             :item="account?.platform"

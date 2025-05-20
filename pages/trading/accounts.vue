@@ -23,10 +23,7 @@ const accounts = ref<ITradingAccountWithBalance[]>([])
 const selectedAccount = ref<ITradingAccount | null>(null)
 const deleteModalOpened = ref(false)
 const createAccountModalOpened = ref(false)
-
 const isLoading = ref(false)
-const sortedBy = ref((route.query?.sortedBy as string) ?? 'name')
-const sortedOrder = ref<1 | 2>(1)
 
 const {
   currentPage,
@@ -50,8 +47,6 @@ const fetchAllAccounts = async () => {
     const { items, totalCount } = await getAllTradingAccounts({
       page: currentPage.value,
       count: itemsCount.value,
-      sortBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
-      sortOrder: sortedOrder.value,
     })
 
     const { balancesProfits } = await getBalancesProfits()
@@ -73,15 +68,13 @@ const fetchAllAccounts = async () => {
       }
     })
 
-    console.log(accounts.value)
-
     totalCountPages.value = totalCount
   } finally {
     isLoading.value = false
   }
 }
 
-const onSort = async (sortState: ISortState) => {
+const onSort = (sortState: ISortState) => {
   accounts.value = accounts.value.sort((a, b) => {
     if (sortState.sortOrder === 1) {
       return a[sortState.sortBy] > b[sortState.sortBy] ? 1 : -1
@@ -211,8 +204,6 @@ onMounted(async () => {
           <div v-else-if="accounts.length" class="acc-content__table-wrapper">
             <TradingAccountsTable
               :accounts="accounts"
-              :default-sort-by="sortedBy"
-              :default-sort-order="sortedOrder"
               @sort="onSort"
               @delete="handleDeleteModalOpen"
               @check="handleCheckConnection"

@@ -49,6 +49,18 @@
       color: var(--status-danger);
     }
   }
+
+  &--unknown {
+    border-color: var(--secondary-default);
+
+    span {
+      background-color: var(--secondary-default);
+    }
+
+    .accounts-table__status-text {
+      color: var(--secondary-default);
+    }
+  }
 }
 
 .accounts-table__status-text {

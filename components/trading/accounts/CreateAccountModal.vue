@@ -59,7 +59,7 @@ const accountItems = ref<iSearchInput[]>([
     name: 'Servers',
     title: 'Servers',
     placeholder: 'Servers',
-    options: ['MT4', 'MT5'],
+    options: [],
     value: '',
   },
   {
@@ -194,11 +194,15 @@ watch(
   async () => {
     const { clients } = await getAllClients()
     serverList.value = clients
-
-    const clientNames = clients.map(c => c.clientName)
+    const clientMappingData = clients.map(c => {
+      if (c?.clientName && c?.ip) return `${c.clientName} - ${c.ip}`
+      if (c?.clientName) return c.clientName
+      if (c?.ip) return c.ip
+      return ''
+    })
 
     updateItem('trading-account-servers', {
-      options: clientNames,
+      options: clientMappingData,
       value: '',
     })
 
