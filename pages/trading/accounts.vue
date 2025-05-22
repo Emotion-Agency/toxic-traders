@@ -23,6 +23,7 @@ const accounts = ref<ITradingAccountWithBalance[]>([])
 const selectedAccount = ref<ITradingAccount | null>(null)
 const deleteModalOpened = ref(false)
 const createAccountModalOpened = ref(false)
+const updateAccountModalOpened = ref(false)
 const isLoading = ref(false)
 
 const {
@@ -120,6 +121,22 @@ const handleCreateAccount = async (acc: ICreateTradingAccountPayload) => {
   createAccountModalOpened.value = false
 }
 
+const handleUpdateAccountModalOpen = async (id: number) => {
+  selectedAccount.value = await getTradingAccount(id)
+  updateAccountModalOpened.value = true
+  console.log('selectedAccount.value', selectedAccount.value)
+}
+
+const handleUpdateAccountModalClose = () => {
+  updateAccountModalOpened.value = false
+}
+
+const handleUpdateAccount = async (acc: ICreateTradingAccountPayload) => {
+  await createTradingAccount(acc)
+  await fetchAllAccounts()
+  updateAccountModalOpened.value = false
+}
+
 const handleCheckConnection = async (id: number) => {
   try {
     isLoading.value = true
@@ -212,6 +229,7 @@ onMounted(async () => {
               @sort="onSort"
               @delete="handleDeleteModalOpen"
               @check="handleCheckConnection"
+              @update="handleUpdateAccountModalOpen"
             />
             <ThePagination
               class="acc-content__pagination"
@@ -246,6 +264,11 @@ onMounted(async () => {
       :modal-opened="createAccountModalOpened"
       @close="handleCreateAccountModalClose"
       @create="handleCreateAccount"
+    />
+    <TradingAccountsUpdateAccountModal
+      :modal-opened="updateAccountModalOpened"
+      @close="handleUpdateAccountModalClose"
+      @update="handleUpdateAccount"
     />
   </main>
 </template>

@@ -149,6 +149,7 @@ const serverStatus = (status?: number) =>
             <TradingAccountsActionDropdown
               @delete="emit('delete', account?.id)"
               @check="emit('check', account?.id)"
+              @update="emit('update', account?.id)"
             />
           </TableCell>
         </TableRow>

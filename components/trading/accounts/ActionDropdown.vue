@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const emit = defineEmits(['delete', 'check'])
+const emit = defineEmits(['delete', 'check', 'update'])
 
 const $el = ref<HTMLElement | null>(null)
 const $wrapper = ref<HTMLElement | null>(null)
@@ -63,7 +63,15 @@ onUnmounted(() => {
             <IconsSuccess color="#000000" />
             Check connection
           </button>
-          <button class="action-dropdown__menu-btn">
+          <button
+            class="action-dropdown__menu-btn"
+            @click="
+              () => {
+                emit('update')
+                menuOpened = false
+              }
+            "
+          >
             <IconsEdit />
             Edit
           </button>
