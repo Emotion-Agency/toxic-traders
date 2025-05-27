@@ -98,14 +98,14 @@ const serverStatus = (status?: string) => {
             class="trading-servers-table__cell"
             :class="[`trading-servers-table__cell--name`]"
           >
-            {{ server.clientName }}
+            {{ server.clientName || 'N/A' }}
           </TableCell>
           <TableCell
             :item="server.ip"
             class="trading-servers-table__cell"
             :class="[`trading-servers-table__cell--address`]"
           >
-            {{ server.ip }}
+            {{ server.ip || 'N/A' }}
           </TableCell>
           <TableCell
             class="trading-servers-table__cell"
