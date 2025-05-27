@@ -108,9 +108,7 @@ const accountItems = ref<iSearchInput[]>([
     type: 'select',
     placeholder: 'Placed type',
     options: [],
-    required: true,
     value: '',
-    error: false,
   },
 ])
 
@@ -146,22 +144,16 @@ const onChange = (val: iInput) => {
 }
 
 const getSelectedItem = ({ id, value }: iSelectInput) => {
-  const isPlacedType = id === 'trading-account-upd-placed-type'
   updateItem(id, {
     value,
-    error: isPlacedType
-      ? !!getValue('trading-account-upd-broker-placed-type')
-      : (getItem(id)?.required ?? false),
+    error: getItem(id)?.required ?? false,
   })
 }
 
 const resetSelectedItem = ({ id, required }: iSearchInput) => {
-  const isPlacedType = id === 'trading-account-upd-placed-type'
   updateItem(id, {
     value: '',
-    error: isPlacedType
-      ? !!getValue('trading-account-upd-broker-servers-type')
-      : (required ?? false),
+    error: required ?? false,
   })
 }
 
@@ -236,6 +228,7 @@ watch(
       account.brokerServerType === 1
         ? placedTypeMT5.value?.[account.placedTypeMt5 ?? '']
         : placedTypeMT4.value?.[account.placedTypeMt4 ?? '']
+    console.log(placedTypeMT5.value)
 
     updateItem('trading-account-upd-placed-type', {
       value: placedValue || '',
@@ -271,10 +264,14 @@ watch(
   () => getValue('trading-account-upd-broker-servers-type'),
   val => {
     const options = val === 'MT4' ? placedTypeMT4.value : placedTypeMT5.value
+    const placedValue =
+      props.selectedAccount.brokerServerType === 1
+        ? placedTypeMT5.value?.[props.selectedAccount.placedTypeMt5 ?? '']
+        : placedTypeMT4.value?.[props.selectedAccount.placedTypeMt4 ?? '']
+
     updateItem('trading-account-upd-placed-type', {
       options,
-      value: '',
-      error: !!val,
+      value: placedValue || '',
     })
   }
 )
