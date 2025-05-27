@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import type { iInput, iSearchInput, iSelectInput } from '~/types'
 import type { IClient } from '~/types/clients/clients'
+import type { ITradingAccount } from '~/types/trading-accounts/tradingAccounts'
 
 interface iProps {
   modalOpened: boolean
+  selectedAccount: ITradingAccount | null
 }
 
 const props = defineProps<iProps>()
@@ -29,7 +31,7 @@ const accountItems = ref<iSearchInput[]>([
     title: 'Name',
     type: 'text',
     required: true,
-    value: '',
+    value: props.selectedAccount?.name || '',
     placeholder: 'Account name',
     error: true,
   },
@@ -39,7 +41,7 @@ const accountItems = ref<iSearchInput[]>([
     title: 'Login',
     type: 'text',
     required: true,
-    value: '',
+    value: props.selectedAccount?.login || '',
     placeholder: 'Login',
     error: true,
   },
@@ -49,7 +51,7 @@ const accountItems = ref<iSearchInput[]>([
     title: 'Password',
     type: 'password',
     required: true,
-    value: '',
+    value: props.selectedAccount?.password || '',
     placeholder: '********',
     error: true,
     isRightButton: true,
@@ -68,14 +70,19 @@ const accountItems = ref<iSearchInput[]>([
     title: 'Broker Server Type',
     placeholder: 'Broker server type',
     options: ['MT4', 'MT5'],
-    value: '',
+    value:
+      props.selectedAccount?.brokerServerType === 1
+        ? 'MT5'
+        : props.selectedAccount?.brokerServerType === 0
+          ? 'MT4'
+          : '',
   },
   {
     id: 'trading-account-upd-broker-name',
     name: 'Broker name',
     title: 'Broker Name',
     type: 'text',
-    value: '',
+    value: props.selectedAccount?.brokerName || '',
     placeholder: 'Broker name',
   },
   {
@@ -83,7 +90,7 @@ const accountItems = ref<iSearchInput[]>([
     name: 'Broker server',
     title: 'Broker Server',
     type: 'text',
-    value: '',
+    value: props.selectedAccount?.brokerServer || '',
     placeholder: 'Broker server',
   },
   {
@@ -91,7 +98,7 @@ const accountItems = ref<iSearchInput[]>([
     name: 'Symbol spec',
     title: 'Symbol spec',
     type: 'text',
-    value: '',
+    value: props.selectedAccount?.symbolSpec || '',
     placeholder: 'Symbol spec',
   },
   {
@@ -170,6 +177,7 @@ const handleSubmit = () => {
     ) || null
 
   const payload = {
+    id: props.selectedAccount?.id || '',
     name: getValue('trading-account-upd-name'),
     login: getValue('trading-account-upd-login'),
     password: getValue('trading-account-upd-password'),
@@ -190,10 +198,58 @@ const handleSubmit = () => {
 }
 
 watch(
+  () => props.selectedAccount,
+  account => {
+    if (!account) return
+
+    updateItem('trading-account-upd-name', {
+      value: account.name || '',
+    })
+    updateItem('trading-account-upd-login', {
+      value: account.login?.toString() || '',
+    })
+    updateItem('trading-account-upd-password', {
+      value: account.password || '',
+    })
+    // updateItem('trading-account-upd-servers', {
+    //   value: account.servers || '',
+    // })
+    updateItem('trading-account-upd-broker-servers-type', {
+      value:
+        account.brokerServerType === 1
+          ? 'MT5'
+          : account.brokerServerType === 0
+            ? 'MT4'
+            : '',
+    })
+    updateItem('trading-account-upd-broker-name', {
+      value: account.brokerName || '',
+    })
+    updateItem('trading-account-upd-broker-server', {
+      value: account.brokerServer || '',
+    })
+    updateItem('trading-account-upd-symbol-spec', {
+      value: account.symbolSpec || '',
+    })
+
+    const placedValue =
+      account.brokerServerType === 1
+        ? placedTypeMT5.value?.[account.placedTypeMt5 ?? '']
+        : placedTypeMT4.value?.[account.placedTypeMt4 ?? '']
+
+    updateItem('trading-account-upd-placed-type', {
+      value: placedValue || '',
+    })
+  }
+)
+
+watch(
   () => props.modalOpened,
   async () => {
     const { clients } = await getAllClients()
     serverList.value = clients
+
+    console.log(props.selectedAccount)
     const clientMappingData = clients.map(c => {
       if (c?.clientName && c?.ip) return `${c.clientName} - ${c.ip}`
       if (c?.clientName) return c.clientName

@@ -14,6 +14,7 @@ const {
   deleteTradingAccount,
   getTradingAccount,
   createTradingAccount,
+  updateTradingAccount,
 } = useTradingAccounts()
 
 const { updateCurrBalance } = useBalances()
@@ -124,7 +125,6 @@ const handleCreateAccount = async (acc: ICreateTradingAccountPayload) => {
 const handleUpdateAccountModalOpen = async (id: number) => {
   selectedAccount.value = await getTradingAccount(id)
   updateAccountModalOpened.value = true
-  console.log('selectedAccount.value', selectedAccount.value)
 }
 
 const handleUpdateAccountModalClose = () => {
@@ -132,7 +132,7 @@ const handleUpdateAccountModalClose = () => {
 }
 
 const handleUpdateAccount = async (acc: ICreateTradingAccountPayload) => {
-  await createTradingAccount(acc)
+  await updateTradingAccount(acc, selectedAccount.value?.id)
   await fetchAllAccounts()
   updateAccountModalOpened.value = false
 }
@@ -266,6 +266,7 @@ onMounted(async () => {
       @create="handleCreateAccount"
     />
     <TradingAccountsUpdateAccountModal
+      :selected-account="selectedAccount"
       :modal-opened="updateAccountModalOpened"
       @close="handleUpdateAccountModalClose"
       @update="handleUpdateAccount"
