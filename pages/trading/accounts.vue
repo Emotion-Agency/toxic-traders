@@ -118,8 +118,8 @@ const handleCreateAccountModalOpen = () => {
 
 const handleCreateAccount = async (acc: ICreateTradingAccountPayload) => {
   await createTradingAccount(acc)
-  await fetchAllAccounts()
   createAccountModalOpened.value = false
+  await fetchAllAccounts()
 }
 
 const handleUpdateAccountModalOpen = async (id: number) => {
@@ -133,8 +133,8 @@ const handleUpdateAccountModalClose = () => {
 
 const handleUpdateAccount = async (acc: ICreateTradingAccountPayload) => {
   await updateTradingAccount(acc, selectedAccount.value?.id)
-  await fetchAllAccounts()
   updateAccountModalOpened.value = false
+  await fetchAllAccounts()
 }
 
 const handleCheckConnection = async (id: number) => {

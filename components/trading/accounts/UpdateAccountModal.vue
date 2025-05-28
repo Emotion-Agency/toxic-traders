@@ -126,6 +126,7 @@ const updateItem = (id: string, data: Partial<iSearchInput>) => {
 }
 
 const hasErrors = computed(() => accountItems.value.some(i => i.error))
+
 const filteredAccountItems = computed(() =>
   accountItems.value.filter(
     i =>
@@ -133,6 +134,23 @@ const filteredAccountItems = computed(() =>
       getValue('trading-account-upd-broker-servers-type')
   )
 )
+
+const updatePlacedTypeOptions = () => {
+  const options =
+    getValue('trading-account-upd-broker-servers-type') === 'MT4'
+      ? placedTypeMT4.value
+      : placedTypeMT5.value
+
+  const placedValue =
+    props.selectedAccount.brokerServerType === 1
+      ? placedTypeMT5.value?.[props.selectedAccount.placedTypeMt5 ?? '']
+      : placedTypeMT4.value?.[props.selectedAccount.placedTypeMt4 ?? '']
+
+  updateItem('trading-account-upd-placed-type', {
+    options,
+    value: placedValue || '',
+  })
+}
 
 const showPassword = () => (isPassword.value = !isPassword.value)
 
@@ -146,14 +164,12 @@ const onChange = (val: iInput) => {
 const getSelectedItem = ({ id, value }: iSelectInput) => {
   updateItem(id, {
     value,
-    error: getItem(id)?.required ?? false,
   })
 }
 
-const resetSelectedItem = ({ id, required }: iSearchInput) => {
+const resetSelectedItem = ({ id }: iSearchInput) => {
   updateItem(id, {
     value: '',
-    error: required ?? false,
   })
 }
 
@@ -224,15 +240,7 @@ watch(
       value: account.symbolSpec || '',
     })
 
-    const placedValue =
-      account.brokerServerType === 1
-        ? placedTypeMT5.value?.[account.placedTypeMt5 ?? '']
-        : placedTypeMT4.value?.[account.placedTypeMt4 ?? '']
-    console.log(placedTypeMT5.value)
-
-    updateItem('trading-account-upd-placed-type', {
-      value: placedValue || '',
-    })
+    updatePlacedTypeOptions()
   }
 )
 
@@ -240,9 +248,10 @@ watch(
   () => props.modalOpened,
   async () => {
     const { clients } = await getAllClients()
+    await getPlacedTypeMT4Enum()
+    await getPlacedTypeMT5Enum()
     serverList.value = clients
 
-    console.log(props.selectedAccount)
     const clientMappingData = clients.map(c => {
       if (c?.clientName && c?.ip) return `${c.clientName} - ${c.ip}`
       if (c?.clientName) return c.clientName
@@ -255,23 +264,21 @@ watch(
       value: '',
     })
 
-    await getPlacedTypeMT4Enum()
-    await getPlacedTypeMT5Enum()
+    updatePlacedTypeOptions()
   }
 )
 
 watch(
   () => getValue('trading-account-upd-broker-servers-type'),
-  val => {
-    const options = val === 'MT4' ? placedTypeMT4.value : placedTypeMT5.value
-    const placedValue =
-      props.selectedAccount.brokerServerType === 1
-        ? placedTypeMT5.value?.[props.selectedAccount.placedTypeMt5 ?? '']
-        : placedTypeMT4.value?.[props.selectedAccount.placedTypeMt4 ?? '']
+  () => {
+    const options =
+      getValue('trading-account-upd-broker-servers-type') === 'MT4'
+        ? placedTypeMT4.value
+        : placedTypeMT5.value
 
     updateItem('trading-account-upd-placed-type', {
       options,
-      value: placedValue || '',
+      value: '',
     })
   }
 )
