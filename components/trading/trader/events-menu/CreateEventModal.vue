@@ -44,9 +44,11 @@ const handleCreateModalClose = () => {
             id="create-event-id"
             required
             name="Event id"
-            type="text"
+            type="number"
             title="Event id"
             placeholder="Value from 0 to 100"
+            :min="0"
+            :max="100"
             :value="inputValue.toString()"
             @input-value="onInputChange"
           />
