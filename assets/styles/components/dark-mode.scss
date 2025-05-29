@@ -324,6 +324,28 @@
       }
     }
   }
+
+  .releases {
+    background-color: var(--gray-800);
+
+    .releases__title {
+      color: var(--white);
+    }
+
+    .releases__btn {
+      color: var(--white);
+      border-color: var(--white);
+
+      &:hover {
+        background-color: var(--gray-700);
+        border-color: var(--gray-700);
+      }
+    }
+
+    .release-item {
+      color: var(--white);
+    }
+  }
 }
 
 .dark-mode {

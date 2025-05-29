@@ -1,0 +1,55 @@
+.release-item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  color: var(--black);
+  padding: 8px;
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  margin-top: 12px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.release-item__title {
+  @include button-small;
+}
+
+.release-item__text {
+  display: flex;
+  align-items: flex-start;
+}
+
+.release-item__flag {
+  display: inline-block;
+  max-height: 1em;
+  margin-right: 8px;
+  vertical-align: bottom;
+  flex: 1 0 auto;
+}
+
+.release-item__country {
+  display: inline-block;
+  margin-right: 8px;
+  @include button-small;
+}
+
+.release-item__name {
+  @include text-small;
+  line-height: 1em;
+}
+
+.release-item__info {
+  @include text-small;
+}
+
+.release-item__date {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.release-item__time {
+  display: inline-block;
+}

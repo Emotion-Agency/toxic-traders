@@ -1,0 +1,31 @@
+.releases {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.releases__title {
+  color: var(--black);
+  @include heading-m-h6;
+}
+
+.releases__btn {
+  margin-top: 12px;
+  padding: 8px;
+  color: var(--black);
+  border: 1px solid;
+  border-color: var(--gray-300);
+  border-radius: 10px;
+  width: 100%;
+  text-align: start;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+  @include text-small;
+
+  &:hover {
+    background-color: var(--gray-400);
+    border-color: var(--gray-400);
+  }
+}
