@@ -23,12 +23,13 @@
   padding: 16px;
   overflow-y: auto;
   background-color: var(--white);
+  height: 100%;
 
-  &:first-child {
+  &--release {
     height: 35%;
   }
 
-  &:last-child {
+  &--balance {
     margin-top: 12px;
     height: 65%;
   }
