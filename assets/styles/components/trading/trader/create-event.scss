@@ -1,0 +1,14 @@
+.create-event__modal-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-top: 16px;
+}
+
+.create-event__buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+}

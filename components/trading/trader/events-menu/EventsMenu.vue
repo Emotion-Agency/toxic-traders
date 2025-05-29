@@ -1,4 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const createEventModalOpened = ref(false)
+
+const createEventModalOpen = () => {
+  createEventModalOpened.value = true
+}
+
+const createEventModalClose = () => {
+  createEventModalOpened.value = false
+}
+</script>
 
 <template>
   <div class="events-menu">
@@ -10,6 +20,7 @@
           button-size="small"
           variant="fill"
           class="events-menu__btn events-menu__btn--event"
+          @click="createEventModalOpen"
         >
           <template #start-icon>
             <IconsPlus />
@@ -56,5 +67,9 @@
         </TheButton>
       </div>
     </div>
+    <TradingTraderEventsMenuCreateEventModal
+      :modal-opened="createEventModalOpened"
+      @close="createEventModalClose"
+    />
   </div>
 </template>
