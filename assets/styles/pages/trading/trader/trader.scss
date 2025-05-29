@@ -10,22 +10,27 @@
 }
 
 .trader__side-content {
+  display: flex;
+  flex-direction: column;
   width: 236px;
   height: 100%;
   padding: 0 12px 12px;
-
-  &--right {
-    overflow-y: auto;
-    position: sticky;
-  }
 }
 
 .trader__list {
+  display: block;
+  border-radius: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: var(--white);
+
   &:first-child {
-    height: 30%;
+    height: 35%;
   }
+
   &:last-child {
-    height: 70%;
+    margin-top: 12px;
+    height: 65%;
   }
 }
 

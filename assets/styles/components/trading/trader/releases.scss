@@ -1,10 +1,3 @@
-.releases {
-  background-color: var(--white);
-  border-radius: 12px;
-  padding: 16px;
-  overflow-y: auto;
-}
-
 .releases__title {
   color: var(--black);
   @include heading-m-h6;

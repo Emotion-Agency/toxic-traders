@@ -1,0 +1,41 @@
+.balance-item__title {
+  @include heading-m-h6;
+}
+
+.balance-item__head-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.balance-item__head-item {
+  @include button-small;
+
+  &:last-child {
+    text-align: right;
+  }
+}
+
+.balance-item__list {
+  margin-top: 10px;
+}
+
+.balance-item__list-item {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  @include text-small;
+}
+
+.balance-item__percent {
+  text-align: right;
+
+  &--positive {
+    color: var(--status-success);
+  }
+
+  &--negative {
+    color: var(--status-danger);
+  }
+}

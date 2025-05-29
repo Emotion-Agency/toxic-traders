@@ -6,7 +6,7 @@
       <div class="trader__wrapper">
         <aside class="trader__side-content trader__side-content--left">
           <TradingTraderReleaseReleases class="trader__list" />
-          <TradingTraderBalanceList class="trader__list" />
+          <TradingTraderBalance class="trader__list" />
         </aside>
         <div class="trader__content">
           Center Content Lorem ipsum dolor sit amet consectetur adipisicing

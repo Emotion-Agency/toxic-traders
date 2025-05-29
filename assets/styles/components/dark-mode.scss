@@ -325,9 +325,11 @@
     }
   }
 
-  .releases {
+  .trader__list {
     background-color: var(--gray-800);
+  }
 
+  .releases {
     .releases__title {
       color: var(--white);
     }
