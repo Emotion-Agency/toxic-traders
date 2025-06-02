@@ -1,9 +1,12 @@
 .events-circles {
   position: relative;
-  min-height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &--loading {
+    min-height: 120px;
+  }
 }
 
 .events-circles__loader {

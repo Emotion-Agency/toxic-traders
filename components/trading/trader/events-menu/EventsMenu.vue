@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IEvent } from '~/types/events/events'
 
-const { getAllEvents, createEvent } = useEvents()
+const { getAllEvents, createEvent, deleteEvent } = useEvents()
 
 const createEventModalOpened = ref(false)
 const events = ref<IEvent[]>([])
@@ -29,6 +29,24 @@ const handleCreateEvent = async (val: string) => {
   await fetchAllEvents()
 }
 
+const handleDeleteEvent = async () => {
+  await deleteEvent(selectedEvent.value?.id)
+  await fetchAllEvents()
+  deleteModalOpened.value = false
+}
+
+const deleteModalOpened = ref(false)
+const selectedEvent = ref<IEvent | null>(null)
+
+const handleDeleteModalClose = () => {
+  deleteModalOpened.value = false
+}
+
+const handleDeleteModalOpen = async (event: IEvent) => {
+  deleteModalOpened.value = true
+  selectedEvent.value = event
+}
+
 onMounted(async () => {
   await fetchAllEvents()
 })
@@ -40,6 +58,7 @@ onMounted(async () => {
       <TradingTraderEventsMenuEventsCircles
         :events="events"
         :is-loading="eventsIsLoading"
+        @delete="handleDeleteModalOpen"
       />
       <div class="events-menu__btns">
         <TheButton
@@ -98,6 +117,13 @@ onMounted(async () => {
       :modal-opened="createEventModalOpened"
       @close="createEventModalClose"
       @create="handleCreateEvent"
+    />
+    <DeleteModal
+      :modal-opened="deleteModalOpened"
+      text="Are you sure you want to delete this event? This action cannot be prevented"
+      @close="handleDeleteModalClose"
+      @delete="handleDeleteEvent"
+      :is-loading="eventsIsLoading"
     />
   </div>
 </template>

@@ -50,6 +50,7 @@ export const useTradingAccounts = () => {
     try {
       const res = await createTradingAccountRequest(payload)
 
+      toast.success('Trading account created successfully.')
       return res
     } catch (error) {
       console.error('Error creating trading account:', error)
@@ -57,8 +58,6 @@ export const useTradingAccounts = () => {
         'An error occurred while creating the trading account. Please try again.'
       )
       throw error
-    } finally {
-      toast.success('Trading account created successfully.')
     }
   }
 
@@ -69,6 +68,7 @@ export const useTradingAccounts = () => {
     try {
       const res = await updateTradingAccountRequest(payload, id)
 
+      toast.success('Trading account updated successfully.')
       return res
     } catch (error) {
       console.error('Error updating trading account:', error)
@@ -76,8 +76,6 @@ export const useTradingAccounts = () => {
         'An error occurred while updating the trading account. Please try again.'
       )
       throw error
-    } finally {
-      toast.success('Trading account updated successfully.')
     }
   }
 
@@ -85,6 +83,7 @@ export const useTradingAccounts = () => {
     try {
       const res = await deleteTradingAccountRequest(id)
 
+      toast.success('Trading account deleted successfully.')
       return res
     } catch (error) {
       console.error('Error deleting trading account:', error)
@@ -92,8 +91,6 @@ export const useTradingAccounts = () => {
         'An error occurred while deleting the trading account. Please try again.'
       )
       throw error
-    } finally {
-      toast.success('Trading account deleted successfully.')
     }
   }
 

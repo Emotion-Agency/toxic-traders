@@ -31,6 +31,7 @@ export const useEvents = () => {
     try {
       const res = await createEventRequest(payload)
 
+      toast.success('Event created successfully.')
       return res
     } catch (error) {
       console.error('Error creating event:', error)
@@ -38,8 +39,6 @@ export const useEvents = () => {
         'An error occurred while creating the event. Please try again.'
       )
       throw error
-    } finally {
-      toast.success('Event created successfully.')
     }
   }
 
@@ -47,6 +46,7 @@ export const useEvents = () => {
     try {
       const res = await updateEventRequest(payload, id)
 
+      toast.success('Event updated successfully.')
       return res
     } catch (error) {
       console.error('Error updating event:', error)
@@ -54,8 +54,6 @@ export const useEvents = () => {
         'An error occurred while updating the event. Please try again.'
       )
       throw error
-    } finally {
-      toast.success('Event updated successfully.')
     }
   }
 
@@ -63,6 +61,7 @@ export const useEvents = () => {
     try {
       const res = await deleteEventRequest(id)
 
+      toast.success('Event deleted successfully.')
       return res
     } catch (error) {
       console.error('Error deleting event:', error)
@@ -70,8 +69,6 @@ export const useEvents = () => {
         'An error occurred while deleting the event. Please try again.'
       )
       throw error
-    } finally {
-      toast.success('Event deleted successfully.')
     }
   }
 

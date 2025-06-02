@@ -5,16 +5,18 @@ interface IProps {
   events?: IEvent[]
 }
 
-const props = defineProps<IProps>()
+defineProps<IProps>()
 
 const emit = defineEmits(['delete', 'update'])
 
 const $el = ref<HTMLElement | null>(null)
 const $wrapper = ref<HTMLElement | null>(null)
 const menuOpened = ref(false)
+const selectedEvent = ref<IEvent | null>(null)
 
-const toggleMenu = () => {
+const toggleMenu = (event: IEvent) => {
   menuOpened.value = !menuOpened.value
+  selectedEvent.value = event
   nextTick(() => {
     if ($el.value && $wrapper.value) {
       $el.value.style.height = menuOpened.value
@@ -54,7 +56,7 @@ onUnmounted(() => {
           'events-dropdown__circle--pending': event?.eventStatus === 2,
           'events-dropdown__circle--cancelled': event?.eventStatus === 3,
         }"
-        @click.prevent="toggleMenu"
+        @click.prevent="toggleMenu(event)"
         @click.stop
       >
         <p class="events-dropdown__num">{{ event?.eventId }}</p>
@@ -86,7 +88,7 @@ onUnmounted(() => {
             class="events-dropdown__menu-btn"
             @click="
               () => {
-                emit('delete')
+                emit('delete', selectedEvent)
                 menuOpened = false
               }
             "
