@@ -1,33 +1,46 @@
-.action-dropdown {
+.events-dropdown {
   position: relative;
 }
 
-.action-dropdown__actions {
+.events-dropdown__circles {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  gap: 12px;
+}
 
-  span {
-    display: block;
-    width: 4px;
-    height: 4px;
-    background-color: var(--black);
-    border-radius: 100%;
+.events-dropdown__circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  width: 64px;
+  height: 64px;
+  transition: opacity 0.3s ease;
+
+  &--warning {
+    background-color: var(--status-warning);
+  }
+
+  &--success {
+    background-color: var(--status-success);
+  }
+
+  &:hover {
+    opacity: 0.8;
   }
 }
 
-.action-dropdown__actions-btn {
-  background-color: transparent;
+.events-dropdown__num {
+  @include button-small;
 }
 
-.action-dropdown__menu {
+.events-dropdown__menu {
   position: absolute;
-  top: 24px;
-  right: 0;
-  min-width: 208px;
+  top: 72px;
+  left: 0;
+  min-width: 188px;
   width: 100%;
   overflow: hidden;
   opacity: 0;
@@ -37,8 +50,10 @@
     height 0.3s ease,
     opacity 0.3s ease;
   z-index: 1;
+  box-shadow:
+    0 1px 4px 0 rgba(12, 12, 13, 0.05),
+    0 1px 4px 0 rgba(12, 12, 13, 0.1);
   border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(12, 12, 13, 0.05);
 
   &--opened {
     opacity: 1;
@@ -46,12 +61,12 @@
   }
 }
 
-.action-dropdown__menu-wrapper {
+.events-dropdown__menu-wrapper {
   padding: 16px;
   background-color: var(--white);
 }
 
-.action-dropdown__menu-content {
+.events-dropdown__menu-content {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -60,15 +75,20 @@
   height: 100%;
 }
 
-.action-dropdown__menu-btn {
+.events-dropdown__title {
+  color: var(--secondary-dark);
+  @include heading-b-h6;
+}
+
+.events-dropdown__menu-btn {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   column-gap: 10px;
   background-color: transparent;
-  @include text-body;
   transition: opacity 0.3s ease;
   color: var(--secondary-dark);
+  @include text-body;
 
   &:hover {
     opacity: 0.5;
