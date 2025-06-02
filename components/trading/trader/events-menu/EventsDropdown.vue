@@ -1,4 +1,12 @@
 <script lang="ts" setup>
+import type { IEvent } from '~/types/events/events'
+
+interface IProps {
+  events?: IEvent[]
+}
+
+const props = defineProps<IProps>()
+
 const emit = defineEmits(['delete', 'update'])
 
 const $el = ref<HTMLElement | null>(null)
@@ -36,20 +44,20 @@ onUnmounted(() => {
   <div class="events-dropdown">
     <div class="events-dropdown__circles">
       <button
+        v-for="(event, idx) in events"
+        :key="idx"
         type="button"
-        class="events-dropdown__circle events-dropdown__circle--warning"
+        class="events-dropdown__circle"
+        :class="{
+          'events-dropdown__circle--new': event?.eventStatus === 0,
+          'events-dropdown__circle--done': event?.eventStatus === 1,
+          'events-dropdown__circle--pending': event?.eventStatus === 2,
+          'events-dropdown__circle--cancelled': event?.eventStatus === 3,
+        }"
         @click.prevent="toggleMenu"
         @click.stop
       >
-        <p class="events-dropdown__num">10</p>
-      </button>
-      <button
-        type="button"
-        class="events-dropdown__circle events-dropdown__circle--success"
-        @click.prevent="toggleMenu"
-        @click.stop
-      >
-        <p class="events-dropdown__num">15</p>
+        <p class="events-dropdown__num">{{ event?.eventId }}</p>
       </button>
     </div>
 

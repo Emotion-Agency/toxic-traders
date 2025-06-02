@@ -1,13 +1,18 @@
 .events-dropdown {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .events-dropdown__circles {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 12px;
+  width: 100%;
+  max-width: 140px;
 }
 
 .events-dropdown__circle {
@@ -19,12 +24,20 @@
   height: 64px;
   transition: opacity 0.3s ease;
 
-  &--warning {
+  &--new {
+    background-color: var(--secondary-default);
+  }
+
+  &--done {
+    background-color: var(--status-success);
+  }
+
+  &--pending {
     background-color: var(--status-warning);
   }
 
-  &--success {
-    background-color: var(--status-success);
+  &--cancelled {
+    background-color: var(--status-danger);
   }
 
   &:hover {
@@ -38,7 +51,7 @@
 
 .events-dropdown__menu {
   position: absolute;
-  top: 72px;
+  top: calc(100% + 8px);
   left: 0;
   min-width: 188px;
   width: 100%;
