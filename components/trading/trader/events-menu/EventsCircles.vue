@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import type { IEvent } from '~/types/events/events'
 
-const { getAllEvents } = useEvents()
-const events = ref<IEvent[]>([])
-const isLoading = ref(false)
+interface IProps {
+  events: IEvent[]
+  isLoading?: boolean
+}
 
-onMounted(async () => {
-  try {
-    isLoading.value = true
-    events.value = await getAllEvents()
-  } catch (error) {
-    console.error('Failed to fetch events:', error)
-  } finally {
-    isLoading.value = false
-  }
-})
+defineProps<IProps>()
 </script>
 
 <template>

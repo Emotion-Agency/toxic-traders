@@ -1,7 +1,7 @@
 export interface ICreateEventPayload {
-  id: number
+  id?: number
   eventId: string
-  eventStatus: number
+  eventStatus?: number
 }
 
 export interface IUpdateEventPayload {

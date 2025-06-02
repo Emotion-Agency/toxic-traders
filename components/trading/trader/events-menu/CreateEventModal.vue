@@ -7,7 +7,7 @@ interface iProps {
 
 defineProps<iProps>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'create'])
 
 const inputValue = ref('')
 
@@ -16,11 +16,15 @@ const onInputChange = (e: iInput) => {
 }
 
 const resetInputs = () => {
-  inputValue.value = ''
+  inputValue.value = null
 }
 
 const handleSubmit = async () => {
-  console.log('Event created')
+  if (!inputValue.value) {
+    return
+  }
+
+  emit('create', inputValue.value)
 
   resetInputs()
   emit('close')
@@ -49,7 +53,7 @@ const handleCreateModalClose = () => {
             placeholder="Value from 0 to 100"
             :min="0"
             :max="100"
-            :value="inputValue.toString()"
+            :value="inputValue?.toString()"
             @input-value="onInputChange"
           />
         </div>

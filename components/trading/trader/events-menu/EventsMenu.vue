@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import type { IEvent } from '~/types/events/events'
+
+const { getAllEvents, createEvent } = useEvents()
+
 const createEventModalOpened = ref(false)
+const events = ref<IEvent[]>([])
+const eventsIsLoading = ref(false)
 
 const createEventModalOpen = () => {
   createEventModalOpened.value = true
@@ -8,12 +14,33 @@ const createEventModalOpen = () => {
 const createEventModalClose = () => {
   createEventModalOpened.value = false
 }
+
+const fetchAllEvents = async () => {
+  try {
+    eventsIsLoading.value = true
+    events.value = await getAllEvents()
+  } finally {
+    eventsIsLoading.value = false
+  }
+}
+
+const handleCreateEvent = async (val: string) => {
+  await createEvent({ eventId: val })
+  await fetchAllEvents()
+}
+
+onMounted(async () => {
+  await fetchAllEvents()
+})
 </script>
 
 <template>
   <div class="events-menu">
     <div class="events-menu__wrapper">
-      <TradingTraderEventsMenuEventsCircles />
+      <TradingTraderEventsMenuEventsCircles
+        :events="events"
+        :is-loading="eventsIsLoading"
+      />
       <div class="events-menu__btns">
         <TheButton
           tag="button"
@@ -70,6 +97,7 @@ const createEventModalClose = () => {
     <TradingTraderEventsMenuCreateEventModal
       :modal-opened="createEventModalOpened"
       @close="createEventModalClose"
+      @create="handleCreateEvent"
     />
   </div>
 </template>
