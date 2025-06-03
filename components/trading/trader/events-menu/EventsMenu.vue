@@ -81,17 +81,7 @@ onMounted(async () => {
         >
           100%
         </TheButton>
-        <TheButton
-          tag="button"
-          button-size="small"
-          variant="outlined"
-          class="events-menu__btn events-menu__btn--terminal"
-        >
-          <template #start-icon>
-            <IconsTerminal />
-          </template>
-          Add terminals
-        </TheButton>
+        <TradingTraderEventsMenuTerminalsSteps />
         <TheButton
           tag="button"
           button-size="small"
