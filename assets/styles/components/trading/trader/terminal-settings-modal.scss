@@ -1,2 +1,10 @@
 .terminals-settings-modal {
 }
+
+.terminals-settings-modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+}

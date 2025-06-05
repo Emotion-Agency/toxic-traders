@@ -5,16 +5,16 @@ import type {
 } from '~/types/trading-accounts/tradingAccounts'
 
 export const getAllTradingAccountsRequest = async (
-  payload: IGetAllTradingAccountsPayload
+  payload?: IGetAllTradingAccountsPayload
 ): Promise<ITradingAccountsData> => {
   const { data } = await axiosInstance.get<ITradingAccountsData>(
     '/TradingAccounts',
     {
       params: {
-        page: payload.page,
-        count: payload.count,
-        sort: payload.sortBy ?? 'id',
-        sortOrder: payload.sortOrder ?? 0,
+        page: payload?.page,
+        count: payload?.count,
+        sort: payload?.sortBy ?? 'id',
+        sortOrder: payload?.sortOrder ?? 0,
       },
     }
   )

@@ -17,7 +17,7 @@ export const useTradingAccounts = () => {
   const { toast } = useToasts()
 
   const getAllTradingAccounts = async (
-    payload: IGetAllTradingAccountsPayload
+    payload?: IGetAllTradingAccountsPayload
   ): Promise<ITradingAccountsData> => {
     try {
       const data = await getAllTradingAccountsRequest(payload)

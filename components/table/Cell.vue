@@ -19,7 +19,7 @@ const onSort = () => {
 
 <template>
   <div class="table-cell">
-    <button v-if="isSort" class="table-cell__btn" @click="onSort">
+    <button v-if="isSort" type="button" class="table-cell__btn" @click="onSort">
       <slot />
       <IconsDownArrow v-if="sortOrder === 1 && isActive" />
       <IconsUpArrow v-else-if="sortOrder === 2 && isActive" />
