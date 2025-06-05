@@ -21,14 +21,13 @@ const isAllSelected = computed(
   () =>
     tradingAccounts.value.length > 0 &&
     tradingAccounts.value.every(acc =>
-      selectedAccounts.value.some(a => a.id === acc.id)
+      selectedAccounts.value.some(a => a?.id === acc?.id)
     )
 )
 
 const fetchTradingAccounts = async () => {
   try {
     isLoading.value = true
-
     const { items } = await getAllTradingAccounts()
 
     tradingAccounts.value = items
@@ -37,8 +36,8 @@ const fetchTradingAccounts = async () => {
   }
 }
 
-const handleSubmit = async () => {
-  emit('next')
+const handleSubmit = () => {
+  emit('next', selectedAccounts.value)
 }
 
 const handleCreateModalClose = () => {
@@ -80,7 +79,6 @@ const { sortState, onSort } = useSort(
 
 onMounted(async () => {
   await fetchTradingAccounts()
-  console.log(tradingAccounts.value)
 })
 </script>
 
@@ -192,6 +190,7 @@ onMounted(async () => {
           variant="fill"
           button-size="medium"
           type="submit"
+          :disabled="!selectedAccounts.length"
         >
           Next
         </TheButton>

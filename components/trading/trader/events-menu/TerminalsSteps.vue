@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ITradingAccount } from '~/types/trading-accounts/tradingAccounts'
+
 const currentStep = ref(0)
 
 const addTerminalsModalOpened = computed(() => currentStep.value === 1)
@@ -6,8 +8,9 @@ const terminalsSettingsModalOpened = computed(() => currentStep.value === 2)
 
 const openAddTerminalsModal = () => (currentStep.value = 1)
 
-const nextStep = () => {
+const nextStep = (selectedAccounts: ITradingAccount[]) => {
   if (currentStep.value === 1) currentStep.value = 2
+  console.log('selectedAccounts', selectedAccounts)
 }
 
 const closeAll = () => (currentStep.value = 0)
