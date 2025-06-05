@@ -90,7 +90,7 @@ onMounted(async () => {
   >
     <form novalidate @submit.prevent="handleSubmit" class="add-terminals-modal">
       <div class="add-terminals-modal__modal-content">
-        <UiLoader v-if="isLoading" class="calendar-chart__loader" />
+        <UiLoader v-if="isLoading" class="add-terminals-modal__loader" />
         <Table v-else-if="tradingAccounts.length">
           <TableHead>
             <TableRow>
