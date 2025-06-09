@@ -154,11 +154,11 @@ export interface ITradingAccountsData {
   items: ITradingAccount[]
 }
 
-export interface ICreateTradingAccountPayload {
+export interface ITradingAccountPayload {
   name: string
   login: string
   password: string
-  servers?: number
+  // servers?: IBindToClientPayload
   brokerServerType?: number
   brokerName?: string
   brokerServer?: string
@@ -167,15 +167,7 @@ export interface ICreateTradingAccountPayload {
   placedTypeMt5?: string
 }
 
-export interface IUpdateTradingAccountPayload {
-  name: string
-  login: string
-  password: string
-  servers?: number
-  brokerServerType?: number
-  brokerName?: string
-  brokerServer?: string
-  symbolSpec?: string
-  placedTypeMt4?: string
-  placedTypeMt5?: string
+export interface IBindToClientPayload {
+  tradingAccountId: number
+  clientId: number
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {
-  ICreateTradingAccountPayload,
+  ITradingAccountPayload,
   ITradingAccount,
   ITradingAccountWithBalance,
 } from '~/types/trading-accounts/tradingAccounts'
@@ -18,6 +18,7 @@ const {
 } = useTradingAccounts()
 
 const { updateCurrBalance } = useBalances()
+const { bindToClient } = useBindClients()
 const { toast } = useToasts()
 
 const accounts = ref<ITradingAccountWithBalance[]>([])
@@ -116,8 +117,15 @@ const handleCreateAccountModalOpen = () => {
   createAccountModalOpened.value = true
 }
 
-const handleCreateAccount = async (acc: ICreateTradingAccountPayload) => {
+const handleCreateAccount = async ({
+  acc,
+  clientId,
+}: {
+  acc: ITradingAccountPayload
+  clientId: number
+}) => {
   await createTradingAccount(acc)
+  // await bindToClient(clientId, acc?.id)
   createAccountModalOpened.value = false
   await fetchAllAccounts()
 }
@@ -131,7 +139,7 @@ const handleUpdateAccountModalClose = () => {
   updateAccountModalOpened.value = false
 }
 
-const handleUpdateAccount = async (acc: ICreateTradingAccountPayload) => {
+const handleUpdateAccount = async (acc: ITradingAccountPayload) => {
   await updateTradingAccount(acc, selectedAccount.value?.id)
   updateAccountModalOpened.value = false
   await fetchAllAccounts()

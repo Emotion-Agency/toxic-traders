@@ -21,6 +21,7 @@ const { getAllClients } = useClients()
 const isPassword = ref(false)
 const selectedPlacedType = ref<number | null>(null)
 const serverList = ref<IClient[]>()
+const selectedServer = ref<IClient | null>(null)
 
 const accountItems = ref<iSearchInput[]>([
   {
@@ -146,6 +147,12 @@ const getSelectedItem = ({ id, value }: iSelectInput) => {
       ? !!getValue('trading-account-broker-placed-type')
       : (getItem(id)?.required ?? false),
   })
+
+  if (id === 'trading-account-servers') {
+    selectedServer.value = serverList.value?.find(
+      server => server?.ip?.toString() === value?.toString()
+    )
+  }
 }
 
 const resetSelectedItem = ({ id, required }: iSearchInput) => {
@@ -173,7 +180,6 @@ const handleSubmit = () => {
     name: getValue('trading-account-name'),
     login: getValue('trading-account-login'),
     password: getValue('trading-account-password'),
-    servers: null,
     brokerServerType: serverType ? (isMT5 ? 1 : 0) : null,
     brokerName: getValue('trading-account-broker-name'),
     brokerServer: getValue('trading-account-broker-server'),
@@ -186,7 +192,10 @@ const handleSubmit = () => {
     Object.entries(payload).filter(([, v]) => v != null && v !== '')
   )
 
-  emit('create', filteredPayload)
+  emit('create', {
+    clientId: selectedServer.value?.id,
+    acc: filteredPayload,
+  })
 }
 
 watch(

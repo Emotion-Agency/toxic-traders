@@ -1,9 +1,8 @@
 import type {
-  ICreateTradingAccountPayload,
+  ITradingAccountPayload,
   IGetAllTradingAccountsPayload,
   ITradingAccount,
   ITradingAccountsData,
-  IUpdateTradingAccountPayload,
 } from '~/types/trading-accounts/tradingAccounts'
 import { getAllTradingAccountsRequest } from '~/utils/api/trading-accounts/getAllTradingAccounts'
 import {
@@ -44,9 +43,7 @@ export const useTradingAccounts = () => {
     }
   }
 
-  const createTradingAccount = async (
-    payload: ICreateTradingAccountPayload
-  ) => {
+  const createTradingAccount = async (payload: ITradingAccountPayload) => {
     try {
       const res = await createTradingAccountRequest(payload)
 
@@ -62,7 +59,7 @@ export const useTradingAccounts = () => {
   }
 
   const updateTradingAccount = async (
-    payload: IUpdateTradingAccountPayload,
+    payload: ITradingAccountPayload,
     id: number
   ) => {
     try {

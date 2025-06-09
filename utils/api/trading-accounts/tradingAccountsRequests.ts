@@ -1,8 +1,5 @@
 import axiosInstance from '../axiosInstance'
-import type {
-  ICreateTradingAccountPayload,
-  IUpdateTradingAccountPayload,
-} from '~/types/trading-accounts/tradingAccounts'
+import type { ITradingAccountPayload } from '~/types/trading-accounts/tradingAccounts'
 
 export const getTradingAccountRequest = async (id: number) => {
   try {
@@ -15,7 +12,7 @@ export const getTradingAccountRequest = async (id: number) => {
 }
 
 export const createTradingAccountRequest = async (
-  payload: ICreateTradingAccountPayload
+  payload: ITradingAccountPayload
 ) => {
   try {
     const res = await axiosInstance.post('/TradingAccounts', payload)
@@ -27,7 +24,7 @@ export const createTradingAccountRequest = async (
 }
 
 export const updateTradingAccountRequest = async (
-  payload: IUpdateTradingAccountPayload,
+  payload: ITradingAccountPayload,
   id: number
 ) => {
   try {
