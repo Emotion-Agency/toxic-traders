@@ -40,7 +40,7 @@ watch(
       :disabled="disabled"
       class="checkbox-input__type"
       :checked="isChecked"
-      @change="emit('inputValue', { value, isChecked })"
+      @change="emit('inputValue', { id, value, isChecked })"
     />
     <span class="checkbox-input__checkmark">
       <IconsCheck />

@@ -141,7 +141,7 @@ onMounted(async () => {
                 <InputCheckbox
                   name="Choose terminal"
                   value=""
-                  :id="`access-${account.id}`"
+                  :id="`terminal-${account.id}`"
                   :checked="selectedAccounts.some(a => a.id === account.id)"
                   @input-value="
                     payload => toggleSelectAccount(payload, account)

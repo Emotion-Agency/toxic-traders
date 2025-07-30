@@ -284,9 +284,9 @@ const handleTerminalsSettingsModalClose = () => {
               >
                 <InputCheckbox
                   v-if="field?.input?.type === 'checkbox'"
-                  name="Choose terminal"
+                  :name="field?.input?.name"
                   value=""
-                  :id="`access-${field?.input?.id}`"
+                  :id="field?.input?.id"
                   @input-value="toggleSelect"
                 />
                 <InputField
