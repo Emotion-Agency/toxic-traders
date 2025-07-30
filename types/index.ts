@@ -26,6 +26,12 @@ export interface iInput {
   error: boolean
 }
 
+export interface iCheckbox {
+  id: string
+  value: string
+  isChecked: boolean
+}
+
 export interface iSelectInput {
   id: string
   value: string

@@ -26,3 +26,9 @@ export const formatToSnakeCase = (name: string) => {
 export const getBrokerHeadings = (names: iBroker) => {
   return Object.keys(names)
 }
+
+export const formatToPascalCase = (str: string) =>
+  str
+    .split(/[\s_-]+/)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('')

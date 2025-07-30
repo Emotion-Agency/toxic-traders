@@ -1,244 +1,279 @@
 <script lang="ts" setup>
-import type { IInput } from '~/types/headless/input'
+import type { iCheckbox, iInput } from '~/types'
 
 interface iProps {
   modalOpened: boolean
 }
 
-defineProps<iProps>()
+const props = defineProps<iProps>()
+
+interface iInputField {
+  id: string
+  name: string
+  type: 'text' | 'number' | 'checkbox'
+  value: string | boolean
+  placeholder: string
+  required: boolean
+}
 
 const emit = defineEmits(['close', 'create'])
 
 const headerFields = ['Variable', 'Value']
+const originalValues = ref<Record<string, string | boolean>>({})
 
-const fieldsList = ref([
+const inputsList = ref<iInputField[]>([
   {
-    variable: 'Pair',
-    input: {
-      id: 'terminal-settings-pair',
-      name: 'Terminal pair',
-      type: 'text',
-      value: '',
-      placeholder: 'Placeholder',
-      required: false,
-    },
+    id: 'terminal-settings-pair',
+    name: 'Pair',
+    type: 'text',
+    value: '',
+    placeholder: 'Placeholder',
+    required: false,
   },
   {
-    variable: 'LotN',
-    input: {
-      id: 'terminal-settings-lotn',
-      name: 'Lot N',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-lotn',
+    name: 'Lot N',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'LotA',
-    input: {
-      id: 'terminal-settings-lota',
-      name: 'Lot A',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-lota',
+    name: 'Lot A',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'LotT',
-    input: {
-      id: 'terminal-settings-lott',
-      name: 'Lot T',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-lott',
+    name: 'Lot T',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'SlippageN',
-    input: {
-      id: 'terminal-settings-slippagen',
-      name: 'Slippage N',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-slippagen',
+    name: 'Slippage N',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'SlippageA',
-    input: {
-      id: 'terminal-settings-slippagea',
-      name: 'Slippage A',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-slippagea',
+    name: 'Slippage A',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'SlippageT',
-    input: {
-      id: 'terminal-settings-slippaget',
-      name: 'Slippage T',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-slippaget',
+    name: 'Slippage T',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'profitN',
-    input: {
-      id: 'terminal-settings-profitn',
-      name: 'Profit N',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-profitn',
+    name: 'Profit N',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'profitA',
-    input: {
-      id: 'terminal-settings-profita',
-      name: 'Profit A',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-profita',
+    name: 'Profit A',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'profitT',
-    input: {
-      id: 'terminal-settings-profitt',
-      name: 'Profit T',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-profitt',
+    name: 'Profit T',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'stoploss',
-    input: {
-      id: 'terminal-settings-stoploss',
-      name: 'Stop Loss',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-stoploss',
+    name: 'Stop Loss',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'WhenBE',
-    input: {
-      id: 'terminal-settings-whenbe',
-      name: 'When BE',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-whenbe',
+    name: 'When BE',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'WhereBE',
-    input: {
-      id: 'terminal-settings-wherebe',
-      name: 'Where BE',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-wherebe',
+    name: 'Where BE',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'TrailingWhen',
-    input: {
-      id: 'terminal-settings-trailingwhen',
-      name: 'Trailing When',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-trailingwhen',
+    name: 'Trailing When',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'TrailingStep',
-    input: {
-      id: 'terminal-settings-trailingstep',
-      name: 'Trailing Step',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-trailingstep',
+    name: 'Trailing Step',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'Reverse',
-    input: {
-      id: 'terminal-settings-reverse',
-      name: 'Reverse',
-      type: 'checkbox',
-      value: false,
-      placeholder: '',
-      required: false,
-    },
+    id: 'terminal-settings-reverse',
+    name: 'Reverse',
+    type: 'checkbox',
+    value: false,
+    placeholder: '',
+    required: false,
   },
   {
-    variable: 'Spread',
-    input: {
-      id: 'terminal-settings-spread',
-      name: 'Spread',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-spread',
+    name: 'Spread',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'Timer',
-    input: {
-      id: 'terminal-settings-timer',
-      name: 'Timer',
-      type: 'number',
-      value: '',
-      placeholder: '0',
-      required: false,
-    },
+    id: 'terminal-settings-timer',
+    name: 'Timer',
+    type: 'number',
+    value: '',
+    placeholder: '0',
+    required: false,
   },
   {
-    variable: 'UsePairSuffix',
-    input: {
-      id: 'terminal-settings-usepairsuffix',
-      name: 'Use Pair Suffix',
-      type: 'checkbox',
-      value: false,
-      placeholder: '',
-      required: false,
-    },
+    id: 'terminal-settings-usepairsuffix',
+    name: 'Use Pair Suffix',
+    type: 'checkbox',
+    value: false,
+    placeholder: '',
+    required: false,
   },
 ])
 
-const onChange = (val: IInput) => {
-  console.log(val)
+const isSubmitDisabled = computed(() =>
+  inputsList.value.every(field =>
+    field.type === 'checkbox' ? field.value === false : field.value === ''
+  )
+)
+
+const onChange = (val: iInput) => {
+  inputsList.value = inputsList.value.map(item => {
+    if (item.id === val.id) {
+      item = {
+        ...item,
+
+        value: val.value?.toString(),
+      }
+    }
+    return item
+  })
 }
 
-const toggleSelect = (val: { value: string; isChecked: boolean }) => {
-  console.log(val)
+const toggleSelect = (val: iCheckbox) => {
+  inputsList.value = inputsList.value.map(item => {
+    if (item.id === val.id) {
+      item = {
+        ...item,
+        value: val.isChecked,
+      }
+    }
+    return item
+  })
 }
 
-const handleSubmit = async () => {
-  emit('create')
+const resetInputs = () => {
+  inputsList.value = inputsList.value.map(field => ({
+    ...field,
+    value: field.type === 'checkbox' ? false : '',
+  }))
+}
+
+const fieldIdToKeyMap: Record<string, string> = {
+  'terminal-settings-pair': 'symbol',
+  'terminal-settings-lotn': 'lotN',
+  'terminal-settings-lota': 'lotA',
+  'terminal-settings-lott': 'lotT',
+  'terminal-settings-slippagen': 'slppN',
+  'terminal-settings-slippagea': 'slppA',
+  'terminal-settings-slippaget': 'slppT',
+  'terminal-settings-profitn': 'profN',
+  'terminal-settings-profita': 'profA',
+  'terminal-settings-profitt': 'profT',
+  'terminal-settings-stoploss': 'sl',
+  'terminal-settings-whenbe': 'whenBE',
+  'terminal-settings-wherebe': 'whereBE',
+  'terminal-settings-trailingwhen': 'trailWhen',
+  'terminal-settings-trailingstep': 'trailStep',
+  'terminal-settings-reverse': 'reverse',
+  'terminal-settings-spread': 'spread',
+  'terminal-settings-timer': 'timer',
+  'terminal-settings-usepairsuffix': 'usePairSuffix',
+}
+
+const handleSubmit = () => {
+  const submitData = inputsList.value.reduce(
+    (acc, field) => {
+      const key = fieldIdToKeyMap[field.id]
+      if (key && field.value !== originalValues.value[key]) {
+        acc[key] = field.value
+      }
+      return acc
+    },
+    {} as Record<string, string | boolean>
+  )
+
+  resetInputs()
+
+  console.log('submitData:', submitData)
+  emit('create', submitData)
   emit('close')
 }
 
 const handleTerminalsSettingsModalClose = () => {
   emit('close')
 }
+
+watch(
+  () => props.modalOpened,
+  isOpen => {
+    if (isOpen) {
+      originalValues.value = inputsList.value.reduce(
+        (acc, field) => {
+          const key = fieldIdToKeyMap[field.id]
+          if (key) acc[key] = field.value
+          return acc
+        },
+        {} as Record<string, string | boolean>
+      )
+    }
+  }
+)
 </script>
 
 <template>
@@ -270,12 +305,12 @@ const handleTerminalsSettingsModalClose = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow v-for="(field, idx) in fieldsList" :key="idx">
+            <TableRow v-for="(field, idx) in inputsList" :key="idx">
               <TableCell
-                :item="field?.variable"
+                :item="formatToPascalCase(field?.name)"
                 :class="[`table-cell--${headerFields[idx]}`]"
               >
-                {{ field?.variable }}
+                {{ field?.name }}
               </TableCell>
               <TableCell
                 item="choose"
@@ -283,19 +318,19 @@ const handleTerminalsSettingsModalClose = () => {
                 :class="[`table-cell--${headerFields[idx]}`]"
               >
                 <InputCheckbox
-                  v-if="field?.input?.type === 'checkbox'"
-                  :name="field?.input?.name"
+                  v-if="field?.type === 'checkbox'"
+                  :name="field?.name"
                   value=""
-                  :id="field?.input?.id"
+                  :id="field?.id"
                   @input-value="toggleSelect"
                 />
                 <InputField
                   v-else
-                  :id="field?.input?.id"
-                  :required="field?.input?.required"
-                  :name="field?.input?.name"
-                  :type="field?.input?.type"
-                  :placeholder="field?.input?.placeholder"
+                  :id="field?.id"
+                  :required="field?.required"
+                  :name="field?.name"
+                  :type="field?.type"
+                  :placeholder="field?.placeholder"
                   @input-value="onChange"
                 />
               </TableCell>
@@ -317,6 +352,7 @@ const handleTerminalsSettingsModalClose = () => {
           variant="fill"
           button-size="medium"
           type="submit"
+          :disabled="isSubmitDisabled"
         >
           Ok
         </TheButton>
