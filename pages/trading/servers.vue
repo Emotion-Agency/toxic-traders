@@ -43,7 +43,7 @@ const fetchAllServers = async () => {
       sortOrder: sortedOrder.value,
     })
 
-    servers.value = clients
+    servers.value = clients ?? []
     totalCountPages.value = totalCount
   } finally {
     isLoading.value = false
@@ -148,7 +148,7 @@ onMounted(async () => {
 
     <section class="servers-content">
       <UiLoader v-if="isLoading" />
-      <div v-else-if="servers.length" class="servers-content__table-wrapper">
+      <div v-else-if="servers?.length" class="servers-content__table-wrapper">
         <TradingServersTable
           :servers="servers"
           :default-sort-by="sortedBy"
@@ -173,11 +173,8 @@ onMounted(async () => {
           @on-change-value="onInputChange"
         />
       </div>
+      <NotFound v-else message="Oops! No servers found" />
     </section>
-    <NotFound
-      v-if="!servers.length && !isLoading"
-      message="Oops! No servers found"
-    />
     <DeleteModal
       :modal-opened="deleteModalOpened"
       text="Are you sure you want to delete this account? This action cannot be prevented"
