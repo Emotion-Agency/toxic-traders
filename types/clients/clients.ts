@@ -11,7 +11,7 @@ export interface IClient {
 
 export interface IClientData {
   totalCount: number
-  clients: IClient[]
+  items: IClient[]
 }
 
 export interface IGetAllClientsPayload {

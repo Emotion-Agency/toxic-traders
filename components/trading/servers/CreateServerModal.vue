@@ -122,6 +122,7 @@ const handleCreateModalClose = () => {
           variant="fill"
           button-size="medium"
           :disabled="serversInputs.some(input => !input.value)"
+          type="submit"
         >
           Create
         </TheButton>

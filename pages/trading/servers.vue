@@ -5,7 +5,7 @@ import type { IClient } from '~/types/clients/clients'
 const router = useRouter()
 const route = useRoute()
 
-const { getAllClients, deleteClient, getClient } = useClients()
+const { getAllClients, deleteClient } = useClients()
 
 const servers = ref<IClient[]>([])
 
@@ -36,7 +36,7 @@ const fetchAllServers = async () => {
   try {
     isLoading.value = true
 
-    const { clients, totalCount } = await getAllClients({
+    const { items: clients, totalCount } = await getAllClients({
       page: currentPage.value,
       count: itemsCount.value,
       sortBy: removeSpaces(formatToSnakeCase(sortedBy.value)),
@@ -78,13 +78,16 @@ const handleDeleteModalClose = () => {
   selectedServer.value = null
 }
 
-const handleDeleteModalOpen = async (id: number) => {
-  selectedServer.value = await getClient(id)
+const getServerFromList = (id: number) =>
+  servers.value.find(server => server.id === id) ?? null
+
+const handleDeleteModalOpen = (id: number) => {
+  selectedServer.value = getServerFromList(id)
   deleteModalOpened.value = true
 }
 
-const handleUpdateModalOpen = async (id: number) => {
-  selectedServer.value = await getClient(id)
+const handleUpdateModalOpen = (id: number) => {
+  selectedServer.value = getServerFromList(id)
   updateModalOpened.value = true
 }
 

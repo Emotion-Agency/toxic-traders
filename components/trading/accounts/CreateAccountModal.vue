@@ -201,7 +201,7 @@ const handleSubmit = () => {
 watch(
   () => props.modalOpened,
   async () => {
-    const { clients } = await getAllClients()
+    const { items: clients } = await getAllClients()
     serverList.value = clients
     const clientMappingData = clients.map(c => {
       if (c?.clientName && c?.ip) return `${c.clientName} - ${c.ip}`

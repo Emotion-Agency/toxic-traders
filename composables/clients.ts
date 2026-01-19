@@ -1,5 +1,4 @@
 import type {
-  IClient,
   IClientData,
   IGetAllClientsPayload,
   ICreateClientPayload,
@@ -8,7 +7,6 @@ import type {
 import {
   createClientRequest,
   deleteClientRequest,
-  getClientRequest,
   updateClientRequest,
 } from '~/utils/api/clients/clientRequests'
 import { getAllClientsRequest } from '~/utils/api/clients/getAllClients'
@@ -26,19 +24,6 @@ export const useClients = () => {
       console.error('Error fetching all clients:', error)
       toast.error(
         'An error occurred while fetching all clients. Please try again.'
-      )
-      throw error
-    }
-  }
-
-  const getClient = async (id: number): Promise<IClient> => {
-    try {
-      const { data } = await getClientRequest(id)
-      return data
-    } catch (error) {
-      console.error('Error fetching client:', error)
-      toast.error(
-        'An error occurred while fetching the client. Please try again.'
       )
       throw error
     }
@@ -86,5 +71,5 @@ export const useClients = () => {
     }
   }
 
-  return { getAllClients, getClient, createClient, updateClient, deleteClient }
+  return { getAllClients, createClient, updateClient, deleteClient }
 }

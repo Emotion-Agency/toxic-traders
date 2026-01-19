@@ -4,16 +4,6 @@ import type {
 } from '~/types/clients/clients'
 import axiosInstance from '../axiosInstance'
 
-export const getClientRequest = async (id: number) => {
-  try {
-    const res = await axiosInstance.get(`/Clients/${id}`)
-
-    return res
-  } catch (error) {
-    throw error
-  }
-}
-
 export const createClientRequest = async (payload: ICreateClientPayload) => {
   try {
     const res = await axiosInstance.post('/Clients', payload)

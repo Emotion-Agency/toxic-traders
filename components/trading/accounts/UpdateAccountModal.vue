@@ -247,7 +247,7 @@ watch(
 watch(
   () => props.modalOpened,
   async () => {
-    const { clients } = await getAllClients()
+    const { items: clients } = await getAllClients()
     await getPlacedTypeMT4Enum()
     await getPlacedTypeMT5Enum()
     serverList.value = clients
