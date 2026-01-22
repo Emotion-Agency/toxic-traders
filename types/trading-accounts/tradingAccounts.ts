@@ -127,31 +127,51 @@ export interface ITradingAccount {
   brokerName: string
   brokerServer: string
   brokerServerType: number
+  brokerServerTypeName: string
   placedTypeMt4: number
+  placedTypeMt4Name: string
   placedTypeMt5: number
+  placedTypeMt5Name: string
   profitCommission: number
   balanceType: number
-  brokerServerIPsAndPing: Record<string, number>
-  orders: IOrder[]
-  templates: TTemplate[]
+  balanceTypeName: string
   tradingAccountBalanceFixed: number
   clientId: number
+  lastStatus: 'Online' | 'Offline'
+  lastPingMs: number
+  lastCurrency: string
+  lastBalance: number
+  lastEquity: number
+  lastTotalDeposits: number
+  lastTotalWithdrawals: number
+  lastTradingProfit: number
+  lastInvestorShare: number
+  lastCheckedAt: string
+  lastError: string
+  displayBalance: number
+  displayProfit: number
 }
 
-export interface ITradingAccountWithBalance {
+export interface ITradingAccountTableItem {
   id: number
   balance: number
   currency: string
   name: string
   ping: number
   platform: number
-  status: number
+  status: 'Online' | 'Offline'
   type: string
 }
 
+export interface ISummary {
+  totalBalances: Record<string, number>
+  totalProfits: Record<string, number>
+}
+
 export interface ITradingAccountsData {
-  totalCount: number
   items: ITradingAccount[]
+  totalCount: number
+  summary: ISummary
 }
 
 export interface ITradingAccountPayload {

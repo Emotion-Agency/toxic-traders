@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type {
-  ITradingAccountPayload,
+  ISummary,
   ITradingAccount,
-  ITradingAccountWithBalance,
+  ITradingAccountPayload,
+  ITradingAccountTableItem,
 } from '~/types/trading-accounts/tradingAccounts'
-import { getBalancesProfits } from '~/utils/api/trading-accounts/balancesProfits'
 
 const router = useRouter()
 const route = useRoute()
@@ -21,7 +21,9 @@ const { updateCurrBalance } = useBalances()
 const { bindToClient } = useBindClients()
 const { toast } = useToasts()
 
-const accounts = ref<ITradingAccountWithBalance[]>([])
+const accounts = ref<ITradingAccountTableItem[]>([])
+const summary = ref<ISummary | null>(null)
+const isSummaryLoading = ref(false)
 const selectedAccount = ref<ITradingAccount | null>(null)
 const deleteModalOpened = ref(false)
 const createAccountModalOpened = ref(false)
@@ -43,7 +45,20 @@ const {
   route.query.count && Number(route.query.count)
 )
 
-const fetchAllAccounts = async () => {
+const mapTradingAccountToTableItem = (
+  account: ITradingAccount
+): ITradingAccountTableItem => ({
+  id: account.id,
+  status: account.lastStatus,
+  ping: account.lastPingMs,
+  name: account.name,
+  balance: account.lastBalance,
+  currency: account.lastCurrency,
+  type: account.balanceTypeName,
+  platform: account.brokerServerType,
+})
+
+const fetchAccounts = async () => {
   try {
     isLoading.value = true
 
@@ -52,28 +67,25 @@ const fetchAllAccounts = async () => {
       count: itemsCount.value,
     })
 
-    const { balancesProfits } = await getBalancesProfits()
-
-    accounts.value = items.map(account => {
-      const balance = balancesProfits.find(
-        balance => balance?.tradingAccountId === account?.id
-      )
-
-      return {
-        id: account?.id,
-        status: balance?.onlineStatus,
-        ping: balance?.lastPing,
-        name: account?.name,
-        balance: balance?.balance,
-        currency: balance?.currency,
-        type: balance?.balanceType,
-        platform: account?.brokerServerType,
-      }
-    })
-
+    accounts.value = items.map(mapTradingAccountToTableItem)
     totalCountPages.value = totalCount
   } finally {
     isLoading.value = false
+  }
+}
+
+const fetchSummary = async () => {
+  try {
+    isSummaryLoading.value = true
+
+    const { summary: summaryData } = await getAllTradingAccounts({
+      page: 1,
+      count: 1,
+    })
+
+    summary.value = summaryData
+  } finally {
+    isSummaryLoading.value = false
   }
 }
 
@@ -127,7 +139,8 @@ const handleCreateAccount = async ({
   await createTradingAccount(acc)
   // await bindToClient(clientId, acc?.id)
   createAccountModalOpened.value = false
-  await fetchAllAccounts()
+  await fetchAccounts()
+  await fetchSummary()
 }
 
 const handleUpdateAccountModalOpen = async (id: number) => {
@@ -142,7 +155,8 @@ const handleUpdateAccountModalClose = () => {
 const handleUpdateAccount = async (acc: ITradingAccountPayload) => {
   await updateTradingAccount(acc, selectedAccount.value?.id)
   updateAccountModalOpened.value = false
-  await fetchAllAccounts()
+  await fetchAccounts()
+  await fetchSummary()
 }
 
 const handleCheckConnection = async (id: number) => {
@@ -155,7 +169,8 @@ const handleCheckConnection = async (id: number) => {
 }
 
 const handleCheckAccounts = async () => {
-  await fetchAllAccounts()
+  await fetchAccounts()
+  await fetchSummary()
   toast.success('Accounts successfully checked.')
 }
 
@@ -163,14 +178,15 @@ const handleDeleteServer = async () => {
   if (!selectedAccount.value) return
 
   await deleteTradingAccount(selectedAccount.value?.id)
-  await fetchAllAccounts()
+  await fetchAccounts()
+  await fetchSummary()
 
   deleteModalOpened.value = false
   selectedAccount.value = null
 }
 
 watch([currentPage, itemsCount], async () => {
-  await fetchAllAccounts()
+  await fetchAccounts()
 
   router.push({
     query: {
@@ -182,7 +198,8 @@ watch([currentPage, itemsCount], async () => {
 })
 
 onMounted(async () => {
-  await fetchAllAccounts()
+  await fetchAccounts()
+  await fetchSummary()
 })
 </script>
 
@@ -229,9 +246,9 @@ onMounted(async () => {
     </section>
     <section class="acc-content">
       <div class="acc-content__wrapper">
-        <div class="acc-content__table">
+        <div class="acc-content__table-wrapper">
           <UiLoader v-if="isLoading" class="acc-content__loader" />
-          <div v-else-if="accounts.length" class="acc-content__table-wrapper">
+          <div v-else-if="accounts?.length" class="acc-content__table">
             <TradingAccountsTable
               :accounts="accounts"
               @sort="onSort"
@@ -255,9 +272,13 @@ onMounted(async () => {
               @on-change-value="onInputChange"
             />
           </div>
+          <NotFound v-else message="Oops! No accounts found" />
         </div>
         <div class="acc-content__info">
-          <TradingAccountsToggleMenu />
+          <TradingAccountsToggleMenu
+            :summary="summary"
+            :is-loading="isSummaryLoading"
+          />
         </div>
       </div>
     </section>

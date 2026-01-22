@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import Table from '~/components/Table.vue'
-import type { ITradingAccountWithBalance } from '~/types/trading-accounts/tradingAccounts'
+import type { ITradingAccountTableItem } from '~/types/trading-accounts/tradingAccounts'
 
 interface IProps {
-  accounts: ITradingAccountWithBalance[]
+  accounts: ITradingAccountTableItem[]
 }
 
 defineProps<IProps>()
@@ -42,12 +42,6 @@ const notSortableFields = ['Actions']
 const isSortable = (field: string) => {
   return !notSortableFields.includes(field)
 }
-
-const serverStatus = (status?: number) =>
-  ({
-    0: { id: 'offline', text: 'Offline' },
-    1: { id: 'online', text: 'Online' },
-  })[status!] ?? { id: 'unknown', text: 'Offline' }
 </script>
 
 <template>
@@ -91,11 +85,11 @@ const serverStatus = (status?: number) =>
           >
             <div
               class="accounts-table__status"
-              :class="`accounts-table__status--${serverStatus(account?.status)?.id?.toLowerCase()}`"
+              :class="`accounts-table__status--${account?.status?.toLowerCase()}`"
             >
               <span />
               <p class="accounts-table__status-text">
-                {{ serverStatus(account?.status)?.text }}
+                {{ account?.status || 'N/A' }}
               </p>
             </div>
           </TableCell>

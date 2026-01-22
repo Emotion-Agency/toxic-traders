@@ -10,17 +10,23 @@
   height: 100%;
 }
 
-.acc-content__table {
+.acc-content__loader {
+  position: absolute;
+}
+
+.acc-content__table-wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   flex: 1;
   min-width: 0;
+  width: 100%;
 }
 
-.acc-content__loader {
-  position: absolute;
+.acc-content__table {
+  position: relative;
+  width: 100%;
 }
 
 .acc-content__pagination {

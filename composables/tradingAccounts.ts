@@ -6,6 +6,8 @@ import type {
 } from '~/types/trading-accounts/tradingAccounts'
 import { getAllTradingAccountsRequest } from '~/utils/api/trading-accounts/getAllTradingAccounts'
 import {
+  checkAllTradingAccountsRequest,
+  checkTradingAccountRequest,
   createTradingAccountRequest,
   deleteTradingAccountRequest,
   getTradingAccountRequest,
@@ -91,11 +93,43 @@ export const useTradingAccounts = () => {
     }
   }
 
+  const checkAllTradingAccounts = async () => {
+    try {
+      const res = await checkAllTradingAccountsRequest()
+
+      toast.success('Trading accounts successfully checked.')
+      return res
+    } catch (error) {
+      console.error('Error checking trading accounts:', error)
+      toast.error(
+        'An error occurred while checking the trading accounts. Please try again.'
+      )
+      throw error
+    }
+  }
+
+  const checkTradingAccount = async (id: number) => {
+    try {
+      const res = await checkTradingAccountRequest(id)
+
+      toast.success('Trading account successfully checked.')
+      return res
+    } catch (error) {
+      console.error('Error checking trading account:', error)
+      toast.error(
+        'An error occurred while checking the trading account. Please try again.'
+      )
+      throw error
+    }
+  }
+
   return {
     getAllTradingAccounts,
     getTradingAccount,
     createTradingAccount,
     updateTradingAccount,
     deleteTradingAccount,
+    checkAllTradingAccounts,
+    checkTradingAccount,
   }
 }

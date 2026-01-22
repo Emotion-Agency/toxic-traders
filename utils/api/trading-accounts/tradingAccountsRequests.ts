@@ -49,3 +49,21 @@ export const deleteTradingAccountRequest = async (id: number) => {
     throw error
   }
 }
+
+export const checkAllTradingAccountsRequest = async () => {
+  try {
+    const res = await axiosInstance.post('/TradingAccounts/CheckAll')
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
+export const checkTradingAccountRequest = async (id: number) => {
+  try {
+    const res = await axiosInstance.post(`/TradingAccounts/${id}/Check`)
+    return res
+  } catch (error) {
+    throw error
+  }
+}
