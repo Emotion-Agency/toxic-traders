@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import Loader from '~/components/headless/Loader.vue'
 import type {
   ISummary,
   ITradingAccount,
   ITradingAccountPayload,
   ITradingAccountTableItem,
 } from '~/types/trading-accounts/tradingAccounts'
+import { tradingAccountTableAdapter } from '~/utils/adapters/tradingAccountTableAdapter'
 
 const router = useRouter()
 const route = useRoute()
@@ -15,6 +17,7 @@ const {
   getTradingAccount,
   createTradingAccount,
   updateTradingAccount,
+  checkAllTradingAccounts,
 } = useTradingAccounts()
 
 const { updateCurrBalance } = useBalances()
@@ -23,12 +26,13 @@ const { toast } = useToasts()
 
 const accounts = ref<ITradingAccountTableItem[]>([])
 const summary = ref<ISummary | null>(null)
-const isSummaryLoading = ref(false)
 const selectedAccount = ref<ITradingAccount | null>(null)
 const deleteModalOpened = ref(false)
 const createAccountModalOpened = ref(false)
 const updateAccountModalOpened = ref(false)
 const isLoading = ref(false)
+const isSummaryLoading = ref(false)
+const isChecking = ref(false)
 
 const {
   currentPage,
@@ -45,18 +49,24 @@ const {
   route.query.count && Number(route.query.count)
 )
 
-const mapTradingAccountToTableItem = (
-  account: ITradingAccount
-): ITradingAccountTableItem => ({
-  id: account.id,
-  status: account.lastStatus,
-  ping: account.lastPingMs,
-  name: account.name,
-  balance: account.lastBalance,
-  currency: account.lastCurrency,
-  type: account.balanceTypeName,
-  platform: account.brokerServerType,
-})
+const checkAllAccounts = async () => {
+  try {
+    isChecking.value = true
+
+    const {
+      accounts,
+      totalCount,
+      summary: summaryData,
+    } = await checkAllTradingAccounts()
+
+    accounts.value = accounts.map(tradingAccountTableAdapter)
+    summary.value = summaryData
+    totalCountPages.value = totalCount
+  } finally {
+    isChecking.value = false
+    isLoading.value = false
+  }
+}
 
 const fetchAccounts = async () => {
   try {
@@ -67,7 +77,7 @@ const fetchAccounts = async () => {
       count: itemsCount.value,
     })
 
-    accounts.value = items.map(mapTradingAccountToTableItem)
+    accounts.value = items.map(tradingAccountTableAdapter)
     totalCountPages.value = totalCount
   } finally {
     isLoading.value = false
@@ -169,9 +179,7 @@ const handleCheckConnection = async (id: number) => {
 }
 
 const handleCheckAccounts = async () => {
-  await fetchAccounts()
-  await fetchSummary()
-  toast.success('Accounts successfully checked.')
+  await checkAllAccounts()
 }
 
 const handleDeleteServer = async () => {
@@ -223,10 +231,12 @@ onMounted(async () => {
             tag="button"
             variant="outlined"
             class="hero-accounts__btn"
+            :disabled="isChecking"
             @click="handleCheckAccounts"
           >
             <template #start-icon>
-              <IconsSuccess />
+              <Loader v-if="isChecking" />
+              <IconsSuccess v-else />
             </template>
             Check accounts
           </TheButton>

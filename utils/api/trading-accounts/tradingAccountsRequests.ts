@@ -52,8 +52,14 @@ export const deleteTradingAccountRequest = async (id: number) => {
 
 export const checkAllTradingAccountsRequest = async () => {
   try {
-    const res = await axiosInstance.post('/TradingAccounts/CheckAll')
-    return res
+    const { data } = await axiosInstance.post(
+      '/TradingAccounts/CheckAll',
+      null,
+      {
+        timeout: 120000,
+      }
+    )
+    return data
   } catch (error) {
     throw error
   }
