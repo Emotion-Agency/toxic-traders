@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Loader from '~/components/headless/Loader.vue'
 import type {
   ISummary,
   ITradingAccount,
@@ -22,7 +21,6 @@ const {
 
 const { updateCurrBalance } = useBalances()
 const { bindToClient } = useBindClients()
-const { toast } = useToasts()
 
 const accounts = ref<ITradingAccountTableItem[]>([])
 const summary = ref<ISummary | null>(null)
@@ -213,51 +211,17 @@ onMounted(async () => {
 
 <template>
   <main class="container">
-    <section class="hero-accounts">
-      <div class="hero-accounts__wrapper">
-        <h1 class="hero-accounts__title">Accounts</h1>
-        <div class="hero-accounts__btns">
-          <TheButton
-            tag="button"
-            class="hero-accounts__btn"
-            @click="handleCreateAccountModalOpen"
-          >
-            <template #start-icon>
-              <IconsPlus />
-            </template>
-            Add account
-          </TheButton>
-          <TheButton
-            tag="button"
-            variant="outlined"
-            class="hero-accounts__btn"
-            :disabled="isChecking"
-            @click="handleCheckAccounts"
-          >
-            <template #start-icon>
-              <Loader v-if="isChecking" />
-              <IconsSuccess v-else />
-            </template>
-            Check accounts
-          </TheButton>
-          <TheButton
-            tag="button"
-            variant="outlined"
-            class="hero-accounts__btn"
-            disabled
-          >
-            <template #start-icon>
-              <IconsPlus />
-            </template>
-            Add investor account
-          </TheButton>
-        </div>
-      </div>
-    </section>
+    <TradingAccountsTopBar
+      :is-checking="isChecking"
+      @create-account="handleCreateAccountModalOpen"
+      @check-accounts="handleCheckAccounts"
+    />
     <section class="acc-content">
       <div class="acc-content__wrapper">
         <div class="acc-content__table-wrapper">
-          <UiLoader v-if="isLoading" class="acc-content__loader" />
+          <div v-if="isLoading" class="acc-content__loader-wrapper">
+            <UiLoader class="acc-content__loader" />
+          </div>
           <div v-else-if="accounts?.length" class="acc-content__table">
             <TradingAccountsTable
               :accounts="accounts"
@@ -312,3 +276,58 @@ onMounted(async () => {
     />
   </main>
 </template>
+
+<style scoped lang="scss">
+.acc-content {
+  padding-bottom: 32px;
+}
+
+.acc-content__wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  flex-wrap: nowrap;
+  height: 100%;
+}
+
+.acc-content__loader-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.acc-content__loader {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+.acc-content__table-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.acc-content__table {
+  position: relative;
+  width: 100%;
+}
+
+.acc-content__pagination {
+  margin-top: 46px;
+}
+
+.acc-content__info {
+  display: flex;
+  flex-direction: column;
+  width: 448px;
+}
+</style>
